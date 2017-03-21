@@ -1,3 +1,5 @@
+language: python
+
 deploy:
   - provider: pypi
     distributions: bdist_wheel
