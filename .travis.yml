@@ -1,0 +1,8 @@
+deploy:
+  provider: pypi
+  user: bavo.van.achte
+  password:
+    secure: e7aSOIdOChZHXVV/vJou3Kr1rxhCJJZeX9v5+FmY47d1eZuPZIQqkJQQ1ZXZS6L09NxaNzpE3zuT0uONYb+RVyOADittmBJolZLJaFKXMtwpRQUhwIiIRU6mJMMiHxKpzoJEo+lAjS24wr9spdgxej2kE0NihK/CD/8jioN4UEAyOQttt9oK6l6BB1g87XOnkJt7ESQNi9taaivHNj2z7uJiYhCGwdS1rplw1IDk3S5rwWC4EKqDyq5gBjR6mx36naWWjeYmGCYBkZl2+4F+wGT3zJ78iufUn39TfiPMqi+fXlsQi/tTyrl6KtT293gf951MZQqCcPSbfdsiVBgB8ra8+J414Tjno5mL3Nlc62AP0w5NTwVkWT9fE8uVmzCZS3XbyE/Swx5O3tpPOrboCXFxWj0zfCJHSqpCnLKUPQgvFsCqx1t6fJfhrEDShoMRgwOsSqqdW4/2jv920pPU3490E/VpO+mAG3jYQHB3VBEJBPowGtUu+ii+aEXuQcz6KBWCotQ/d6P9p2X7YbzrRG3MGyuUMgYNngea1cG9ws1l6eolEUl5l/AGKww8AgZnGGGbAu5g949oiBYRZnnWFpUnNJkWjVb9mhu+E1+dc0j/8GEoTwLYWjPNJKnEbecFpYUyQGXnEf1CcJ7hBRVT2BW9zK64AhbPloCEsY6dR/M=
+  on:
+    branch: master
+  distributions: "bdist_wheel"
