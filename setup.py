@@ -12,7 +12,7 @@ setup(
     author='Bavo Van Achte',
     author_email='bavo.van.achte@gmail.com',
     description='Command-line alternative for https://github.com/jenkinsci/warnings-plugin. Useable with plugin-less CI systems.',
-    long_description=open("README.md").read(),
+    long_description=open("README.rst").read(),
     zip_safe=False,
     classifiers=[],
     platforms='any',
