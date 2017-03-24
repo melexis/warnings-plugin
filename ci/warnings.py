@@ -37,8 +37,8 @@ def check_doxygen_warnings(logfile):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='warnings-plugin')
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('-d', '--doxygen', action='store_true')
-    group.add_argument('-s', '--sphinx', action='store_false')
+    group.add_argument('-d', '--doxygen', dest='doxygen',action='store_true')
+    group.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
     parser.add_argument('-m', '--maxwarnings', type=int, required=False, default=0,
                         help='Maximum amount of warnings accepted')
     parser.add_argument('logfile', help='Logfile that might contain warnings')
@@ -48,9 +48,9 @@ if __name__ == "__main__":
     warn_max = args.maxwarnings
 
     if args.doxygen:
-        warn_count = check_doxygen_warnings()
+        warn_count = check_doxygen_warnings(args.logfile)
     elif args.sphinx:
-        warn_count = check_sphinx_warnings()
+        warn_count = check_sphinx_warnings(args.logfile)
 
     if warn_count > warn_max:
         print("Number of warnings ({count}) is higher than the limit ({max}). Returning error code 1.".format(count=warn_count, max=warn_max))
