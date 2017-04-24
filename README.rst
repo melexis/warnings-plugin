@@ -1,5 +1,7 @@
-[![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+..image:: https://img.shields.io/hexpm/l/plug.svg
+    :target: http://www.apache.org/licenses/LICENSE-2.0
 
+============================
 Command line warnings-plugin
 ============================
 
