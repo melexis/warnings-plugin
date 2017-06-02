@@ -12,7 +12,7 @@ sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 class WarningsPlugin:
     def __init__(self):
         self.sphinx_counter = 0
-        self.doxygen_couter = 0
+        self.doxygen_counter = 0
 
     def check_sphinx_warnings(self, line):
         '''
