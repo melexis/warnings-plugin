@@ -16,7 +16,7 @@ def read(*names, **kwargs):
 
 
 setup(
-    name='warnings',
+    name='mlx.warnings',
     version=VERSION,
     url=PROJECT_URL,
     download_url=PROJECT_URL + '/tarball/' + VERSION,
