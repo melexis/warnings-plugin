@@ -5,7 +5,7 @@ from os.path import basename, dirname, join, splitext
 from setuptools import find_packages, setup
 
 PROJECT_URL = 'https://github.com/melexis/warnings-plugin'
-VERSION = '0.0.2'
+VERSION = '0.0.3'
 
 
 def read(*names, **kwargs):
