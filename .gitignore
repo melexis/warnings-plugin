@@ -91,3 +91,7 @@ pip-selfcheck.json
 
 # Rope project settings
 .ropeproject
+
+# vim
+*.swp
+
