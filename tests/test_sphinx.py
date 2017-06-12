@@ -15,6 +15,11 @@ class TestSphinxWarnings(TestCase):
         self.warnings.check_sphinx_warnings("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
         self.assertEqual(self.warnings.return_sphinx_warnings(), 1)
 
+    def test_single_warning_no_line_number(self):
+        self.warnings.check_sphinx_warnings("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
+        self.warnings.check_sphinx_warnings("/home/bljah/test/index.rst:None: WARNING: toctree contains reference to nonexisting document u'installation'")
+        self.assertEqual(self.warnings.return_sphinx_warnings(), 2)
+
     def test_single_warning_mixed(self):
         self.warnings.check_sphinx_warnings('This1 should not be treated as warning')
         self.warnings.check_sphinx_warnings("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")

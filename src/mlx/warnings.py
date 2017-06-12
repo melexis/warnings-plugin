@@ -6,7 +6,7 @@ import math
 DOXYGEN_WARNING_REGEX = r"(?:(?:((?:[/.]|[A-Za-z]:).+?):(-?\d+):\s*([Ww]arning|[Ee]rror)|<.+>:-?\d+(?::\s*([Ww]arning|[Ee]rror))?): (.+(?:\n(?!\s*(?:[Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*([Nn]otice|[Ww]arning|[Ee]rror): (.+))$"
 doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
 
-SPHINX_WARNING_REGEX = r"^(.+?:\d+): (DEBUG|INFO|WARNING|ERROR|SEVERE): (.+)\n?$"
+SPHINX_WARNING_REGEX = r"^(.+?:(?:\d+|None)): (DEBUG|INFO|WARNING|ERROR|SEVERE): (.+)\n?$"
 sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 
 
