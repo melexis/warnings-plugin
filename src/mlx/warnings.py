@@ -1,6 +1,7 @@
 import argparse
 import re
 import sys
+import math
 
 DOXYGEN_WARNING_REGEX = r"(?:(?:((?:[/.]|[A-Za-z]:).+?):(-?\d+):\s*([Ww]arning|[Ee]rror)|<.+>:-?\d+(?::\s*([Ww]arning|[Ee]rror))?): (.+(?:\n(?!\s*(?:[Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*([Nn]otice|[Ww]arning|[Ee]rror): (.+))$"
 doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
@@ -46,11 +47,14 @@ def main():
     group.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
     parser.add_argument('-m', '--maxwarnings', type=int, required=False, default=0,
                         help='Maximum amount of warnings accepted')
+    parser.add_argument('--minwarnings', type=int, required=False, default=math.inf,
+                        help='Minimum amount of warnings accepted')
     parser.add_argument('logfile', help='Logfile that might contain warnings')
     args = parser.parse_args()
 
     warn_count = 0
     warn_max = args.maxwarnings
+    warn_min = args.minwarnings
 
     warnings = WarningsPlugin()
 
@@ -62,8 +66,12 @@ def main():
 
     warn_count = warnings.return_sphinx_warnings() + warnings.return_doxygen_warnings()
     if warn_count > warn_max:
-        print("Number of warnings ({count}) is higher than the limit ({max}). Returning error code 1.".format(count=warn_count, max=warn_max))
+        print("Number of warnings ({count}) is higher than the maximum limit ({max}). Returning error code 1.".format(count=warn_count, max=warn_max))
+        sys.exit(1)
+    elif warn_count < warn_min:
+        print("Number of warnings ({count}) is lower than the minimum limit ({min}). Returning error code 1.".format(count=warn_count, min=warn_min))
         sys.exit(1)
     else:
-        print("Number of warnings ({count}) is lower than (or equal to) the limit ({max}). Well done.".format(count=warn_count, max=warn_max))
+        print("Number of warnings ({count}) is between limits {min} and {max}. Well done.".format(count=warn_count, min=warn_min, max=warn_max))
         sys.exit(0)
+
