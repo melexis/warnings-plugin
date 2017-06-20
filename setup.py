@@ -20,7 +20,6 @@ setup(
     version=VERSION,
     url=PROJECT_URL,
     download_url=PROJECT_URL + '/tarball/' + VERSION,
-    license='Apache2 license',
     author='Bavo Van Achte',
     author_email='bavo.van.achte@gmail.com',
     description='Command-line alternative for https://github.com/jenkinsci/warnings-plugin. Useable with plugin-less CI systems.',
