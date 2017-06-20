@@ -26,6 +26,7 @@ setup(
     description='Command-line alternative for https://github.com/jenkinsci/warnings-plugin. Useable with plugin-less CI systems.',
     long_description=open("README.rst").read(),
     zip_safe=False,
+    license='Apache License, Version 2.0',
     platforms='any',
     packages=find_packages('src'),
     package_dir={'': 'src'},
@@ -37,7 +38,7 @@ setup(
         # complete classifier list: http://pypi.python.org/pypi?%3Aaction=list_classifiers
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: Apache2 License',
+        'License :: OSI Approved :: Apache Software License',
         'Operating System :: Unix',
         'Operating System :: POSIX',
         'Operating System :: Microsoft :: Windows',
