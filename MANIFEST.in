@@ -15,3 +15,6 @@ include NOTICE
 
 # added by check_manifest.py
 recursive-include ci *.py
+
+# added by check_manifest.py
+include *.md

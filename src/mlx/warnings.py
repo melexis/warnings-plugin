@@ -41,14 +41,19 @@ class WarningsPlugin:
 
 
 def main():
-    parser = argparse.ArgumentParser(prog='warnings-plugin')
+    parser = argparse.ArgumentParser(prog='mlx-warnings')
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-d', '--doxygen', dest='doxygen', action='store_true')
     group.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
     parser.add_argument('-m', '--maxwarnings', type=int, required=False, default=0,
                         help='Maximum amount of warnings accepted')
-    parser.add_argument('--minwarnings', type=int, required=False, default=math.inf,
-                        help='Minimum amount of warnings accepted')
+    try:
+        parser.add_argument('--minwarnings', type=int, required=False, default=math.inf,
+                            help='Minimum amount of warnings accepted')
+    except AttributeError:
+        parser.add_argument('--minwarnings', type=int, required=False, default=float('inf'),
+                            help='Minimum amount of warnings accepted')
+
     parser.add_argument('logfile', help='Logfile that might contain warnings')
     args = parser.parse_args()
 
