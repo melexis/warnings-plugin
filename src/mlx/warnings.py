@@ -80,9 +80,9 @@ def main():
     for line in open(args.logfile, 'r'):
         if args.doxygen:
             warnings.check_doxygen_warnings(line)
-        elif args.sphinx:
+        if args.sphinx:
             warnings.check_sphinx_warnings(line)
-        elif args.junit:
+        if args.junit:
             warnings.check_junit_failures(line)
 
     warn_count = warnings.return_sphinx_warnings() + warnings.return_doxygen_warnings() + warnings.return_junit_failures()
