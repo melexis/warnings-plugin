@@ -8,7 +8,7 @@ doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
 SPHINX_WARNING_REGEX = r"^(.+?:(?:\d+|None)): (DEBUG|INFO|WARNING|ERROR|SEVERE): (.+)\n?$"
 sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 
-JUNIT_WARNING_REGEX = r"\<failure\s+message"
+JUNIT_WARNING_REGEX = r"\<\s*failure\s+message"
 junit_pattern = re.compile(JUNIT_WARNING_REGEX)
 
 
