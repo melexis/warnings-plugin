@@ -47,12 +47,8 @@ def main():
     group.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
     parser.add_argument('-m', '--maxwarnings', type=int, required=False, default=0,
                         help='Maximum amount of warnings accepted')
-    try:
-        parser.add_argument('--minwarnings', type=int, required=False, default=math.inf,
-                            help='Minimum amount of warnings accepted')
-    except AttributeError:
-        parser.add_argument('--minwarnings', type=int, required=False, default=float('inf'),
-                            help='Minimum amount of warnings accepted')
+    parser.add_argument('--minwarnings', type=int, required=False, default=0,
+                        help='Minimum amount of warnings accepted')
 
     parser.add_argument('logfile', help='Logfile that might contain warnings')
     args = parser.parse_args()
@@ -70,7 +66,10 @@ def main():
             warnings.check_sphinx_warnings(line)
 
     warn_count = warnings.return_sphinx_warnings() + warnings.return_doxygen_warnings()
-    if warn_count > warn_max:
+    if warn_min > warn_max:
+        print("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Returning error code 1.". format(min=warn_min, max=warn_max))
+        sys.exit(1)
+    elif warn_count > warn_max:
         print("Number of warnings ({count}) is higher than the maximum limit ({max}). Returning error code 1.".format(count=warn_count, max=warn_max))
         sys.exit(1)
     elif warn_count < warn_min:
