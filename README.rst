@@ -39,7 +39,7 @@ Every release is uploaded to pip so it can be installed simply by using pip.
     # Python3
     pip3 install mlx.warnings
 
-You can find more in `docs/installation`_
+You can find more details in `Installation guide <docs/installation.rst>`_
 
 =====
 Usage
