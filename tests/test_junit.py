@@ -15,6 +15,10 @@ class TestJUnitFailures(TestCase):
         self.warnings.check_junit_failures('<testcase classname="dummy_class" name="dummy_name"><failure message="some random message from test case" /></testcase>')
         self.assertEqual(self.warnings.return_junit_failures(), 1)
 
+    def test_single_warning_with_random_spaces(self):
+        self.warnings.check_junit_failures('<testcase classname="dummy_class" name="dummy_name"> <   failure   message ="some random message from test case" /></testcase>')
+        self.assertEqual(self.warnings.return_junit_failures(), 1)
+
     def test_single_warning_mixed(self):
         self.warnings.check_junit_failures('<testcase classname="dummy_class" name="dummy_name1" />')
         self.warnings.check_junit_failures('<testcase classname="dummy_class" name="dummy_name2"><failure message="some random message from test case" /></testcase>')
