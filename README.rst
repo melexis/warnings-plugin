@@ -111,6 +111,21 @@ command:
     python -m mlx.warnings doc_log.txt --doxygen
 
 
+------------------------
+Parse for JUnit failures
+------------------------
+
+After you saved your JUnit XML output to the file, you can parse it with
+command:
+
+.. code-block:: bash
+
+    # command line
+    mlx-warnings junit_output.xml --junit
+    # explicitly as python module
+    python3 -m mlx.warnings junit_output.xml --junit
+    python -m mlx.warnings junit_output.xml --junit
+
 -------------
 Other options
 -------------
