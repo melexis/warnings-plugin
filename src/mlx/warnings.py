@@ -12,6 +12,7 @@ sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 JUNIT_WARNING_REGEX = r"\<failure\s+message"
 junit_pattern = re.compile(JUNIT_WARNING_REGEX)
 
+
 class WarningsPlugin:
     def __init__(self):
         self.sphinx_counter = 0
@@ -52,6 +53,7 @@ class WarningsPlugin:
     def return_junit_failures(self):
         print("{count} junit failures found".format(count=self.junit_counter))
         return self.junit_counter
+
 
 def main():
     parser = argparse.ArgumentParser(prog='mlx-warnings')
