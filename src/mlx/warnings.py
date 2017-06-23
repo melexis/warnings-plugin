@@ -1,7 +1,6 @@
 import argparse
 import re
 import sys
-import math
 
 DOXYGEN_WARNING_REGEX = r"(?:(?:((?:[/.]|[A-Za-z]:).+?):(-?\d+):\s*([Ww]arning|[Ee]rror)|<.+>:-?\d+(?::\s*([Ww]arning|[Ee]rror))?): (.+(?:\n(?!\s*(?:[Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*([Nn]otice|[Ww]arning|[Ee]rror): (.+))$"
 doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
@@ -63,12 +62,8 @@ def main():
     group.add_argument('-j', '--junit', dest='junit', action='store_true')
     parser.add_argument('-m', '--maxwarnings', type=int, required=False, default=0,
                         help='Maximum amount of warnings accepted')
-    try:
-        parser.add_argument('--minwarnings', type=int, required=False, default=math.inf,
-                            help='Minimum amount of warnings accepted')
-    except AttributeError:
-        parser.add_argument('--minwarnings', type=int, required=False, default=float('inf'),
-                            help='Minimum amount of warnings accepted')
+    parser.add_argument('--minwarnings', type=int, required=False, default=0,
+                        help='Minimum amount of warnings accepted')
 
     parser.add_argument('logfile', help='Logfile that might contain warnings')
     args = parser.parse_args()
@@ -88,7 +83,10 @@ def main():
             warnings.check_junit_failures(line)
 
     warn_count = warnings.return_sphinx_warnings() + warnings.return_doxygen_warnings() + warnings.return_junit_failures()
-    if warn_count > warn_max:
+    if warn_min > warn_max:
+        print("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Returning error code 1.". format(min=warn_min, max=warn_max))
+        sys.exit(1)
+    elif warn_count > warn_max:
         print("Number of warnings ({count}) is higher than the maximum limit ({max}). Returning error code 1.".format(count=warn_count, max=warn_max))
         sys.exit(1)
     elif warn_count < warn_min:
