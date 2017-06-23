@@ -1,11 +1,18 @@
 .. image:: https://img.shields.io/hexpm/l/plug.svg
     :target: http://www.apache.org/licenses/LICENSE-2.0
+    :alt: Apache2 License
 
 .. image:: https://travis-ci.org/melexis/warnings-plugin.svg?branch=master
     :target: https://travis-ci.org/melexis/warnings-plugin
+    :alt: Build status
 
 .. image:: https://codecov.io/gh/melexis/warnings-plugin/branch/master/graph/badge.svg
-   :target: https://codecov.io/gh/melexis/warnings-plugin
+    :target: https://codecov.io/gh/melexis/warnings-plugin
+    :alt: Code Coverage
+
+.. image:: https://requires.io/github/melexis/warnings-plugin/requirements.svg?branch=master
+    :target: https://requires.io/github/melexis/warnings-plugin/requirements/?branch=master
+    :alt: Requirements Status
 
 
 ============================
@@ -27,11 +34,12 @@ Every release is uploaded to pip so it can be installed simply by using pip.
 .. code-block:: bash
 
     # Python2
-    pip install mlx.warnings
+    pip2 install mlx.warnings
 
     # Python3
     pip3 install mlx.warnings
 
+You can find more in installation_
 
 =====
 Usage
