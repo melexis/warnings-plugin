@@ -34,6 +34,7 @@ class WarningsPlugin:
 
         self.warn_min = 0
         self.warn_max = 0
+        self.count = 0
 
     def check(self, line):
         # type: (string) -> None
@@ -56,11 +57,11 @@ class WarningsPlugin:
             self.warn_min = minimum
 
     def return_count(self):
-        count = 0
+        self.count = 0
         for checker in self.checkerList:
-            count += checker.return_count()
+            self.count += checker.return_count()
 
-        return count
+        return self.count
 
     def return_check_limits(self):
         if self.warn_count > self.warn_max:
