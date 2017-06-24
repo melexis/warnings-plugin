@@ -5,7 +5,7 @@ from mlx.warnings import JUnitWarnings
 
 class TestJUnitFailures(TestCase):
     def setUp(self):
-        self.warnings = JUnitWarnings()
+        self.warnings = WarningsPlugin(False, False, True)
 
     def test_no_warning(self):
         self.warnings.check('<testcase classname="dummy_class" name="dummy_name" />')

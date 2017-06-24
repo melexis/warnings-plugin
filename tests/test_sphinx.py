@@ -5,7 +5,7 @@ from mlx.warnings import SphinxWarnings
 
 class TestSphinxWarnings(TestCase):
     def setUp(self):
-        self.warnings = SphinxWarnings()
+        self.warnings = WarningsPlugin(True, False, False)
 
     def test_no_warning(self):
         self.warnings.check('This should not be treated as warning')

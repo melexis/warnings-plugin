@@ -25,11 +25,11 @@ class WarningsPlugin:
             junit           enable junit parser
         '''
         if sphinx:
-            self.sphinx = SphinxWarnings()
+            self.sphinx = WarningsChecker('sphinx', sphinx_pattern)
         if doxygen:
-            self.doxygen = DoxygenWarnings()
+            self.doxygen = WarningsChecker('doxygen', doxy_pattern)
         if junit:
-            self.junit = JUnitWarnings()
+            self.junit = WarningsChecker('junit', junit_pattern)
 
     def check(self, line):
         # type: (string) -> None
@@ -71,54 +71,24 @@ class WarningsPlugin:
         return count
 
 
-class SphinxWarnings:
+class WarningsChecker:
 
-    def __init__(self):
+    def __init__(self, name, pattern):
+        # type: (string, unicode) -> None
         self.counter = 0
+        self.name = name
+        self.pattern = pattern
 
     def check(self, line):
         '''
         Function for counting the number of sphinx warnings in a logfile.
         The function returns the number of warnings found
         '''
-        if re.search(sphinx_pattern, line):
+        if re.search(self.pattern, line):
             self.counter += 1
 
     def return_count(self):
-        print("{count} sphinx warnings found".format(count=self.counter))
-        return self.counter
-
-
-class DoxygenWarnings:
-    def __init__(self):
-        self.counter = 0
-
-    def check(self, line):
-        '''
-        Function for counting the number of doxygen warnings in a logfile.
-        The function returns the number of warnings found
-        '''
-        if re.search(doxy_pattern, line):
-            self.counter += 1
-
-    def return_count(self):
-        print("{count} doxygen warnings found".format(count=self.counter))
-        return self.counter
-
-
-class JUnitWarnings:
-    def __init__(self):
-        self.counter = 0
-
-    def check(self, line):
-        '''
-        Function for counting the number of JUnit warnings in a xmlfile.
-        The function returns the number of failing test cases found
-        '''
-        self.counter += len(re.findall(junit_pattern, line))
-
-    def return_count(self):
-        print("{count} junit failures found".format(count=self.counter))
+        print("{count} {name} warnings found".format(count=self.counter, name=self.name))
         return self.counter
 
 
