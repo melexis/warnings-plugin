@@ -24,49 +24,27 @@ class WarningsPlugin:
             doxygen         enable doxygen parser
             junit           enable junit parser
         '''
+        self.checkerList = []
         if sphinx:
-            self.sphinx = WarningsChecker('sphinx', sphinx_pattern)
+            self.checkerList.append(WarningsChecker('sphinx', sphinx_pattern))
         if doxygen:
-            self.doxygen = WarningsChecker('doxygen', doxy_pattern)
+            self.checkerList.append(WarningsChecker('doxygen', doxy_pattern))
         if junit:
-            self.junit = WarningsChecker('junit', junit_pattern)
+            self.checkerList.append(WarningsChecker('junit', junit_pattern))
 
     def check(self, line):
         # type: (string) -> None
         '''
         Function for running checks with each initalized parser
         '''
-        try:
-            self.sphinx.check(line)
-        except AttributeError as e:
-            pass
-
-        try:
-            self.doxygen.check(line)
-        except AttributeError as e:
-            pass
-
-        try:
-            self.junit.check(line)
-        except AttributeError as e:
-            pass
-
+        for checker in self.checkerList:
+            print(str(checker))
+            checker.check(line)
+        print("---------")
     def return_count(self):
         count = 0
-        try:
-            count += self.sphinx.return_count()
-        except AttributeError as e:
-            pass
-
-        try:
-            count += self.doxygen.return_count()
-        except AttributeError as e:
-            pass
-
-        try:
-            count += self.junit.return_count()
-        except AttributeError as e:
-            pass
+        for checker in self.checkerList:
+            count += checker.return_count()
 
         return count
 
