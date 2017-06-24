@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from mlx.warnings import SphinxWarnings
+from mlx.warnings import WarningsPlugin
 
 
 class TestSphinxWarnings(TestCase):

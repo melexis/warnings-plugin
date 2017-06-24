@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from mlx.warnings import DoxygenWarnings
+from mlx.warnings import WarningsPlugin
 
 
 class TestDoxygenWarnings(TestCase):

@@ -84,8 +84,9 @@ class WarningsChecker:
         Function for counting the number of sphinx warnings in a logfile.
         The function returns the number of warnings found
         '''
-        if re.search(self.pattern, line):
-            self.counter += 1
+        self.counter += len(re.findall(self.pattern, line))
+        #if re.search(self.pattern, line):
+        #    self.counter += 1
 
     def return_count(self):
         print("{count} {name} warnings found".format(count=self.counter, name=self.name))

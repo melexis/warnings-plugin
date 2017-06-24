@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from mlx.warnings import JUnitWarnings
+from mlx.warnings import WarningsPlugin
 
 
 class TestJUnitFailures(TestCase):
