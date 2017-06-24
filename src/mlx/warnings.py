@@ -32,13 +32,28 @@ class WarningsPlugin:
         if junit:
             self.checkerList.append(WarningsChecker('junit', junit_pattern))
 
+        self.warn_min = 0
+        self.warn_max = 0
+
     def check(self, line):
         # type: (string) -> None
         '''
         Function for running checks with each initalized parser
         '''
         for checker in self.checkerList:
-            print(str(checker))
+            checker.check(line)
+
+    def limit_maximum(self, maximum):
+        if self.warn_min > maximum:
+            print("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Cannot enter {value}". format(min=self.warn_min, max=self.warn_max, value=maximum))
+        else:
+            self.warn_max = maximum
+
+    def limit_minimum(self, minimum):
+        if minimum > self.warn_max:
+            print("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Cannot enter {value}". format(min=self.warn_min, max=self.warn_max, value=minimum))
+        else:
+            self.warn_min = minimum
 
     def return_count(self):
         count = 0
@@ -46,6 +61,17 @@ class WarningsPlugin:
             count += checker.return_count()
 
         return count
+
+    def return_check_limits(self):
+        if self.warn_count > self.warn_max:
+            print("Number of warnings ({count}) is higher than the maximum limit ({max}). Returning error code 1.".format(count=self.warn_count, max=self.warn_max))
+            return 1
+        elif self.warn_count < self.warn_min:
+            print("Number of warnings ({count}) is lower than the minimum limit ({min}). Returning error code 1.".format(count=self.warn_count, min=self.warn_min))
+            return 1
+        else:
+            print("Number of warnings ({count}) is between limits {min} and {max}. Well done.".format(count=self.count, min=self.warn_min, max=self.warn_max))
+            return 0
 
 
 class WarningsChecker:
@@ -82,26 +108,13 @@ def main():
     parser.add_argument('logfile', help='Logfile that might contain warnings')
     args = parser.parse_args()
 
-    warn_count = 0
-    warn_max = args.maxwarnings
-    warn_min = args.minwarnings
-
     warnings = WarningsPlugin(args.sphinx, args.doxygen, args.junit)
+    warnings.limit_maximum(args.maxwarnings)
+    warnings.limit_minimum(args.minwarnings)
 
     for line in open(args.logfile, 'r'):
         warnings.check(line)
 
-    warn_count = warnings.return_count()
-    if warn_min > warn_max:
-        print("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Returning error code 1.". format(min=warn_min, max=warn_max))
-        sys.exit(1)
-    elif warn_count > warn_max:
-        print("Number of warnings ({count}) is higher than the maximum limit ({max}). Returning error code 1.".format(count=warn_count, max=warn_max))
-        sys.exit(1)
-    elif warn_count < warn_min:
-        print("Number of warnings ({count}) is lower than the minimum limit ({min}). Returning error code 1.".format(count=warn_count, min=warn_min))
-        sys.exit(1)
-    else:
-        print("Number of warnings ({count}) is between limits {min} and {max}. Well done.".format(count=warn_count, min=warn_min, max=warn_max))
-        sys.exit(0)
+    warnings.return_count()
+    sys.exit(warnings.return_check_limits())
 
