@@ -35,15 +35,39 @@ class WarningsPlugin:
         '''
         Function for running checks with each initalized parser
         '''
-        if self.sphinx:
-            sphinx.check(line)
-        if self.doxygen:
-            doxygen.check(line)
-        if self.junit:
-            junit.check(line)
+        try:
+            self.sphinx.check(line)
+        except AttributeError as e:
+            pass
+
+        try:
+            self.doxygen.check(line)
+        except AttributeError as e:
+            pass
+
+        try:
+            self.junit.check(line)
+        except AttributeError as e:
+            pass
 
     def return_count(self):
-        return self.sphinx.return_count() + self.doxygen.return_count() + self.junit.return_count()
+        count = 0
+        try:
+            count += self.sphinx.return_count()
+        except AttributeError as e:
+            pass
+
+        try:
+            count += self.doxygen.return_count()
+        except AttributeError as e:
+            pass
+
+        try:
+            count += self.junit.return_count()
+        except AttributeError as e:
+            pass
+
+        return count
 
 class SphinxWarnings:
 
