@@ -11,6 +11,40 @@ sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 JUNIT_WARNING_REGEX = r"\<\s*failure\s+message"
 junit_pattern = re.compile(JUNIT_WARNING_REGEX)
 
+class WarningsPlugin:
+
+    def __init__(self, sphinx, doxygen, junit):
+        # type: (boolean, boolean, boolean) -> None
+        '''
+        Function for initializing the parsers
+
+        Args:
+            sphinx          enable sphinx parser
+            doxygen         enable doxygen parser
+            junit           enable junit parser
+        '''
+        if sphinx:
+            self.sphinx = SphinxWarnings()
+        if doxygen:
+            self.doxygen = DoxygenWarnings()
+        if junit:
+            self.junit = JUnitWarnings()
+
+    def check(self, line):
+        # type: (string) -> None
+        '''
+        Function for running checks with each initalized parser
+        '''
+        if self.sphinx:
+            sphinx.check(line)
+        if self.doxygen:
+            doxygen.check(line)
+        if self.junit:
+            junit.check(line)
+
+    def return_count(self):
+        return self.sphinx.return_count() + self.doxygen.return_count() + self.junit.return_count()
+
 class SphinxWarnings:
 
     def __init__(self):
@@ -78,20 +112,12 @@ def main():
     warn_max = args.maxwarnings
     warn_min = args.minwarnings
 
-    warnings = WarningsPlugin()
-    doxygen = DoxygenWarnings()
-    sphinx = SphinxWarnings()
-    junit = JUnitWarnings()
+    warnings = WarningsPlugin(args.sphinx, args.doxygen, args.junit)
 
     for line in open(args.logfile, 'r'):
-        if args.doxygen:
-            doxygen.check(line)
-        if args.sphinx:
-            sphinx.check(line)
-        if args.junit:
-            junit.check(line)
+        warnings.check(line)
 
-    warn_count = sphinx.return_count() + doxygen.return_count() + junit.return_count()
+    warn_count = warnings.return_count()
     if warn_min > warn_max:
         print("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Returning error code 1.". format(min=warn_min, max=warn_max))
         sys.exit(1)
