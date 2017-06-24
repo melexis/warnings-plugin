@@ -11,47 +11,53 @@ sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 JUNIT_WARNING_REGEX = r"\<\s*failure\s+message"
 junit_pattern = re.compile(JUNIT_WARNING_REGEX)
 
+class SphinxWarnings:
 
-class WarningsPlugin:
     def __init__(self):
-        self.sphinx_counter = 0
-        self.doxygen_counter = 0
-        self.junit_counter = 0
+        self.counter = 0
 
-    def check_sphinx_warnings(self, line):
+    def check(self, line):
         '''
         Function for counting the number of sphinx warnings in a logfile.
         The function returns the number of warnings found
         '''
         if re.search(sphinx_pattern, line):
-            self.sphinx_counter += 1
+            self.counter += 1
 
-    def return_sphinx_warnings(self):
-        print("{count} sphinx warnings found".format(count=self.sphinx_counter))
-        return self.sphinx_counter
+    def return_count(self):
+        print("{count} sphinx warnings found".format(count=self.counter))
+        return self.counter
 
-    def check_doxygen_warnings(self, line):
+class DoxygenWarnings:
+    def __init__(self):
+        self.counter = 0
+
+    def check(self, line):
         '''
         Function for counting the number of doxygen warnings in a logfile.
         The function returns the number of warnings found
         '''
         if re.search(doxy_pattern, line):
-            self.doxygen_counter += 1
+            self.counter += 1
 
-    def return_doxygen_warnings(self):
-        print("{count} doxygen warnings found".format(count=self.doxygen_counter))
-        return self.doxygen_counter
+    def return_count(self):
+        print("{count} doxygen warnings found".format(count=self.counter))
+        return self.counter
 
-    def check_junit_failures(self, line):
+class JUnitWarnings:
+    def __init__(self):
+        self.counter = 0
+
+    def check(self, line):
         '''
         Function for counting the number of JUnit warnings in a xmlfile.
         The function returns the number of failing test cases found
         '''
-        self.junit_counter += len(re.findall(junit_pattern, line))
+        self.counter += len(re.findall(junit_pattern, line))
 
-    def return_junit_failures(self):
-        print("{count} junit failures found".format(count=self.junit_counter))
-        return self.junit_counter
+    def return_count(self):
+        print("{count} junit failures found".format(count=self.counter))
+        return self.counter
 
 
 def main():
@@ -73,16 +79,19 @@ def main():
     warn_min = args.minwarnings
 
     warnings = WarningsPlugin()
+    doxygen = DoxygenWarnings()
+    sphinx = SphinxWarnings()
+    junit = JUnitWarnings()
 
     for line in open(args.logfile, 'r'):
         if args.doxygen:
-            warnings.check_doxygen_warnings(line)
+            doxygen.check(line)
         if args.sphinx:
-            warnings.check_sphinx_warnings(line)
+            sphinx.check(line)
         if args.junit:
-            warnings.check_junit_failures(line)
+            junit.check(line)
 
-    warn_count = warnings.return_sphinx_warnings() + warnings.return_doxygen_warnings() + warnings.return_junit_failures()
+    warn_count = sphinx.return_count() + doxygen.return_count() + junit.return_count()
     if warn_min > warn_max:
         print("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Returning error code 1.". format(min=warn_min, max=warn_max))
         sys.exit(1)
