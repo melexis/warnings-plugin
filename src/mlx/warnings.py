@@ -11,6 +11,7 @@ sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 JUNIT_WARNING_REGEX = r"\<\s*failure\s+message"
 junit_pattern = re.compile(JUNIT_WARNING_REGEX)
 
+
 class WarningsPlugin:
 
     def __init__(self, sphinx, doxygen, junit):
@@ -69,6 +70,7 @@ class WarningsPlugin:
 
         return count
 
+
 class SphinxWarnings:
 
     def __init__(self):
@@ -86,6 +88,7 @@ class SphinxWarnings:
         print("{count} sphinx warnings found".format(count=self.counter))
         return self.counter
 
+
 class DoxygenWarnings:
     def __init__(self):
         self.counter = 0
@@ -101,6 +104,7 @@ class DoxygenWarnings:
     def return_count(self):
         print("{count} doxygen warnings found".format(count=self.counter))
         return self.counter
+
 
 class JUnitWarnings:
     def __init__(self):
