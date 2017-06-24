@@ -39,8 +39,7 @@ class WarningsPlugin:
         '''
         for checker in self.checkerList:
             print(str(checker))
-            checker.check(line)
-        print("---------")
+
     def return_count(self):
         count = 0
         for checker in self.checkerList:
@@ -63,8 +62,6 @@ class WarningsChecker:
         The function returns the number of warnings found
         '''
         self.counter += len(re.findall(self.pattern, line))
-        #if re.search(self.pattern, line):
-        #    self.counter += 1
 
     def return_count(self):
         print("{count} {name} warnings found".format(count=self.counter, name=self.name))
