@@ -40,7 +40,7 @@ install:
   - easy_install --version
   - pip --version
   - tox --version
-  - pip install sphinxcontrib-plantuml
+  - pip3 install sphinxcontrib-plantuml
 
 script:
   - tox -v
