@@ -90,36 +90,15 @@ class JUnitChecker(WarningsChecker):
 
 
 class WarningsPlugin:
-    Sphinx = SphinxChecker()
-    Doxygen = DoxyChecker()
-    JUnit = JUnitChecker()
-
-    def __init__(self, sphinx = False, doxygen = False, junit = False):
-        # type: (boolean, boolean, boolean) -> None
-        '''
-        Function for initializing the parsers
-
-        Args:
-            sphinx (bool, optional):    enable sphinx parser
-            doxygen (bool, optional):   enable doxygen parser
-            junit (bool, optional):     enable junit parser
-        '''
+    def __init__(self):
+        ''' Function for initializing the parsers '''
         self.checkerList = []
-        if sphinx:
-            self.activate_checker(WarningsPlugin.Sphinx)
-        if doxygen:
-            self.activate_checker(WarningsPlugin.Doxygen)
-        if junit:
-            self.activate_checker(WarningsPlugin.JUnit)
-
         self.warn_min = 0
         self.warn_max = 0
         self.count = 0
 
     def activate_checker(self, checker):
-        # type: (WarningsChecker) -> None
-        '''
-        Activate additional checkers after initialization
+        ''' Activate checkers
 
         Args:
             checker (WarningsChecker):         checker object
@@ -128,7 +107,6 @@ class WarningsPlugin:
         self.checkerList.append(checker)
 
     def check(self, line):
-        # type: (string) -> None
         '''
         Function for running checks with each initalized parser
         '''
@@ -178,7 +156,17 @@ def main():
     parser.add_argument('logfile', help='Logfile that might contain warnings')
     args = parser.parse_args()
 
-    warnings = WarningsPlugin(sphinx=args.sphinx, doxygen=args.doxygen, junit=args.junit)
+    warnings = WarningsPlugin()
+
+    if args.sphinx:
+        warnings.activate_checker(SphinxChecker())
+
+    if args.doxygen:
+        warnings.activate_checker(DoxyChecker())
+
+    if args.junit:
+        warnings.activate_checker(JUnitChecker())
+
     warnings.set_maximum(args.maxwarnings)
     warnings.set_minimum(args.minwarnings)
 
