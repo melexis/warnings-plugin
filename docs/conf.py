@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import os, subprocess
+import sys, os, subprocess
+
+# Append src directory to path so that autodoc can find the python module
+sys.path.append("src")
 
 
 extensions = [
