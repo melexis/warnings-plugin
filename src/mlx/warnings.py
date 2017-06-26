@@ -21,29 +21,54 @@ class WarningsPlugin:
         Function for initializing the parsers
 
         Args:
-            sphinx          enable sphinx parser
-            doxygen         enable doxygen parser
-            junit           enable junit parser
+            sphinx (bool, optional):    enable sphinx parser
+            doxygen (bool, optional):   enable doxygen parser
+            junit (bool, optional):     enable junit parser
         '''
         self.checkerList = []
         if sphinx:
-            self.checkerList.append(WarningsChecker('sphinx', sphinx_pattern))
+            self.activate_checker('sphinx')
         if doxygen:
-            self.checkerList.append(WarningsChecker('doxygen', doxy_pattern))
+            self.activate_checker('doxygen')
         if junit:
-            self.checkerList.append(WarningsChecker('junit', junit_pattern))
+            self.activate_checker('junit')
 
         self.warn_min = 0
         self.warn_max = 0
         self.count = 0
+
+    def activate_checker(self, name):
+        # type: (string) -> errno
+        '''
+        Activate additional checkers after initialization
+
+        Args:
+            name (str):         checker name
+        Return:
+            0:                  checker successfully activated
+            errno.EINVAL:       checker with supplied name not found
+        '''
+        if name == 'sphinx':
+            self.checkerList.append(WarningsChecker('sphinx', sphinx_pattern))
+        elif name == 'doxygen':
+            self.checkerList.append(WarningsChecker('doxygen', doxy_pattern))
+        elif name == 'junit':
+            self.checkerList.append(WarningsChecker('junit', junit_pattern))
+        else:
+            print("No checker with that name to be activated")
+            return errno.EINVAL
+        return 0
 
     def check(self, line):
         # type: (string) -> None
         '''
         Function for running checks with each initalized parser
         '''
-        for checker in self.checkerList:
-            checker.check(line)
+        if len(self.checkerList) == 0:
+            print("No checkers activated. Please use activate_checker function")
+        else:
+            for checker in self.checkerList:
+                checker.check(line)
 
     def set_maximum(self, maximum):
         if self.warn_min == 0:
