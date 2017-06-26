@@ -239,6 +239,7 @@ class WarningsPlugin:
 
         return 0
 
+
 def main():
     parser = argparse.ArgumentParser(prog='mlx-warnings')
     group = parser.add_mutually_exclusive_group(required=True)
