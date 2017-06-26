@@ -13,59 +13,28 @@ JUNIT_WARNING_REGEX = r"\<\s*failure\s+message"
 junit_pattern = re.compile(JUNIT_WARNING_REGEX)
 
 
-class WarningsPlugin:
+class WarningsChecker(object):
 
-    def __init__(self, sphinx = False, doxygen = False, junit = False):
-        # type: (boolean, boolean, boolean) -> None
-        '''
-        Function for initializing the parsers
+    def __init__(self, name = None, pattern = None):
+        # type: (string, unicode) -> None
+        self.pattern = pattern
+        if name is None:
+            self.name = 'uninitialized'
+        else:
+            self.name = name
+        self.reset()
 
-        Args:
-            sphinx (bool, optional):    enable sphinx parser
-            doxygen (bool, optional):   enable doxygen parser
-            junit (bool, optional):     enable junit parser
-        '''
-        self.AvailableCheckers = {
-            'sphinx': SphinxChecker('sphinx'),
-            'doxygen': DoxyChecker('doxygen'),
-            'junit': JUnitChecker('junit')
-        }
-
-        self.checkerList = []
-        if sphinx:
-            self.activate_checker('sphinx')
-        if doxygen:
-            self.activate_checker('doxygen')
-        if junit:
-            self.activate_checker('junit')
-
+    def reset(self):
+        self.count = 0
         self.warn_min = 0
         self.warn_max = 0
-        self.count = 0
-
-    def activate_checker(self, name):
-        # type: (string) -> errno
-        '''
-        Activate additional checkers after initialization
-
-        Args:
-            name (str):         checker name
-        Return:
-            0:                  checker successfully activated
-            errno.EINVAL:       checker with supplied name not found
-        '''
-        self.checkerList.append(self.AvailableCheckers[name])
 
     def check(self, line):
-        # type: (string) -> None
         '''
-        Function for running checks with each initalized parser
+        Function for counting the number of sphinx warnings in a logfile.
+        The function returns the number of warnings found
         '''
-        if len(self.checkerList) == 0:
-            print("No checkers activated. Please use activate_checker function")
-        else:
-            for checker in self.checkerList:
-                checker.check(line)
+        self.count += len(re.findall(self.pattern, line))
 
     def set_maximum(self, maximum):
         if self.warn_min == 0:
@@ -93,10 +62,7 @@ class WarningsPlugin:
         return self.warn_min
 
     def return_count(self):
-        self.count = 0
-        for checker in self.checkerList:
-            self.count += checker.return_count()
-
+        print("{count} {name} warnings found".format(count=self.count, name=self.name))
         return self.count
 
     def return_check_limits(self):
@@ -111,39 +77,103 @@ class WarningsPlugin:
             return 0
 
 
-class WarningsChecker(object):
-
-    def __init__(self, name, pattern = None):
-        # type: (string, unicode) -> None
-        self.counter = 0
-        self.name = name
-        self.pattern = pattern
-
-    def check(self, line):
-        '''
-        Function for counting the number of sphinx warnings in a logfile.
-        The function returns the number of warnings found
-        '''
-        self.counter += len(re.findall(self.pattern, line))
-
-    def return_count(self):
-        print("{count} {name} warnings found".format(count=self.counter, name=self.name))
-        return self.counter
-
-
 class SphinxChecker(WarningsChecker):
-    def __init__(self, name):
-        super(SphinxChecker, self).__init__(name = name, pattern = sphinx_pattern)
+
+    def __init__(self):
+        super(SphinxChecker, self).__init__(name='sphinx', pattern=sphinx_pattern)
 
 
 class DoxyChecker(WarningsChecker):
-    def __init__(self, name):
-        super(DoxyChecker, self).__init__(name = name, pattern = doxy_pattern)
+
+    def __init__(self):
+        super(DoxyChecker, self).__init__(name='doxygen', pattern=doxy_pattern)
 
 
 class JUnitChecker(WarningsChecker):
-    def __init__(self, name):
-        super(JUnitChecker, self).__init__(name = name, pattern =junit_pattern)
+
+    def __init__(self):
+        super(JUnitChecker, self).__init__(name='junit', pattern=junit_pattern)
+
+
+class WarningsPlugin:
+    Sphinx = SphinxChecker()
+    Doxygen = DoxyChecker()
+    JUnit = JUnitChecker()
+
+    def __init__(self, sphinx = False, doxygen = False, junit = False):
+        # type: (boolean, boolean, boolean) -> None
+        '''
+        Function for initializing the parsers
+
+        Args:
+            sphinx (bool, optional):    enable sphinx parser
+            doxygen (bool, optional):   enable doxygen parser
+            junit (bool, optional):     enable junit parser
+        '''
+        self.checkerList = []
+        if sphinx:
+            self.activate_checker(WarningsPlugin.Sphinx)
+        if doxygen:
+            self.activate_checker(WarningsPlugin.Doxygen)
+        if junit:
+            self.activate_checker(WarningsPlugin.JUnit)
+
+        self.warn_min = 0
+        self.warn_max = 0
+        self.count = 0
+
+    def activate_checker(self, checker):
+        # type: (WarningsChecker) -> None
+        '''
+        Activate additional checkers after initialization
+
+        Args:
+            checker (WarningsChecker):         checker object
+        '''
+        checker.reset()
+        self.checkerList.append(checker)
+
+    def check(self, line):
+        # type: (string) -> None
+        '''
+        Function for running checks with each initalized parser
+        '''
+        if len(self.checkerList) == 0:
+            print("No checkers activated. Please use activate_checker function")
+        else:
+            for checker in self.checkerList:
+                checker.check(line)
+
+    def set_maximum(self, maximum):
+        for checker in self.checkerList:
+            retval = checker.set_maximum(maximum)
+            if retval != 0:
+                return retval
+        return 0
+
+    def set_minimum(self, minimum):
+        for checker in self.checkerList:
+            retval = checker.set_minimum(minimum)
+            if retval != 0:
+                return retval
+        return 0
+
+    def return_count(self, name = None):
+        self.count = 0
+        if name is None:
+            for checker in self.checkerList:
+                self.count += checker.return_count()
+        else:
+            self.count = name.return_count()
+        return self.count
+
+    def return_check_limits(self, name = None):
+        if name is None:
+            for checker in self.checkerList:
+                retval = checker.return_check_limits()
+                if retval != 0:
+                    return retval
+        return 0
 
 
 def main():
@@ -160,9 +190,9 @@ def main():
     parser.add_argument('logfile', help='Logfile that might contain warnings')
     args = parser.parse_args()
 
-    warnings = WarningsPlugin(args.sphinx, args.doxygen, args.junit)
-    warnings.limit_maximum(args.maxwarnings)
-    warnings.limit_minimum(args.minwarnings)
+    warnings = WarningsPlugin(sphinx=args.sphinx, doxygen=args.doxygen, junit=args.junit)
+    warnings.set_maximum(args.maxwarnings)
+    warnings.set_minimum(args.minwarnings)
 
     for line in open(args.logfile, 'r'):
         warnings.check(line)

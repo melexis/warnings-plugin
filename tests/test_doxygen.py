@@ -6,6 +6,7 @@ from mlx.warnings import WarningsPlugin
 class TestDoxygenWarnings(TestCase):
     def setUp(self):
         self.warnings = WarningsPlugin(False, True, False)
+        print(str(self.warnings))
 
     def test_no_warning(self):
         self.warnings.check('This should not be treated as warning')

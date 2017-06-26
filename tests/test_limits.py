@@ -10,7 +10,7 @@ class TestLimits(TestCase):
         warnings = WarningsPlugin(False, True, False)
         for x in range(0, 10):
             self.assertEqual(warnings.set_maximum(x), 0)
-            self.assertEqual(warnings.get_maximum(), x)
+            self.assertEqual(warnings.Doxygen.get_maximum(), x)
 
     def test_set_minimum(self):
         warnings = WarningsPlugin(False, True, False)
@@ -18,14 +18,14 @@ class TestLimits(TestCase):
         self.assertEqual(warnings.set_maximum(11), 0)
         for x in range(0, 10):
             self.assertEqual(warnings.set_minimum(x), 0)
-            self.assertEqual(warnings.get_minimum(), x)
+            self.assertEqual(warnings.Doxygen.get_minimum(), x)
 
     def test_set_minimum_fail(self):
         warnings = WarningsPlugin(False, True, False)
         self.assertEqual(warnings.set_maximum(5), 0)
         for x in range(1, 5):
             self.assertEqual(warnings.set_minimum(x), 0)
-            self.assertEqual(warnings.get_minimum(), x)
+            self.assertEqual(warnings.Doxygen.get_minimum(), x)
 
         for x in range(6, 10):
             self.assertEqual(warnings.set_minimum(x), errno.EINVAL)
