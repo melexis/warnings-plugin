@@ -25,6 +25,12 @@ class WarningsPlugin:
             doxygen (bool, optional):   enable doxygen parser
             junit (bool, optional):     enable junit parser
         '''
+        self.AvailableCheckers = {
+            'sphinx': SphinxChecker('sphinx'),
+            'doxygen': DoxyChecker('doxygen'),
+            'junit': JUnitChecker('junit')
+        }
+
         self.checkerList = []
         if sphinx:
             self.activate_checker('sphinx')
@@ -48,16 +54,7 @@ class WarningsPlugin:
             0:                  checker successfully activated
             errno.EINVAL:       checker with supplied name not found
         '''
-        if name == 'sphinx':
-            self.checkerList.append(WarningsChecker('sphinx', sphinx_pattern))
-        elif name == 'doxygen':
-            self.checkerList.append(WarningsChecker('doxygen', doxy_pattern))
-        elif name == 'junit':
-            self.checkerList.append(WarningsChecker('junit', junit_pattern))
-        else:
-            print("No checker with that name to be activated")
-            return errno.EINVAL
-        return 0
+        self.checkerList.append(self.AvailableCheckers[name])
 
     def check(self, line):
         # type: (string) -> None
@@ -114,9 +111,9 @@ class WarningsPlugin:
             return 0
 
 
-class WarningsChecker:
+class WarningsChecker(object):
 
-    def __init__(self, name, pattern):
+    def __init__(self, name, pattern = None):
         # type: (string, unicode) -> None
         self.counter = 0
         self.name = name
@@ -132,6 +129,21 @@ class WarningsChecker:
     def return_count(self):
         print("{count} {name} warnings found".format(count=self.counter, name=self.name))
         return self.counter
+
+
+class SphinxChecker(WarningsChecker):
+    def __init__(self, name):
+        super(SphinxChecker, self).__init__(name = name, pattern = sphinx_pattern)
+
+
+class DoxyChecker(WarningsChecker):
+    def __init__(self, name):
+        super(DoxyChecker, self).__init__(name = name, pattern = doxy_pattern)
+
+
+class JUnitChecker(WarningsChecker):
+    def __init__(self, name):
+        super(JUnitChecker, self).__init__(name = name, pattern =junit_pattern)
 
 
 def main():
