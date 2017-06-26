@@ -1,4 +1,3 @@
-import errno
 from unittest import TestCase
 
 from mlx.warnings import WarningsPlugin
@@ -9,26 +8,26 @@ class TestLimits(TestCase):
     def test_set_maximum(self):
         warnings = WarningsPlugin(False, True, False)
         for x in range(0, 10):
-            self.assertEqual(warnings.set_maximum(x), 0)
+            warnings.set_maximum(x)
             self.assertEqual(warnings.Doxygen.get_maximum(), x)
 
     def test_set_minimum(self):
         warnings = WarningsPlugin(False, True, False)
         # Setting minimum is tricky - we need to max out maximum
-        self.assertEqual(warnings.set_maximum(11), 0)
+        warnings.set_maximum(11)
         for x in range(0, 10):
-            self.assertEqual(warnings.set_minimum(x), 0)
+            warnings.set_minimum(x)
             self.assertEqual(warnings.Doxygen.get_minimum(), x)
 
     def test_set_minimum_fail(self):
         warnings = WarningsPlugin(False, True, False)
-        self.assertEqual(warnings.set_maximum(5), 0)
+        warnings.set_maximum(5)
         for x in range(1, 5):
-            self.assertEqual(warnings.set_minimum(x), 0)
+            warnings.set_minimum(x)
             self.assertEqual(warnings.Doxygen.get_minimum(), x)
 
         for x in range(6, 10):
-            self.assertEqual(warnings.set_minimum(x), errno.EINVAL)
+            self.assertRaises(ValueError, warnings.set_minimum, x)
 
     def test_return_values_maximum_decrease(self):
         warnings = WarningsPlugin(False, True, False)

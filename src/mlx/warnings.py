@@ -1,7 +1,6 @@
 import argparse
 import re
 import sys
-import errno
 
 DOXYGEN_WARNING_REGEX = r"(?:(?:((?:[/.]|[A-Za-z]:).+?):(-?\d+):\s*([Ww]arning|[Ee]rror)|<.+>:-?\d+(?::\s*([Ww]arning|[Ee]rror))?): (.+(?:\n(?!\s*(?:[Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*([Nn]otice|[Ww]arning|[Ee]rror): (.+))$"
 doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
@@ -39,24 +38,19 @@ class WarningsChecker(object):
     def set_maximum(self, maximum):
         if self.warn_min == 0:
             self.warn_max = maximum
-            return 0
         elif self.warn_min > maximum:
-            print("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Cannot enter {value}". format(min=self.warn_min, max=self.warn_max, value=maximum))
-            return errno.EINVAL
+            raise ValueError("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Cannot enter {value}". format(min=self.warn_min, max=self.warn_max, value=maximum))
         else:
             self.warn_max = maximum
-            return 0
 
     def get_maximum(self):
         return self.warn_max
 
     def set_minimum(self, minimum):
         if minimum > self.warn_max:
-            print("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Cannot enter {value}". format(min=self.warn_min, max=self.warn_max, value=minimum))
-            return errno.EINVAL
+            raise ValueError("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Cannot enter {value}". format(min=self.warn_min, max=self.warn_max, value=minimum))
         else:
             self.warn_min = minimum
-            return 0
 
     def get_minimum(self):
         return self.warn_min
@@ -146,17 +140,11 @@ class WarningsPlugin:
 
     def set_maximum(self, maximum):
         for checker in self.checkerList:
-            retval = checker.set_maximum(maximum)
-            if retval != 0:
-                return retval
-        return 0
+            checker.set_maximum(maximum)
 
     def set_minimum(self, minimum):
         for checker in self.checkerList:
-            retval = checker.set_minimum(minimum)
-            if retval != 0:
-                return retval
-        return 0
+            checker.set_minimum(minimum)
 
     def return_count(self, name = None):
         self.count = 0
