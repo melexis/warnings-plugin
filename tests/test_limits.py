@@ -8,7 +8,7 @@ class TestLimits(TestCase):
 
     def test_set_maximum(self):
         warnings = WarningsPlugin(False, True, False)
-        for x in range(0,10):
+        for x in range(0, 10):
             self.assertEqual(warnings.set_maximum(x), 0)
             self.assertEqual(warnings.get_maximum(), x)
 
