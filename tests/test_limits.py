@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from mlx.warnings import WarningsPlugin
+from mlx.warnings import WarningsPlugin, DoxyChecker
 
 
 class TestLimits(TestCase):
@@ -9,7 +9,7 @@ class TestLimits(TestCase):
         warnings = WarningsPlugin(False, True, False)
         for x in range(0, 10):
             warnings.set_maximum(x)
-            self.assertEqual(warnings.Doxygen.get_maximum(), x)
+            self.assertEqual(warnings.get_checker(DoxyChecker.name).get_maximum(), x)
 
     def test_set_minimum(self):
         warnings = WarningsPlugin(False, True, False)
@@ -17,14 +17,14 @@ class TestLimits(TestCase):
         warnings.set_maximum(11)
         for x in range(0, 10):
             warnings.set_minimum(x)
-            self.assertEqual(warnings.Doxygen.get_minimum(), x)
+            self.assertEqual(warnings.get_checker(DoxyChecker.name).get_minimum(), x)
 
     def test_set_minimum_fail(self):
         warnings = WarningsPlugin(False, True, False)
         warnings.set_maximum(5)
         for x in range(1, 5):
             warnings.set_minimum(x)
-            self.assertEqual(warnings.Doxygen.get_minimum(), x)
+            self.assertEqual(warnings.get_checker(DoxyChecker.name).get_minimum(), x)
 
         for x in range(6, 10):
             self.assertRaises(ValueError, warnings.set_minimum, x)

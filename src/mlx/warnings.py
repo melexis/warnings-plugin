@@ -108,27 +108,27 @@ class WarningsChecker(object):
 
 
 class SphinxChecker(WarningsChecker):
+    name = 'sphinx'
 
     def __init__(self):
-        super(SphinxChecker, self).__init__(name='sphinx', pattern=sphinx_pattern)
+        super(SphinxChecker, self).__init__(name=SphinxChecker.name, pattern=sphinx_pattern)
 
 
 class DoxyChecker(WarningsChecker):
+    name = 'doxygen'
 
     def __init__(self):
-        super(DoxyChecker, self).__init__(name='doxygen', pattern=doxy_pattern)
+        super(DoxyChecker, self).__init__(name=DoxyChecker.name, pattern=doxy_pattern)
 
 
 class JUnitChecker(WarningsChecker):
+    name = 'junit'
 
     def __init__(self):
-        super(JUnitChecker, self).__init__(name='junit', pattern=junit_pattern)
+        super(JUnitChecker, self).__init__(name=JUnitChecker.name, pattern=junit_pattern)
 
 
 class WarningsPlugin:
-    Sphinx = SphinxChecker()
-    Doxygen = DoxyChecker()
-    JUnit = JUnitChecker()
 
     def __init__(self, sphinx = False, doxygen = False, junit = False):
         '''
@@ -139,13 +139,13 @@ class WarningsPlugin:
             doxygen (bool, optional):   enable doxygen parser
             junit (bool, optional):     enable junit parser
         '''
-        self.checkerList = []
+        self.checkerList = {}
         if sphinx:
-            self.activate_checker(WarningsPlugin.Sphinx)
+            self.activate_checker(SphinxChecker())
         if doxygen:
-            self.activate_checker(WarningsPlugin.Doxygen)
+            self.activate_checker(DoxyChecker())
         if junit:
-            self.activate_checker(WarningsPlugin.JUnit)
+            self.activate_checker(JUnitChecker())
 
         self.warn_min = 0
         self.warn_max = 0
@@ -159,7 +159,17 @@ class WarningsPlugin:
             checker (WarningsChecker):         checker object
         '''
         checker.reset()
-        self.checkerList.append(checker)
+        self.checkerList[checker.name] = checker
+
+    def get_checker(self, name):
+        ''' Get checker by name
+
+        Args:
+            name (str): checker name
+        Return:
+            checker object (WarningsChecker)
+        '''
+        return self.checkerList[name]
 
     def check(self, line):
         '''
@@ -171,7 +181,7 @@ class WarningsPlugin:
         if len(self.checkerList) == 0:
             print("No checkers activated. Please use activate_checker function")
         else:
-            for checker in self.checkerList:
+            for name, checker in self.checkerList.items():
                 checker.check(line)
 
     def set_maximum(self, maximum):
@@ -180,7 +190,7 @@ class WarningsPlugin:
         Args:
             maximum (int): maximum amount of warnings allowed
         '''
-        for checker in self.checkerList:
+        for name, checker in self.checkerList.items():
             checker.set_maximum(maximum)
 
     def set_minimum(self, minimum):
@@ -189,7 +199,7 @@ class WarningsPlugin:
         Args:
             minimum (int): minimum amount of warnings allowed
         '''
-        for checker in self.checkerList:
+        for name, checker in self.checkerList.items():
             checker.set_minimum(minimum)
 
     def return_count(self, name = None):
@@ -207,10 +217,10 @@ class WarningsPlugin:
         '''
         self.count = 0
         if name is None:
-            for checker in self.checkerList:
+            for name, checker in self.checkerList.items():
                 self.count += checker.return_count()
         else:
-            self.count = name.return_count()
+            self.count = self.checkerList[name].return_count()
         return self.count
 
     def return_check_limits(self, name = None):
@@ -227,12 +237,12 @@ class WarningsPlugin:
             int: 0 if the amount warnings are within limits otherwise 1
         '''
         if name is None:
-            for checker in self.checkerList:
+            for name, checker in self.checkerList.items():
                 retval = checker.return_check_limits()
                 if retval != 0:
                     return retval
         else:
-            return name.return_check_limits()
+            return self.checkerList[name].return_check_limits()
 
         return 0
 
