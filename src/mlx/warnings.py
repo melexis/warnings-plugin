@@ -14,7 +14,7 @@ junit_pattern = re.compile(JUNIT_WARNING_REGEX)
 
 class WarningsChecker(object):
 
-    def __init__(self, name = None, pattern = None):
+    def __init__(self, name, pattern = None):
         ''' Constructor
 
         Args:
@@ -22,10 +22,7 @@ class WarningsChecker(object):
             pattern (str): Regular expression used by the checker in order to find warnings
         '''
         self.pattern = pattern
-        if name is None:
-            self.name = 'uninitialized'
-        else:
-            self.name = name
+        self.name = name
         self.reset()
 
     def reset(self):
