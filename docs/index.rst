@@ -12,6 +12,7 @@ Contents
    contributing
    authors
    changelog
+   design
 
 Indices and tables
 ==================

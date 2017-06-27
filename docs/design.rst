@@ -50,3 +50,12 @@ Class diagram
     WarningsChecker <|-- JUnitFailuresChecker
 
     @enduml
+
+
+Instrument module
+-----------------
+
+.. automodule:: mlx.warnings
+    :members:
+    :undoc-members:
+    :show-inheritance:
