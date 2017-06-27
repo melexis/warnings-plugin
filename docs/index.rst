@@ -8,6 +8,7 @@ Contents
    readme
    installation
    usage
+   design
    reference/index
    contributing
    authors

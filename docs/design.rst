@@ -53,7 +53,7 @@ Class diagram
 
 
 Instrument module
------------------
+=================
 
 .. automodule:: mlx.warnings
     :members:
