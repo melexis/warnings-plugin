@@ -271,3 +271,7 @@ def main():
     warnings.return_count()
     sys.exit(warnings.return_check_limits())
 
+
+if __name__ == '__main__':
+    main()
+
