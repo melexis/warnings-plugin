@@ -1,0 +1,149 @@
+from unittest import TestCase
+
+from mlx.warnings import WarningsPlugin, SphinxChecker, DoxyChecker, JUnitChecker
+
+
+class TestConfig(TestCase):
+    def test_configfile_parsing(self):
+        warnings = WarningsPlugin(configfile="tests/config_example.json")
+        warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
+        self.assertEqual(warnings.return_count(), 0)
+        warnings.check('<testcase classname="dummy_class" name="dummy_name"><failure message="some random message from test case" /></testcase>')
+        self.assertEqual(warnings.return_count(), 0)
+        warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
+        self.assertEqual(warnings.return_count(), 1)
+        warnings.check('This should not be treated as warning2')
+        self.assertEqual(warnings.return_count(), 1)
+
+    def test_partial_sphinx_config_parsing(self):
+        warnings = WarningsPlugin()
+        tmpjson = {
+            'sphinx': {
+                'enabled': True,
+                'min': 0,
+                'max': 0
+            }
+        }
+
+        warnings.config_parser(tmpjson)
+        warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
+        self.assertEqual(warnings.return_count(), 0)
+        warnings.check('<testcase classname="dummy_class" name="dummy_name"><failure message="some random message from test case" /></testcase>')
+        self.assertEqual(warnings.return_count(), 0)
+        warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
+        self.assertEqual(warnings.return_count(), 1)
+
+    def test_partial_doxygen_config_parsing(self):
+        warnings = WarningsPlugin()
+        tmpjson = {
+            'doxygen': {
+                'enabled': True,
+                'min': 0,
+                'max': 0
+            }
+        }
+
+        warnings.config_parser(tmpjson)
+        warnings.check('<testcase classname="dummy_class" name="dummy_name"><failure message="some random message from test case" /></testcase>')
+        self.assertEqual(warnings.return_count(), 0)
+        warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
+        self.assertEqual(warnings.return_count(), 0)
+        warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
+        self.assertEqual(warnings.return_count(), 1)
+
+    def test_partial_junit_config_parsing(self):
+        warnings = WarningsPlugin()
+        tmpjson = {
+            'junit': {
+                'enabled': True,
+                'min': 0,
+                'max': 0
+            }
+        }
+
+        warnings.config_parser(tmpjson)
+        warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
+        self.assertEqual(warnings.return_count(), 0)
+        warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
+        self.assertEqual(warnings.return_count(), 0)
+        warnings.check('<testcase classname="dummy_class" name="dummy_name"><failure message="some random message from test case" /></testcase>')
+        self.assertEqual(warnings.return_count(), 1)
+
+    def test_sphinx_config_max(self):
+        warnings = WarningsPlugin()
+        tmpjson = {
+            'sphinx': {
+                'enabled': True,
+                'min': 0,
+                'max': 5
+            }
+        }
+
+        warnings.config_parser(tmpjson)
+        self.assertEqual(warnings.get_checker(SphinxChecker().name).get_maximum(), 5)
+
+    def test_doxygen_config_max(self):
+        warnings = WarningsPlugin()
+        tmpjson = {
+            'doxygen': {
+                'enabled': True,
+                'min': 0,
+                'max': 5
+            }
+        }
+
+        warnings.config_parser(tmpjson)
+        self.assertEqual(warnings.get_checker(DoxyChecker().name).get_maximum(), 5)
+
+    def test_junit_config_max(self):
+        warnings = WarningsPlugin()
+        tmpjson = {
+            'junit': {
+                'enabled': True,
+                'min': 0,
+                'max': 5
+            }
+        }
+
+        warnings.config_parser(tmpjson)
+        self.assertEqual(warnings.get_checker(JUnitChecker().name).get_maximum(), 5)
+
+    def test_sphinx_config_min(self):
+        warnings = WarningsPlugin()
+        tmpjson = {
+            'sphinx': {
+                'enabled': True,
+                'min': 5,
+                'max': 7
+            }
+        }
+
+        warnings.config_parser(tmpjson)
+        self.assertEqual(warnings.get_checker(SphinxChecker().name).get_minimum(), 5)
+
+    def test_doxygen_config_min(self):
+        warnings = WarningsPlugin()
+        tmpjson = {
+            'doxygen': {
+                'enabled': True,
+                'min': 5,
+                'max': 7
+            }
+        }
+
+        warnings.config_parser(tmpjson)
+        self.assertEqual(warnings.get_checker(DoxyChecker().name).get_minimum(), 5)
+
+    def test_junit_config_min(self):
+        warnings = WarningsPlugin()
+        tmpjson = {
+            'junit': {
+                'enabled': True,
+                'min': 5,
+                'max': 7
+            }
+        }
+
+        warnings.config_parser(tmpjson)
+        self.assertEqual(warnings.get_checker(JUnitChecker().name).get_minimum(), 5)
+

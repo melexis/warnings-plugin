@@ -1,0 +1,17 @@
+{
+    "sphinx":{
+        "enabled": true,
+        "min": 0,
+        "max": 0
+    },
+    "doxygen":{
+        "enabled": false,
+        "min": 0,
+        "max": 0
+    },
+    "junit":{
+        "enabled": false,
+        "min": 0,
+        "max": 0
+    }
+}

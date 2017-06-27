@@ -1,6 +1,7 @@
 import argparse
 import re
 import sys
+import json
 
 DOXYGEN_WARNING_REGEX = r"(?:(?:((?:[/.]|[A-Za-z]:).+?):(-?\d+):\s*([Ww]arning|[Ee]rror)|<.+>:-?\d+(?::\s*([Ww]arning|[Ee]rror))?): (.+(?:\n(?!\s*(?:[Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*([Nn]otice|[Ww]arning|[Ee]rror): (.+))$"
 doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
@@ -130,7 +131,7 @@ class JUnitChecker(WarningsChecker):
 
 class WarningsPlugin:
 
-    def __init__(self, sphinx = False, doxygen = False, junit = False):
+    def __init__(self, sphinx = False, doxygen = False, junit = False, configfile= None):
         '''
         Function for initializing the parsers
 
@@ -140,12 +141,17 @@ class WarningsPlugin:
             junit (bool, optional):     enable junit parser
         '''
         self.checkerList = {}
-        if sphinx:
-            self.activate_checker(SphinxChecker())
-        if doxygen:
-            self.activate_checker(DoxyChecker())
-        if junit:
-            self.activate_checker(JUnitChecker())
+        if configfile is not None:
+            with open(configfile, 'r') as f:
+                config = json.load(f)
+            self.config_parser(config)
+        else:
+            if sphinx:
+                self.activate_checker(SphinxChecker())
+            if doxygen:
+                self.activate_checker(DoxyChecker())
+            if junit:
+                self.activate_checker(JUnitChecker())
 
         self.warn_min = 0
         self.warn_max = 0
@@ -246,6 +252,24 @@ class WarningsPlugin:
 
         return 0
 
+    def config_parser(self, config):
+        ''' Parsing configuration dict extracted by previously opened json file
+
+        Args:
+            config (dict): json dump of the configuration
+        '''
+        self.publicCheckers = [SphinxChecker(), DoxyChecker(), JUnitChecker()]
+        # activate checker
+        for checker in self.publicCheckers:
+            try:
+                if bool(config[checker.name]['enabled']):
+                    self.activate_checker(checker)
+                    self.get_checker(checker.name).set_maximum(int(config[checker.name]['max']))
+                    self.get_checker(checker.name).set_minimum(int(config[checker.name]['min']))
+                    print("Config parsing for {name} completed".format(name=checker.name))
+            except KeyError as e:
+                print("Uncomplete config. Missing: {key}".format(key=e))
+
 
 def main():
     parser = argparse.ArgumentParser(prog='mlx-warnings')
@@ -257,13 +281,18 @@ def main():
                         help='Maximum amount of warnings accepted')
     parser.add_argument('--minwarnings', type=int, required=False, default=0,
                         help='Minimum amount of warnings accepted')
+    parser.add_argument('-c', '--config', dest='configfile', action='store', required=False)
 
     parser.add_argument('logfile', help='Logfile that might contain warnings')
     args = parser.parse_args()
 
-    warnings = WarningsPlugin(sphinx=args.sphinx, doxygen=args.doxygen, junit=args.junit)
-    warnings.set_maximum(args.maxwarnings)
-    warnings.set_minimum(args.minwarnings)
+    # Read config file
+    if args.configfile is not None:
+        warnings = WarningsPlugin(configfile=args.configfile)
+    else:
+        warnings = WarningsPlugin(sphinx=args.sphinx, doxygen=args.doxygen, junit=args.junit)
+        warnings.set_maximum(args.maxwarnings)
+        warnings.set_minimum(args.minwarnings)
 
     for line in open(args.logfile, 'r'):
         warnings.check(line)
