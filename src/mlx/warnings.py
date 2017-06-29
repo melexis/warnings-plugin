@@ -1,6 +1,7 @@
 import argparse
 import re
 import sys
+import xunitparser
 
 DOXYGEN_WARNING_REGEX = r"(?:(?:((?:[/.]|[A-Za-z]:).+?):(-?\d+):\s*([Ww]arning|[Ee]rror)|<.+>:-?\d+(?::\s*([Ww]arning|[Ee]rror))?): (.+(?:\n(?!\s*(?:[Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*([Nn]otice|[Ww]arning|[Ee]rror): (.+))$"
 doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
@@ -8,20 +9,15 @@ doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
 SPHINX_WARNING_REGEX = r"^(.+?:(?:\d+|None)): (DEBUG|INFO|WARNING|ERROR|SEVERE): (.+)\n?$"
 sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 
-JUNIT_WARNING_REGEX = r"\<\s*failure\s+message"
-junit_pattern = re.compile(JUNIT_WARNING_REGEX)
-
 
 class WarningsChecker(object):
 
-    def __init__(self, name, pattern = None):
+    def __init__(self, name):
         ''' Constructor
 
         Args:
             name (str): Name of the checker
-            pattern (str): Regular expression used by the checker in order to find warnings
         '''
-        self.pattern = pattern
         self.name = name
         self.reset()
 
@@ -31,8 +27,128 @@ class WarningsChecker(object):
         self.warn_min = 0
         self.warn_max = 0
 
+    def check_file(self, filename):
+        '''
+        Function for counting the number of warnings in a specific file
+
+        Args:
+            filename (str): The path to the file to parse
+        '''
+        with open(filename, 'r') as logfile:
+            for line in logfile:
+                check(line)
+
     def check(self, line):
-        ''' Function for counting the number of sphinx warnings in a specific line '''
+        '''
+        Function for counting the number of warnings in a specific line of text
+
+        Args:
+            line (str): The content of the line to parse
+        '''
+        pass
+
+    def set_maximum(self, maximum):
+        ''' Setter function for the maximum amount of warnings
+
+        Args:
+            maximum (int): maximum amount of warnings allowed
+
+        Raises:
+            ValueError: Invalid argument (min limit higher than max limit)
+        '''
+        if self.warn_min == 0:
+            self.warn_max = maximum
+        elif self.warn_min > maximum:
+            raise ValueError("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Cannot enter {value}". format(min=self.warn_min, max=self.warn_max, value=maximum))
+        else:
+            self.warn_max = maximum
+
+    def get_maximum(self):
+        ''' Getter function for the maximum amount of warnings
+
+        Returns:
+            int: Maximum amount of warnings
+        '''
+        return self.warn_max
+
+    def set_minimum(self, minimum):
+        ''' Setter function for the minimum amount of warnings
+
+        Args:
+            minimum (int): minimum amount of warnings allowed
+
+        Raises:
+            ValueError: Invalid argument (min limit higher than max limit)
+        '''
+        if minimum > self.warn_max:
+            raise ValueError("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Cannot enter {value}". format(min=self.warn_min, max=self.warn_max, value=minimum))
+        else:
+            self.warn_min = minimum
+
+    def get_minimum(self):
+        ''' Getter function for the minimum amount of warnings
+
+        Returns:
+            int: Minimum amount of warnings
+        '''
+        return self.warn_min
+
+    def return_count(self):
+        ''' Getter function for the amount of warnings found
+
+        Returns:
+            int: Number of warnings found
+        '''
+        print("{count} {name} warnings found".format(count=self.count, name=self.name))
+        return self.count
+
+    def return_check_limits(self):
+        ''' Function for checking whether the warning count is within the configured limits
+
+        Returns:
+            int: 0 if the amount of warnings is within limits. 1 otherwise
+        '''
+        if self.count > self.warn_max:
+            print("Number of warnings ({count}) is higher than the maximum limit ({max}). Returning error code 1.".format(count=self.count, max=self.warn_max))
+            return 1
+        elif self.count < self.warn_min:
+            print("Number of warnings ({count}) is lower than the minimum limit ({min}). Returning error code 1.".format(count=self.count, min=self.warn_min))
+            return 1
+        else:
+            print("Number of warnings ({count}) is between limits {min} and {max}. Well done.".format(count=self.count, min=self.warn_min, max=self.warn_max))
+            return 0
+
+
+class RegexChecker(WarningsChecker):
+
+    def __init__(self, name, pattern):
+        ''' Constructor
+
+        Args:
+            name (str): Name of the checker
+            pattern (str): Regular expression used by the checker in order to find warnings
+        '''
+        super(RegexChecker, self).__init__(name=name)
+        self.pattern = pattern
+
+    def check_file(self, filename):
+        '''
+        Function for counting the number of warnings in a specific file
+
+        Args:
+            filename (str): The path to the file to parse
+        '''
+        with open(filename, 'r') as logfile:
+            for line in logfile:
+                check(line)
+
+    def check(self, line):
+        '''
+        Function for counting the number of warnings in a specific line of text
+
+        Args:
+            line (str): The content of the line to parse
+        '''
         self.count += len(re.findall(self.pattern, line))
 
     def set_maximum(self, maximum):
@@ -107,14 +223,15 @@ class WarningsChecker(object):
             return 0
 
 
-class SphinxChecker(WarningsChecker):
+
+class SphinxChecker(RegexChecker):
     name = 'sphinx'
 
     def __init__(self):
         super(SphinxChecker, self).__init__(name=SphinxChecker.name, pattern=sphinx_pattern)
 
 
-class DoxyChecker(WarningsChecker):
+class DoxyChecker(RegexChecker):
     name = 'doxygen'
 
     def __init__(self):
@@ -125,8 +242,30 @@ class JUnitChecker(WarningsChecker):
     name = 'junit'
 
     def __init__(self):
-        super(JUnitChecker, self).__init__(name=JUnitChecker.name, pattern=junit_pattern)
+        super(JUnitChecker, self).__init__(name=JUnitChecker.name)
 
+    def check_file(self, filename):
+        '''
+        Function for counting the number of JUnit failures in a specific file
+
+        Args:
+            filename (str): The path to the file to parse
+        '''
+        with open(filename, 'r') as xmlfile:
+            ts, tr = xunitparser.parse(xmlfile)
+
+            for tc in ts:
+                if not tc.good:
+                    self.count += 1
+
+    def check(self, line):
+        '''
+        Function for counting the number of JUnit failures in a specific line of text
+
+        Args:
+            line (str): The content of the line to parse
+        '''
+        raise(AttributeError('Not possible to check for JUnit failures on a single line'))
 
 class WarningsPlugin:
 
@@ -171,18 +310,32 @@ class WarningsPlugin:
         '''
         return self.checkerList[name]
 
-    def check(self, line):
+    def check(self, content):
         '''
-        Function for running checks with each initalized parser
+        Function for counting the number of warnings in a specific text
 
         Args:
-            line (str): The line of the file/console output to parse
+            content (str): The text to parse
         '''
         if len(self.checkerList) == 0:
             print("No checkers activated. Please use activate_checker function")
         else:
             for name, checker in self.checkerList.items():
-                checker.check(line)
+                checker.check(content)
+
+
+    def check_file(self, filename):
+        '''
+        Function for running checks with each initialized parser
+
+        Args:
+            filename (str): The path to the file to parse
+        '''
+        if len(self.checkerList) == 0:
+            print("No checkers activated. Please use activate_checker function")
+        else:
+            for name, checker in self.checkerList.items():
+                checker.check_file(filename)
 
     def set_maximum(self, maximum):
         ''' Setter function for the maximum amount of warnings
@@ -265,8 +418,7 @@ def main():
     warnings.set_maximum(args.maxwarnings)
     warnings.set_minimum(args.minwarnings)
 
-    for line in open(args.logfile, 'r'):
-        warnings.check(line)
+    warnings.check_file(args.logfile)
 
     warnings.return_count()
     sys.exit(warnings.return_check_limits())
