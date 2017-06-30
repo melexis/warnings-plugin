@@ -45,7 +45,7 @@ class TestLimits(TestCase):
         warnings.check('testfile.c:12: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
         self.assertEqual(warnings.return_count(), 2)
         warnings.set_maximum(1)
-        self.assertEqual(warnings.return_check_limits(), 1)
+        self.assertEqual(warnings.return_check_limits(), 2)
         warnings.set_maximum(2)
         self.assertEqual(warnings.return_check_limits(), 0)
 
@@ -56,7 +56,7 @@ class TestLimits(TestCase):
         warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
         self.assertEqual(warnings.return_count(), 2)
         # default behavior
-        self.assertEqual(warnings.return_check_limits(), 1)
+        self.assertEqual(warnings.return_check_limits(), 2)
 
         # to set minimum we need to make maximum higher
         warnings.set_maximum(10)
@@ -64,7 +64,7 @@ class TestLimits(TestCase):
             if x <= 3:
                 self.assertEqual(warnings.return_check_limits(), 0)
             else:
-                self.assertEqual(warnings.return_check_limits(), 1)
+                self.assertEqual(warnings.return_check_limits(), 2)
             warnings.set_minimum(x)
 
 

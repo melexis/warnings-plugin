@@ -99,6 +99,11 @@ that case command will look like:
 
 Help prints all currently supported commands and their usages.
 
+The command returns (shell $? variable):
+
+- value 0 when the number of counted warnings is within the supplied minimum and maximum limits: ok,
+- number of counted warnings (positive) when the counter number is not within those limit.
+
 ----------------------------
 Parse for Sphinx warnings
 ----------------------------
