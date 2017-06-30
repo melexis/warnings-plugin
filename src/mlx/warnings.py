@@ -94,14 +94,14 @@ class WarningsChecker(object):
         ''' Function for checking whether the warning count is within the configured limits
 
         Returns:
-            int: 0 if the amount of warnings is within limits. 1 otherwise
+            int: 0 if the amount of warnings is within limits. the count of warnings otherwise
         '''
         if self.count > self.warn_max:
             print("Number of warnings ({count}) is higher than the maximum limit ({max}). Returning error code 1.".format(count=self.count, max=self.warn_max))
-            return 1
+            return self.count
         elif self.count < self.warn_min:
             print("Number of warnings ({count}) is lower than the minimum limit ({min}). Returning error code 1.".format(count=self.count, min=self.warn_min))
-            return 1
+            return self.count
         else:
             print("Number of warnings ({count}) is between limits {min} and {max}. Well done.".format(count=self.count, min=self.warn_min, max=self.warn_max))
             return 0
