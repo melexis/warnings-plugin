@@ -6,7 +6,7 @@ graft tests
 include README.rst
 include LICENSE
 
-include tox.ini .travis.yml
+include tox.ini .travis.yml .codeclimate.yml
 
 global-exclude *.py[cod] __pycache__ *.so *.dylib
 
