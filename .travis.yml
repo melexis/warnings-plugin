@@ -5,6 +5,7 @@ env:
   global:
     - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
     - SEGFAULT_SIGNALS=all
+    - CC_TEST_REPORTER_ID=d0e92af596f04809021d11cdbeb7abf87a848a4928593a76495c5ea032110a74
   matrix:
     - TOXENV=check
     - TOXENV=docs
@@ -36,6 +37,7 @@ before_install:
 
 install:
   - pip install tox
+  - pip install coverage
   - virtualenv --version
   - easy_install --version
   - pip --version
@@ -43,6 +45,7 @@ install:
 
 script:
   - tox -v
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
 
 after_failure:
   - more .tox/log/* | cat
