@@ -1,7 +1,7 @@
 import argparse
 import re
 import sys
-import xunitparser
+from junitparser import JUnitXml
 
 DOXYGEN_WARNING_REGEX = r"(?:(?:((?:[/.]|[A-Za-z]:).+?):(-?\d+):\s*([Ww]arning|[Ee]rror)|<.+>:-?\d+(?::\s*([Ww]arning|[Ee]rror))?): (.+(?:\n(?!\s*(?:[Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*([Nn]otice|[Ww]arning|[Ee]rror): (.+))$"
 doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
@@ -27,23 +27,12 @@ class WarningsChecker(object):
         self.warn_min = 0
         self.warn_max = 0
 
-    def check_file(self, filename):
+    def check(self, content):
         '''
-        Function for counting the number of warnings in a specific file
+        Function for counting the number of warnings in a specific text
 
         Args:
-            filename (str): The path to the file to parse
-        '''
-        with open(filename, 'r') as logfile:
-            for line in logfile:
-                check(line)
-
-    def check(self, line):
-        '''
-        Function for counting the number of warnings in a specific line of text
-
-        Args:
-            line (str): The content of the line to parse
+            content (str): The content to parse
         '''
         pass
 
@@ -131,25 +120,14 @@ class RegexChecker(WarningsChecker):
         super(RegexChecker, self).__init__(name=name)
         self.pattern = pattern
 
-    def check_file(self, filename):
+    def check(self, content):
         '''
-        Function for counting the number of warnings in a specific file
+        Function for counting the number of warnings in a specific text
 
         Args:
-            filename (str): The path to the file to parse
+            content (str): The content to parse
         '''
-        with open(filename, 'r') as logfile:
-            for line in logfile:
-                check(line)
-
-    def check(self, line):
-        '''
-        Function for counting the number of warnings in a specific line of text
-
-        Args:
-            line (str): The content of the line to parse
-        '''
-        self.count += len(re.findall(self.pattern, line))
+        self.count += len(re.findall(self.pattern, content))
 
     def set_maximum(self, maximum):
         ''' Setter function for the maximum amount of warnings
@@ -223,7 +201,6 @@ class RegexChecker(WarningsChecker):
             return 0
 
 
-
 class SphinxChecker(RegexChecker):
     name = 'sphinx'
 
@@ -244,28 +221,20 @@ class JUnitChecker(WarningsChecker):
     def __init__(self):
         super(JUnitChecker, self).__init__(name=JUnitChecker.name)
 
-    def check_file(self, filename):
+    def check(self, content):
         '''
-        Function for counting the number of JUnit failures in a specific file
+        Function for counting the number of JUnit failures in a specific text
 
         Args:
-            filename (str): The path to the file to parse
+            content (str): The content to parse
         '''
-        with open(filename, 'r') as xmlfile:
-            ts, tr = xunitparser.parse(xmlfile)
+        try:
+            result = JUnitXml.fromstring(content)
+            result.update_statistics()
+            self.count += result.errors + result.failures
+        except Exception as e:
+            print('Exception {exception} while parsing JUnit'.format(exception=type(e).__name__))
 
-            for tc in ts:
-                if not tc.good:
-                    self.count += 1
-
-    def check(self, line):
-        '''
-        Function for counting the number of JUnit failures in a specific line of text
-
-        Args:
-            line (str): The content of the line to parse
-        '''
-        raise(AttributeError('Not possible to check for JUnit failures on a single line'))
 
 class WarningsPlugin:
 
@@ -322,20 +291,6 @@ class WarningsPlugin:
         else:
             for name, checker in self.checkerList.items():
                 checker.check(content)
-
-
-    def check_file(self, filename):
-        '''
-        Function for running checks with each initialized parser
-
-        Args:
-            filename (str): The path to the file to parse
-        '''
-        if len(self.checkerList) == 0:
-            print("No checkers activated. Please use activate_checker function")
-        else:
-            for name, checker in self.checkerList.items():
-                checker.check_file(filename)
 
     def set_maximum(self, maximum):
         ''' Setter function for the maximum amount of warnings
@@ -418,7 +373,8 @@ def main():
     warnings.set_maximum(args.maxwarnings)
     warnings.set_minimum(args.minwarnings)
 
-    warnings.check_file(args.logfile)
+    with open(args.logfile, 'r') as logfile:
+        warnings.check(logfile.read())
 
     warnings.return_count()
     sys.exit(warnings.return_check_limits())

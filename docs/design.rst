@@ -24,8 +24,7 @@ Class diagram
 
         #{abstract} __init__(name)
         +set_limits(min_count=0, max_count=0,
-        +check_file(filename)
-        +check(line)
+        +check(content)
         +get_count()
     }
 
