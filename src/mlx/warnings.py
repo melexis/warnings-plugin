@@ -95,14 +95,14 @@ class WarningsChecker(object):
         ''' Function for checking whether the warning count is within the configured limits
 
         Returns:
-            int: 0 if the amount of warnings is within limits. 1 otherwise
+            int: 0 if the amount of warnings is within limits. the count of warnings otherwise
         '''
         if self.count > self.warn_max:
             print("Number of warnings ({count}) is higher than the maximum limit ({max}). Returning error code 1.".format(count=self.count, max=self.warn_max))
-            return 1
+            return self.count
         elif self.count < self.warn_min:
             print("Number of warnings ({count}) is lower than the minimum limit ({min}). Returning error code 1.".format(count=self.count, min=self.warn_min))
-            return 1
+            return self.count
         else:
             print("Number of warnings ({count}) is between limits {min} and {max}. Well done.".format(count=self.count, min=self.warn_min, max=self.warn_max))
             return 0
@@ -128,77 +128,6 @@ class RegexChecker(WarningsChecker):
             content (str): The content to parse
         '''
         self.count += len(re.findall(self.pattern, content))
-
-    def set_maximum(self, maximum):
-        ''' Setter function for the maximum amount of warnings
-
-        Args:
-            maximum (int): maximum amount of warnings allowed
-
-        Raises:
-            ValueError: Invalid argument (min limit higher than max limit)
-        '''
-        if self.warn_min == 0:
-            self.warn_max = maximum
-        elif self.warn_min > maximum:
-            raise ValueError("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Cannot enter {value}". format(min=self.warn_min, max=self.warn_max, value=maximum))
-        else:
-            self.warn_max = maximum
-
-    def get_maximum(self):
-        ''' Getter function for the maximum amount of warnings
-
-        Returns:
-            int: Maximum amount of warnings
-        '''
-        return self.warn_max
-
-    def set_minimum(self, minimum):
-        ''' Setter function for the minimum amount of warnings
-
-        Args:
-            minimum (int): minimum amount of warnings allowed
-
-        Raises:
-            ValueError: Invalid argument (min limit higher than max limit)
-        '''
-        if minimum > self.warn_max:
-            raise ValueError("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Cannot enter {value}". format(min=self.warn_min, max=self.warn_max, value=minimum))
-        else:
-            self.warn_min = minimum
-
-    def get_minimum(self):
-        ''' Getter function for the minimum amount of warnings
-
-        Returns:
-            int: Minimum amount of warnings
-        '''
-        return self.warn_min
-
-    def return_count(self):
-        ''' Getter function for the amount of warnings found
-
-        Returns:
-            int: Number of warnings found
-        '''
-        print("{count} {name} warnings found".format(count=self.count, name=self.name))
-        return self.count
-
-    def return_check_limits(self):
-        ''' Function for checking whether the warning count is within the configured limits
-
-        Returns:
-            int: 0 if the amount of warnings is within limits. the count of warnings otherwise
-        '''
-        if self.count > self.warn_max:
-            print("Number of warnings ({count}) is higher than the maximum limit ({max}). Returning error code 1.".format(count=self.count, max=self.warn_max))
-            return self.count
-        elif self.count < self.warn_min:
-            print("Number of warnings ({count}) is lower than the minimum limit ({min}). Returning error code 1.".format(count=self.count, min=self.warn_min))
-            return self.count
-        else:
-            print("Number of warnings ({count}) is between limits {min} and {max}. Well done.".format(count=self.count, min=self.warn_min, max=self.warn_max))
-            return 0
 
 
 class SphinxChecker(RegexChecker):
