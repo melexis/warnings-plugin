@@ -15,6 +15,8 @@ def read(*names, **kwargs):
     ).read()
 
 
+requires = ['junitparser>=1.0.0']
+
 setup(
     name='mlx.warnings',
     version=VERSION,
@@ -32,7 +34,7 @@ setup(
     entry_points = {'console_scripts': ['mlx-warnings = mlx.warnings:main']},
     py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
     include_package_data=True,
-    install_requires=None,
+    install_requires=requires,
     namespace_packages=['mlx'],
     classifiers=[
         # complete classifier list: http://pypi.python.org/pypi?%3Aaction=list_classifiers
