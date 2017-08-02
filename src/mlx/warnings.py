@@ -157,12 +157,9 @@ class JUnitChecker(WarningsChecker):
         Args:
             content (str): The content to parse
         '''
-        try:
-            result = JUnitXml.fromstring(content)
-            result.update_statistics()
-            self.count += result.errors + result.failures
-        except Exception as e:
-            print('Exception {exception} while parsing JUnit'.format(exception=type(e).__name__))
+        result = JUnitXml.fromstring(content)
+        result.update_statistics()
+        self.count += result.errors + result.failures
 
 
 class WarningsPlugin:
