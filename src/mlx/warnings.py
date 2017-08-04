@@ -294,15 +294,16 @@ def main():
     parser.add_argument('--minwarnings', type=int, required=False, default=0,
                         help='Minimum amount of warnings accepted')
 
-    parser.add_argument('logfile', help='Logfile that might contain warnings')
+    parser.add_argument('logfile', nargs='+', help='Logfile that might contain warnings')
     args = parser.parse_args()
 
     warnings = WarningsPlugin(sphinx=args.sphinx, doxygen=args.doxygen, junit=args.junit)
     warnings.set_maximum(args.maxwarnings)
     warnings.set_minimum(args.minwarnings)
 
-    with open(args.logfile, 'r') as logfile:
-        warnings.check(logfile.read())
+    for logfile in args.logfile:
+        with open(logfile, 'r') as loghandle:
+            warnings.check(loghandle.read())
 
     warnings.return_count()
     sys.exit(warnings.return_check_limits())
