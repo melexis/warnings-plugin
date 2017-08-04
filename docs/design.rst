@@ -30,6 +30,7 @@ Class diagram
 
     class RegexChecker {
         #{abstract} __init__(name, regex)
+        +check(content)
     }
 
     class SphinxChecker {
@@ -47,6 +48,7 @@ Class diagram
     class JUnitChecker {
         #{static} String name
         +__init__()
+        +check(content)
     }
 
     WarningsPlugin o-- WarningsChecker
