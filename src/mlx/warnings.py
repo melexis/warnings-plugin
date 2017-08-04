@@ -1,6 +1,8 @@
 import argparse
 import re
 import sys
+import abc
+from junitparser import JUnitXml
 
 DOXYGEN_WARNING_REGEX = r"(?:(?:((?:[/.]|[A-Za-z]:).+?):(-?\d+):\s*([Ww]arning|[Ee]rror)|<.+>:-?\d+(?::\s*([Ww]arning|[Ee]rror))?): (.+(?:\n(?!\s*(?:[Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*([Nn]otice|[Ww]arning|[Ee]rror): (.+))$"
 doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
@@ -8,20 +10,15 @@ doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
 SPHINX_WARNING_REGEX = r"^(.+?:(?:\d+|None)): (DEBUG|INFO|WARNING|ERROR|SEVERE): (.+)\n?$"
 sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 
-JUNIT_WARNING_REGEX = r"\<\s*failure\s+message"
-junit_pattern = re.compile(JUNIT_WARNING_REGEX)
-
 
 class WarningsChecker(object):
 
-    def __init__(self, name, pattern = None):
+    def __init__(self, name):
         ''' Constructor
 
         Args:
             name (str): Name of the checker
-            pattern (str): Regular expression used by the checker in order to find warnings
         '''
-        self.pattern = pattern
         self.name = name
         self.reset()
 
@@ -31,9 +28,15 @@ class WarningsChecker(object):
         self.warn_min = 0
         self.warn_max = 0
 
-    def check(self, line):
-        ''' Function for counting the number of sphinx warnings in a specific line '''
-        self.count += len(re.findall(self.pattern, line))
+    @abc.abstractmethod
+    def check(self, content):
+        '''
+        Function for counting the number of warnings in a specific text
+
+        Args:
+            content (str): The content to parse
+        '''
+        return
 
     def set_maximum(self, maximum):
         ''' Setter function for the maximum amount of warnings
@@ -107,14 +110,36 @@ class WarningsChecker(object):
             return 0
 
 
-class SphinxChecker(WarningsChecker):
+class RegexChecker(WarningsChecker):
+
+    def __init__(self, name, pattern):
+        ''' Constructor
+
+        Args:
+            name (str): Name of the checker
+            pattern (str): Regular expression used by the checker in order to find warnings
+        '''
+        super(RegexChecker, self).__init__(name=name)
+        self.pattern = pattern
+
+    def check(self, content):
+        '''
+        Function for counting the number of warnings in a specific text
+
+        Args:
+            content (str): The content to parse
+        '''
+        self.count += len(re.findall(self.pattern, content))
+
+
+class SphinxChecker(RegexChecker):
     name = 'sphinx'
 
     def __init__(self):
         super(SphinxChecker, self).__init__(name=SphinxChecker.name, pattern=sphinx_pattern)
 
 
-class DoxyChecker(WarningsChecker):
+class DoxyChecker(RegexChecker):
     name = 'doxygen'
 
     def __init__(self):
@@ -125,7 +150,18 @@ class JUnitChecker(WarningsChecker):
     name = 'junit'
 
     def __init__(self):
-        super(JUnitChecker, self).__init__(name=JUnitChecker.name, pattern=junit_pattern)
+        super(JUnitChecker, self).__init__(name=JUnitChecker.name)
+
+    def check(self, content):
+        '''
+        Function for counting the number of JUnit failures in a specific text
+
+        Args:
+            content (str): The content to parse
+        '''
+        result = JUnitXml.fromstring(content)
+        result.update_statistics()
+        self.count += result.errors + result.failures
 
 
 class WarningsPlugin:
@@ -171,18 +207,18 @@ class WarningsPlugin:
         '''
         return self.checkerList[name]
 
-    def check(self, line):
+    def check(self, content):
         '''
-        Function for running checks with each initalized parser
+        Function for counting the number of warnings in a specific text
 
         Args:
-            line (str): The line of the file/console output to parse
+            content (str): The text to parse
         '''
         if len(self.checkerList) == 0:
             print("No checkers activated. Please use activate_checker function")
         else:
             for name, checker in self.checkerList.items():
-                checker.check(line)
+                checker.check(content)
 
     def set_maximum(self, maximum):
         ''' Setter function for the maximum amount of warnings
@@ -265,8 +301,8 @@ def main():
     warnings.set_maximum(args.maxwarnings)
     warnings.set_minimum(args.minwarnings)
 
-    for line in open(args.logfile, 'r'):
-        warnings.check(line)
+    with open(args.logfile, 'r') as logfile:
+        warnings.check(logfile.read())
 
     warnings.return_count()
     sys.exit(warnings.return_check_limits())

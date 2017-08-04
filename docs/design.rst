@@ -14,8 +14,7 @@ Class diagram
 
     @startuml
     class WarningsPlugin {
-        #checkers : WarningsChecker
-        +main()
+        #checkerList : WarningsChecker
     }
 
     class WarningsChecker {
@@ -23,31 +22,40 @@ Class diagram
         #max_count = 0
         #count = 0
 
-        #{abstract} __init__(regex=None)
+        #{abstract} __init__(name)
         +set_limits(min_count=0, max_count=0,
-        +check(line)
+        +{abstract}check(content)
         +get_count()
     }
 
-    class SphinxWarningsChecker {
+    class RegexChecker {
+        #{abstract} __init__(name, regex)
+        +check(content)
+    }
+
+    class SphinxChecker {
+        #{static} String name
         #{static} String regex
         +__init__()
     }
 
-    class DoxygenWarningsChecker {
+    class DoxyChecker {
+        #{static} String name
         #{static} String regex
         +__init__()
     }
 
-    class JUnitFailuresChecker {
-        #{static} String regex //todo: issue 20 (use junit parser)
+    class JUnitChecker {
+        #{static} String name
         +__init__()
+        +check(content)
     }
 
     WarningsPlugin o-- WarningsChecker
-    WarningsChecker <|-- SphinxWarningsChecker
-    WarningsChecker <|-- DoxygenWarningsChecker
-    WarningsChecker <|-- JUnitFailuresChecker
+    WarningsChecker <|-- RegexChecker
+    RegexChecker <|-- SphinxChecker
+    RegexChecker <|-- DoxyChecker
+    WarningsChecker <|-- JUnitChecker
 
     @enduml
 
