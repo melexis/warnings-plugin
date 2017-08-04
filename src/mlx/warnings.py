@@ -1,6 +1,7 @@
 import argparse
 import re
 import sys
+import abc
 from junitparser import JUnitXml
 
 DOXYGEN_WARNING_REGEX = r"(?:(?:((?:[/.]|[A-Za-z]:).+?):(-?\d+):\s*([Ww]arning|[Ee]rror)|<.+>:-?\d+(?::\s*([Ww]arning|[Ee]rror))?): (.+(?:\n(?!\s*(?:[Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*([Nn]otice|[Ww]arning|[Ee]rror): (.+))$"
@@ -27,6 +28,7 @@ class WarningsChecker(object):
         self.warn_min = 0
         self.warn_max = 0
 
+    @abc.abstractmethod
     def check(self, content):
         '''
         Function for counting the number of warnings in a specific text
@@ -34,7 +36,7 @@ class WarningsChecker(object):
         Args:
             content (str): The content to parse
         '''
-        pass
+        return
 
     def set_maximum(self, maximum):
         ''' Setter function for the maximum amount of warnings
