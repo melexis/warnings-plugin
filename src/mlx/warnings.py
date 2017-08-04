@@ -303,7 +303,7 @@ def main():
 
     for logfile in args.logfile:
         with open(logfile, 'r') as loghandle:
-            warnings.check(loghandle.read())
+            warnings.check(loghandle.read().encode('ascii', 'replace'))
 
     warnings.return_count()
     sys.exit(warnings.return_check_limits())
