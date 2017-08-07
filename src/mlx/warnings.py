@@ -1,4 +1,5 @@
 import argparse
+import pkg_resources
 import re
 import sys
 import abc
@@ -294,6 +295,7 @@ def main():
                         help='Maximum amount of warnings accepted')
     parser.add_argument('--minwarnings', type=int, required=False, default=0,
                         help='Minimum amount of warnings accepted')
+    parser.add_argument('--version', action='version', version='%(prog)s {version}'.format(version=pkg_resources.require('mlx.warnings')[0].version))
 
     parser.add_argument('logfile', nargs='+', help='Logfile that might contain warnings')
     args = parser.parse_args()
