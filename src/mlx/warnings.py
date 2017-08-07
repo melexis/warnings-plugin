@@ -131,10 +131,10 @@ class RegexChecker(WarningsChecker):
         Args:
             content (str): The content to parse
         '''
-        matches = re.findall(self.pattern, content, re.M)
+        matches = re.findall(self.pattern, content)
         if self.verbose:
             for match in matches:
-                print(match)
+                print(str(match))
         self.count += len(matches)
 
 
