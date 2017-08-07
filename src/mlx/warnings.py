@@ -4,6 +4,7 @@ import re
 import sys
 import abc
 from junitparser import JUnitXml
+import glob
 
 DOXYGEN_WARNING_REGEX = r"(?:(?:((?:[/.]|[A-Za-z]:).+?):(-?\d+):\s*([Ww]arning|[Ee]rror)|<.+>:-?\d+(?::\s*([Ww]arning|[Ee]rror))?): (.+(?:\n(?!\s*(?:[Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*([Nn]otice|[Ww]arning|[Ee]rror): (.+))$"
 doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
@@ -296,15 +297,23 @@ def main():
                         help='Minimum amount of warnings accepted')
     parser.add_argument('--version', action='version', version='%(prog)s {version}'.format(version=pkg_resources.require('mlx.warnings')[0].version))
 
-    parser.add_argument('logfile', help='Logfile that might contain warnings')
+    parser.add_argument('logfile', nargs='+', help='Logfile that might contain warnings')
     args = parser.parse_args()
 
     warnings = WarningsPlugin(sphinx=args.sphinx, doxygen=args.doxygen, junit=args.junit)
     warnings.set_maximum(args.maxwarnings)
     warnings.set_minimum(args.minwarnings)
 
-    with open(args.logfile, 'r') as logfile:
-        warnings.check(logfile.read())
+    # args.logfile doesn't necessarily contain wildcards, but just to be safe, we
+    # assume it does, and try to expand them.
+    # This mechanism is put in place to allow wildcards to be passed on even when
+    # executing the script on windows (in that case there is no shell expansion of wildcards)
+    # so that the script can be used in the exact same way even when moving from one
+    # OS to another.
+    for file_wildcard in args.logfile:
+        for logfile in glob.glob(file_wildcard):
+            with open(logfile, 'r') as loghandle:
+                warnings.check(loghandle.read().encode('utf-8'))
 
     warnings.return_count()
     sys.exit(warnings.return_check_limits())
