@@ -187,7 +187,8 @@ class JUnitChecker(WarningsChecker):
             for suite in result:
                 for testcase in suite:
                     if isinstance(testcase.result, Failure) or isinstance(testcase.result, Error):
-                        print(str(testcase.classname))
+                        print('{classname}.{testname}'.format(classname=testcase.classname,
+                                                              testname=testcase.name))
         result.update_statistics()
         self.count += result.errors + result.failures
 
