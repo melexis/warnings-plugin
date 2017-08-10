@@ -206,9 +206,7 @@ class WarningsPlugin:
             verbose (bool, optional):   enable verbose logging
         '''
         self.checkerList = {}
-        self.verbose = False
-        if verbose:
-            self.verbose = True
+        self.verbose = verbose
         if sphinx:
             self.activate_checker(SphinxChecker(self.verbose))
         if doxygen:
