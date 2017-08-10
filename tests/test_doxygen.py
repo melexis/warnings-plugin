@@ -36,10 +36,10 @@ class TestDoxygenWarnings(TestCase):
         self.assertRegexpMatches(fake_out.getvalue(), dut2)
 
     def test_multiline(self):
-        duterr = 'testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"'
-        dut = 'This1 should not be treated as warning'
+        duterr = 'testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"\n'
+        dut = 'This1 should not be treated as warning\n'
         dut += duterr
-        dut += 'This should not be treated as warning2'
+        dut += 'This should not be treated as warning2\n'
         with patch('sys.stdout', new=StringIO()) as fake_out:
             self.warnings.check(dut)
         self.assertEqual(self.warnings.return_count(), 1)
