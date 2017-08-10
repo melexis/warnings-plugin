@@ -133,11 +133,11 @@ class RegexChecker(WarningsChecker):
         Args:
             content (str): The content to parse
         '''
-        matches = re.findall(self.pattern, content)
-        if self.verbose:
-            for match in matches:
-                print(str(match))
-        self.count += len(matches)
+        matches = re.finditer(self.pattern, content)
+        for match in matches:
+            self.count += 1
+            if self.verbose:
+                print(match.group(0).strip())
 
 
 class SphinxChecker(RegexChecker):
