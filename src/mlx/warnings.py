@@ -185,10 +185,9 @@ class JUnitChecker(WarningsChecker):
         result = JUnitXml.fromstring(content)
         if self.verbose:
             for suite in result:
-                for testcase in suite:
-                    if isinstance(testcase.result, Failure) or isinstance(testcase.result, Error):
-                        print('{classname}.{testname}'.format(classname=testcase.classname,
-                                                              testname=testcase.name))
+                for testcase in filter(lambda testcase: isinstance(testcase.result, (Failure, Error)), suite):
+                    print('{classname}.{testname}'.format(classname=testcase.classname,
+                                                          testname=testcase.name))
         result.update_statistics()
         self.count += result.errors + result.failures
 
