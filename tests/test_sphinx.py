@@ -45,12 +45,15 @@ class TestSphinxWarnings(TestCase):
         self.assertRegexpMatches(fake_out.getvalue(), dut2)
 
     def test_multiline(self):
-        duterr = "/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'\n"
-        dut = 'This1 should not be treated as warning\n'
-        dut += duterr
-        dut += 'This should not be treated as warning2\n'
+        duterr1 = "/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'\n"
+        duterr2 = "/home/bljah/test/index.rst:None: WARNING: toctree contains reference to nonexisting document u'installation'\n"
+        dut = "This1 should not be treated as warning\n"
+        dut += duterr1
+        dut += "This should not be treated as warning2\n"
+        dut += duterr2
         with patch('sys.stdout', new=StringIO()) as fake_out:
             self.warnings.check(dut)
-        self.assertEqual(self.warnings.return_count(), 1)
-        self.assertRegexpMatches(fake_out.getvalue(), duterr)
+        self.assertEqual(self.warnings.return_count(), 2)
+        self.assertRegexpMatches(fake_out.getvalue(), duterr1)
+        self.assertRegexpMatches(fake_out.getvalue(), duterr2)
 
