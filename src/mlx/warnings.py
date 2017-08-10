@@ -285,7 +285,7 @@ class WarningsPlugin:
         return 0
 
 
-def main():
+def warnings_wrapper(args):
     parser = argparse.ArgumentParser(prog='mlx-warnings')
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-d', '--doxygen', dest='doxygen', action='store_true')
@@ -298,7 +298,7 @@ def main():
     parser.add_argument('--version', action='version', version='%(prog)s {version}'.format(version=pkg_resources.require('mlx.warnings')[0].version))
 
     parser.add_argument('logfile', nargs='+', help='Logfile that might contain warnings')
-    args = parser.parse_args()
+    args = parser.parse_args(args)
 
     warnings = WarningsPlugin(sphinx=args.sphinx, doxygen=args.doxygen, junit=args.junit)
     warnings.set_maximum(args.maxwarnings)
@@ -316,7 +316,11 @@ def main():
                 warnings.check(loghandle.read().encode('utf-8'))
 
     warnings.return_count()
-    sys.exit(warnings.return_check_limits())
+    return warnings.return_check_limits()
+
+
+def main():
+    sys.exit(warnings_wrapper(sys.argv[1:]))
 
 
 if __name__ == '__main__':
