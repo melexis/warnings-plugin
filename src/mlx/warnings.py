@@ -14,15 +14,15 @@ sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 
 
 class WarningsChecker(object):
+    name = 'checker'
 
-    def __init__(self, name, verbose=False):
+    def __init__(self, verbose=False):
         ''' Constructor
 
         Args:
             name (str): Name of the checker
             verbose (bool): Enable/disable verbose logging
         '''
-        self.name = name
         self.verbose = verbose
         self.reset()
 
@@ -115,16 +115,17 @@ class WarningsChecker(object):
 
 
 class RegexChecker(WarningsChecker):
+    name = 'regex'
+    pattern = None
 
-    def __init__(self, name, pattern, verbose=False):
+    def __init__(self, verbose=False):
         ''' Constructor
 
         Args:
             name (str): Name of the checker
             pattern (str): Regular expression used by the checker in order to find warnings
         '''
-        super(RegexChecker, self).__init__(name=name, verbose=verbose)
-        self.pattern = pattern
+        super(RegexChecker, self).__init__(verbose=verbose)
 
     def check(self, content):
         '''
@@ -142,26 +143,12 @@ class RegexChecker(WarningsChecker):
 
 class SphinxChecker(RegexChecker):
     name = 'sphinx'
-
-    def __init__(self, verbose=False):
-        ''' Constructor
-
-        Args:
-            verbose (bool): Enable/disable verbose logging
-        '''
-        super(SphinxChecker, self).__init__(name=SphinxChecker.name, pattern=sphinx_pattern, verbose=verbose)
+    pattern = sphinx_pattern
 
 
 class DoxyChecker(RegexChecker):
     name = 'doxygen'
-
-    def __init__(self, verbose=False):
-        ''' Constructor
-
-        Args:
-            verbose (bool): Enable/disable verbose logging
-        '''
-        super(DoxyChecker, self).__init__(name=DoxyChecker.name, pattern=doxy_pattern, verbose=verbose)
+    pattern = doxy_pattern
 
 
 class JUnitChecker(WarningsChecker):
@@ -173,7 +160,7 @@ class JUnitChecker(WarningsChecker):
         Args:
             verbose (bool): Enable/disable verbose logging
         '''
-        super(JUnitChecker, self).__init__(name=JUnitChecker.name, verbose=verbose)
+        super(JUnitChecker, self).__init__(verbose=verbose)
 
     def check(self, content):
         '''
