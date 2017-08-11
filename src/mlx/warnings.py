@@ -3,25 +3,27 @@ import pkg_resources
 import re
 import sys
 import abc
-from junitparser import JUnitXml
+from junitparser import JUnitXml, Failure, Error
 import glob
 
-DOXYGEN_WARNING_REGEX = r"(?:(?:((?:[/.]|[A-Za-z]:).+?):(-?\d+):\s*([Ww]arning|[Ee]rror)|<.+>:-?\d+(?::\s*([Ww]arning|[Ee]rror))?): (.+(?:\n(?!\s*(?:[Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*([Nn]otice|[Ww]arning|[Ee]rror): (.+))$"
+DOXYGEN_WARNING_REGEX = r"(?:((?:[/.]|[A-Za-z]).+?):(-?\d+):\s*([Ww]arning|[Ee]rror)|<.+>:-?\d+(?::\s*([Ww]arning|[Ee]rror))?): (.+(?:(?!\s*(?:[Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*([Nn]otice|[Ww]arning|[Ee]rror): (.+)\n?"
 doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
 
-SPHINX_WARNING_REGEX = r"^(.+?:(?:\d+|None)): (DEBUG|INFO|WARNING|ERROR|SEVERE): (.+)\n?$"
+SPHINX_WARNING_REGEX = r"(.+?:(?:\d+|None)):\s*(DEBUG|INFO|WARNING|ERROR|SEVERE):\s*(.+)\n?"
 sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 
 
 class WarningsChecker(object):
+    name = 'checker'
 
-    def __init__(self, name):
+    def __init__(self, verbose=False):
         ''' Constructor
 
         Args:
             name (str): Name of the checker
+            verbose (bool): Enable/disable verbose logging
         '''
-        self.name = name
+        self.verbose = verbose
         self.reset()
 
     def reset(self):
@@ -113,16 +115,17 @@ class WarningsChecker(object):
 
 
 class RegexChecker(WarningsChecker):
+    name = 'regex'
+    pattern = None
 
-    def __init__(self, name, pattern):
+    def __init__(self, verbose=False):
         ''' Constructor
 
         Args:
             name (str): Name of the checker
             pattern (str): Regular expression used by the checker in order to find warnings
         '''
-        super(RegexChecker, self).__init__(name=name)
-        self.pattern = pattern
+        super(RegexChecker, self).__init__(verbose=verbose)
 
     def check(self, content):
         '''
@@ -131,28 +134,33 @@ class RegexChecker(WarningsChecker):
         Args:
             content (str): The content to parse
         '''
-        self.count += len(re.findall(self.pattern, content))
+        matches = re.finditer(self.pattern, content)
+        for match in matches:
+            self.count += 1
+            if self.verbose:
+                print(match.group(0).strip())
 
 
 class SphinxChecker(RegexChecker):
     name = 'sphinx'
-
-    def __init__(self):
-        super(SphinxChecker, self).__init__(name=SphinxChecker.name, pattern=sphinx_pattern)
+    pattern = sphinx_pattern
 
 
 class DoxyChecker(RegexChecker):
     name = 'doxygen'
-
-    def __init__(self):
-        super(DoxyChecker, self).__init__(name=DoxyChecker.name, pattern=doxy_pattern)
+    pattern = doxy_pattern
 
 
 class JUnitChecker(WarningsChecker):
     name = 'junit'
 
-    def __init__(self):
-        super(JUnitChecker, self).__init__(name=JUnitChecker.name)
+    def __init__(self, verbose=False):
+        ''' Constructor
+
+        Args:
+            verbose (bool): Enable/disable verbose logging
+        '''
+        super(JUnitChecker, self).__init__(verbose=verbose)
 
     def check(self, content):
         '''
@@ -162,13 +170,18 @@ class JUnitChecker(WarningsChecker):
             content (str): The content to parse
         '''
         result = JUnitXml.fromstring(content)
+        if self.verbose:
+            for suite in result:
+                for testcase in filter(lambda testcase: isinstance(testcase.result, (Failure, Error)), suite):
+                    print('{classname}.{testname}'.format(classname=testcase.classname,
+                                                          testname=testcase.name))
         result.update_statistics()
         self.count += result.errors + result.failures
 
 
 class WarningsPlugin:
 
-    def __init__(self, sphinx = False, doxygen = False, junit = False):
+    def __init__(self, sphinx = False, doxygen = False, junit = False, verbose = False):
         '''
         Function for initializing the parsers
 
@@ -176,14 +189,16 @@ class WarningsPlugin:
             sphinx (bool, optional):    enable sphinx parser
             doxygen (bool, optional):   enable doxygen parser
             junit (bool, optional):     enable junit parser
+            verbose (bool, optional):   enable verbose logging
         '''
         self.checkerList = {}
+        self.verbose = verbose
         if sphinx:
-            self.activate_checker(SphinxChecker())
+            self.activate_checker(SphinxChecker(self.verbose))
         if doxygen:
-            self.activate_checker(DoxyChecker())
+            self.activate_checker(DoxyChecker(self.verbose))
         if junit:
-            self.activate_checker(JUnitChecker())
+            self.activate_checker(JUnitChecker(self.verbose))
 
         self.warn_min = 0
         self.warn_max = 0
@@ -291,6 +306,7 @@ def main():
     group.add_argument('-d', '--doxygen', dest='doxygen', action='store_true')
     group.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
     group.add_argument('-j', '--junit', dest='junit', action='store_true')
+    parser.add_argument('-v', '--verbose', dest='verbose', action='store_true')
     parser.add_argument('-m', '--maxwarnings', type=int, required=False, default=0,
                         help='Maximum amount of warnings accepted')
     parser.add_argument('--minwarnings', type=int, required=False, default=0,
@@ -300,7 +316,7 @@ def main():
     parser.add_argument('logfile', nargs='+', help='Logfile that might contain warnings')
     args = parser.parse_args()
 
-    warnings = WarningsPlugin(sphinx=args.sphinx, doxygen=args.doxygen, junit=args.junit)
+    warnings = WarningsPlugin(sphinx=args.sphinx, doxygen=args.doxygen, junit=args.junit, verbose=args.verbose)
     warnings.set_maximum(args.maxwarnings)
     warnings.set_minimum(args.minwarnings)
 
