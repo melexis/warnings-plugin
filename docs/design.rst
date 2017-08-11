@@ -61,6 +61,12 @@ Class diagram
 
     @enduml
 
+String handling
+===============
+
+Convention is to use plain python strings everywhere. Where needed the strings can be converted to anything else.
+
+Example: junitparser expects byte array objects, so we encode our string right before passing it to junitparser.
 
 Instrument module
 =================
