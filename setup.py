@@ -1,7 +1,6 @@
 import io
 from glob import glob
 from os.path import basename, dirname, join, splitext
-import re
 
 from setuptools import find_packages, setup
 
@@ -13,11 +12,6 @@ def read(*names, **kwargs):
         join(dirname(__file__), *names),
         encoding=kwargs.get('encoding', 'utf8')
     ).read()
-
-
-def get_property(prop, project):
-    result = re.search(r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format(prop), open(project + '/__init__.py').read())
-    return result.group(1)
 
 
 requires = ['junitparser>=1.0.0', 'setuptools-scm']
