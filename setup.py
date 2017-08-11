@@ -16,7 +16,6 @@ def read(*names, **kwargs):
 
 requires = ['junitparser>=1.0.0', 'setuptools-scm']
 
-
 setup(
     name='mlx.warnings',
     url=PROJECT_URL,
