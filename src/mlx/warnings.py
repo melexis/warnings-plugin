@@ -172,7 +172,7 @@ class JUnitChecker(WarningsChecker):
         Args:
             content (str): The content to parse
         '''
-        result = JUnitXml.fromstring(content)
+        result = JUnitXml.fromstring(content.encode('utf-8'))
         if self.verbose:
             for suite in result:
                 for testcase in filter(lambda testcase: isinstance(testcase.result, (Failure, Error)), suite):
@@ -332,7 +332,7 @@ def warnings_wrapper(args):
     for file_wildcard in args.logfile:
         for logfile in glob.glob(file_wildcard):
             with open(logfile, 'r') as loghandle:
-                warnings.check(loghandle.read().encode('utf-8'))
+                warnings.check(loghandle.read())
 
     warnings.return_count()
     return warnings.return_check_limits()
