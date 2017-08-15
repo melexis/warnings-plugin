@@ -5,7 +5,6 @@ from os.path import basename, dirname, join, splitext
 from setuptools import find_packages, setup
 
 PROJECT_URL = 'https://github.com/melexis/warnings-plugin'
-VERSION = '0.0.9'
 
 
 def read(*names, **kwargs):
@@ -15,13 +14,13 @@ def read(*names, **kwargs):
     ).read()
 
 
-requires = ['junitparser>=1.0.0']
+requires = ['junitparser>=1.0.0', 'setuptools-scm']
 
 setup(
     name='mlx.warnings',
-    version=VERSION,
     url=PROJECT_URL,
-    download_url=PROJECT_URL + '/tarball/' + VERSION,
+    use_scm_version=True,
+    setup_requires=['setuptools_scm'],
     author='Bavo Van Achte',
     author_email='bavo.van.achte@gmail.com',
     description='Command-line alternative for https://github.com/jenkinsci/warnings-plugin. Useable with plugin-less CI systems.',
