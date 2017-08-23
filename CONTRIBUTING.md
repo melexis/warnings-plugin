@@ -37,6 +37,13 @@ coding skills of all included. Remember to act politely. Since some people might
 frequent contributors to various repositories, do not intimidate them, but rather
 help them improve. We are all learning.
 
+Changelog
+---------
+We have deployed automated CHANGELOG to the repository using: 
+https://github.com/skywinder/github-changelog-generator . The update of CHANGELOG is simple
+but it requires installation of Ruby. Then you install it via `gem install github_changelog_generator`
+generate a personal token on GitHub (see https://github.com/skywinder/github-changelog-generator#github-token)
+and afterwards generate an CHANGELOG with `github_changelog_generator --token=your-40-digit-token`
 
 Reporting issues or requesting a new feature
 ============================================
