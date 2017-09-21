@@ -5,6 +5,21 @@ from mlx.warnings import warnings_wrapper
 
 class TestIntegration(TestCase):
 
+    def test_help(self):
+        with self.assertRaises(SystemExit) as ex:
+            warnings_wrapper(['--help'])
+        self.assertEqual(0, ex.exception.code)
+
+    def test_version(self):
+        with self.assertRaises(SystemExit) as ex:
+            warnings_wrapper(['--version'])
+        self.assertEqual(0, ex.exception.code)
+
+    def test_no_parser_selection(self):
+        with self.assertRaises(SystemExit) as ex:
+            warnings_wrapper([])
+        self.assertEqual(2, ex.exception.code)
+
     junit_warning_cnt = 3
 
     def test_single_argument(self):
