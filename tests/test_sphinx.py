@@ -26,12 +26,15 @@ class TestSphinxWarnings(TestCase):
     def test_warning_no_line_number(self):
         dut1 = "/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'"
         dut2 = "/home/bljah/test/index.rst:None: WARNING: toctree contains reference to nonexisting document u'installation'"
+        dut3 = "/home/bljah/test/index.rst:: WARNING: toctree contains reference to nonexisting document u'installation'"
         with patch('sys.stdout', new=StringIO()) as fake_out:
             self.warnings.check(dut1)
             self.warnings.check(dut2)
-        self.assertEqual(self.warnings.return_count(), 2)
+            self.warnings.check(dut3)
+        self.assertEqual(self.warnings.return_count(), 3)
         self.assertRegexpMatches(fake_out.getvalue(), dut1)
         self.assertRegexpMatches(fake_out.getvalue(), dut2)
+        self.assertRegexpMatches(fake_out.getvalue(), dut3)
 
     def test_single_warning_mixed(self):
         dut1 = 'This1 should not be treated as warning'
