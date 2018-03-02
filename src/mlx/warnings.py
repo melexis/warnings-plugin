@@ -317,7 +317,8 @@ def warnings_wrapper(args):
     group.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
     group.add_argument('-j', '--junit', dest='junit', action='store_true')
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true')
-    parser.add_argument('-c', '--command', dest='command', action='store_true', help='Treat program arguments as command to execute to obtain data')
+    parser.add_argument('-c', '--command', dest='command', action='store_true',
+                        help='Treat program arguments as command to execute to obtain data')
     parser.add_argument('-m', '--maxwarnings', type=int, required=False, default=0,
                         help='Maximum amount of warnings accepted')
     parser.add_argument('--minwarnings', type=int, required=False, default=0,
@@ -325,8 +326,10 @@ def warnings_wrapper(args):
     parser.add_argument('--version', action='version', version='%(prog)s {version}'.format(version=pkg_resources.require('mlx.warnings')[0].version))
 
     parser.add_argument('logfile', nargs='+', help='Logfile (or command) that might contain warnings')
-    args = parser.parse_args(args)
 
+    return warnings_exec(parser.parse_args(args))
+
+def warnings_exec(args):
     warnings = WarningsPlugin(sphinx=args.sphinx, doxygen=args.doxygen, junit=args.junit, verbose=args.verbose)
     warnings.set_maximum(args.maxwarnings)
     warnings.set_minimum(args.minwarnings)
