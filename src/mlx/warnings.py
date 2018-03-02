@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+import os
 import pkg_resources
 import re
+import subprocess
 import sys
 import abc
 from junitparser import JUnitXml, Failure, Error
@@ -313,29 +315,46 @@ def warnings_wrapper(args):
     group.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
     group.add_argument('-j', '--junit', dest='junit', action='store_true')
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true')
+    parser.add_argument('-c', '--command', dest='command', action='store_true')
     parser.add_argument('-m', '--maxwarnings', type=int, required=False, default=0,
                         help='Maximum amount of warnings accepted')
     parser.add_argument('--minwarnings', type=int, required=False, default=0,
                         help='Minimum amount of warnings accepted')
     parser.add_argument('--version', action='version', version='%(prog)s {version}'.format(version=pkg_resources.require('mlx.warnings')[0].version))
 
-    parser.add_argument('logfile', nargs='+', help='Logfile that might contain warnings')
+    parser.add_argument('logfile', nargs='+', help='Logfile (or command) that might contain warnings')
     args = parser.parse_args(args)
 
     warnings = WarningsPlugin(sphinx=args.sphinx, doxygen=args.doxygen, junit=args.junit, verbose=args.verbose)
     warnings.set_maximum(args.maxwarnings)
     warnings.set_minimum(args.minwarnings)
 
-    # args.logfile doesn't necessarily contain wildcards, but just to be safe, we
-    # assume it does, and try to expand them.
-    # This mechanism is put in place to allow wildcards to be passed on even when
-    # executing the script on windows (in that case there is no shell expansion of wildcards)
-    # so that the script can be used in the exact same way even when moving from one
-    # OS to another.
-    for file_wildcard in args.logfile:
-        for logfile in glob.glob(file_wildcard):
-            with open(logfile, 'r') as loghandle:
-                warnings.check(loghandle.read())
+    if args.command:
+        try:
+            proc = subprocess.Popen(args.logfile, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+            out, err = proc.communicate()
+            # Check stderr
+            if err:
+                warnings.check(err.decode(encoding="utf-8"))
+            # Check stdout
+            if out:
+                warnings.check(out.decode(encoding="utf-8"))
+        except OSError as e:
+            if e.errno == os.errno.ENOENT:
+                print("It seems like program " + str(args.logfile) + " is not installed.")
+            else:
+                raise
+    else:
+        # args.logfile doesn't necessarily contain wildcards, but just to be safe, we
+        # assume it does, and try to expand them.
+        # This mechanism is put in place to allow wildcards to be passed on even when
+        # executing the script on windows (in that case there is no shell expansion of wildcards)
+        # so that the script can be used in the exact same way even when moving from one
+        # OS to another.
+        for file_wildcard in args.logfile:
+            for logfile in glob.glob(file_wildcard):
+                with open(logfile, 'r') as loghandle:
+                    warnings.check(loghandle.read())
 
     warnings.return_count()
     return warnings.return_check_limits()
