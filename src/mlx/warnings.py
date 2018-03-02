@@ -317,7 +317,7 @@ def warnings_wrapper(args):
     group.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
     group.add_argument('-j', '--junit', dest='junit', action='store_true')
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true')
-    parser.add_argument('-c', '--command', dest='command', action='store_true',
+    parser.add_argument('--command', dest='command', action='store_true',
                         help='Treat program arguments as command to execute to obtain data')
     parser.add_argument('-m', '--maxwarnings', type=int, required=False, default=0,
                         help='Maximum amount of warnings accepted')
@@ -326,6 +326,7 @@ def warnings_wrapper(args):
     parser.add_argument('--version', action='version', version='%(prog)s {version}'.format(version=pkg_resources.require('mlx.warnings')[0].version))
 
     parser.add_argument('logfile', nargs='+', help='Logfile (or command) that might contain warnings')
+    parser.add_argument('flags', nargs=argparse.REMAINDER, help='Possible not-used flags from above are considered as command flags')
 
     args = parser.parse_args(args)
 
@@ -334,7 +335,10 @@ def warnings_wrapper(args):
     warnings.set_minimum(args.minwarnings)
 
     if args.command:
-        warnings_command(warnings, args.logfile)
+        cmd = args.logfile
+        if args.flags:
+            cmd.extend(args.flags)
+        warnings_command(warnings, cmd)
     else:
         warnings_logfile(warnings, args.logfile)
 

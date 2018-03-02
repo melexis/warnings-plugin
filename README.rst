@@ -63,6 +63,10 @@ You can do that with shell pipes or with
 command line arguments to command (if it supports outputting errors to file
 instead of stderr). Be aware that some commands print warnings on stdout.
 
+Also warnings plugin log files need to be the last argument as otherwise the
+arguments after that are discarded, because they are considered as command
+arguments (with or without command flag).
+
 ------------
 Pipe example
 ------------
@@ -83,7 +87,7 @@ required).
 
 .. code-block:: bash
 
-    mlx-warnings -c yourcommand
+    mlx-warnings --command yourcommand
 
 ---------------
 Running command
@@ -115,9 +119,9 @@ The command returns (shell $? variable):
 - value 0 when the number of counted warnings is within the supplied minimum and maximum limits: ok,
 - number of counted warnings (positive) when the counter number is not within those limit.
 
-----------------------------
+-------------------------
 Parse for Sphinx warnings
-----------------------------
+-------------------------
 
 After you saved your Sphinx warnings to the file, you can parse it with
 command:
@@ -130,8 +134,8 @@ command:
     mlx-warnings --command --sphinx commandforsphinx
 
     # explicitly as python module for log file
-    python3 -m mlx.warnings doc_log.txt --sphinx
-    python -m mlx.warnings doc_log.txt --sphinx
+    python3 -m mlx.warnings --sphinx doc_log.txt
+    python -m mlx.warnings --sphinx doc_log.txt
     # explicitly as python module
     python3 -m mlx.warnings --command --sphinx commandforsphinx
     python -m mlx.warnings --command --sphinx commandforsphinx
@@ -152,8 +156,8 @@ command:
     mlx-warnings --command --doxygen commandfordoxygen
 
     # explicitly as python module for log file
-    python3 -m mlx.warnings doc_log.txt --doxygen
-    python -m mlx.warnings doc_log.txt --doxygen
+    python3 -m mlx.warnings --doxygen doc_log.txt
+    python -m mlx.warnings --doxygen doc_log.txt
     # explicitly as python module
     python3 -m mlx.warnings --command --doxygen commandfordoxygen
     python -m mlx.warnings --command --doxygen commandfordoxygen
@@ -174,8 +178,8 @@ command:
     mlx-warnings --command --junit commandforjunit
 
     # explicitly as python module for log file
-    python3 -m mlx.warnings junit_output.xml --junit
-    python -m mlx.warnings junit_output.xml --junit
+    python3 -m mlx.warnings --junit junit_output.xml
+    python -m mlx.warnings --junit junit_output.xml
     # explicitly as python module
     python3 -m mlx.warnings --command --junit commandforjunit
     python -m mlx.warnings --command --junit commandforjunit

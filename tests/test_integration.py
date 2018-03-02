@@ -23,6 +23,10 @@ class TestIntegration(TestCase):
         retval = warnings_wrapper(['--sphinx', '--command', 'cat', 'tests/sphinx_single_warning.txt', 'tests/sphinx_double_warning.txt'])
         self.assertEqual(1 + 2, retval)
 
+    def test_command_with_its_own_arguments(self):
+        retval = warnings_wrapper(['--sphinx', '--command', 'cat', '-A', 'tests/sphinx_single_warning.txt', 'tests/sphinx_double_warning.txt'])
+        self.assertEqual(1 + 2, retval)
+
     def test_wildcarded_arguments(self):
         # note: no shell expansion simulation (e.g. as in windows)
         retval = warnings_wrapper(['--junit', 'tests/junit*.xml'])
