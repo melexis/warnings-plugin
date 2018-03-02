@@ -327,52 +327,62 @@ def warnings_wrapper(args):
 
     parser.add_argument('logfile', nargs='+', help='Logfile (or command) that might contain warnings')
 
-    return warnings_exec(parser.parse_args(args))
+    args = parser.parse_args(args)
 
-def warnings_exec(args):
     warnings = WarningsPlugin(sphinx=args.sphinx, doxygen=args.doxygen, junit=args.junit, verbose=args.verbose)
     warnings.set_maximum(args.maxwarnings)
     warnings.set_minimum(args.minwarnings)
 
     if args.command:
-        try:
-            proc = subprocess.Popen(args.logfile, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
-            out, err = proc.communicate()
-            # Check stdout
-            if out:
-                try:
-                    warnings.check(out.decode(encoding="utf-8"))
-                    print(out.decode(encoding="utf-8"))
-                except AttributeError as e:
-                    warnings.check(out)
-                    print(out)
-            # Check stderr
-            if err:
-                try:
-                    warnings.check(err.decode(encoding="utf-8"))
-                    print(err.decode(encoding="utf-8"), file=sys.stderr)
-                except AttributeError as e:
-                    warnings.check(err)
-                    print(err, file=sys.stderr)
-        except OSError as e:
-            if e.errno == os.errno.ENOENT:
-                print("It seems like program " + str(args.logfile) + " is not installed.")
-            else:
-                raise
+        warnings_command(warnings, args.logfile)
     else:
-        # args.logfile doesn't necessarily contain wildcards, but just to be safe, we
-        # assume it does, and try to expand them.
-        # This mechanism is put in place to allow wildcards to be passed on even when
-        # executing the script on windows (in that case there is no shell expansion of wildcards)
-        # so that the script can be used in the exact same way even when moving from one
-        # OS to another.
-        for file_wildcard in args.logfile:
-            for logfile in glob.glob(file_wildcard):
-                with open(logfile, 'r') as loghandle:
-                    warnings.check(loghandle.read())
+        warnings_logfile(warnings, args.logfile)
 
     warnings.return_count()
     return warnings.return_check_limits()
+
+
+def warnings_command(warnings, cmd):
+    try:
+        print("Executing: ", end='')
+        print(cmd)
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                stdin=subprocess.PIPE, bufsize=1, universal_newlines=True)
+        out, err = proc.communicate()
+        # Check stdout
+        if out:
+            try:
+                print(out.decode(encoding="utf-8"))
+                warnings.check(out.decode(encoding="utf-8"))
+            except AttributeError as e:
+                warnings.check(out)
+                print(out)
+        # Check stderr
+        if err:
+            try:
+                warnings.check(err.decode(encoding="utf-8"))
+                print(err.decode(encoding="utf-8"), file=sys.stderr)
+            except AttributeError as e:
+                warnings.check(err)
+                print(err, file=sys.stderr)
+    except OSError as e:
+        if e.errno == os.errno.ENOENT:
+            print("It seems like program " + str(cmd) + " is not installed.")
+        else:
+            raise
+
+
+def warnings_logfile(warnings, log):
+    # args.logfile doesn't necessarily contain wildcards, but just to be safe, we
+    # assume it does, and try to expand them.
+    # This mechanism is put in place to allow wildcards to be passed on even when
+    # executing the script on windows (in that case there is no shell expansion of wildcards)
+    # so that the script can be used in the exact same way even when moving from one
+    # OS to another.
+    for file_wildcard in log:
+        for logfile in glob.glob(file_wildcard):
+            with open(logfile, 'r') as loghandle:
+                warnings.check(loghandle.read())
 
 
 def main():
