@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 import argparse
 import os
 import pkg_resources
@@ -333,12 +335,22 @@ def warnings_wrapper(args):
         try:
             proc = subprocess.Popen(args.logfile, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
             out, err = proc.communicate()
-            # Check stderr
-            if err:
-                warnings.check(err.decode(encoding="utf-8"))
             # Check stdout
             if out:
-                warnings.check(out.decode(encoding="utf-8"))
+                try:
+                    warnings.check(out.decode(encoding="utf-8"))
+                    print(out.decode(encoding="utf-8"))
+                except AttributeError as e:
+                    warnings.check(out)
+                    print(out)
+            # Check stderr
+            if err:
+                try:
+                    warnings.check(err.decode(encoding="utf-8"))
+                    print(err.decode(encoding="utf-8"), file=sys.stderr)
+                except AttributeError as e:
+                    warnings.check(err)
+                    print(err, file=sys.stderr)
         except OSError as e:
             if e.errno == os.errno.ENOENT:
                 print("It seems like program " + str(args.logfile) + " is not installed.")
