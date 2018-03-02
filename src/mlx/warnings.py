@@ -372,8 +372,7 @@ def warnings_command(warnings, cmd):
     except OSError as e:
         if e.errno == os.errno.ENOENT:
             print("It seems like program " + str(cmd) + " is not installed.")
-        else:
-            raise
+        raise
 
 
 def warnings_logfile(warnings, log):
