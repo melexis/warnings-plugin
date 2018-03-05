@@ -340,8 +340,9 @@ def warnings_wrapper(args):
         cmd = args.logfile
         if args.flags:
             cmd.extend(args.flags)
-        retval = warnings_command(warnings, cmd, args.ignore)
-        if retval != 0:
+        retval = warnings_command(warnings, cmd)
+
+        if (not args.ignore) and (retval != 0):
             return retval
     else:
         warnings_logfile(warnings, args.logfile)
@@ -350,7 +351,7 @@ def warnings_wrapper(args):
     return warnings.return_check_limits()
 
 
-def warnings_command(warnings, cmd, ignore):
+def warnings_command(warnings, cmd):
     ''' Execute command to obtain input for parsing for warnings
 
     Usually log files are output of the commands. To avoid this additional step
@@ -364,7 +365,6 @@ def warnings_command(warnings, cmd, ignore):
 
     Return:
         retval: Return value of executed command
-        0: If ignore flag is used.
 
     Raises:
         OSError: When program is not installed.
@@ -392,11 +392,7 @@ def warnings_command(warnings, cmd, ignore):
             except AttributeError as e:
                 warnings.check(err)
                 print(err, file=sys.stderr)
-
-        if ignore:
-            return 0
-        else:
-            return proc.returncode
+        return proc.returncode
     except OSError as e:
         if e.errno == os.errno.ENOENT:
             print("It seems like program " + str(cmd) + " is not installed.")
