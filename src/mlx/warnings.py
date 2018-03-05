@@ -213,6 +213,7 @@ class WarningsPlugin:
         self.warn_min = 0
         self.warn_max = 0
         self.count = 0
+        self.printout = False
 
     def activate_checker(self, checker):
         '''
@@ -244,6 +245,8 @@ class WarningsPlugin:
         if len(self.checkerList) == 0:
             print("No checkers activated. Please use activate_checker function")
         else:
+            if self.printout:
+                print(content)
             for name, checker in self.checkerList.items():
                 checker.check(content)
 
@@ -309,6 +312,16 @@ class WarningsPlugin:
 
         return 0
 
+    def toggle_printout(self, printout):
+        ''' Toggle printout of all the parsed content
+
+        Useful for command input where we want to print content as well
+
+        Args:
+            printout: True enables the printout, False provides more silent mode
+        '''
+        self.printout = printout
+
 
 def warnings_wrapper(args):
     parser = argparse.ArgumentParser(prog='mlx-warnings')
@@ -340,6 +353,7 @@ def warnings_wrapper(args):
         cmd = args.logfile
         if args.flags:
             cmd.extend(args.flags)
+        warnings.toggle_printout(True)
         retval = warnings_command(warnings, cmd)
 
         if (not args.ignore) and (retval != 0):
@@ -379,19 +393,15 @@ def warnings_command(warnings, cmd):
         # Check stdout
         if out:
             try:
-                print(out.decode(encoding="utf-8"))
                 warnings.check(out.decode(encoding="utf-8"))
             except AttributeError as e:
                 warnings.check(out)
-                print(out)
         # Check stderr
         if err:
             try:
                 warnings.check(err.decode(encoding="utf-8"))
-                print(err.decode(encoding="utf-8"), file=sys.stderr)
             except AttributeError as e:
                 warnings.check(err)
-                print(err, file=sys.stderr)
         return proc.returncode
     except OSError as e:
         if e.errno == os.errno.ENOENT:
