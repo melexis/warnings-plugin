@@ -87,7 +87,7 @@ required).
 
 .. code-block:: bash
 
-    mlx-warnings --command yourcommand
+    mlx-warnings --command <yourcommand>
 
 ---------------
 Running command
@@ -131,14 +131,14 @@ command:
     # command line log file
     mlx-warnings doc_log.txt --sphinx
     # command line command execution
-    mlx-warnings --command --sphinx commandforsphinx
+    mlx-warnings --command --sphinx <commandforsphinx>
 
     # explicitly as python module for log file
     python3 -m mlx.warnings --sphinx doc_log.txt
     python -m mlx.warnings --sphinx doc_log.txt
     # explicitly as python module
-    python3 -m mlx.warnings --command --sphinx commandforsphinx
-    python -m mlx.warnings --command --sphinx commandforsphinx
+    python3 -m mlx.warnings --command --sphinx <commandforsphinx>
+    python -m mlx.warnings --command --sphinx <commandforsphinx>
 
 
 --------------------------
@@ -153,14 +153,14 @@ command:
     # command line log file
     mlx-warnings doc_log.txt --doxygen
     # command line command execution
-    mlx-warnings --command --doxygen commandfordoxygen
+    mlx-warnings --command --doxygen <commandfordoxygen>
 
     # explicitly as python module for log file
     python3 -m mlx.warnings --doxygen doc_log.txt
     python -m mlx.warnings --doxygen doc_log.txt
     # explicitly as python module
-    python3 -m mlx.warnings --command --doxygen commandfordoxygen
-    python -m mlx.warnings --command --doxygen commandfordoxygen
+    python3 -m mlx.warnings --command --doxygen <commandfordoxygen>
+    python -m mlx.warnings --command --doxygen <commandfordoxygen>
 
 
 ------------------------
@@ -175,14 +175,14 @@ command:
     # command line log file
     mlx-warnings junit_output.xml --junit
     # command line command execution
-    mlx-warnings --command --junit commandforjunit
+    mlx-warnings --command --junit <commandforjunit>
 
     # explicitly as python module for log file
     python3 -m mlx.warnings --junit junit_output.xml
     python -m mlx.warnings --junit junit_output.xml
     # explicitly as python module
-    python3 -m mlx.warnings --command --junit commandforjunit
-    python -m mlx.warnings --command --junit commandforjunit
+    python3 -m mlx.warnings --command --junit <commandforjunit>
+    python -m mlx.warnings --command --junit <commandforjunit>
 
 -------------
 Other options
