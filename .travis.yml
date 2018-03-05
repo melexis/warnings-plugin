@@ -65,7 +65,7 @@ deploy:
     before_deploy:
       - "env SETUP_TOOLS_SCM_PRETEND_VERSION='{next_version}.dev{distance}'"
     on:
-      branch: master
+      branch: test_pypi_deployment
       python: 3.6
       tags: false
   # production pypi
