@@ -319,6 +319,8 @@ def warnings_wrapper(args):
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true')
     parser.add_argument('--command', dest='command', action='store_true',
                         help='Treat program arguments as command to execute to obtain data')
+    parser.add_argument('--ignore-retval', dest='ignore', action='store_true',
+                        help='Ignore return value of the executed command')
     parser.add_argument('-m', '--maxwarnings', type=int, required=False, default=0,
                         help='Maximum amount of warnings accepted')
     parser.add_argument('--minwarnings', type=int, required=False, default=0,
@@ -338,7 +340,7 @@ def warnings_wrapper(args):
         cmd = args.logfile
         if args.flags:
             cmd.extend(args.flags)
-        retval = warnings_command(warnings, cmd)
+        retval = warnings_command(warnings, cmd, args.ignore)
         if retval != 0:
             return retval
     else:
@@ -348,7 +350,26 @@ def warnings_wrapper(args):
     return warnings.return_check_limits()
 
 
-def warnings_command(warnings, cmd):
+def warnings_command(warnings, cmd, ignore):
+    ''' Execute command to obtain input for parsing for warnings
+
+    Usually log files are output of the commands. To avoid this additional step
+    this function runs a command instead and parses the stderr and stdout of the
+    command for warnings.
+
+    Args:
+        warnings (WarningsPlugin): Object for warnings where errors should be logged
+        cmd: Command list, which should be executed to obtain input for parsing
+        ignore: Flag to ignore return value of the command
+
+    Return:
+        retval: Return value of executed command
+        0: If ignore flag is used.
+
+    Raises:
+        OSError: When program is not installed.
+    '''
+
     try:
         print("Executing: ", end='')
         print(cmd)
@@ -371,7 +392,11 @@ def warnings_command(warnings, cmd):
             except AttributeError as e:
                 warnings.check(err)
                 print(err, file=sys.stderr)
-        return proc.returncode
+
+        if ignore:
+            return 0
+        else:
+            return proc.returncode
     except OSError as e:
         if e.errno == os.errno.ENOENT:
             print("It seems like program " + str(cmd) + " is not installed.")
