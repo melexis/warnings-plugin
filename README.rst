@@ -57,10 +57,15 @@ You can find more details in `Installation guide <docs/installation.rst>`_
 Usage
 =====
 
-Since warnings plugin parses log messages (so far), you will need to redirect
-your stderr to some text file. You can do that with shell pipes or with
+Warnings plugin parses log messages as well as direct command stream. In case you
+want to create log file, you will need to redirect your stderr to some text file.
+You can do that with shell pipes or with
 command line arguments to command (if it supports outputting errors to file
 instead of stderr). Be aware that some commands print warnings on stdout.
+
+Also warnings plugin log files need to be the last argument as otherwise the
+arguments after that are discarded, because they are considered as command
+arguments (with or without command flag).
 
 ------------
 Pipe example
@@ -73,6 +78,16 @@ file.
 
     yourcommand 2>&1 | tee doc_log.txt
 
+---------------
+Command example
+---------------
+
+Below is the command example for the plugin (keep in mind that parse commands are
+required).
+
+.. code-block:: bash
+
+    mlx-warnings --command <yourcommand>
 
 ---------------
 Running command
@@ -104,20 +119,26 @@ The command returns (shell $? variable):
 - value 0 when the number of counted warnings is within the supplied minimum and maximum limits: ok,
 - number of counted warnings (positive) when the counter number is not within those limit.
 
-----------------------------
+-------------------------
 Parse for Sphinx warnings
-----------------------------
+-------------------------
 
 After you saved your Sphinx warnings to the file, you can parse it with
 command:
 
 .. code-block:: bash
 
-    # command line
+    # command line log file
     mlx-warnings doc_log.txt --sphinx
+    # command line command execution
+    mlx-warnings --command --sphinx <commandforsphinx>
+
+    # explicitly as python module for log file
+    python3 -m mlx.warnings --sphinx doc_log.txt
+    python -m mlx.warnings --sphinx doc_log.txt
     # explicitly as python module
-    python3 -m mlx.warnings doc_log.txt --sphinx
-    python -m mlx.warnings doc_log.txt --sphinx
+    python3 -m mlx.warnings --command --sphinx <commandforsphinx>
+    python -m mlx.warnings --command --sphinx <commandforsphinx>
 
 
 --------------------------
@@ -129,11 +150,17 @@ command:
 
 .. code-block:: bash
 
-    # command line
+    # command line log file
     mlx-warnings doc_log.txt --doxygen
+    # command line command execution
+    mlx-warnings --command --doxygen <commandfordoxygen>
+
+    # explicitly as python module for log file
+    python3 -m mlx.warnings --doxygen doc_log.txt
+    python -m mlx.warnings --doxygen doc_log.txt
     # explicitly as python module
-    python3 -m mlx.warnings doc_log.txt --doxygen
-    python -m mlx.warnings doc_log.txt --doxygen
+    python3 -m mlx.warnings --command --doxygen <commandfordoxygen>
+    python -m mlx.warnings --command --doxygen <commandfordoxygen>
 
 
 ------------------------
@@ -145,11 +172,17 @@ command:
 
 .. code-block:: bash
 
-    # command line
+    # command line log file
     mlx-warnings junit_output.xml --junit
+    # command line command execution
+    mlx-warnings --command --junit <commandforjunit>
+
+    # explicitly as python module for log file
+    python3 -m mlx.warnings --junit junit_output.xml
+    python -m mlx.warnings --junit junit_output.xml
     # explicitly as python module
-    python3 -m mlx.warnings junit_output.xml --junit
-    python -m mlx.warnings junit_output.xml --junit
+    python3 -m mlx.warnings --command --junit <commandforjunit>
+    python -m mlx.warnings --command --junit <commandforjunit>
 
 -------------
 Other options

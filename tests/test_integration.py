@@ -30,6 +30,26 @@ class TestIntegration(TestCase):
         retval = warnings_wrapper(['--junit', 'tests/junit_single_fail.xml', 'tests/junit_double_fail.xml'])
         self.assertEqual(1 + 2, retval)
 
+    def test_single_command_argument(self):
+        retval = warnings_wrapper(['--junit', '--command', 'cat', 'tests/junit_single_fail.xml'])
+        self.assertEqual(1, retval)
+
+    def test_two_command_arguments(self):
+        retval = warnings_wrapper(['--sphinx', '--command', 'cat', 'tests/sphinx_single_warning.txt', 'tests/sphinx_double_warning.txt'])
+        self.assertEqual(1 + 2, retval)
+
+    def test_command_with_its_own_arguments(self):
+        retval = warnings_wrapper(['--sphinx', '--command', 'cat', '-A', 'tests/sphinx_single_warning.txt', 'tests/sphinx_double_warning.txt'])
+        self.assertEqual(1 + 2, retval)
+
+    def test_command_to_stderr(self):
+        retval = warnings_wrapper(['--sphinx', '--command', 'cat', 'tests/sphinx_single_warning.txt', '>&2'])
+        self.assertEqual(1, retval)
+
+    def test_faulty_command(self):
+        with self.assertRaises(OSError):
+            warnings_wrapper(['--sphinx', '--command', 'blahahahaha', 'tests/sphinx_single_warning.txt'])
+
     def test_wildcarded_arguments(self):
         # note: no shell expansion simulation (e.g. as in windows)
         retval = warnings_wrapper(['--junit', 'tests/junit*.xml'])
