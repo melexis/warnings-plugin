@@ -338,7 +338,9 @@ def warnings_wrapper(args):
         cmd = args.logfile
         if args.flags:
             cmd.extend(args.flags)
-        warnings_command(warnings, cmd)
+        retval = warnings_command(warnings, cmd)
+        if retval != 0:
+            return retval
     else:
         warnings_logfile(warnings, args.logfile)
 
@@ -369,6 +371,7 @@ def warnings_command(warnings, cmd):
             except AttributeError as e:
                 warnings.check(err)
                 print(err, file=sys.stderr)
+        return proc.returncode
     except OSError as e:
         if e.errno == os.errno.ENOENT:
             print("It seems like program " + str(cmd) + " is not installed.")
