@@ -359,7 +359,9 @@ def warnings_wrapper(args):
         if (not args.ignore) and (retval != 0):
             return retval
     else:
-        warnings_logfile(warnings, args.logfile)
+        retval = warnings_logfile(warnings, args.logfile)
+        if retval != 0:
+            return retval
 
     warnings.return_count()
     return warnings.return_check_limits()
@@ -383,7 +385,6 @@ def warnings_command(warnings, cmd):
     Raises:
         OSError: When program is not installed.
     '''
-
     try:
         print("Executing: ", end='')
         print(cmd)
@@ -410,6 +411,16 @@ def warnings_command(warnings, cmd):
 
 
 def warnings_logfile(warnings, log):
+    ''' Parse logfile for warnings
+
+    Args:
+        warnings (WarningsPlugin): Object for warnings where errors should be logged
+        log: Logfile for parsing
+
+    Return:
+        0: Log files existed and are parsed successfully
+        1: Log files did not exist
+    '''
     # args.logfile doesn't necessarily contain wildcards, but just to be safe, we
     # assume it does, and try to expand them.
     # This mechanism is put in place to allow wildcards to be passed on even when
@@ -417,9 +428,15 @@ def warnings_logfile(warnings, log):
     # so that the script can be used in the exact same way even when moving from one
     # OS to another.
     for file_wildcard in log:
-        for logfile in glob.glob(file_wildcard):
-            with open(logfile, 'r') as loghandle:
-                warnings.check(loghandle.read())
+        if glob.glob(file_wildcard):
+            for logfile in glob.glob(file_wildcard):
+                with open(logfile, 'r') as loghandle:
+                    warnings.check(loghandle.read())
+        else:
+            print("FILE: %s does not exist" % file_wildcard)
+            return 1
+
+    return 0
 
 
 def main():
