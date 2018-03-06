@@ -1,8 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import re
 import abc
+import re
+from junitparser import JUnitXml, Failure, Error
+
+DOXYGEN_WARNING_REGEX = r"(?:((?:[/.]|[A-Za-z]).+?):(-?\d+):\s*([Ww]arning|[Ee]rror)|<.+>:-?\d+(?::\s*([Ww]arning|[Ee]rror))?): (.+(?:(?!\s*(?:[Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*([Nn]otice|[Ww]arning|[Ee]rror): (.+)\n?"
+doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
+
+SPHINX_WARNING_REGEX = r"(.+?:(?:\d+|None)?):?\s*(DEBUG|INFO|WARNING|ERROR|SEVERE):\s*(.+)\n?"
+sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 
 
 class WarningsChecker(object):
@@ -131,5 +138,44 @@ class RegexChecker(WarningsChecker):
             self.count += 1
             if self.verbose:
                 print(match.group(0).strip())
+
+
+class SphinxChecker(RegexChecker):
+    name = 'sphinx'
+    pattern = sphinx_pattern
+
+
+class DoxyChecker(RegexChecker):
+    name = 'doxygen'
+    pattern = doxy_pattern
+
+
+class JUnitChecker(WarningsChecker):
+    name = 'junit'
+
+    def __init__(self, verbose=False):
+        ''' Constructor
+
+        Args:
+            verbose (bool): Enable/disable verbose logging
+        '''
+        super(JUnitChecker, self).__init__(verbose=verbose)
+
+    def check(self, content):
+        '''
+        Function for counting the number of JUnit failures in a specific text
+
+        Args:
+            content (str): The content to parse
+        '''
+        result = JUnitXml.fromstring(content.encode('utf-8'))
+        if self.verbose:
+            for suite in result:
+                for testcase in filter(lambda testcase: isinstance(testcase.result, (Failure, Error)), suite):
+                    print('{classname}.{testname}'.format(classname=testcase.classname,
+                                                          testname=testcase.name))
+        result.update_statistics()
+        self.count += result.errors + result.failures
+
 
 
