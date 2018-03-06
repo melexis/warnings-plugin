@@ -213,6 +213,7 @@ class WarningsPlugin:
         self.warn_min = 0
         self.warn_max = 0
         self.count = 0
+        self.printout = False
 
     def activate_checker(self, checker):
         '''
@@ -244,6 +245,8 @@ class WarningsPlugin:
         if len(self.checkerList) == 0:
             print("No checkers activated. Please use activate_checker function")
         else:
+            if self.printout:
+                print(content)
             for name, checker in self.checkerList.items():
                 checker.check(content)
 
@@ -309,6 +312,16 @@ class WarningsPlugin:
 
         return 0
 
+    def toggle_printout(self, printout):
+        ''' Toggle printout of all the parsed content
+
+        Useful for command input where we want to print content as well
+
+        Args:
+            printout: True enables the printout, False provides more silent mode
+        '''
+        self.printout = printout
+
 
 def warnings_wrapper(args):
     parser = argparse.ArgumentParser(prog='mlx-warnings')
@@ -319,6 +332,8 @@ def warnings_wrapper(args):
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true')
     parser.add_argument('--command', dest='command', action='store_true',
                         help='Treat program arguments as command to execute to obtain data')
+    parser.add_argument('--ignore-retval', dest='ignore', action='store_true',
+                        help='Ignore return value of the executed command')
     parser.add_argument('-m', '--maxwarnings', type=int, required=False, default=0,
                         help='Maximum amount of warnings accepted')
     parser.add_argument('--minwarnings', type=int, required=False, default=0,
@@ -338,7 +353,11 @@ def warnings_wrapper(args):
         cmd = args.logfile
         if args.flags:
             cmd.extend(args.flags)
-        warnings_command(warnings, cmd)
+        warnings.toggle_printout(True)
+        retval = warnings_command(warnings, cmd)
+
+        if (not args.ignore) and (retval != 0):
+            return retval
     else:
         warnings_logfile(warnings, args.logfile)
 
@@ -347,6 +366,24 @@ def warnings_wrapper(args):
 
 
 def warnings_command(warnings, cmd):
+    ''' Execute command to obtain input for parsing for warnings
+
+    Usually log files are output of the commands. To avoid this additional step
+    this function runs a command instead and parses the stderr and stdout of the
+    command for warnings.
+
+    Args:
+        warnings (WarningsPlugin): Object for warnings where errors should be logged
+        cmd: Command list, which should be executed to obtain input for parsing
+        ignore: Flag to ignore return value of the command
+
+    Return:
+        retval: Return value of executed command
+
+    Raises:
+        OSError: When program is not installed.
+    '''
+
     try:
         print("Executing: ", end='')
         print(cmd)
@@ -356,19 +393,16 @@ def warnings_command(warnings, cmd):
         # Check stdout
         if out:
             try:
-                print(out.decode(encoding="utf-8"))
                 warnings.check(out.decode(encoding="utf-8"))
             except AttributeError as e:
                 warnings.check(out)
-                print(out)
         # Check stderr
         if err:
             try:
                 warnings.check(err.decode(encoding="utf-8"))
-                print(err.decode(encoding="utf-8"), file=sys.stderr)
             except AttributeError as e:
                 warnings.check(err)
-                print(err, file=sys.stderr)
+        return proc.returncode
     except OSError as e:
         if e.errno == os.errno.ENOENT:
             print("It seems like program " + str(cmd) + " is not installed.")
