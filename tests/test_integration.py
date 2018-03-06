@@ -30,6 +30,10 @@ class TestIntegration(TestCase):
         retval = warnings_wrapper(['--junit', 'tests/junit_single_fail.xml', 'tests/junit_double_fail.xml'])
         self.assertEqual(1 + 2, retval)
 
+    def test_non_existing_logfile(self):
+        retval = warnings_wrapper(['--sphinx', 'not-exist.log'])
+        self.assertEqual(1, retval)
+
     def test_single_command_argument(self):
         retval = warnings_wrapper(['--junit', '--command', 'cat', 'tests/junit_single_fail.xml'])
         self.assertEqual(1, retval)
