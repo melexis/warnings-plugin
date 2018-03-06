@@ -1,4 +1,5 @@
-engines:
+version: "2"
+plugins:
   duplication:
     enabled: true
     config:
@@ -9,14 +10,12 @@ engines:
     enabled: true
   radon:
     enabled: true
-ratings:
-  paths:
-  - "**.inc"
-  - "**.js"
-  - "**.jsx"
-  - "**.module"
-  - "**.php"
-  - "**.py"
-  - "**.rb"
-exclude_paths:
+    config:
+      threshold: "C"
+  sonar-python:
+    enabled: true
+    config:
+      tests_patterns:
+        - tests/**
+exclude_patterns:
 - tests/
