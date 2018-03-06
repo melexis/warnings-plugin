@@ -50,9 +50,7 @@ class WarningsChecker(object):
         Raises:
             ValueError: Invalid argument (min limit higher than max limit)
         '''
-        if self.warn_min == 0:
-            self.warn_max = maximum
-        elif self.warn_min > maximum:
+        if self.warn_min > maximum:
             raise ValueError("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Cannot enter {value}". format(min=self.warn_min, max=self.warn_max, value=maximum))
         else:
             self.warn_max = maximum
