@@ -5,6 +5,8 @@ env:
   global:
     - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
     - SEGFAULT_SIGNALS=all
+      # CC_TEST_REPORTER_ID=
+    - secure: A5pK06CxONo/hZSfl7Bk1/vYbQOEH5RqXf01FMav9n7qgEXsa4TeUOpsnpy1xSMfZtu7d7HuOUecdubKpEWvJIgA0vO98juguOZtN/crcpc6AA3XdEqVFM5NKYPBdtx2rcgWxbig3sFv1g1JIg3GRhWdYLmvSdxxF4vM1wDkwYztY+WaSXMigmMQz8/KOMhmXSdvjpLfEzk+NdSEIwEVrxlbFX8nZzTJxahN2W4kwBFlpzDeVDMIUWStUZHJKrswv75KfA2goRhGnT1/aLBa7dVl0M3ChTxrDHrgn7PZSuP+r1ORDd7hSx2730QhALHh4f8N+cOsNqyevgbpDlGEr+CgnJqcfi5jdkxaeQZ4f/aXCy2iQCIUeGElNahNoJ6bVqpPz9d9fCAGg9dYfKq/X5Wy+7TXr+9qlGBw5oYMavPELXR3qdY5rUxKsIoLmbRJq9/TRzKeeBP5ft8vlaX3MbYV6MJOxGc6TYn1XpS92LvDyqnm7M6ib2AgJhUfRttIu2cI5yebGRyNxF83Dl98qjPHU98UgHyJXJLPcAfgQA5GcvQGzUmCrhEQWtAGov6z7G3uvPmXm4bhkvtV8tP06QAcNFCwmHonjJMyrKNxkU1hPZjWwACPQ0gT6mLr+I67FReesjtx7IUugWB7Gi4I8RondV4IL41kfsk6FsSsq4k=
   matrix:
     - TOXENV=check
     - TOXENV=docs
@@ -41,9 +43,13 @@ install:
   - easy_install --version
   - pip --version
   - tox --version
-
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 script:
   - tox -v
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 after_failure:
   - more .tox/log/* | cat
