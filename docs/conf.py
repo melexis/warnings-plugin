@@ -62,8 +62,8 @@ napoleon_use_param = False
 if 'nt' in os.name:
     plantuml_path = subprocess.check_output(["where", "/F", "plantuml.jar"])
     if not plantuml_path :
-        print "Can't find 'plantuml.jar' file."
-        print "You need to add path to 'plantuml.jar' file to your PATH variable."
+        print("Can't find 'plantuml.jar' file.")
+        print("You need to add path to 'plantuml.jar' file to your PATH variable.")
         sys.exit(os.strerror(errno.EPERM))
     plantuml = plantuml_path.decode("utf-8")
     plantuml = plantuml.rstrip('\n\r')
@@ -73,8 +73,8 @@ if 'nt' in os.name:
 else:
     plantuml_path = subprocess.check_output(["whereis", "-u", "plantuml"])
     if not plantuml_path :
-        print "Can't find 'plantuml.jar' file."
-        print "You need to add path to 'plantuml.jar' file to your PATH variable."
+        print("Can't find 'plantuml.jar' file.")
+        print("You need to add path to 'plantuml.jar' file to your PATH variable.")
         sys.exit(os.strerror(errno.EPERM))
 
 

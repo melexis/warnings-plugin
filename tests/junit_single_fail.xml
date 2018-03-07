@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites>
+    <testsuite errors="0" failures="1" name="test_warn_plugin_single_fail" skips="0" tests="2" time="33">
+        <testcase classname="test_warn_plugin_single_fail" name="myfirstgreatsu66ess" time="22"/>
+        <testcase classname="test_warn_plugin_single_fail" name="myfirstfai1ure" time="44">
+            <failure message="Is our warnings plugin able to trace this random failure msg?" />
+        </testcase>
+    </testsuite>
+    <testsuite errors="0" failures="0" name="test_warn_plugin_no_single_fail" skips="0" tests="1" time="33">
+        <testcase classname="test_warn_plugin_no_single_fail" name="mysecondgreatsu66ess" time="33"/>
+    </testsuite>
+</testsuites>

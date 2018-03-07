@@ -1,137 +1,24 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from __future__ import print_function
+
 import argparse
-import re
-import sys
 import json
+import os
+import pkg_resources
+import subprocess
+import sys
+import glob
+from mlx.warnings_checker import SphinxChecker, DoxyChecker, JUnitChecker
+from setuptools_scm import get_version
 
-DOXYGEN_WARNING_REGEX = r"(?:(?:((?:[/.]|[A-Za-z]:).+?):(-?\d+):\s*([Ww]arning|[Ee]rror)|<.+>:-?\d+(?::\s*([Ww]arning|[Ee]rror))?): (.+(?:\n(?!\s*(?:[Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*([Nn]otice|[Ww]arning|[Ee]rror): (.+))$"
-doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
-
-SPHINX_WARNING_REGEX = r"^(.+?:(?:\d+|None)): (DEBUG|INFO|WARNING|ERROR|SEVERE): (.+)\n?$"
-sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
-
-JUNIT_WARNING_REGEX = r"\<\s*failure\s+message"
-junit_pattern = re.compile(JUNIT_WARNING_REGEX)
-
-
-class WarningsChecker(object):
-
-    def __init__(self, name, pattern = None):
-        ''' Constructor
-
-        Args:
-            name (str): Name of the checker
-            pattern (str): Regular expression used by the checker in order to find warnings
-        '''
-        self.pattern = pattern
-        self.name = name
-        self.reset()
-
-    def reset(self):
-        ''' Reset function (resets min, max and counter values) '''
-        self.count = 0
-        self.warn_min = 0
-        self.warn_max = 0
-
-    def check(self, line):
-        ''' Function for counting the number of sphinx warnings in a specific line '''
-        self.count += len(re.findall(self.pattern, line))
-
-    def set_maximum(self, maximum):
-        ''' Setter function for the maximum amount of warnings
-
-        Args:
-            maximum (int): maximum amount of warnings allowed
-
-        Raises:
-            ValueError: Invalid argument (min limit higher than max limit)
-        '''
-        if self.warn_min == 0:
-            self.warn_max = maximum
-        elif self.warn_min > maximum:
-            raise ValueError("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Cannot enter {value}". format(min=self.warn_min, max=self.warn_max, value=maximum))
-        else:
-            self.warn_max = maximum
-
-    def get_maximum(self):
-        ''' Getter function for the maximum amount of warnings
-
-        Returns:
-            int: Maximum amount of warnings
-        '''
-        return self.warn_max
-
-    def set_minimum(self, minimum):
-        ''' Setter function for the minimum amount of warnings
-
-        Args:
-            minimum (int): minimum amount of warnings allowed
-
-        Raises:
-            ValueError: Invalid argument (min limit higher than max limit)
-        '''
-        if minimum > self.warn_max:
-            raise ValueError("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Cannot enter {value}". format(min=self.warn_min, max=self.warn_max, value=minimum))
-        else:
-            self.warn_min = minimum
-
-    def get_minimum(self):
-        ''' Getter function for the minimum amount of warnings
-
-        Returns:
-            int: Minimum amount of warnings
-        '''
-        return self.warn_min
-
-    def return_count(self):
-        ''' Getter function for the amount of warnings found
-
-        Returns:
-            int: Number of warnings found
-        '''
-        print("{count} {name} warnings found".format(count=self.count, name=self.name))
-        return self.count
-
-    def return_check_limits(self):
-        ''' Function for checking whether the warning count is within the configured limits
-
-        Returns:
-            int: 0 if the amount of warnings is within limits. 1 otherwise
-        '''
-        if self.count > self.warn_max:
-            print("Number of warnings ({count}) is higher than the maximum limit ({max}). Returning error code 1.".format(count=self.count, max=self.warn_max))
-            return 1
-        elif self.count < self.warn_min:
-            print("Number of warnings ({count}) is lower than the minimum limit ({min}). Returning error code 1.".format(count=self.count, min=self.warn_min))
-            return 1
-        else:
-            print("Number of warnings ({count}) is between limits {min} and {max}. Well done.".format(count=self.count, min=self.warn_min, max=self.warn_max))
-            return 0
-
-
-class SphinxChecker(WarningsChecker):
-    name = 'sphinx'
-
-    def __init__(self):
-        super(SphinxChecker, self).__init__(name=SphinxChecker.name, pattern=sphinx_pattern)
-
-
-class DoxyChecker(WarningsChecker):
-    name = 'doxygen'
-
-    def __init__(self):
-        super(DoxyChecker, self).__init__(name=DoxyChecker.name, pattern=doxy_pattern)
-
-
-class JUnitChecker(WarningsChecker):
-    name = 'junit'
-
-    def __init__(self):
-        super(JUnitChecker, self).__init__(name=JUnitChecker.name, pattern=junit_pattern)
+__version__ = get_version()
 
 
 class WarningsPlugin:
 
-    def __init__(self, sphinx = False, doxygen = False, junit = False, configfile= None):
+    def __init__(self, sphinx = False, doxygen = False, junit = False, verbose = False, configfile= None):
         '''
         Function for initializing the parsers
 
@@ -139,23 +26,26 @@ class WarningsPlugin:
             sphinx (bool, optional):    enable sphinx parser
             doxygen (bool, optional):   enable doxygen parser
             junit (bool, optional):     enable junit parser
+            verbose (bool, optional):   enable verbose logging
         '''
         self.checkerList = {}
+        self.verbose = verbose
         if configfile is not None:
             with open(configfile, 'r') as f:
                 config = json.load(f)
             self.config_parser(config)
         else:
             if sphinx:
-                self.activate_checker(SphinxChecker())
+                self.activate_checker(SphinxChecker(self.verbose))
             if doxygen:
-                self.activate_checker(DoxyChecker())
+                self.activate_checker(DoxyChecker(self.verbose))
             if junit:
-                self.activate_checker(JUnitChecker())
+                self.activate_checker(JUnitChecker(self.verbose))
 
         self.warn_min = 0
         self.warn_max = 0
         self.count = 0
+        self.printout = False
 
     def activate_checker(self, checker):
         '''
@@ -177,18 +67,20 @@ class WarningsPlugin:
         '''
         return self.checkerList[name]
 
-    def check(self, line):
+    def check(self, content):
         '''
-        Function for running checks with each initalized parser
+        Function for counting the number of warnings in a specific text
 
         Args:
-            line (str): The line of the file/console output to parse
+            content (str): The text to parse
         '''
         if len(self.checkerList) == 0:
             print("No checkers activated. Please use activate_checker function")
         else:
+            if self.printout:
+                print(content)
             for name, checker in self.checkerList.items():
-                checker.check(line)
+                checker.check(content)
 
     def set_maximum(self, maximum):
         ''' Setter function for the maximum amount of warnings
@@ -252,6 +144,16 @@ class WarningsPlugin:
 
         return 0
 
+    def toggle_printout(self, printout):
+        ''' Toggle printout of all the parsed content
+
+        Useful for command input where we want to print content as well
+
+        Args:
+            printout: True enables the printout, False provides more silent mode
+        '''
+        self.printout = printout
+
     def config_parser(self, config):
         ''' Parsing configuration dict extracted by previously opened json file
 
@@ -271,34 +173,130 @@ class WarningsPlugin:
                 print("Uncomplete config. Missing: {key}".format(key=e))
 
 
-def main():
+def warnings_wrapper(args):
     parser = argparse.ArgumentParser(prog='mlx-warnings')
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-d', '--doxygen', dest='doxygen', action='store_true')
     group.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
     group.add_argument('-j', '--junit', dest='junit', action='store_true')
+    parser.add_argument('-v', '--verbose', dest='verbose', action='store_true')
+    parser.add_argument('--command', dest='command', action='store_true',
+                        help='Treat program arguments as command to execute to obtain data')
+    parser.add_argument('--ignore-retval', dest='ignore', action='store_true',
+                        help='Ignore return value of the executed command')
     parser.add_argument('-m', '--maxwarnings', type=int, required=False, default=0,
                         help='Maximum amount of warnings accepted')
     parser.add_argument('--minwarnings', type=int, required=False, default=0,
                         help='Minimum amount of warnings accepted')
-    parser.add_argument('-c', '--config', dest='configfile', action='store', required=False)
+    parser.add_argument('--version', action='version', version='%(prog)s {version}'.format(version=pkg_resources.require('mlx.warnings')[0].version))
+    parser.add_argument('--config', dest='configfile', action='store', required=False)
 
-    parser.add_argument('logfile', help='Logfile that might contain warnings')
-    args = parser.parse_args()
+
+    parser.add_argument('logfile', nargs='+', help='Logfile (or command) that might contain warnings')
+    parser.add_argument('flags', nargs=argparse.REMAINDER, help='Possible not-used flags from above are considered as command flags')
+
+    args = parser.parse_args(args)
 
     # Read config file
     if args.configfile is not None:
-        warnings = WarningsPlugin(configfile=args.configfile)
+    	warnings = WarningsPlugin(configfile=args.configfile)
     else:
-        warnings = WarningsPlugin(sphinx=args.sphinx, doxygen=args.doxygen, junit=args.junit)
+        warnings = WarningsPlugin(sphinx=args.sphinx, doxygen=args.doxygen, junit=args.junit, verbose=args.verbose)
         warnings.set_maximum(args.maxwarnings)
         warnings.set_minimum(args.minwarnings)
 
-    for line in open(args.logfile, 'r'):
-        warnings.check(line)
+    if args.command:
+        cmd = args.logfile
+        if args.flags:
+            cmd.extend(args.flags)
+        warnings.toggle_printout(True)
+        retval = warnings_command(warnings, cmd)
+
+        if (not args.ignore) and (retval != 0):
+            return retval
+    else:
+        retval = warnings_logfile(warnings, args.logfile)
+        if retval != 0:
+            return retval
 
     warnings.return_count()
-    sys.exit(warnings.return_check_limits())
+    return warnings.return_check_limits()
+
+
+def warnings_command(warnings, cmd):
+    ''' Execute command to obtain input for parsing for warnings
+
+    Usually log files are output of the commands. To avoid this additional step
+    this function runs a command instead and parses the stderr and stdout of the
+    command for warnings.
+
+    Args:
+        warnings (WarningsPlugin): Object for warnings where errors should be logged
+        cmd: Command list, which should be executed to obtain input for parsing
+        ignore: Flag to ignore return value of the command
+
+    Return:
+        retval: Return value of executed command
+
+    Raises:
+        OSError: When program is not installed.
+    '''
+    try:
+        print("Executing: ", end='')
+        print(cmd)
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                stdin=subprocess.PIPE, bufsize=1, universal_newlines=True)
+        out, err = proc.communicate()
+        # Check stdout
+        if out:
+            try:
+                warnings.check(out.decode(encoding="utf-8"))
+            except AttributeError as e:
+                warnings.check(out)
+        # Check stderr
+        if err:
+            try:
+                warnings.check(err.decode(encoding="utf-8"))
+            except AttributeError as e:
+                warnings.check(err)
+        return proc.returncode
+    except OSError as e:
+        if e.errno == os.errno.ENOENT:
+            print("It seems like program " + str(cmd) + " is not installed.")
+        raise
+
+
+def warnings_logfile(warnings, log):
+    ''' Parse logfile for warnings
+
+    Args:
+        warnings (WarningsPlugin): Object for warnings where errors should be logged
+        log: Logfile for parsing
+
+    Return:
+        0: Log files existed and are parsed successfully
+        1: Log files did not exist
+    '''
+    # args.logfile doesn't necessarily contain wildcards, but just to be safe, we
+    # assume it does, and try to expand them.
+    # This mechanism is put in place to allow wildcards to be passed on even when
+    # executing the script on windows (in that case there is no shell expansion of wildcards)
+    # so that the script can be used in the exact same way even when moving from one
+    # OS to another.
+    for file_wildcard in log:
+        if glob.glob(file_wildcard):
+            for logfile in glob.glob(file_wildcard):
+                with open(logfile, 'r') as loghandle:
+                    warnings.check(loghandle.read())
+        else:
+            print("FILE: %s does not exist" % file_wildcard)
+            return 1
+
+    return 0
+
+
+def main():
+    sys.exit(warnings_wrapper(sys.argv[1:]))
 
 
 if __name__ == '__main__':

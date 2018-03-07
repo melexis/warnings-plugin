@@ -14,43 +14,59 @@ Class diagram
 
     @startuml
     class WarningsPlugin {
-        #checkers : WarningsChecker
-        +main()
+        #checkerList : WarningsChecker
+        +__init__(sphinx=False, doxygen=False, junit=False, verbose=False)
     }
 
     class WarningsChecker {
         #min_count = 0
         #max_count = 0
         #count = 0
+        #verbose = False
 
-        #{abstract} __init__(regex=None)
+        #{abstract} __init__(name, verbose=False)
         +set_limits(min_count=0, max_count=0,
-        +check(line)
+        +{abstract}check(content)
         +get_count()
     }
 
-    class SphinxWarningsChecker {
-        #{static} String regex
-        +__init__()
+    class RegexChecker {
+        #{abstract} __init__(name, regex, verbose=False)
+        +check(content)
     }
 
-    class DoxygenWarningsChecker {
+    class SphinxChecker {
+        #{static} String name
         #{static} String regex
-        +__init__()
+        +__init__(verbose=False)
     }
 
-    class JUnitFailuresChecker {
-        #{static} String regex //todo: issue 20 (use junit parser)
-        +__init__()
+    class DoxyChecker {
+        #{static} String name
+        #{static} String regex
+        +__init__(verbose=False)
+    }
+
+    class JUnitChecker {
+        #{static} String name
+        +__init__(verbose=False)
+        +check(content)
     }
 
     WarningsPlugin o-- WarningsChecker
-    WarningsChecker <|-- SphinxWarningsChecker
-    WarningsChecker <|-- DoxygenWarningsChecker
-    WarningsChecker <|-- JUnitFailuresChecker
+    WarningsChecker <|-- RegexChecker
+    RegexChecker <|-- SphinxChecker
+    RegexChecker <|-- DoxyChecker
+    WarningsChecker <|-- JUnitChecker
 
     @enduml
 
+String handling
+===============
+
+Convention is to use plain python strings everywhere. Where needed the strings can be converted to anything else.
+
+Example: junitparser expects byte array objects, so we encode our string right before passing it to junitparser.
 
 Instrument module
 =================

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites>
+    <testsuite errors="0" failures="0" name="test_warn_plugin_ok" skipped="0" tests="2" time="33">
+        <testcase classname="test_warn_plugin_ok" name="foo" time="22"/>
+        <testcase classname="test_warn_plugin_ok" name="bar" time="44"/>
+    </testsuite>
+</testsuites>
