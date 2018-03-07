@@ -1,4 +1,5 @@
 from unittest import TestCase
+from xml.etree.ElementTree import ParseError
 
 from mlx.warnings import WarningsPlugin, SphinxChecker, DoxyChecker, JUnitChecker
 
@@ -28,7 +29,8 @@ class TestConfig(TestCase):
         warnings.config_parser(tmpjson)
         warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
         self.assertEqual(warnings.return_count(), 0)
-        warnings.check('<testcase classname="dummy_class" name="dummy_name"><failure message="some random message from test case" /></testcase>')
+        with open('tests/junit_single_fail.xml', 'r') as xmlfile:
+            warnings.check(xmlfile.read())
         self.assertEqual(warnings.return_count(), 0)
         warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
         self.assertEqual(warnings.return_count(), 1)
@@ -44,7 +46,8 @@ class TestConfig(TestCase):
         }
 
         warnings.config_parser(tmpjson)
-        warnings.check('<testcase classname="dummy_class" name="dummy_name"><failure message="some random message from test case" /></testcase>')
+        with open('tests/junit_single_fail.xml', 'r') as xmlfile:
+            warnings.check(xmlfile.read())
         self.assertEqual(warnings.return_count(), 0)
         warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
         self.assertEqual(warnings.return_count(), 0)
@@ -62,11 +65,14 @@ class TestConfig(TestCase):
         }
 
         warnings.config_parser(tmpjson)
-        warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
+        with self.assertRaises(ParseError):
+            warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
         self.assertEqual(warnings.return_count(), 0)
-        warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
+        with self.assertRaises(ParseError):
+            warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
         self.assertEqual(warnings.return_count(), 0)
-        warnings.check('<testcase classname="dummy_class" name="dummy_name"><failure message="some random message from test case" /></testcase>')
+        with open('tests/junit_single_fail.xml', 'r') as xmlfile:
+            warnings.check(xmlfile.read())
         self.assertEqual(warnings.return_count(), 1)
 
     def test_sphinx_config_max(self):

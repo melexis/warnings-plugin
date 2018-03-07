@@ -191,7 +191,6 @@ def warnings_wrapper(args):
     parser.add_argument('--version', action='version', version='%(prog)s {version}'.format(version=pkg_resources.require('mlx.warnings')[0].version))
     parser.add_argument('--config', dest='configfile', action='store', required=False)
 
-
     parser.add_argument('logfile', nargs='+', help='Logfile (or command) that might contain warnings')
     parser.add_argument('flags', nargs=argparse.REMAINDER, help='Possible not-used flags from above are considered as command flags')
 
@@ -199,7 +198,7 @@ def warnings_wrapper(args):
 
     # Read config file
     if args.configfile is not None:
-    	warnings = WarningsPlugin(configfile=args.configfile)
+        warnings = WarningsPlugin(configfile=args.configfile)
     else:
         warnings = WarningsPlugin(sphinx=args.sphinx, doxygen=args.doxygen, junit=args.junit, verbose=args.verbose)
         warnings.set_maximum(args.maxwarnings)
