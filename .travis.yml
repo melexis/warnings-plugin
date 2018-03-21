@@ -5,6 +5,9 @@ env:
   global:
     - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
     - SEGFAULT_SIGNALS=all
+    # COVERITY_SCAN_TOKEN
+    - secure: "XxeWrpxO0GdKULFXz8E6XgbLSVzXpK1DeyzhPEtoZ31oPbyjQgd2e+BayhbC6H0bnckwXin+cneiKGrzViba71U9cQDeeIj4vmqTd1Wqm4bGnGK79u8dKvCxWSTJnRQ8hl/rTWTHU3FvfUuaLwHoCiYEPqSJ4pIunCQE+qmWn7JEnm8eKBSB75K7rYea18F/IshkmWqEpYuJcT7Wc+pfBleqgEPAlGdYLIQnH6vQS1KkQrizMxks1YlZPC4vQqVN44pPplDNrDJ+bT/7PfqYFEV6+uxf2fSOnWJKmsuuOjQfeaZdm8+RYJCrTpfL8VmEXNchuBaCWO5D47nQ+D+VZQTptVOVyYDCkboojsLGpbe8Wx6o2emScJ94z5FzhgzgXOabyKlIzzjOuT4iARQdSJCoT8JKtw/EIo9IQ0QDzU+5TW6kfRzmydVeaSGCYGBNYRkre7TwDoh60zaqAOB+Wh4HhTmcqc5gWQfTF05QL4gcQWV3wYfvXwTiKpG1TUncMtIKeNHm9pyL69C1FD2KcQYnuon2IXR+onDd7538gG6r+ymrjlvKE7aQNbyhaSDCchcofVHLoV+cZn0i7AmbizRVdYf8knITGCcZAL7XRt52slA5h0q6Z5AcI/J2uAqhvB5c2u8uwynURoAZ+UKxleScmRrQ7nc2W7JPbglmUHw="
+
   matrix:
     - TOXENV=check
     - TOXENV=docs
@@ -12,7 +15,7 @@ matrix:
   include:
     - python: '2.7'
       env:
-        - TOXENV=py27,codecov
+        - TOXENV=py27,codecov COVERITY_DO_BUILD=1
     - python: '3.3'
       env:
         - TOXENV=py33,codecov
@@ -33,6 +36,7 @@ before_install:
   - python --version
   - uname -a
   - lsb_release -a
+  - if [[ "$COVERITY_DO_BUILD" == "1" ]]; then echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca- ; fi
 
 install:
   - pip install tox
@@ -65,3 +69,12 @@ deploy:
       branch: master
       python: 3.6
       tags: true
+
+addons:
+  coverity_scan:
+    project:
+      name: "melexis/warnings-plugin"
+    notification_email: crt.mori@gmail.com
+    build_command_prepend: ""
+    build_command: "--no-command --fs-capture-search ."
+    branch_pattern: coverity_scan_setup
