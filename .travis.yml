@@ -10,7 +10,8 @@ stages:
   - check
   - docs
   - test
-  - coverity
+  - name: coverity
+    if: branch = master
   - name: deploy
     if: branch = master
 
@@ -61,7 +62,7 @@ jobs:
           notification_email: crt.mori@gmail.com
           build_command_prepend: ""
           build_command: "--no-command --fs-capture-search ."
-          branch_pattern: coverity_scan_setup
+          branch_pattern: master
     # Stage DEPLOY
     - stage: deploy
       python: 3.6
