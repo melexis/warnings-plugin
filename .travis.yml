@@ -20,36 +20,18 @@ jobs:
     - stage: check
       python: '2.7'
       env:
-        - TOXENV=check
-    - python: '3.3'
-      env:
-        - TOXENV=check
-    - python: '3.4'
-      env:
-        - TOXENV=check
-    - python: '3.5'
-      env:
-        - TOXENV=check
+        - TOXENV=py27,check
     - python: '3.6'
       env:
-        - TOXENV=check
+        - TOXENV=py36,check
     # Stage DOCS
     - stage: docs
       python: '2.7'
       env:
-        - TOXENV=docs
-    - python: '3.3'
-      env:
-        - TOXENV=docs
-    - python: '3.4'
-      env:
-        - TOXENV=docs
-    - python: '3.5'
-      env:
-        - TOXENV=docs
+        - TOXENV=py27,docs
     - python: '3.6'
       env:
-        - TOXENV=docs
+        - TOXENV=py36,docs
     # Stage TEST
     - stage: test
       python: '2.7'
@@ -78,6 +60,14 @@ jobs:
         - secure: "VjiASJr/DgmDA5Gpy021ZVWAImhTdeKP8PreWWMRQlw02ZT96Ro39M/wtNUPKbbvph9q6gMIfF9bjBRxxcgmp73evyfbZu1ScyFQ7poFOOlX59tduDsmTaLMOdF3/uM3SwPEQJ40fSFXiHfFP6j26aFUNOwa7fUPhQuZ8aGofBaoRocL3llsDURIi5DjZBG9WmmNnHKh6X95aex4svj6hRq4/8L1EQiuignrQZmLFePCKz/FQ+AIperZZQyNNE7umLE8yHuVLWjH0gpBqyVqis2KSv4rU281oN/madi9de40sRdBS1pkyjdaBEnUn7QAPa8cwwkzRKmmL+YYKGe2zBfVydNzH/+B+N+f+dExbmK2vnCgpucNb7qAh4+ESPTXiO+9KtKNRocs5dgIC4SyvXUNEgYGpg0MViQKHaqGFpI3E750jY2bfvnrk/2DB3aYlR2FHfdsct214j0Ask/4eEwKqcY/AljVbDOm0ELAlhmhz1OfmphIRBMZPCT0qGJ4+zlyoe+CbW62lNYdDn+V5jiz43VNbtuxTIzYACxe10sRx5uNOCHlskOoy8m9hpXNpOMAqfNry/Vt33Nm7UCK4J9WF+kD87So/xaux+FKYat07PbPAocBCjVp490szPqXAMfX2RapIdpwFsy+JSyh/buWibmTWG5HF6ImTagM5f8="
       before_install:
         - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+      addons:
+        coverity_scan:
+          project:
+            name: "melexis/warnings-plugin"
+          notification_email: crt.mori@gmail.com
+          build_command_prepend: ""
+          build_command: "--no-command --fs-capture-search ."
+          branch_pattern: coverity_scan_setup
     # Stage DEPLOY
     - stage: deploy
       python: 3.6
@@ -118,13 +108,5 @@ notifications:
     on_success: never
     on_failure: always
 
-addons:
-  coverity_scan:
-    project:
-      name: "melexis/warnings-plugin"
-    notification_email: crt.mori@gmail.com
-    build_command_prepend: ""
-    build_command: "--no-command --fs-capture-search ."
-    branch_pattern: coverity_scan_setup
 
 
