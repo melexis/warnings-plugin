@@ -28,10 +28,7 @@ jobs:
     - stage: docs
       python: '2.7'
       env:
-        - TOXENV=py27,docs
-    - python: '3.6'
-      env:
-        - TOXENV=py36,docs
+        - TOXENV=docs
     # Stage TEST
     - stage: test
       python: '2.7'
