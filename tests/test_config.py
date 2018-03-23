@@ -166,6 +166,31 @@ class TestConfig(TestCase):
         warnings.config_parser(tmpjson)
         self.assertEqual(warnings.get_checker(JUnitChecker().name).get_maximum(), 5)
 
+    def test_all_config_max(self):
+        warnings = WarningsPlugin()
+        tmpjson = {
+            'sphinx': {
+                'enabled': True,
+                'min': 0,
+                'max': 4
+            },
+            'doxygen': {
+                'enabled': True,
+                'min': 0,
+                'max': 5
+            },
+            'junit': {
+                'enabled': True,
+                'min': 0,
+                'max': 6
+            }
+        }
+
+        warnings.config_parser(tmpjson)
+        self.assertEqual(warnings.get_checker(SphinxChecker().name).get_maximum(), 4)
+        self.assertEqual(warnings.get_checker(DoxyChecker().name).get_maximum(), 5)
+        self.assertEqual(warnings.get_checker(JUnitChecker().name).get_maximum(), 6)
+
     def test_sphinx_config_min(self):
         warnings = WarningsPlugin()
         tmpjson = {
@@ -203,5 +228,30 @@ class TestConfig(TestCase):
         }
 
         warnings.config_parser(tmpjson)
+        self.assertEqual(warnings.get_checker(JUnitChecker().name).get_minimum(), 5)
+
+    def test_all_config_min(self):
+        warnings = WarningsPlugin()
+        tmpjson = {
+            'sphinx': {
+                'enabled': True,
+                'min': 4,
+                'max': 7
+            },
+            'doxygen': {
+                'enabled': True,
+                'min': 3,
+                'max': 7
+            },
+            'junit': {
+                'enabled': True,
+                'min': 5,
+                'max': 7
+            }
+        }
+
+        warnings.config_parser(tmpjson)
+        self.assertEqual(warnings.get_checker(SphinxChecker().name).get_minimum(), 4)
+        self.assertEqual(warnings.get_checker(DoxyChecker().name).get_minimum(), 3)
         self.assertEqual(warnings.get_checker(JUnitChecker().name).get_minimum(), 5)
 
