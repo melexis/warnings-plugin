@@ -206,7 +206,14 @@ def warnings_wrapper(args):
     if args.configfile is not None:
         warnings = WarningsPlugin(configfile=args.configfile)
     else:
-        warnings = WarningsPlugin(sphinx=args.sphinx, doxygen=args.doxygen, junit=args.junit, verbose=args.verbose)
+        warnings = WarningsPlugin(verbose=args.verbose)
+        if args.sphinx:
+            warnings.activate_checker_name('sphinx')
+        if args.doxygen:
+            warnings.activate_checker_name('doxygen')
+        if args.junit:
+            warnings.activate_checker_name('junit')
+
         warnings.set_maximum(args.maxwarnings)
         warnings.set_minimum(args.minwarnings)
 
