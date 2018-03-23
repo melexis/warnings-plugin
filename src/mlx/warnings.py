@@ -23,10 +23,8 @@ class WarningsPlugin:
         Function for initializing the parsers
 
         Args:
-            sphinx (bool, optional):    enable sphinx parser
-            doxygen (bool, optional):   enable doxygen parser
-            junit (bool, optional):     enable junit parser
-            verbose (bool, optional):   enable verbose logging
+            verbose (bool, optional):           enable verbose logging
+            configfile (filename, optional):    configuration file with setup
         '''
         self.checkerList = {}
         self.verbose = verbose
@@ -204,7 +202,7 @@ def warnings_wrapper(args):
 
     # Read config file
     if args.configfile is not None:
-        warnings = WarningsPlugin(configfile=args.configfile)
+        warnings = WarningsPlugin(verbose=args.verbose, configfile=args.configfile)
     else:
         warnings = WarningsPlugin(verbose=args.verbose)
         if args.sphinx:
