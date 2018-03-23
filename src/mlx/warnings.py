@@ -18,7 +18,7 @@ __version__ = get_version()
 
 class WarningsPlugin:
 
-    def __init__(self, sphinx = False, doxygen = False, junit = False, verbose = False, configfile= None):
+    def __init__(self, verbose = False, configfile= None):
         '''
         Function for initializing the parsers
 
@@ -30,17 +30,12 @@ class WarningsPlugin:
         '''
         self.checkerList = {}
         self.verbose = verbose
+        self.publicCheckers = [SphinxChecker(self.verbose), DoxyChecker(self.verbose), JUnitChecker(self.verbose)]
+
         if configfile is not None:
             with open(configfile, 'r') as f:
                 config = json.load(f)
             self.config_parser(config)
-        else:
-            if sphinx:
-                self.activate_checker(SphinxChecker(self.verbose))
-            if doxygen:
-                self.activate_checker(DoxyChecker(self.verbose))
-            if junit:
-                self.activate_checker(JUnitChecker(self.verbose))
 
         self.warn_min = 0
         self.warn_max = 0
@@ -56,6 +51,20 @@ class WarningsPlugin:
         '''
         checker.reset()
         self.checkerList[checker.name] = checker
+
+    def activate_checker_name(self, name):
+        '''
+        Activate checker by name
+
+        Args:
+            name (str): checker name
+        '''
+        for checker in self.publicCheckers:
+            if checker.name == name:
+                self.activate_checker(checker)
+                break
+        else:
+            print("Checker %s does not exist" % name)
 
     def get_checker(self, name):
         ''' Get checker by name
@@ -160,7 +169,6 @@ class WarningsPlugin:
         Args:
             config (dict): json dump of the configuration
         '''
-        self.publicCheckers = [SphinxChecker(), DoxyChecker(), JUnitChecker()]
         # activate checker
         for checker in self.publicCheckers:
             try:
