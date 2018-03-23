@@ -1,5 +1,4 @@
 from unittest import TestCase
-from xml.etree.ElementTree import ParseError
 
 from mlx.warnings import WarningsPlugin, SphinxChecker, DoxyChecker, JUnitChecker
 
@@ -65,15 +64,68 @@ class TestConfig(TestCase):
         }
 
         warnings.config_parser(tmpjson)
-        with self.assertRaises(ParseError):
-            warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
+        warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
         self.assertEqual(warnings.return_count(), 0)
-        with self.assertRaises(ParseError):
-            warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
+        warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
         self.assertEqual(warnings.return_count(), 0)
         with open('tests/junit_single_fail.xml', 'r') as xmlfile:
             warnings.check(xmlfile.read())
         self.assertEqual(warnings.return_count(), 1)
+
+    def test_doxy_junit_options_config_parsing(self):
+        warnings = WarningsPlugin()
+        tmpjson = {
+            'doxygen': {
+                'enabled': True,
+                'min': 0,
+                'max': 0
+            },
+            'junit': {
+                'enabled': True,
+                'min': 0,
+                'max': 0
+            }
+
+        }
+        warnings.config_parser(tmpjson)
+        warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
+        self.assertEqual(warnings.return_count(), 0)
+        warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
+        self.assertEqual(warnings.return_count(), 1)
+        with open('tests/junit_single_fail.xml', 'r') as xmlfile:
+            warnings.check(xmlfile.read())
+        self.assertEqual(warnings.return_count(), 2)
+
+    def test_sphinx_doxy_config_parsing(self):
+        warnings = WarningsPlugin()
+        tmpjson = {
+            'sphinx': {
+                'enabled': True,
+                'min': 0,
+                'max': 0
+            },
+            'doxygen': {
+                'enabled': True,
+                'min': 0,
+                'max': 0
+            }
+        }
+
+        warnings.config_parser(tmpjson)
+        with open('tests/junit_single_fail.xml', 'r') as xmlfile:
+            warnings.check(xmlfile.read())
+        self.assertEqual(warnings.return_count(), 0)
+        warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
+        self.assertEqual(warnings.return_count(), 1)
+        warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
+        self.assertEqual(warnings.return_count(), 2)
+        with open('tests/junit_single_fail.xml', 'r') as xmlfile:
+            warnings.check(xmlfile.read())
+        self.assertEqual(warnings.return_count(), 2)
+        warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
+        self.assertEqual(warnings.return_count(), 3)
+        warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
+        self.assertEqual(warnings.return_count(), 4)
 
     def test_sphinx_config_max(self):
         warnings = WarningsPlugin()

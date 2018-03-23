@@ -4,6 +4,8 @@
 import abc
 import re
 from junitparser import JUnitXml, Failure, Error
+from xml.etree.ElementTree import ParseError
+
 
 DOXYGEN_WARNING_REGEX = r"(?:((?:[/.]|[A-Za-z]).+?):(-?\d+):\s*([Ww]arning|[Ee]rror)|<.+>:-?\d+(?::\s*([Ww]arning|[Ee]rror))?): (.+(?:(?!\s*(?:[Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*([Nn]otice|[Ww]arning|[Ee]rror): (.+)\n?"
 doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
@@ -166,14 +168,17 @@ class JUnitChecker(WarningsChecker):
         Args:
             content (str): The content to parse
         '''
-        result = JUnitXml.fromstring(content.encode('utf-8'))
-        if self.verbose:
-            for suite in result:
-                for testcase in filter(lambda testcase: isinstance(testcase.result, (Failure, Error)), suite):
-                    print('{classname}.{testname}'.format(classname=testcase.classname,
-                                                          testname=testcase.name))
-        result.update_statistics()
-        self.count += result.errors + result.failures
+        try:
+            result = JUnitXml.fromstring(content.encode('utf-8'))
+            if self.verbose:
+                for suite in result:
+                    for testcase in filter(lambda testcase: isinstance(testcase.result, (Failure, Error)), suite):
+                        print('{classname}.{testname}'.format(classname=testcase.classname,
+                                                              testname=testcase.name))
+            result.update_statistics()
+            self.count += result.errors + result.failures
+        except ParseError as _:
+            return
 
 
 
