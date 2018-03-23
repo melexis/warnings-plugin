@@ -175,10 +175,9 @@ class WarningsPlugin:
 
 def warnings_wrapper(args):
     parser = argparse.ArgumentParser(prog='mlx-warnings')
-    group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('-d', '--doxygen', dest='doxygen', action='store_true')
-    group.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
-    group.add_argument('-j', '--junit', dest='junit', action='store_true')
+    parser.add_argument('-d', '--doxygen', dest='doxygen', action='store_true')
+    parser.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
+    parser.add_argument('-j', '--junit', dest='junit', action='store_true')
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true')
     parser.add_argument('--command', dest='command', action='store_true',
                         help='Treat program arguments as command to execute to obtain data')
@@ -189,8 +188,7 @@ def warnings_wrapper(args):
     parser.add_argument('--minwarnings', type=int, required=False, default=0,
                         help='Minimum amount of warnings accepted')
     parser.add_argument('--version', action='version', version='%(prog)s {version}'.format(version=pkg_resources.require('mlx.warnings')[0].version))
-    parser.add_argument('--config', dest='configfile', action='store', required=False)
-
+    parser.add_argument('--config', dest='configfile', action='store', required=False, help='Config file in JSON format provides toggle of checkers and their limits')
     parser.add_argument('logfile', nargs='+', help='Logfile (or command) that might contain warnings')
     parser.add_argument('flags', nargs=argparse.REMAINDER, help='Possible not-used flags from above are considered as command flags')
 
