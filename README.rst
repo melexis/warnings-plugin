@@ -123,7 +123,16 @@ The command returns (shell $? variable):
 - value 0 when the number of counted warnings is within the supplied minimum and maximum limits: ok,
 - number of counted warnings (positive) when the counter number is not within those limit.
 
--------------------------
+---------------------------
+Simple Command line options
+---------------------------
+
+Plugin has two forms of passing the arguments to checkers. The command line
+option which enables checkers and sets minimum and maximum to each checker
+individually, or the configuration file option which provides more flexibility
+and also traceability as it resides inside repository and provides option to
+adjust minimum and maximum per individual checker.
+
 Parse for Sphinx warnings
 -------------------------
 
@@ -135,17 +144,16 @@ command:
     # command line log file
     mlx-warnings doc_log.txt --sphinx
     # command line command execution
-    mlx-warnings --command --sphinx <commandforsphinx>
+    mlx-warnings --sphinx --command <commandforsphinx>
 
     # explicitly as python module for log file
     python3 -m mlx.warnings --sphinx doc_log.txt
     python -m mlx.warnings --sphinx doc_log.txt
     # explicitly as python module
-    python3 -m mlx.warnings --command --sphinx <commandforsphinx>
-    python -m mlx.warnings --command --sphinx <commandforsphinx>
+    python3 -m mlx.warnings --sphinx --command <commandforsphinx>
+    python -m mlx.warnings --sphinx --command <commandforsphinx>
 
 
---------------------------
 Parse for Doxygen warnings
 --------------------------
 
@@ -157,17 +165,16 @@ command:
     # command line log file
     mlx-warnings doc_log.txt --doxygen
     # command line command execution
-    mlx-warnings --command --doxygen <commandfordoxygen>
+    mlx-warnings --doxygen --command <commandfordoxygen>
 
     # explicitly as python module for log file
     python3 -m mlx.warnings --doxygen doc_log.txt
     python -m mlx.warnings --doxygen doc_log.txt
     # explicitly as python module
-    python3 -m mlx.warnings --command --doxygen <commandfordoxygen>
-    python -m mlx.warnings --command --doxygen <commandfordoxygen>
+    python3 -m mlx.warnings --doxygen --command <commandfordoxygen>
+    python -m mlx.warnings --doxygen --command <commandfordoxygen>
 
 
-------------------------
 Parse for JUnit failures
 ------------------------
 
@@ -179,14 +186,57 @@ command:
     # command line log file
     mlx-warnings junit_output.xml --junit
     # command line command execution
-    mlx-warnings --command --junit <commandforjunit>
+    mlx-warnings --junit --command <commandforjunit>
 
     # explicitly as python module for log file
     python3 -m mlx.warnings --junit junit_output.xml
     python -m mlx.warnings --junit junit_output.xml
     # explicitly as python module
-    python3 -m mlx.warnings --command --junit <commandforjunit>
-    python -m mlx.warnings --command --junit <commandforjunit>
+    python3 -m mlx.warnings --junit --command <commandforjunit>
+    python -m mlx.warnings --junit --command <commandforjunit>
+
+
+----------------------------------
+Configuration file to pass options
+----------------------------------
+
+Beside command line, you can pass options through the configuration file.
+Configuration file is in JSON format with a simple structure.
+
+.. code-block:: json
+
+    {
+        "sphinx":{
+    	    "enabled": true,
+    	    "min": 0,
+    	    "max": 0
+        },
+        "doxygen":{
+    	    "enabled": false,
+    	    "min": 0,
+    	    "max": 0
+        },
+        "junit":{
+    	    "enabled": false,
+    	    "min": 0,
+    	    "max": 0
+        }
+    }
+
+First key is `checkername`, then it contains a boolean value for key `enabled`,
+value for minimum number of warnings with key `min` and value for maximum
+number of warnings with key `max`. This structure allows simple expansion.
+
+To run the plugin with configuration file you simply pass `--config` flag with
+path to configuration file
+
+.. code-block:: bash
+
+    # command line log file
+    mlx-warnings --config pathtoconfig.json junit_output.xml
+    # command line command execution
+    mlx-warnings --config patchtoconfig.json --command <commandforjunit>
+
 
 -------------
 Other options
