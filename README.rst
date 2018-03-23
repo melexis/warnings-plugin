@@ -6,6 +6,10 @@
     :target: https://travis-ci.org/melexis/warnings-plugin
     :alt: Build status
 
+.. image:: https://scan.coverity.com/projects/15266/badge.svg
+    :target: https://scan.coverity.com/projects/melexis-warnings-plugin
+    :alt: Coverity Scan Build Status
+
 .. image:: https://codecov.io/gh/melexis/warnings-plugin/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/melexis/warnings-plugin
     :alt: Code Coverage

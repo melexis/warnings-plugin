@@ -5,12 +5,31 @@ env:
   global:
     - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
     - SEGFAULT_SIGNALS=all
-  matrix:
-    - TOXENV=check
-    - TOXENV=docs
-matrix:
+
+stages:
+  - check
+  - docs
+  - test
+  - name: coverity
+    if: branch = master
+  - name: deploy
+    if: branch = master
+
+jobs:
   include:
-    - python: '2.7'
+    # Stage CHECK
+    - stage: check
+      python: '2.7'
+      env:
+        - TOXENV=check
+    # Stage DOCS
+    - stage: docs
+      python: '2.7'
+      env:
+        - TOXENV=docs
+    # Stage TEST
+    - stage: test
+      python: '2.7'
       env:
         - TOXENV=py27,codecov
     - python: '3.3'
@@ -25,15 +44,42 @@ matrix:
     - python: '3.6'
       env:
         - TOXENV=py36,codecov
-    - python: 'pypy-5.4'
+    # Stage COVERITY
+    - stage: coverity
+      python: '2.7'
       env:
-        - TOXENV=pypy,codecov
+        # TOXENV=py27 COVERITY_SCAN_TOKEN
+        - secure: "VjiASJr/DgmDA5Gpy021ZVWAImhTdeKP8PreWWMRQlw02ZT96Ro39M/wtNUPKbbvph9q6gMIfF9bjBRxxcgmp73evyfbZu1ScyFQ7poFOOlX59tduDsmTaLMOdF3/uM3SwPEQJ40fSFXiHfFP6j26aFUNOwa7fUPhQuZ8aGofBaoRocL3llsDURIi5DjZBG9WmmNnHKh6X95aex4svj6hRq4/8L1EQiuignrQZmLFePCKz/FQ+AIperZZQyNNE7umLE8yHuVLWjH0gpBqyVqis2KSv4rU281oN/madi9de40sRdBS1pkyjdaBEnUn7QAPa8cwwkzRKmmL+YYKGe2zBfVydNzH/+B+N+f+dExbmK2vnCgpucNb7qAh4+ESPTXiO+9KtKNRocs5dgIC4SyvXUNEgYGpg0MViQKHaqGFpI3E750jY2bfvnrk/2DB3aYlR2FHfdsct214j0Ask/4eEwKqcY/AljVbDOm0ELAlhmhz1OfmphIRBMZPCT0qGJ4+zlyoe+CbW62lNYdDn+V5jiz43VNbtuxTIzYACxe10sRx5uNOCHlskOoy8m9hpXNpOMAqfNry/Vt33Nm7UCK4J9WF+kD87So/xaux+FKYat07PbPAocBCjVp490szPqXAMfX2RapIdpwFsy+JSyh/buWibmTWG5HF6ImTagM5f8="
+      before_install:
+        - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+      addons:
+        coverity_scan:
+          project:
+            name: "melexis/warnings-plugin"
+          notification_email: crt.mori@gmail.com
+          build_command_prepend: ""
+          build_command: "--no-command --fs-capture-search ."
+          branch_pattern: master
+    # Stage DEPLOY
+    - stage: deploy
+      python: 3.6
+      env:
+        - TOXENV=py36,codecov
+      deploy:
+        # production pypi
+        - provider: pypi
+          distributions: sdist bdist_wheel
+          user: bavo.van.achte
+          password:
+            secure: cKCBgEUOSUnlPbOxHCrXENlVgdMGnjNC+7nnutp/1xF8VEDF3aj9Br4u5LKrAYs0sm0AvnCyjhPvfKGPwyRDdfGBjoG06G+L+1hcfpgBlItmdSBqB8RxMm2B76si1ZlVI9gC58hlk/agFr2vik/mLXsH23rafB/2UwfB3ItTTx2J14xC5jlaqYR/srMJUi8YO5z6mGGLokfcz0KhYUHegOna38UcARM8rkAC2Je0xrPKZMlCoTI84dqwnFPW4zn3g/B5s3s18gmZu4fE4+J1g0PNMvxhbDP1TIBzPSWXLBv+YPSKrIT6+Q4R/kfDJFzLn3SmDDnNOpD/OC8ssqVJOcQL3HhKQ7EAcxX9W+/Rt7mIpdJdDXohiPrBl9EdRYbhB+KiPeo/dekAV6loUP/8cHuEgjcW/gE8t+HIqWsa5SO9yK7Sz8Ym+0ENdzS1df0iPOj2ebR3kb1iwINdFi7zIG6Utvlf7w1A2Qtx1xfI2+woPU+GOgQrpwdw64Wl1uo4l0kqTpFkytIG7BEVWC+zPPzqddi+3Ulf9AkWSjNDTqYafxZ9oqBJ5q7WPH8zyPQHotcHbnziTAnv7qRa+CTFLeME/KXNT8egToLK75G367lANTFIhMm8eSDS7wAxFWHacq8j68wNb38Yj1Rv1WMHQh14sxOkzQ4hVEV0xYY7Bj8=
+          on:
+            branch: master
+            tags: true
 
 before_install:
   - python --version
   - uname -a
   - lsb_release -a
-
 install:
   - pip install tox
   - pip install coverage
@@ -54,14 +100,5 @@ notifications:
     on_success: never
     on_failure: always
 
-deploy:
-  # production pypi
-  - provider: pypi
-    distributions: sdist bdist_wheel
-    user: bavo.van.achte
-    password:
-      secure: cKCBgEUOSUnlPbOxHCrXENlVgdMGnjNC+7nnutp/1xF8VEDF3aj9Br4u5LKrAYs0sm0AvnCyjhPvfKGPwyRDdfGBjoG06G+L+1hcfpgBlItmdSBqB8RxMm2B76si1ZlVI9gC58hlk/agFr2vik/mLXsH23rafB/2UwfB3ItTTx2J14xC5jlaqYR/srMJUi8YO5z6mGGLokfcz0KhYUHegOna38UcARM8rkAC2Je0xrPKZMlCoTI84dqwnFPW4zn3g/B5s3s18gmZu4fE4+J1g0PNMvxhbDP1TIBzPSWXLBv+YPSKrIT6+Q4R/kfDJFzLn3SmDDnNOpD/OC8ssqVJOcQL3HhKQ7EAcxX9W+/Rt7mIpdJdDXohiPrBl9EdRYbhB+KiPeo/dekAV6loUP/8cHuEgjcW/gE8t+HIqWsa5SO9yK7Sz8Ym+0ENdzS1df0iPOj2ebR3kb1iwINdFi7zIG6Utvlf7w1A2Qtx1xfI2+woPU+GOgQrpwdw64Wl1uo4l0kqTpFkytIG7BEVWC+zPPzqddi+3Ulf9AkWSjNDTqYafxZ9oqBJ5q7WPH8zyPQHotcHbnziTAnv7qRa+CTFLeME/KXNT8egToLK75G367lANTFIhMm8eSDS7wAxFWHacq8j68wNb38Yj1Rv1WMHQh14sxOkzQ4hVEV0xYY7Bj8=
-    on:
-      branch: master
-      python: 3.6
-      tags: true
+
+
