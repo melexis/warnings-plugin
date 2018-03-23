@@ -44,9 +44,6 @@ jobs:
     - python: '3.6'
       env:
         - TOXENV=py36,codecov
-    - python: 'pypy-5.4'
-      env:
-        - TOXENV=pypy,codecov
     # Stage COVERITY
     - stage: coverity
       python: '2.7'
