@@ -11,9 +11,8 @@ stages:
   - docs
   - test
   - name: coverity
-    if: branch = master
+    if: tag
   - name: deploy
-    if: branch = master
 
 jobs:
   include:
