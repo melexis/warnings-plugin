@@ -33,7 +33,7 @@ class WarningsPlugin:
         if configfile is not None:
             with open(configfile, 'r') as f:
                 config = json.load(f)
-            self.config_parser(config)
+            self.config_parser_json(config)
         else:
             if sphinx:
                 self.activate_checker(SphinxChecker(self.verbose))
@@ -154,7 +154,7 @@ class WarningsPlugin:
         '''
         self.printout = printout
 
-    def config_parser(self, config):
+    def config_parser_json(self, config):
         ''' Parsing configuration dict extracted by previously opened json file
 
         Args:

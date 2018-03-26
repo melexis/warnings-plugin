@@ -25,7 +25,7 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
+        warnings.config_parser_json(tmpjson)
         warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
         self.assertEqual(warnings.return_count(), 0)
         with open('tests/junit_single_fail.xml', 'r') as xmlfile:
@@ -44,7 +44,7 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
+        warnings.config_parser_json(tmpjson)
         with open('tests/junit_single_fail.xml', 'r') as xmlfile:
             warnings.check(xmlfile.read())
         self.assertEqual(warnings.return_count(), 0)
@@ -63,7 +63,7 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
+        warnings.config_parser_json(tmpjson)
         warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
         self.assertEqual(warnings.return_count(), 0)
         warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
@@ -87,7 +87,7 @@ class TestConfig(TestCase):
             }
 
         }
-        warnings.config_parser(tmpjson)
+        warnings.config_parser_json(tmpjson)
         warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
         self.assertEqual(warnings.return_count(), 0)
         warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
@@ -111,7 +111,7 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
+        warnings.config_parser_json(tmpjson)
         with open('tests/junit_single_fail.xml', 'r') as xmlfile:
             warnings.check(xmlfile.read())
         self.assertEqual(warnings.return_count(), 0)
@@ -137,7 +137,7 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
+        warnings.config_parser_json(tmpjson)
         self.assertEqual(warnings.get_checker(SphinxChecker().name).get_maximum(), 5)
 
     def test_doxygen_config_max(self):
@@ -150,7 +150,7 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
+        warnings.config_parser_json(tmpjson)
         self.assertEqual(warnings.get_checker(DoxyChecker().name).get_maximum(), 5)
 
     def test_junit_config_max(self):
@@ -163,7 +163,7 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
+        warnings.config_parser_json(tmpjson)
         self.assertEqual(warnings.get_checker(JUnitChecker().name).get_maximum(), 5)
 
     def test_all_config_max(self):
@@ -186,7 +186,7 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
+        warnings.config_parser_json(tmpjson)
         self.assertEqual(warnings.get_checker(SphinxChecker().name).get_maximum(), 4)
         self.assertEqual(warnings.get_checker(DoxyChecker().name).get_maximum(), 5)
         self.assertEqual(warnings.get_checker(JUnitChecker().name).get_maximum(), 6)
@@ -201,7 +201,7 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
+        warnings.config_parser_json(tmpjson)
         self.assertEqual(warnings.get_checker(SphinxChecker().name).get_minimum(), 5)
 
     def test_doxygen_config_min(self):
@@ -214,7 +214,7 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
+        warnings.config_parser_json(tmpjson)
         self.assertEqual(warnings.get_checker(DoxyChecker().name).get_minimum(), 5)
 
     def test_junit_config_min(self):
@@ -227,7 +227,7 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
+        warnings.config_parser_json(tmpjson)
         self.assertEqual(warnings.get_checker(JUnitChecker().name).get_minimum(), 5)
 
     def test_all_config_min(self):
@@ -250,7 +250,7 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
+        warnings.config_parser_json(tmpjson)
         self.assertEqual(warnings.get_checker(SphinxChecker().name).get_minimum(), 4)
         self.assertEqual(warnings.get_checker(DoxyChecker().name).get_minimum(), 3)
         self.assertEqual(warnings.get_checker(JUnitChecker().name).get_minimum(), 5)
