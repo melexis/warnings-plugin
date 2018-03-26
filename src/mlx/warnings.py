@@ -33,7 +33,7 @@ class WarningsPlugin:
         if configfile is not None:
             with open(configfile, 'r') as f:
                 config = json.load(f)
-            self.config_parser(config)
+            self.config_parser_json(config)
 
         self.warn_min = 0
         self.warn_max = 0
@@ -161,7 +161,7 @@ class WarningsPlugin:
         '''
         self.printout = printout
 
-    def config_parser(self, config):
+    def config_parser_json(self, config):
         ''' Parsing configuration dict extracted by previously opened json file
 
         Args:
@@ -176,25 +176,27 @@ class WarningsPlugin:
                     self.get_checker(checker.name).set_minimum(int(config[checker.name]['min']))
                     print("Config parsing for {name} completed".format(name=checker.name))
             except KeyError as e:
-                print("Uncomplete config. Missing: {key}".format(key=e))
+                print("Incomplete config. Missing: {key}".format(key=e))
 
 
 def warnings_wrapper(args):
     parser = argparse.ArgumentParser(prog='mlx-warnings')
-    parser.add_argument('-d', '--doxygen', dest='doxygen', action='store_true')
-    parser.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
-    parser.add_argument('-j', '--junit', dest='junit', action='store_true')
+    group1 = parser.add_argument_group('Configuration command line options')
+    group1.add_argument('-d', '--doxygen', dest='doxygen', action='store_true')
+    group1.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
+    group1.add_argument('-j', '--junit', dest='junit', action='store_true')
+    group1.add_argument('-m', '--maxwarnings', type=int, required=False, default=0,
+                        help='Maximum amount of warnings accepted')
+    group1.add_argument('--minwarnings', type=int, required=False, default=0,
+                        help='Minimum amount of warnings accepted')
+    group2 = parser.add_argument_group('Configuration file with options')
+    group2.add_argument('--config', dest='configfile', action='store', required=False, help='Config file in JSON format provides toggle of checkers and their limits')
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true')
     parser.add_argument('--command', dest='command', action='store_true',
                         help='Treat program arguments as command to execute to obtain data')
     parser.add_argument('--ignore-retval', dest='ignore', action='store_true',
                         help='Ignore return value of the executed command')
-    parser.add_argument('-m', '--maxwarnings', type=int, required=False, default=0,
-                        help='Maximum amount of warnings accepted')
-    parser.add_argument('--minwarnings', type=int, required=False, default=0,
-                        help='Minimum amount of warnings accepted')
     parser.add_argument('--version', action='version', version='%(prog)s {version}'.format(version=pkg_resources.require('mlx.warnings')[0].version))
-    parser.add_argument('--config', dest='configfile', action='store', required=False, help='Config file in JSON format provides toggle of checkers and their limits')
     parser.add_argument('logfile', nargs='+', help='Logfile (or command) that might contain warnings')
     parser.add_argument('flags', nargs=argparse.REMAINDER, help='Possible not-used flags from above are considered as command flags')
 
@@ -202,6 +204,9 @@ def warnings_wrapper(args):
 
     # Read config file
     if args.configfile is not None:
+        if args.sphinx or args.doxygen or args.junit or (args.maxwarnings != 0) or (args.minwarnings != 0):
+            print("Configfile cannot be provided with other arguments")
+            sys.exit(2)
         warnings = WarningsPlugin(verbose=args.verbose, configfile=args.configfile)
     else:
         warnings = WarningsPlugin(verbose=args.verbose)
@@ -211,7 +216,6 @@ def warnings_wrapper(args):
             warnings.activate_checker_name('doxygen')
         if args.junit:
             warnings.activate_checker_name('junit')
-
         warnings.set_maximum(args.maxwarnings)
         warnings.set_minimum(args.minwarnings)
 
