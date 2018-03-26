@@ -82,3 +82,13 @@ class TestIntegration(TestCase):
     def test_min_but_still_ok(self):
         retval = warnings_wrapper(['--junit', '--maxwarnings', '100', '--minwarnings', '2', 'tests/junit*.xml'])
         self.assertEqual(0, retval)
+
+    def test_configfile_ok(self):
+        retval = warnings_wrapper(['--config', 'tests/config_example.json', 'tests/junit_single_fail.xml'])
+        self.assertEqual(0, retval)
+
+    def test_configfile_exclude_commandline(self):
+        with self.assertRaises(SystemExit) as ex:
+            warnings_wrapper(['--config', 'tests/config_example.json', '--junit', 'tests/junit_single_fail.xml'])
+        self.assertEqual(2, ex.exception.code)
+

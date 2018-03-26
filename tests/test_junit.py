@@ -6,7 +6,6 @@ from mock import patch
 from unittest import TestCase
 
 from mlx.warnings import WarningsPlugin
-from xml.etree.ElementTree import ParseError
 
 
 class TestJUnitFailures(TestCase):
@@ -34,7 +33,6 @@ class TestJUnitFailures(TestCase):
         self.assertRegexpMatches(fake_out.getvalue(), 'mysecondfai1ure')
 
     def test_invalid_xml(self):
-        with self.assertRaises(ParseError):
-            self.warnings.check('this is not xml')
+        self.warnings.check('this is not xml')
         self.assertEqual(self.warnings.return_count(), 0)
 
