@@ -10,7 +10,8 @@ from mlx.warnings import WarningsPlugin
 
 class TestJUnitFailures(TestCase):
     def setUp(self):
-        self.warnings = WarningsPlugin(junit=True, verbose=True)
+        self.warnings = WarningsPlugin(verbose=True)
+        self.warnings.activate_checker_name('junit')
 
     def test_no_warning(self):
         with open('tests/junit_no_fail.xml', 'r') as xmlfile:
