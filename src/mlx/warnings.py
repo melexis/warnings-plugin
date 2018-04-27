@@ -81,11 +81,12 @@ class WarningsPlugin:
         Args:
             content (str): The text to parse
         '''
+        if self.printout:
+            print(content)
+
         if len(self.checkerList) == 0:
             print("No checkers activated. Please use activate_checker function")
         else:
-            if self.printout:
-                print(content)
             for name, checker in self.checkerList.items():
                 checker.check(content)
 
