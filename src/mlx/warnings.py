@@ -10,7 +10,7 @@ import pkg_resources
 import subprocess
 import sys
 import glob
-from mlx.warnings_checker import SphinxChecker, DoxyChecker, JUnitChecker
+from mlx.warnings_checker import SphinxChecker, DoxyChecker, JUnitChecker, XMLRunnerChecker
 from setuptools_scm import get_version
 
 __version__ = get_version()
@@ -28,7 +28,8 @@ class WarningsPlugin:
         '''
         self.checkerList = {}
         self.verbose = verbose
-        self.publicCheckers = [SphinxChecker(self.verbose), DoxyChecker(self.verbose), JUnitChecker(self.verbose)]
+        self.publicCheckers = [SphinxChecker(self.verbose), DoxyChecker(self.verbose), JUnitChecker(self.verbose),
+                               XMLRunnerChecker(self.verbose)]
 
         if configfile is not None:
             with open(configfile, 'r') as f:
@@ -186,6 +187,7 @@ def warnings_wrapper(args):
     group1.add_argument('-d', '--doxygen', dest='doxygen', action='store_true')
     group1.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
     group1.add_argument('-j', '--junit', dest='junit', action='store_true')
+    group1.add_argument('-x', '--xmlrunner', dest='xmlrunner', action='store_true')
     group1.add_argument('-m', '--maxwarnings', type=int, required=False, default=0,
                         help='Maximum amount of warnings accepted')
     group1.add_argument('--minwarnings', type=int, required=False, default=0,
@@ -217,6 +219,8 @@ def warnings_wrapper(args):
             warnings.activate_checker_name('doxygen')
         if args.junit:
             warnings.activate_checker_name('junit')
+        if args.xmlrunner:
+            warnings.activate_checker_name('xmlrunner')
         warnings.set_maximum(args.maxwarnings)
         warnings.set_minimum(args.minwarnings)
 
