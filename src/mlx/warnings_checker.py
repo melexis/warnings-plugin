@@ -16,6 +16,7 @@ sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 PYTHON_XMLRUNNER_REGEX = r"(\s*(ERROR|FAILED) (\[\d+.\d\d\ds\]: \s*(.+)))\n?"
 xmlrunner_pattern = re.compile(PYTHON_XMLRUNNER_REGEX)
 
+
 class WarningsChecker(object):
     name = 'checker'
 
