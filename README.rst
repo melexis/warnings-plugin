@@ -196,6 +196,30 @@ command:
     python -m mlx.warnings --junit --command <commandforjunit>
 
 
+Parse for XMLRunner errors
+--------------------------
+
+When you run [XMLRunner](https://github.com/xmlrunner/unittest-xml-reporting)
+the errors are reported on the output, but they are not marked as failures in
+the test reports xml files. Since command exits as 1, we could not detect tests
+that just did not run (not failed). warnings-plugin now parses for the output
+with command:
+
+.. code-block:: bash
+
+    # command line log file
+    mlx-warnings xmlrunner_log.txt --xmlrunner
+    # command line command execution
+    mlx-warnings --xmlrunner --command <commandforxmlrunner>
+
+    # explicitly as python module for log file
+    python3 -m mlx.warnings --xmlrunner xmlrunner_log.txt
+    python -m mlx.warnings --xmlrunner xmlrunner_log.txt
+    # explicitly as python module
+    python3 -m mlx.warnings --xmlrunner --command <commandforxmlrunner>
+    python -m mlx.warnings --xmlrunner --command <commandforxmlrunner>
+
+
 ----------------------------------
 Configuration file to pass options
 ----------------------------------

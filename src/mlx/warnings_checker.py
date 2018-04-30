@@ -13,6 +13,9 @@ doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
 SPHINX_WARNING_REGEX = r"(.+?:(?:\d+|None)?):?\s*(DEBUG|INFO|WARNING|ERROR|SEVERE):\s*(.+)\n?"
 sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 
+PYTHON_XMLRUNNER_REGEX = r"(\s*(ERROR|FAILED) (\[\d+.\d\d\ds\]: \s*(.+)))\n?"
+xmlrunner_pattern = re.compile(PYTHON_XMLRUNNER_REGEX)
+
 
 class WarningsChecker(object):
     name = 'checker'
@@ -148,6 +151,11 @@ class SphinxChecker(RegexChecker):
 class DoxyChecker(RegexChecker):
     name = 'doxygen'
     pattern = doxy_pattern
+
+
+class XMLRunnerChecker(RegexChecker):
+    name = 'xmlrunner'
+    pattern = xmlrunner_pattern
 
 
 class JUnitChecker(WarningsChecker):
