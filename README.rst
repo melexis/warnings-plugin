@@ -244,6 +244,11 @@ Configuration file is in JSON format with a simple structure.
     	    "enabled": false,
     	    "min": 0,
     	    "max": 0
+        },
+        "xmlrunner":{
+    	    "enabled": false,
+    	    "min": 0,
+    	    "max": 0
         }
     }
 
