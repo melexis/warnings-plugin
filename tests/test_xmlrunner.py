@@ -23,7 +23,7 @@ class TestXMLRunnerWarnings(TestCase):
         with patch('sys.stdout', new=StringIO()) as fake_out:
             self.warnings.check(dut)
         self.assertEqual(self.warnings.return_count(), 1)
-        self.assertRegexpMatches(fake_out.getvalue(), dut)
+        self.assertIn(dut, fake_out.getvalue())
 
     def test_single_warning_mixed(self):
         dut1 = 'This1 should not be treated as warning'
@@ -34,7 +34,7 @@ class TestXMLRunnerWarnings(TestCase):
             self.warnings.check(dut2)
             self.warnings.check(dut3)
         self.assertEqual(self.warnings.return_count(), 1)
-        self.assertRegexpMatches(fake_out.getvalue(), dut2)
+        self.assertIn(dut2, fake_out.getvalue())
 
     def test_multiline(self):
         duterr1 = "ERROR [0.000s]: test_some_error_test (something.anything.somewhere) \"Some test functions\" that does not match old title \"Some freaky test functions\"\n"
@@ -46,6 +46,6 @@ class TestXMLRunnerWarnings(TestCase):
         with patch('sys.stdout', new=StringIO()) as fake_out:
             self.warnings.check(dut)
         self.assertEqual(self.warnings.return_count(), 2)
-        self.assertRegexpMatches(fake_out.getvalue(), duterr1)
-        self.assertRegexpMatches(fake_out.getvalue(), duterr2)
+        self.assertIn(duterr1, fake_out.getvalue())
+        self.assertIn(duterr2, fake_out.getvalue())
 
