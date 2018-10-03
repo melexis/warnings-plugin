@@ -14,12 +14,14 @@ def read(*names, **kwargs):
     ).read()
 
 
-requires = ['junitparser>=1.0.0', 'setuptools-scm']
+requires = ['junitparser>=1.0.0']
 
 setup(
     name='mlx.warnings',
     url=PROJECT_URL,
-    use_scm_version=True,
+    use_scm_version = {
+        'write_to': 'src/mlx/__version__.py'
+    },
     setup_requires=['setuptools_scm'],
     author='Bavo Van Achte',
     author_email='bavo.van.achte@gmail.com',
