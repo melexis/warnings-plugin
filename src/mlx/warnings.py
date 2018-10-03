@@ -6,7 +6,6 @@ from __future__ import print_function
 import argparse
 import json
 import os
-import pkg_resources
 import subprocess
 import sys
 import glob
