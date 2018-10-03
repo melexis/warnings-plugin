@@ -12,7 +12,7 @@ import glob
 from mlx.warnings_checker import SphinxChecker, DoxyChecker, JUnitChecker, XMLRunnerChecker
 from .__version__ import version as warnings_version
 
-__version__ = warnings_version()
+__version__ = warnings_version
 
 
 class WarningsPlugin:
