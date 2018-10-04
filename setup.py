@@ -20,7 +20,7 @@ setup(
     name='mlx.warnings',
     url=PROJECT_URL,
     use_scm_version = {
-        'write_to': 'src/mlx/__version__.py'
+        'write_to': 'src/mlx/__warnings_version__.py'
     },
     setup_requires=['setuptools_scm'],
     author='Bavo Van Achte',

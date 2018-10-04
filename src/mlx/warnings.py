@@ -10,7 +10,7 @@ import subprocess
 import sys
 import glob
 from mlx.warnings_checker import SphinxChecker, DoxyChecker, JUnitChecker, XMLRunnerChecker
-from .__version__ import version as warnings_version
+from .__warnings_version__.py import version as warnings_version
 
 __version__ = warnings_version
 
