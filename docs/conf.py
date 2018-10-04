@@ -27,10 +27,13 @@ if os.getenv('SPELLCHECK'):
 source_suffix = '.rst'
 master_doc = 'index'
 project = 'warning-plugin'
-year = '2017'
+year = '2017-2018'
 author = 'Bavo Van Achte'
 copyright = '{0}, {1}'.format(year, author)
-version = release = '0.1.0'
+
+from pkg_resources import get_distribution
+release = get_distribution('mlx.warnings').version
+version = '.'.join(release.split('.')[:3])
 
 pygments_style = 'trac'
 templates_path = ['.']
