@@ -1,4 +1,5 @@
 sphinx>=1.3
 sphinx-py3doc-enhanced-theme
 sphinxcontrib-plantuml
+setuptools_scm
 -e .
