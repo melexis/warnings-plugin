@@ -6,14 +6,13 @@ from __future__ import print_function
 import argparse
 import json
 import os
-import pkg_resources
 import subprocess
 import sys
 import glob
 from mlx.warnings_checker import SphinxChecker, DoxyChecker, JUnitChecker, XMLRunnerChecker
-from setuptools_scm import get_version
+from .__warnings_version__ import version as warnings_version
 
-__version__ = get_version()
+__version__ = warnings_version
 
 
 class WarningsPlugin:
@@ -199,7 +198,7 @@ def warnings_wrapper(args):
                         help='Treat program arguments as command to execute to obtain data')
     parser.add_argument('--ignore-retval', dest='ignore', action='store_true',
                         help='Ignore return value of the executed command')
-    parser.add_argument('--version', action='version', version='%(prog)s {version}'.format(version=pkg_resources.require('mlx.warnings')[0].version))
+    parser.add_argument('--version', action='version', version='%(prog)s {version}'.format(version=__version__))
     parser.add_argument('logfile', nargs='+', help='Logfile (or command) that might contain warnings')
     parser.add_argument('flags', nargs=argparse.REMAINDER, help='Possible not-used flags from above are considered as command flags')
 
