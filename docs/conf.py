@@ -31,9 +31,11 @@ year = '2017-2018'
 author = 'Bavo Van Achte'
 copyright = '{0}, {1}'.format(year, author)
 
-from pkg_resources import get_distribution
-release = get_distribution('mlx.warnings').version
-version = '.'.join(release.split('.')[:3])
+# The full version, including alpha/beta/rc tags.
+from setuptools_scm import get_version
+version = release = get_version(root="..")
+# The short X.Y version.
+#version = '.'.join(release.split('.')[:3])
 
 pygments_style = 'trac'
 templates_path = ['.']
