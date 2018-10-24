@@ -185,7 +185,7 @@ class JUnitChecker(WarningsChecker):
                                                               testname=testcase.name))
             result.update_statistics()
             self.count += result.errors + result.failures
-        except ParseError as _:
+        except ParseError:
             return
 
 
