@@ -269,13 +269,13 @@ def warnings_command(warnings, cmd):
         if out:
             try:
                 warnings.check(out.decode(encoding="utf-8"))
-            except AttributeError as e:
+            except AttributeError:
                 warnings.check(out)
         # Check stderr
         if err:
             try:
                 warnings.check(err.decode(encoding="utf-8"))
-            except AttributeError as e:
+            except AttributeError:
                 warnings.check(err)
         return proc.returncode
     except OSError as e:
