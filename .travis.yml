@@ -24,9 +24,21 @@ jobs:
         - TOXENV=check
     # Stage DOCS
     - stage: docs
-      python: '2.7'
+      python: '3.6'
       env:
         - TOXENV=docs
+      before_deploy:
+        - mkdir -p dist/docs/
+        - touch dist/docs/.nojekyll
+      deploy:
+        # publish example: build by tox, published to pages
+        - provider: pages
+          skip_cleanup: true
+          local_dir: dist/docs/
+          github_token: $GITHUB_TOKEN
+          on:
+            branch: master
+            python: 3.6
     # Stage TEST
     - stage: test
       python: '2.7'
