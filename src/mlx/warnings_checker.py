@@ -3,7 +3,15 @@
 
 import abc
 import re
+from decouple import config
 from junitparser import JUnitXml, Failure, Error
+from mlx.coverity_services import CoverityConfigurationService, CoverityDefectService
+try:
+    # For Python 3.0 and later
+    from urllib.error import URLError
+except ImportError:
+    # Fall back to Python 2's urllib2
+    from urllib2 import URLError
 from xml.etree.ElementTree import ParseError
 
 
@@ -187,6 +195,61 @@ class JUnitChecker(WarningsChecker):
             self.count += result.errors + result.failures
         except ParseError:
             return
+
+
+class CoverityChecker(WarningsChecker):
+    name = 'coverity'
+
+    def __init__(self, verbose=False):
+        ''' Constructor
+
+        Args:
+            verbose (bool): Enable/disable verbose logging
+        '''
+        self.transport = config('COVERITY_TRANSPORT', default='http')
+        self.port = config('COVERITY_PORT', default='8080')
+        self.hostname = config('COVERITY_HOSTNAME')
+        self.username = config('COVERITY_USERNAME')
+        self.password = config('COVERITY_PASSWORD')
+        self.stream = config('COVERITY_STREAM')
+        self.classification = "Pending,Bug,Unclassified"
+
+        super(CoverityChecker, self).__init__(verbose=verbose)
+
+    def __extract_args__(self, content):
+        return
+
+    def __connect_to_coverity__(self):
+        print("Login to Coverity Server: %s%s:%s" % (self.transport, self.hostname, self.port))
+        coverity_conf_service = CoverityConfigurationService(self.transport, self.hostname, self.port)
+        coverity_conf_service.login(self.username, self.password)
+        if self.verbose:
+            print("Retrieve stream from Coverity Server" % (self.transport, self.hostname, self.port))
+        check_stream = coverity_conf_service.get_stream(self.stream)
+        if check_stream is None:
+            raise ValueError('Coverity checker failed. No such Coverity stream [%s] found on [%s]',
+                             self.stream, coverity_conf_service.get_service_url())
+        self.project_name = coverity_conf_service.get_project_name(check_stream)
+        self.coverity_service = CoverityDefectService(coverity_conf_service)
+        self.coverity_service.login(self.username, self.password)
+
+    def check(self, content):
+        '''
+        Function for retrieving number of defects from Coverity server
+
+        Args:
+            content (str): some sort of configuration string
+        '''
+        self.__extract_args__(content)
+        self.__connect_to_coverity__()
+        print("Querying Coverity Server for defects")
+        try:
+            defects = self.coverity_service.get_defects(self.project_name, self.stream, classification=self.classification)
+        except (URLError, AttributeError) as error:
+            print('Coverity checker failed with %s' % error)
+            return
+        self.count = defects.totalNumberOfRecords
+
 
 
 
