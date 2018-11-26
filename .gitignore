@@ -97,3 +97,6 @@ pip-selfcheck.json
 
 # Offline version file
 src/mlx/__warnings_version__.py
+
+# Coverity idir
+idir/
