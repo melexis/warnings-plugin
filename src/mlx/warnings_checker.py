@@ -3,7 +3,7 @@
 
 import abc
 import re
-from decouple import config
+from decouple import config, Config, RepositoryEnv
 from junitparser import JUnitXml, Failure, Error
 from mlx.coverity_services import CoverityConfigurationService, CoverityDefectService
 try:
@@ -199,6 +199,20 @@ class JUnitChecker(WarningsChecker):
 
 class CoverityChecker(WarningsChecker):
     name = 'coverity'
+    transport = 'http'
+    port = '8080'
+    hostname = ''
+    username = ''
+    password = ''
+    stream = ''
+
+    def _fill_vars(self, configuration):
+        self.transport = configuration('COVERITY_TRANSPORT', default=self.transport)
+        self.port = configuration('COVERITY_PORT', default=self.port)
+        self.hostname = configuration('COVERITY_HOSTNAME', default=self.hostname)
+        self.username = configuration('COVERITY_USERNAME', default=self.username)
+        self.password = configuration('COVERITY_PASSWORD', default=self.password)
+        self.stream = configuration('COVERITY_STREAM', default=self.stream)
 
     def __init__(self, verbose=False):
         ''' Constructor
@@ -206,12 +220,7 @@ class CoverityChecker(WarningsChecker):
         Args:
             verbose (bool): Enable/disable verbose logging
         '''
-        self.transport = config('COVERITY_TRANSPORT', default='http')
-        self.port = config('COVERITY_PORT', default='8080')
-        self.hostname = config('COVERITY_HOSTNAME', default='')
-        self.username = config('COVERITY_USERNAME', default='')
-        self.password = config('COVERITY_PASSWORD', default='')
-        self.stream = config('COVERITY_STREAM', default='')
+        self._fill_vars(config)
         self.classification = "Pending,Bug,Unclassified"
 
         super(CoverityChecker, self).__init__(verbose=verbose)
@@ -228,17 +237,20 @@ class CoverityChecker(WarningsChecker):
         '''
         # Add here a function that populates variables from the logfile (probably .env logfile)
         # Maybe a suggestion is to simply load that env like file here
-
+        try:
+            self._fill_vars(Config(RepositoryEnv(str(logfile[0]))))
+        except FileNotFoundError:
+            pass
         if self.hostname == '' or self.username == '' or self.password == '' or self.stream == '':
-            raise ValueError('Coverity checker requires hostname, username, password and stream to be set')
+            raise ValueError('Coverity checker requires COVERITY_HOSTNAME, COVERITY_USERNAME, COVERITY_PASSWORD and COVERITY_STREAM to be set in .env file or as environment variables')
         return
 
     def __connect_to_coverity__(self):
-        print("Login to Coverity Server: %s%s:%s" % (self.transport, self.hostname, self.port))
+        print("Login to Coverity Server: %s://%s:%s" % (self.transport, self.hostname, self.port))
         coverity_conf_service = CoverityConfigurationService(self.transport, self.hostname, self.port)
         coverity_conf_service.login(self.username, self.password)
         if self.verbose:
-            print("Retrieve stream from Coverity Server" % (self.transport, self.hostname, self.port))
+            print("Retrieving stream from Coverity Server" % (self.transport, self.hostname, self.port))
         check_stream = coverity_conf_service.get_stream(self.stream)
         if check_stream is None:
             raise ValueError('Coverity checker failed. No such Coverity stream [%s] found on [%s]',
@@ -256,7 +268,7 @@ class CoverityChecker(WarningsChecker):
         '''
         self.__extract_args__(logfile)
         self.__connect_to_coverity__()
-        print("Querying Coverity Server for defects")
+        print("Querying Coverity Server for defects on stream %s" % self.stream)
         try:
             defects = self.coverity_service.get_defects(self.project_name, self.stream, classification=self.classification)
         except (URLError, AttributeError) as error:
