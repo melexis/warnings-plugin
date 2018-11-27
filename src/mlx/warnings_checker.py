@@ -208,15 +208,29 @@ class CoverityChecker(WarningsChecker):
         '''
         self.transport = config('COVERITY_TRANSPORT', default='http')
         self.port = config('COVERITY_PORT', default='8080')
-        self.hostname = config('COVERITY_HOSTNAME')
-        self.username = config('COVERITY_USERNAME')
-        self.password = config('COVERITY_PASSWORD')
-        self.stream = config('COVERITY_STREAM')
+        self.hostname = config('COVERITY_HOSTNAME', default='')
+        self.username = config('COVERITY_USERNAME', default='')
+        self.password = config('COVERITY_PASSWORD', default='')
+        self.stream = config('COVERITY_STREAM', default='')
         self.classification = "Pending,Bug,Unclassified"
 
         super(CoverityChecker, self).__init__(verbose=verbose)
 
-    def __extract_args__(self, content):
+    def __extract_args__(self, logfile):
+        '''
+        Function for extracting arguments from logfile
+
+        Args:
+            logfile (file): Logfile is actually a configuration file for Coverity checker
+
+        Raises:
+            ValueError when all needed variables are not set to their non-default values
+        '''
+        # Add here a function that populates variables from the logfile (probably .env logfile)
+        # Maybe a suggestion is to simply load that env like file here
+
+        if self.hostname == '' or self.username == '' or self.password == '' or self.stream == '':
+            raise ValueError('Coverity checker requires hostname, username, password and stream to be set')
         return
 
     def __connect_to_coverity__(self):
@@ -233,14 +247,14 @@ class CoverityChecker(WarningsChecker):
         self.coverity_service = CoverityDefectService(coverity_conf_service)
         self.coverity_service.login(self.username, self.password)
 
-    def check(self, content):
+    def check(self, logfile):
         '''
         Function for retrieving number of defects from Coverity server
 
         Args:
             content (str): some sort of configuration string
         '''
-        self.__extract_args__(content)
+        self.__extract_args__(logfile)
         self.__connect_to_coverity__()
         print("Querying Coverity Server for defects")
         try:
