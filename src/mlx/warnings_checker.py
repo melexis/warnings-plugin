@@ -6,12 +6,7 @@ import re
 from decouple import config, Config, RepositoryEnv
 from junitparser import JUnitXml, Failure, Error
 from mlx.coverity_services import CoverityConfigurationService, CoverityDefectService
-try:
-    # For Python 3.0 and later
-    from urllib.error import URLError
-except ImportError:
-    # Fall back to Python 2's urllib2
-    from urllib2 import URLError
+from urllib.error import URLError
 from xml.etree.ElementTree import ParseError
 
 
