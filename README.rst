@@ -49,9 +49,6 @@ Every release is uploaded to pip so it can be installed simply by using pip.
 
 .. code-block:: bash
 
-    # Python2
-    pip2 install mlx.warnings
-
     # Python3
     pip3 install mlx.warnings
 
