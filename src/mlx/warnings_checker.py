@@ -249,7 +249,7 @@ class CoverityChecker(WarningsChecker):
     def _connect_to_coverity(self):
         '''
         Login to Coverity server and retrieve project and stream information. This function
-        requires __extract_args__ to be run before as all class arguments need to be set.
+        requires _extract_args to be run before as all class arguments need to be set.
         '''
         print("Login to Coverity Server: %s://%s:%s" % (self.transport, self.hostname, self.port))
         coverity_conf_service = CoverityConfigurationService(self.transport, self.hostname, self.port)
@@ -271,8 +271,8 @@ class CoverityChecker(WarningsChecker):
         Args:
             content (str): some sort of configuration string
         '''
-        self.__extract_args__(logfile)
-        self.__connect_to_coverity__()
+        self._extract_args(logfile)
+        self._connect_to_coverity()
         print("Querying Coverity Server for defects on stream %s" % self.stream)
         try:
             defects = self.coverity_service.get_defects(self.project_name, self.stream, classification=self.classification)
