@@ -212,7 +212,8 @@ def warnings_wrapper(args):
 
     # Read config file
     if args.configfile is not None:
-        if args.sphinx or args.doxygen or args.junit or args.coverity or (args.maxwarnings != 0) or (args.minwarnings != 0):
+        checkers = args.sphinx or args.doxygen or args.junit or args.coverity
+        if checkers or (args.maxwarnings != 0) or (args.minwarnings != 0):
             print("Configfile cannot be provided with other arguments")
             sys.exit(2)
         warnings = WarningsPlugin(verbose=args.verbose, configfile=args.configfile)
