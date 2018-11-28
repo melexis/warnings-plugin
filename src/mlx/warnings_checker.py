@@ -202,6 +202,12 @@ class CoverityChecker(WarningsChecker):
     stream = ''
 
     def _fill_vars(self, configuration):
+        '''
+        Fill variables from Python decouple Config class
+
+        Args:
+            configuration (decouple.Config): Config class from python Decouple
+        '''
         self.transport = configuration('COVERITY_TRANSPORT', default=self.transport)
         self.port = configuration('COVERITY_PORT', default=self.port)
         self.hostname = configuration('COVERITY_HOSTNAME', default=self.hostname)
@@ -220,7 +226,7 @@ class CoverityChecker(WarningsChecker):
 
         super(CoverityChecker, self).__init__(verbose=verbose)
 
-    def __extract_args__(self, logfile):
+    def _extract_args(self, logfile):
         '''
         Function for extracting arguments from logfile
 
@@ -240,7 +246,11 @@ class CoverityChecker(WarningsChecker):
             raise ValueError('Coverity checker requires COVERITY_HOSTNAME, COVERITY_USERNAME, COVERITY_PASSWORD and COVERITY_STREAM to be set in .env file or as environment variables')
         return
 
-    def __connect_to_coverity__(self):
+    def _connect_to_coverity(self):
+        '''
+        Login to Coverity server and retrieve project and stream information. This function
+        requires __extract_args__ to be run before as all class arguments need to be set.
+        '''
         print("Login to Coverity Server: %s://%s:%s" % (self.transport, self.hostname, self.port))
         coverity_conf_service = CoverityConfigurationService(self.transport, self.hostname, self.port)
         coverity_conf_service.login(self.username, self.password)
