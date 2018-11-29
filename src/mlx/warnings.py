@@ -9,7 +9,7 @@ import os
 import subprocess
 import sys
 import glob
-from mlx.warnings_checker import SphinxChecker, DoxyChecker, JUnitChecker, XMLRunnerChecker
+from mlx.warnings_checker import SphinxChecker, DoxyChecker, JUnitChecker, XMLRunnerChecker, CoverityChecker
 from .__warnings_version__ import version as warnings_version
 
 __version__ = warnings_version
@@ -28,7 +28,7 @@ class WarningsPlugin:
         self.checkerList = {}
         self.verbose = verbose
         self.publicCheckers = [SphinxChecker(self.verbose), DoxyChecker(self.verbose), JUnitChecker(self.verbose),
-                               XMLRunnerChecker(self.verbose)]
+                               XMLRunnerChecker(self.verbose), CoverityChecker(self.verbose)]
 
         if configfile is not None:
             with open(configfile, 'r') as f:
@@ -183,6 +183,7 @@ class WarningsPlugin:
 def warnings_wrapper(args):
     parser = argparse.ArgumentParser(prog='mlx-warnings')
     group1 = parser.add_argument_group('Configuration command line options')
+    group1.add_argument('--coverity', dest='coverity', action='store_true')
     group1.add_argument('-d', '--doxygen', dest='doxygen', action='store_true')
     group1.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
     group1.add_argument('-j', '--junit', dest='junit', action='store_true')
@@ -206,7 +207,8 @@ def warnings_wrapper(args):
 
     # Read config file
     if args.configfile is not None:
-        if args.sphinx or args.doxygen or args.junit or (args.maxwarnings != 0) or (args.minwarnings != 0):
+        checkersflag = args.sphinx or args.doxygen or args.junit or args.coverity or args.xmlrunner
+        if checkersflag or (args.maxwarnings != 0) or (args.minwarnings != 0):
             print("Configfile cannot be provided with other arguments")
             sys.exit(2)
         warnings = WarningsPlugin(verbose=args.verbose, configfile=args.configfile)
@@ -220,6 +222,8 @@ def warnings_wrapper(args):
             warnings.activate_checker_name('junit')
         if args.xmlrunner:
             warnings.activate_checker_name('xmlrunner')
+        if args.coverity:
+            warnings.activate_checker_name('coverity')
         warnings.set_maximum(args.maxwarnings)
         warnings.set_minimum(args.minwarnings)
 
