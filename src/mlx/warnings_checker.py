@@ -207,9 +207,9 @@ class CoverityChecker(RegexChecker):
         '''
         matches = re.finditer(self.pattern, content)
         for match in matches:
-            if match.group('curr') == match.group('max'):
-                if match.group('classification') in self.CLASSIFICATION:
-                    self.count += 1
-                    if self.verbose:
-                        print(match.group(0).strip())
+            if (match.group('curr') == match.group('max')) and \
+                    (match.group('classification') in self.CLASSIFICATION):
+                self.count += 1
+                if self.verbose:
+                    print(match.group(0).strip())
 
