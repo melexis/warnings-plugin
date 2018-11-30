@@ -26,6 +26,10 @@ class TestIntegration(TestCase):
         retval = warnings_wrapper(['--junit', 'tests/junit_single_fail.xml'])
         self.assertEqual(1, retval)
 
+    def test_single_defect_coverity(self):
+        retval = warnings_wrapper(['--coverity', 'tests/coverity_single_defect.txt'])
+        self.assertEqual(1, retval)
+
     def test_two_arguments(self):
         retval = warnings_wrapper(['--junit', 'tests/junit_single_fail.xml', 'tests/junit_double_fail.xml'])
         self.assertEqual(1 + 2, retval)
