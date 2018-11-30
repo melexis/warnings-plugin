@@ -10,6 +10,7 @@ import subprocess
 import sys
 import glob
 from mlx.warnings_checker import SphinxChecker, DoxyChecker, JUnitChecker, XMLRunnerChecker, CoverityChecker
+from mlx.warnings_checker import CoverityServerChecker
 from .__warnings_version__ import version as warnings_version
 
 __version__ = warnings_version
@@ -28,7 +29,8 @@ class WarningsPlugin:
         self.checkerList = {}
         self.verbose = verbose
         self.publicCheckers = [SphinxChecker(self.verbose), DoxyChecker(self.verbose), JUnitChecker(self.verbose),
-                               XMLRunnerChecker(self.verbose), CoverityChecker(self.verbose)]
+                               XMLRunnerChecker(self.verbose), CoverityChecker(self.verbose),
+                               CoverityServerChecker(self.verbose)]
 
         if configfile is not None:
             with open(configfile, 'r') as f:

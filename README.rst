@@ -248,8 +248,8 @@ with command:
     python -m mlx.warnings --xmlrunner --command <commandforxmlrunner>
 
 
-Query for Coverity defects
---------------------------
+Query Coverity server for defects
+---------------------------------
 
 Coverity requires server and its Triage information to determine if reported
 defect is indeed an error or a warning. Locally reported information (increase
@@ -275,15 +275,15 @@ file to plugin.
 .. code-block:: bash
 
     # Coverity checker assumes logfile as configuration file (.env format)
-    mlx-warnings --coverity .env.example
+    mlx-warnings --coverityserver .env.example
 
     # rename the .env.example
     mv .env.example .env
     # command line, where whatever is non-existant .env file
-    mlx-warnings --coverity whatever
+    mlx-warnings --coverityserver whatever
 
     # explicitly as python module
-    python3 -m mlx.warnings --coverity whatever
+    python3 -m mlx.warnings --coverityserver whatever
 
 
 ----------------------------------
