@@ -50,3 +50,4 @@ class TestCoverityWarnings(TestCase):
         self.assertEqual(self.warnings.return_count(), 1)
         self.assertIn(dut2, fake_out.getvalue())
 
+

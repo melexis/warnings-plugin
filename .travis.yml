@@ -40,10 +40,6 @@ jobs:
             branch: master
             python: 3.6
     # Stage TEST
-    - stage: test
-      python: '2.7'
-      env:
-        - TOXENV=py27,codecov
     - python: '3.4'
       env:
         - TOXENV=py34,codecov
@@ -55,7 +51,7 @@ jobs:
         - TOXENV=py36,codecov
     # Stage COVERITY
     - stage: coverity
-      python: '2.7'
+      python: '3.6'
       env:
         # TOXENV=py27 COVERITY_SCAN_TOKEN
         - secure: "VjiASJr/DgmDA5Gpy021ZVWAImhTdeKP8PreWWMRQlw02ZT96Ro39M/wtNUPKbbvph9q6gMIfF9bjBRxxcgmp73evyfbZu1ScyFQ7poFOOlX59tduDsmTaLMOdF3/uM3SwPEQJ40fSFXiHfFP6j26aFUNOwa7fUPhQuZ8aGofBaoRocL3llsDURIi5DjZBG9WmmNnHKh6X95aex4svj6hRq4/8L1EQiuignrQZmLFePCKz/FQ+AIperZZQyNNE7umLE8yHuVLWjH0gpBqyVqis2KSv4rU281oN/madi9de40sRdBS1pkyjdaBEnUn7QAPa8cwwkzRKmmL+YYKGe2zBfVydNzH/+B+N+f+dExbmK2vnCgpucNb7qAh4+ESPTXiO+9KtKNRocs5dgIC4SyvXUNEgYGpg0MViQKHaqGFpI3E750jY2bfvnrk/2DB3aYlR2FHfdsct214j0Ask/4eEwKqcY/AljVbDOm0ELAlhmhz1OfmphIRBMZPCT0qGJ4+zlyoe+CbW62lNYdDn+V5jiz43VNbtuxTIzYACxe10sRx5uNOCHlskOoy8m9hpXNpOMAqfNry/Vt33Nm7UCK4J9WF+kD87So/xaux+FKYat07PbPAocBCjVp490szPqXAMfX2RapIdpwFsy+JSyh/buWibmTWG5HF6ImTagM5f8="

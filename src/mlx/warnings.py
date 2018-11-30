@@ -10,6 +10,7 @@ import subprocess
 import sys
 import glob
 from mlx.warnings_checker import SphinxChecker, DoxyChecker, JUnitChecker, XMLRunnerChecker, CoverityChecker
+from mlx.warnings_checker import CoverityServerChecker
 from .__warnings_version__ import version as warnings_version
 
 __version__ = warnings_version
@@ -28,7 +29,8 @@ class WarningsPlugin:
         self.checkerList = {}
         self.verbose = verbose
         self.publicCheckers = [SphinxChecker(self.verbose), DoxyChecker(self.verbose), JUnitChecker(self.verbose),
-                               XMLRunnerChecker(self.verbose), CoverityChecker(self.verbose)]
+                               XMLRunnerChecker(self.verbose), CoverityChecker(self.verbose),
+                               CoverityServerChecker(self.verbose)]
 
         if configfile is not None:
             with open(configfile, 'r') as f:
@@ -183,6 +185,12 @@ class WarningsPlugin:
 def warnings_wrapper(args):
     parser = argparse.ArgumentParser(prog='mlx-warnings')
     group1 = parser.add_argument_group('Configuration command line options')
+    group1.add_argument('--coverityserver', dest='coverityserver', action='store_true', help='Logfile is for Coverity checker \
+                        .env file in which COVERITY_ variables are defined. In case you do not have one in your \
+                        project root (where you run mlx-warnings from) and you do not have variables defined in \
+                        environment, the file passed as logfile will be tested for .env styled variables. Logfile \
+                        can also be fake (required argument) and then .env or variables defined in environment will \
+                        be used')
     group1.add_argument('--coverity', dest='coverity', action='store_true')
     group1.add_argument('-d', '--doxygen', dest='doxygen', action='store_true')
     group1.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
@@ -207,7 +215,7 @@ def warnings_wrapper(args):
 
     # Read config file
     if args.configfile is not None:
-        checkersflag = args.sphinx or args.doxygen or args.junit or args.coverity or args.xmlrunner
+        checkersflag = args.sphinx or args.doxygen or args.junit or args.coverity or args.xmlrunner or args.coverityserver
         if checkersflag or (args.maxwarnings != 0) or (args.minwarnings != 0):
             print("Configfile cannot be provided with other arguments")
             sys.exit(2)
@@ -224,6 +232,9 @@ def warnings_wrapper(args):
             warnings.activate_checker_name('xmlrunner')
         if args.coverity:
             warnings.activate_checker_name('coverity')
+        if args.coverityserver:
+            warnings.activate_checker_name('coverityserver')
+
         warnings.set_maximum(args.maxwarnings)
         warnings.set_minimum(args.minwarnings)
 
@@ -237,9 +248,12 @@ def warnings_wrapper(args):
         if (not args.ignore) and (retval != 0):
             return retval
     else:
-        retval = warnings_logfile(warnings, args.logfile)
-        if retval != 0:
-            return retval
+        if args.coverity:
+            retval = warnings.check(args.logfile)
+        else:
+            retval = warnings_logfile(warnings, args.logfile)
+            if retval != 0:
+                return retval
 
     warnings.return_count()
     return warnings.return_check_limits()

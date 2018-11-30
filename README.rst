@@ -49,9 +49,6 @@ Every release is uploaded to pip so it can be installed simply by using pip.
 
 .. code-block:: bash
 
-    # Python2
-    pip2 install mlx.warnings
-
     # Python3
     pip3 install mlx.warnings
 
@@ -249,6 +246,44 @@ with command:
     # explicitly as python module
     python3 -m mlx.warnings --xmlrunner --command <commandforxmlrunner>
     python -m mlx.warnings --xmlrunner --command <commandforxmlrunner>
+
+
+Query Coverity server for defects
+---------------------------------
+
+Coverity requires server and its Triage information to determine if reported
+defect is indeed an error or a warning. Locally reported information (increase
+or decrease) do not indicate if new defects appeared or they are variation of
+already triaged defects. That is why local parsing of the information is not
+sufficient, but warnings-plugin based on [Sphinx Coverity Plugin](https://github.com/melexis/sphinx-coverity-extension)
+is now able to query the server and receive count of defects classified as
+"Bug", "Pending" and "Unclassified".
+
+Coverity checker requires connection to your local Coverity instance, but it
+is able to eliminate the increase of Coverity defects of new contributions
+during the development with legacy defects.
+
+To run Coverity checker you need to copy/rename `.env.example` file to `.env` and
+fill it your Coverity credentials (along with Coverity stream name). You can also
+just define environment variables `COVERITY_HOSTNAME`, `COVERITY_USERNAME`,
+`COVERITY_PASSWORD` and `COVERITY_STREAM`, if you are not comfortable writing
+your password in a file. `.env` is added to `.gitignore` just so that you do
+not commit your password to repository. You can also pass explicit .env styled
+file to plugin.
+
+
+.. code-block:: bash
+
+    # Coverity checker assumes logfile as configuration file (.env format)
+    mlx-warnings --coverityserver .env.example
+
+    # rename the .env.example
+    mv .env.example .env
+    # command line, where whatever is non-existant .env file
+    mlx-warnings --coverityserver whatever
+
+    # explicitly as python module
+    python3 -m mlx.warnings --coverityserver whatever
 
 
 ----------------------------------

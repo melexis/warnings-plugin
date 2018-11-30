@@ -14,7 +14,7 @@ def read(*names, **kwargs):
     ).read()
 
 
-requires = ['junitparser>=1.0.0']
+requires = ['junitparser>=1.0.0', 'mlx.coverity==0.0.8', 'python-decouple']
 
 setup(
     name='mlx.warnings',
@@ -46,7 +46,6 @@ setup(
         'Operating System :: POSIX',
         'Operating System :: Microsoft :: Windows',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
