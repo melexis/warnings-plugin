@@ -19,6 +19,9 @@ sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 PYTHON_XMLRUNNER_REGEX = r"(\s*(ERROR|FAILED) (\[\d+.\d\d\ds\]: \s*(.+)))\n?"
 xmlrunner_pattern = re.compile(PYTHON_XMLRUNNER_REGEX)
 
+COVERITY_WARNING_REGEX = r"(?:((?:[/.]|[A-Za-z]).+?):(-?\d+):) (CID) \d+ \(#(?P<curr>\d+) of (?P<max>\d+)\): (?P<checker>.+)\): (?P<classification>\w+), *(.+)\n?"
+coverity_pattern = re.compile(COVERITY_WARNING_REGEX)
+
 
 class WarningsChecker(object):
     name = 'checker'
@@ -192,8 +195,30 @@ class JUnitChecker(WarningsChecker):
             return
 
 
-class CoverityChecker(WarningsChecker):
+class CoverityChecker(RegexChecker):
     name = 'coverity'
+    pattern = coverity_pattern
+    CLASSIFICATION = "Unclassified"
+
+    def check(self, content):
+        '''
+        Function for counting the number of warnings, but adopted for Coverity
+        output
+
+        Args:
+            content (str): The content to parse
+        '''
+        matches = re.finditer(self.pattern, content)
+        for match in matches:
+            if (match.group('curr') == match.group('max')) and \
+                    (match.group('classification') in self.CLASSIFICATION):
+                self.count += 1
+                if self.verbose:
+                    print(match.group(0).strip())
+
+
+class CoverityServerChecker(WarningsChecker):
+    name = 'coverityserver'
     transport = 'http'
     port = '8080'
     hostname = ''

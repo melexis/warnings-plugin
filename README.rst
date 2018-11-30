@@ -172,6 +172,37 @@ command:
     python -m mlx.warnings --doxygen --command <commandfordoxygen>
 
 
+Parse for Coverity Defects
+--------------------------
+
+Coverity is a static analysis tool which has option to run desktop analysis
+on your local changes and report the results back directly in the console.
+You only need to list affected files and below example lists changed files
+between your branch and master, which it then forwards to `cov-run-desktop`:
+
+.. code-block:: bash
+
+    cov-run-desktop --text-output-style=oneline `git diff --name-only --ignore-submodules master`
+
+
+You can pipe the results to logfile, which you pass to warnings-plugin, or you use
+the `--command` argument and execute the `cov-run-desktop` through
+
+.. code-block:: bash
+
+    # command line log file
+    mlx-warnings cov-run-desktop-output.txt --coverity
+    # command line command execution
+    mlx-warnings --coverity --command <commandforcoverity>
+
+    # explicitly as python module for log file
+    python3 -m mlx.warnings --coverity cov-run-desktop-output.txt
+    python -m mlx.warnings --coverity cov-run-desktop-output.txt
+    # explicitly as python module
+    python3 -m mlx.warnings --coverity --command <commandforcoverity>
+    python -m mlx.warnings --coverity --command <commandforcoverity>
+
+
 Parse for JUnit failures
 ------------------------
 
