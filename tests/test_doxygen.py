@@ -49,3 +49,16 @@ class TestDoxygenWarnings(TestCase):
         self.assertRegexpMatches(fake_out.getvalue(), duterr1)
         self.assertRegexpMatches(fake_out.getvalue(), duterr2)
 
+    def test_git_warning(self):
+        duterr1 = "testfile.c:6: warning: group test: ignoring title \"Some test functions\" that does not match old title \"Some freaky test functions\"\n"
+        duterr2 = "testfile.c:8: warning: group test: ignoring title \"Some test functions\" that does not match old title \"Some freaky test functions\"\n"
+        dut = "warning: notes ref refs/notes/review is invalid should not be treated as warning\n"
+        dut += duterr1
+        dut += "This should not be treated as warning2\n"
+        dut += duterr2
+        with patch('sys.stdout', new=StringIO()) as fake_out:
+            self.warnings.check(dut)
+        self.assertEqual(self.warnings.return_count(), 2)
+        self.assertRegexpMatches(fake_out.getvalue(), duterr1)
+        self.assertRegexpMatches(fake_out.getvalue(), duterr2)
+
