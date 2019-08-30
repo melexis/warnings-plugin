@@ -3,9 +3,9 @@
 
 import abc
 import re
-from junitparser import JUnitXml, Failure, Error
 from xml.etree.ElementTree import ParseError
 
+from junitparser import Error, Failure, JUnitXml
 
 DOXYGEN_WARNING_REGEX = r"(?:((?:[/.]|[A-Za-z]).+?):(-?\d+):\s*([Ww]arning|[Ee]rror)|<.+>:-?\d+(?::\s*([Ww]arning|[Ee]rror))?): (.+(?:(?!\s*(?:[Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*([Nn]otice|[Ww]arning|[Ee]rror): (.+)\n?"
 doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
@@ -59,7 +59,8 @@ class WarningsChecker(object):
             ValueError: Invalid argument (min limit higher than max limit)
         '''
         if self.warn_min > maximum:
-            raise ValueError("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Cannot enter {value}". format(min=self.warn_min, max=self.warn_max, value=maximum))
+            raise ValueError("Invalid argument: mininum limit ({0.warn_min}) is higher than maximum limit "
+                             "({0.warn_max}). Cannot enter {value}". format(self, value=maximum))
         else:
             self.warn_max = maximum
 
@@ -81,7 +82,8 @@ class WarningsChecker(object):
             ValueError: Invalid argument (min limit higher than max limit)
         '''
         if minimum > self.warn_max:
-            raise ValueError("Invalid argument: mininum limit ({min}) is higher than maximum limit ({max}). Cannot enter {value}". format(min=self.warn_min, max=self.warn_max, value=minimum))
+            raise ValueError("Invalid argument: mininum limit ({0.warn_min}) is higher than maximum limit "
+                             "({0.warn_max}). Cannot enter {value}".format(self, value=minimum))
         else:
             self.warn_min = minimum
 
@@ -99,7 +101,7 @@ class WarningsChecker(object):
         Returns:
             int: Number of warnings found
         '''
-        print("{count} {name} warnings found".format(count=self.count, name=self.name))
+        print("{0.count} {0.name} warnings found".format(self))
         return self.count
 
     def return_check_limits(self):
@@ -109,14 +111,15 @@ class WarningsChecker(object):
             int: 0 if the amount of warnings is within limits. the count of warnings otherwise
         '''
         if self.count > self.warn_max:
-            print("Number of warnings ({count}) is higher than the maximum limit ({max}). Returning error code 1.".format(count=self.count, max=self.warn_max))
+            print("Number of warnings ({0.count}) is higher than the maximum limit ({0.warn_max}). "
+                  "Returning error code 1.".format(self))
             return self.count
-        elif self.count < self.warn_min:
-            print("Number of warnings ({count}) is lower than the minimum limit ({min}). Returning error code 1.".format(count=self.count, min=self.warn_min))
+        if self.count < self.warn_min:
+            print("Number of warnings ({0.count}) is lower than the minimum limit ({0.warn_min}). "
+                  "Returning error code 1.".format(self))
             return self.count
-        else:
-            print("Number of warnings ({count}) is between limits {min} and {max}. Well done.".format(count=self.count, min=self.warn_min, max=self.warn_max))
-            return 0
+        print("Number of warnings ({0.count}) is between limits {0.warn_min} and {0.warn_max}. Well done.".format(self))
+        return 0
 
 
 class RegexChecker(WarningsChecker):
@@ -212,4 +215,3 @@ class CoverityChecker(RegexChecker):
                 self.count += 1
                 if self.verbose:
                     print(match.group(0).strip())
-
