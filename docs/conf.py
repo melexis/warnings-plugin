@@ -65,22 +65,25 @@ napoleon_use_ivar = True
 napoleon_use_rtype = False
 napoleon_use_param = False
 
-# Point to plantuml jar file
-# confirm we have plantuml in the path
-if 'nt' in os.name:
-    plantuml_path = subprocess.check_output(["where", "/F", "plantuml.jar"])
-    if not plantuml_path:
-        print("Can't find 'plantuml.jar' file.")
-        print("You need to add path to 'plantuml.jar' file to your PATH variable.")
-        sys.exit(os.strerror(errno.EPERM))
-    plantuml = plantuml_path.decode("utf-8")
-    plantuml = plantuml.rstrip('\n\r')
-    plantuml = plantuml.replace('"', '')
-    plantuml = plantuml.replace('\\', '//')
-    plantuml = 'java -jar' + ' ' + plantuml
-else:
-    plantuml_path = subprocess.check_output(["whereis", "-u", "plantuml"])
-    if not plantuml_path:
-        print("Can't find 'plantuml.jar' file.")
-        print("You need to add path to 'plantuml.jar' file to your PATH variable.")
-        sys.exit(os.strerror(errno.EPERM))
+try:
+    plantuml = os.environ['PLANTUML']
+except KeyError: # There is no such environment variable. Try to find it in the path
+    # Point to plantuml jar file
+    # confirm we have plantuml in the path
+    if 'nt' in os.name:
+        plantuml_path = subprocess.check_output(["where", "/F", "plantuml.jar"])
+        if not plantuml_path:
+            print("Can't find 'plantuml.jar' file.")
+            print("You need to add path to 'plantuml.jar' file to your PATH variable.")
+            sys.exit(os.strerror(errno.EPERM))
+        plantuml = plantuml_path.decode("utf-8")
+        plantuml = plantuml.rstrip('\n\r')
+        plantuml = plantuml.replace('"', '')
+        plantuml = plantuml.replace('\\', '//')
+        plantuml = 'java -jar' + ' ' + plantuml
+    else:
+        plantuml_path = subprocess.check_output(["whereis", "-u", "plantuml"])
+        if not plantuml_path:
+            print("Can't find 'plantuml.jar' file.")
+            print("You need to add path to 'plantuml.jar' file to your PATH variable.")
+            sys.exit(os.strerror(errno.EPERM))
