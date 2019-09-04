@@ -3,6 +3,7 @@ try:
 except ImportError:
     from io import StringIO
 from mock import patch
+from pathlib import Path
 from unittest import TestCase
 
 from mlx.warnings import WarningsPlugin
@@ -49,3 +50,8 @@ class TestDoxygenWarnings(TestCase):
         self.assertRegexpMatches(fake_out.getvalue(), duterr1)
         self.assertRegexpMatches(fake_out.getvalue(), duterr2)
 
+    def test_doxygen_warnings_txt(self):
+        dut_file = Path(Path(__file__).parent, 'doxygen_warnings.txt')
+        with open(str(dut_file), 'r') as open_file:
+            self.warnings.check(open_file.read())
+        self.assertEqual(self.warnings.return_count(), 22)
