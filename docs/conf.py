@@ -3,9 +3,8 @@ from __future__ import unicode_literals
 
 import errno
 import os
-import sys
 import subprocess
-
+import sys
 
 # Append src directory to path so that autodoc can find the python module
 sys.path.append("src")
@@ -24,14 +23,14 @@ extensions = [
     'sphinxcontrib.plantuml',
 ]
 if os.getenv('SPELLCHECK'):
-    extensions += 'sphinxcontrib.spelling',
+    extensions.append('sphinxcontrib.spelling')
     spelling_show_suggestions = True
     spelling_lang = 'en_US'
 
 source_suffix = '.rst'
 master_doc = 'index'
 project = 'warning-plugin'
-year = '2017-2018'
+year = '2017-2019'
 author = 'Bavo Van Achte'
 copyright = '{0}, {1}'.format(year, author)
 
@@ -58,7 +57,7 @@ html_use_smartypants = True
 html_last_updated_fmt = '%b %d, %Y'
 html_split_index = False
 html_sidebars = {
-   '**': ['searchbox.html', 'globaltoc.html', 'sourcelink.html'],
+    '**': ['searchbox.html', 'globaltoc.html', 'sourcelink.html'],
 }
 html_short_title = '%s-%s' % (project, version)
 
@@ -70,7 +69,7 @@ napoleon_use_param = False
 # confirm we have plantuml in the path
 if 'nt' in os.name:
     plantuml_path = subprocess.check_output(["where", "/F", "plantuml.jar"])
-    if not plantuml_path :
+    if not plantuml_path:
         print("Can't find 'plantuml.jar' file.")
         print("You need to add path to 'plantuml.jar' file to your PATH variable.")
         sys.exit(os.strerror(errno.EPERM))
@@ -81,9 +80,7 @@ if 'nt' in os.name:
     plantuml = 'java -jar' + ' ' + plantuml
 else:
     plantuml_path = subprocess.check_output(["whereis", "-u", "plantuml"])
-    if not plantuml_path :
+    if not plantuml_path:
         print("Can't find 'plantuml.jar' file.")
         print("You need to add path to 'plantuml.jar' file to your PATH variable.")
         sys.exit(os.strerror(errno.EPERM))
-
-

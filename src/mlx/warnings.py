@@ -4,12 +4,14 @@
 from __future__ import print_function
 
 import argparse
+import errno
+import glob
 import json
-import os
 import subprocess
 import sys
-import glob
-from mlx.warnings_checker import SphinxChecker, DoxyChecker, JUnitChecker, XMLRunnerChecker, CoverityChecker
+
+from mlx.warnings_checker import CoverityChecker, DoxyChecker, JUnitChecker, SphinxChecker, XMLRunnerChecker
+
 from .__warnings_version__ import version as warnings_version
 
 __version__ = warnings_version
@@ -17,22 +19,22 @@ __version__ = warnings_version
 
 class WarningsPlugin:
 
-    def __init__(self, verbose = False, configfile= None):
+    def __init__(self, verbose=False, config_file=None):
         '''
         Function for initializing the parsers
 
         Args:
-            verbose (bool, optional):           enable verbose logging
-            configfile (filename, optional):    configuration file with setup
+            verbose (bool): optional - enable verbose logging
+            config_file (str): optional - configuration file with setup
         '''
-        self.checkerList = {}
+        self.checker_list = {}
         self.verbose = verbose
-        self.publicCheckers = [SphinxChecker(self.verbose), DoxyChecker(self.verbose), JUnitChecker(self.verbose),
-                               XMLRunnerChecker(self.verbose), CoverityChecker(self.verbose)]
+        self.public_checkers = [SphinxChecker(self.verbose), DoxyChecker(self.verbose), JUnitChecker(self.verbose),
+                                XMLRunnerChecker(self.verbose), CoverityChecker(self.verbose)]
 
-        if configfile is not None:
-            with open(configfile, 'r') as f:
-                config = json.load(f)
+        if config_file:
+            with open(config_file, 'r') as open_file:
+                config = json.load(open_file)
             self.config_parser_json(config)
 
         self.warn_min = 0
@@ -45,10 +47,10 @@ class WarningsPlugin:
         Activate additional checkers after initialization
 
         Args:
-            checker (WarningsChecker):         checker object
+            checker (WarningsChecker): checker object
         '''
         checker.reset()
-        self.checkerList[checker.name] = checker
+        self.checker_list[checker.name] = checker
 
     def activate_checker_name(self, name):
         '''
@@ -57,7 +59,7 @@ class WarningsPlugin:
         Args:
             name (str): checker name
         '''
-        for checker in self.publicCheckers:
+        for checker in self.public_checkers:
             if checker.name == name:
                 self.activate_checker(checker)
                 break
@@ -72,7 +74,7 @@ class WarningsPlugin:
         Return:
             checker object (WarningsChecker)
         '''
-        return self.checkerList[name]
+        return self.checker_list[name]
 
     def check(self, content):
         '''
@@ -84,10 +86,10 @@ class WarningsPlugin:
         if self.printout:
             print(content)
 
-        if len(self.checkerList) == 0:
+        if not self.checker_list:
             print("No checkers activated. Please use activate_checker function")
         else:
-            for name, checker in self.checkerList.items():
+            for checker in self.checker_list.values():
                 checker.check(content)
 
     def set_maximum(self, maximum):
@@ -96,7 +98,7 @@ class WarningsPlugin:
         Args:
             maximum (int): maximum amount of warnings allowed
         '''
-        for name, checker in self.checkerList.items():
+        for checker in self.checker_list.values():
             checker.set_maximum(maximum)
 
     def set_minimum(self, minimum):
@@ -105,10 +107,10 @@ class WarningsPlugin:
         Args:
             minimum (int): minimum amount of warnings allowed
         '''
-        for name, checker in self.checkerList.items():
+        for checker in self.checker_list.values():
             checker.set_minimum(minimum)
 
-    def return_count(self, name = None):
+    def return_count(self, name=None):
         ''' Getter function for the amount of found warnings
 
         If the name parameter is set, this function will return the amount of
@@ -123,32 +125,32 @@ class WarningsPlugin:
         '''
         self.count = 0
         if name is None:
-            for name, checker in self.checkerList.items():
+            for checker in self.checker_list.values():
                 self.count += checker.return_count()
         else:
-            self.count = self.checkerList[name].return_count()
+            self.count = self.checker_list[name].return_count()
         return self.count
 
-    def return_check_limits(self, name = None):
+    def return_check_limits(self, name=None):
         ''' Function for determining the return value of the script
 
         If the name parameter is set, this function will check (and return) the
         return value of that checker. If not, this function checks whether the
-        warnings for each registred checker are within the configured limits.
+        warnings for each registered checker are within the configured limits.
 
         Args:
             name (WarningsChecker): The checker for which to check the return value
 
         Return:
-            int: 0 if the amount warnings are within limits otherwise 1
+            int: 0 if the amount of warnings is within limits, 1 otherwise
         '''
         if name is None:
-            for name, checker in self.checkerList.items():
+            for checker in self.checker_list.values():
                 retval = checker.return_check_limits()
-                if retval != 0:
+                if retval:
                     return retval
         else:
-            return self.checkerList[name].return_check_limits()
+            return self.checker_list[name].return_check_limits()
 
         return 0
 
@@ -158,26 +160,26 @@ class WarningsPlugin:
         Useful for command input where we want to print content as well
 
         Args:
-            printout: True enables the printout, False provides more silent mode
+            printout (bool): True enables the printout, False provides more silent mode
         '''
         self.printout = printout
 
     def config_parser_json(self, config):
-        ''' Parsing configuration dict extracted by previously opened json file
+        ''' Parsing configuration dict extracted by previously opened JSON file
 
         Args:
-            config (dict): json dump of the configuration
+            config (dict): JSON dump of the configuration
         '''
         # activate checker
-        for checker in self.publicCheckers:
+        for checker in self.public_checkers:
             try:
                 if bool(config[checker.name]['enabled']):
                     self.activate_checker(checker)
                     self.get_checker(checker.name).set_maximum(int(config[checker.name]['max']))
                     self.get_checker(checker.name).set_minimum(int(config[checker.name]['min']))
                     print("Config parsing for {name} completed".format(name=checker.name))
-            except KeyError as e:
-                print("Incomplete config. Missing: {key}".format(key=e))
+            except KeyError as err:
+                print("Incomplete config. Missing: {key}".format(key=err))
 
 
 def warnings_wrapper(args):
@@ -193,7 +195,8 @@ def warnings_wrapper(args):
     group1.add_argument('--minwarnings', type=int, required=False, default=0,
                         help='Minimum amount of warnings accepted')
     group2 = parser.add_argument_group('Configuration file with options')
-    group2.add_argument('--config', dest='configfile', action='store', required=False, help='Config file in JSON format provides toggle of checkers and their limits')
+    group2.add_argument('--config', dest='configfile', action='store', required=False,
+                        help='Config file in JSON format provides toggle of checkers and their limits')
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true')
     parser.add_argument('--command', dest='command', action='store_true',
                         help='Treat program arguments as command to execute to obtain data')
@@ -201,7 +204,8 @@ def warnings_wrapper(args):
                         help='Ignore return value of the executed command')
     parser.add_argument('--version', action='version', version='%(prog)s {version}'.format(version=__version__))
     parser.add_argument('logfile', nargs='+', help='Logfile (or command) that might contain warnings')
-    parser.add_argument('flags', nargs=argparse.REMAINDER, help='Possible not-used flags from above are considered as command flags')
+    parser.add_argument('flags', nargs=argparse.REMAINDER,
+                        help='Possible not-used flags from above are considered as command flags')
 
     args = parser.parse_args(args)
 
@@ -211,7 +215,7 @@ def warnings_wrapper(args):
         if checkersflag or (args.maxwarnings != 0) or (args.minwarnings != 0):
             print("Configfile cannot be provided with other arguments")
             sys.exit(2)
-        warnings = WarningsPlugin(verbose=args.verbose, configfile=args.configfile)
+        warnings = WarningsPlugin(verbose=args.verbose, config_file=args.configfile)
     else:
         warnings = WarningsPlugin(verbose=args.verbose)
         if args.sphinx:
@@ -254,11 +258,10 @@ def warnings_command(warnings, cmd):
 
     Args:
         warnings (WarningsPlugin): Object for warnings where errors should be logged
-        cmd: Command list, which should be executed to obtain input for parsing
-        ignore: Flag to ignore return value of the command
+        cmd (list): List of commands (str), which should be executed to obtain input for parsing
 
     Return:
-        retval: Return value of executed command
+        int: Return value of executed command(s)
 
     Raises:
         OSError: When program is not installed.
@@ -282,8 +285,8 @@ def warnings_command(warnings, cmd):
             except AttributeError:
                 warnings.check(err)
         return proc.returncode
-    except OSError as e:
-        if e.errno == os.errno.ENOENT:
+    except OSError as err:
+        if err.errno == errno.ENOENT:
             print("It seems like program " + str(cmd) + " is not installed.")
         raise
 
@@ -323,4 +326,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
