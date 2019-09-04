@@ -96,6 +96,8 @@ install:
   - easy_install --version
   - pip --version
   - tox --version
+  - sudo apt-get install graphviz
+  - sudo apt-get install plantuml
 
 script:
   - tox -v
