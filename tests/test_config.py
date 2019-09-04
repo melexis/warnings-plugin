@@ -5,7 +5,7 @@ from mlx.warnings import WarningsPlugin, SphinxChecker, DoxyChecker, JUnitChecke
 
 class TestConfig(TestCase):
     def test_configfile_parsing(self):
-        warnings = WarningsPlugin(configfile="tests/config_example.json")
+        warnings = WarningsPlugin(config_file="tests/config_example.json")
         warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
         self.assertEqual(warnings.return_count(), 0)
         warnings.check('<testcase classname="dummy_class" name="dummy_name"><failure message="some random message from test case" /></testcase>')
