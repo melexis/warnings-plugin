@@ -73,3 +73,4 @@ class TestSphinxWarnings(TestCase):
             self.warnings.check(dut)
         self.assertEqual(self.warnings.return_count(), 1)
         self.assertRegexpMatches(fake_out.getvalue(), duterr1)
+
