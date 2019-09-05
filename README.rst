@@ -49,9 +49,6 @@ Every release is uploaded to pip so it can be installed simply by using pip.
 
 .. code-block:: bash
 
-    # Python2
-    pip2 install mlx.warnings
-
     # Python3
     pip3 install mlx.warnings
 
@@ -108,12 +105,11 @@ Melexis Warnings plugin can be called directly from shell/console using:
 
     mlx-warnings -h
 
-It has also possibility to be called as module from `Python2` or `Python3`. In
+It has also possibility to be called as module from `Python3`. In
 that case command will look like:
 
 .. code-block:: bash
 
-    python -m mlx.warnings -h
     python3 -m mlx.warnings -h
 
 Help prints all currently supported commands and their usages.
