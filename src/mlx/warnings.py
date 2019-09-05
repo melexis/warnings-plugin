@@ -10,12 +10,6 @@ import json
 import subprocess
 import sys
 
-# TODO Add checker #67
-
-# TODO TEst
-
-# TODO 123
- 
 from mlx.warnings_checker import CoverityChecker, DoxyChecker, JUnitChecker, SphinxChecker, XMLRunnerChecker
 
 from .__warnings_version__ import version as warnings_version
