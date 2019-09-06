@@ -65,11 +65,11 @@ class TestSphinxWarnings(TestCase):
         self.assertRegex(fake_out.getvalue(), duterr2)
 
     def test_deprecation_warning(self):
-        duterr1 = "/usr/local/lib/python3.5/dist-packages/sphinx/application.py:402: RemovedInSphinx20Warning: app.info() "\
-            "is now deprecated. Use sphinx.util.logging instead. RemovedInSphinx20Warning)\n"
+        duterr1 = "/usr/local/lib/python3.5/dist-packages/sphinx/application.py:402: RemovedInSphinx20Warning: "\
+            "app.info() is now deprecated. Use sphinx.util.logging instead. RemovedInSphinx20Warning\n"
         dut = "This1 should not be treated as warning\n"
         dut += duterr1
         with patch('sys.stdout', new=StringIO()) as fake_out:
             self.warnings.check(dut)
         self.assertEqual(self.warnings.return_count(), 1)
-        self.assertRegex(fake_out.getvalue(), duterr1)
+        self.assertEqual(fake_out.getvalue(), duterr1)
