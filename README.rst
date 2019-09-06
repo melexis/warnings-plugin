@@ -6,6 +6,10 @@
     :target: https://travis-ci.org/melexis/warnings-plugin
     :alt: Build status
 
+.. image:: https://badge.fury.io/py/mlx.warnings.png
+    :target: https://badge.fury.io/py/mlx.warnings
+    :alt: Pypi packaged release
+
 .. image:: https://scan.coverity.com/projects/15266/badge.svg
     :target: https://scan.coverity.com/projects/melexis-warnings-plugin
     :alt: Coverity Scan Build Status
