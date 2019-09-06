@@ -2,10 +2,10 @@ try:
     from StringIO import StringIO
 except ImportError:
     from io import StringIO
-from mock import patch
 from unittest import TestCase
 
 from mlx.warnings import WarningsPlugin
+from mock import patch
 
 
 class TestXMLRunnerWarnings(TestCase):
@@ -48,4 +48,3 @@ class TestXMLRunnerWarnings(TestCase):
         self.assertEqual(self.warnings.return_count(), 2)
         self.assertIn(duterr1, fake_out.getvalue())
         self.assertIn(duterr2, fake_out.getvalue())
-
