@@ -2,10 +2,11 @@ try:
     from StringIO import StringIO
 except ImportError:
     from io import StringIO
-from mock import patch
+from pathlib import Path
 from unittest import TestCase
 
 from mlx.warnings import WarningsPlugin
+from mock import patch
 
 
 class TestDoxygenWarnings(TestCase):
@@ -23,7 +24,7 @@ class TestDoxygenWarnings(TestCase):
         with patch('sys.stdout', new=StringIO()) as fake_out:
             self.warnings.check(dut)
         self.assertEqual(self.warnings.return_count(), 1)
-        self.assertRegexpMatches(fake_out.getvalue(), dut)
+        self.assertRegex(fake_out.getvalue(), dut)
 
     def test_single_warning_mixed(self):
         dut1 = 'This1 should not be treated as warning'
@@ -34,7 +35,7 @@ class TestDoxygenWarnings(TestCase):
             self.warnings.check(dut2)
             self.warnings.check(dut3)
         self.assertEqual(self.warnings.return_count(), 1)
-        self.assertRegexpMatches(fake_out.getvalue(), dut2)
+        self.assertRegex(fake_out.getvalue(), dut2)
 
     def test_multiline(self):
         duterr1 = "testfile.c:6: warning: group test: ignoring title \"Some test functions\" that does not match old title \"Some freaky test functions\"\n"
@@ -46,8 +47,8 @@ class TestDoxygenWarnings(TestCase):
         with patch('sys.stdout', new=StringIO()) as fake_out:
             self.warnings.check(dut)
         self.assertEqual(self.warnings.return_count(), 2)
-        self.assertRegexpMatches(fake_out.getvalue(), duterr1)
-        self.assertRegexpMatches(fake_out.getvalue(), duterr2)
+        self.assertRegex(fake_out.getvalue(), duterr1)
+        self.assertRegex(fake_out.getvalue(), duterr2)
 
     def test_git_warning(self):
         duterr1 = "testfile.c:6: warning: group test: ignoring title \"Some test functions\" that does not match old title \"Some freaky test functions\"\n"
@@ -59,8 +60,8 @@ class TestDoxygenWarnings(TestCase):
         with patch('sys.stdout', new=StringIO()) as fake_out:
             self.warnings.check(dut)
         self.assertEqual(self.warnings.return_count(), 2)
-        self.assertRegexpMatches(fake_out.getvalue(), duterr1)
-        self.assertRegexpMatches(fake_out.getvalue(), duterr2)
+        self.assertRegex(fake_out.getvalue(), duterr1)
+        self.assertRegex(fake_out.getvalue(), duterr2)
 
     def test_sphinx_deprecation_warning(self):
         duterr1 = "testfile.c:6: warning: group test: ignoring title \"Some test functions\" that does not match old title \"Some freaky test functions\"\n"
@@ -70,4 +71,10 @@ class TestDoxygenWarnings(TestCase):
         with patch('sys.stdout', new=StringIO()) as fake_out:
             self.warnings.check(dut)
         self.assertEqual(self.warnings.return_count(), 1)
-        self.assertRegexpMatches(fake_out.getvalue(), duterr1)
+        self.assertRegex(fake_out.getvalue(), duterr1)
+
+    def test_doxygen_warnings_txt(self):
+        dut_file = Path(Path(__file__).parent, 'doxygen_warnings.txt')
+        with open(str(dut_file), 'r') as open_file:
+            self.warnings.check(open_file.read())
+        self.assertEqual(self.warnings.return_count(), 22)

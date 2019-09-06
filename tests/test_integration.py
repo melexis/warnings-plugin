@@ -97,4 +97,3 @@ class TestIntegration(TestCase):
         with self.assertRaises(SystemExit) as ex:
             warnings_wrapper(['--config', 'tests/config_example.json', '--junit', 'tests/junit_single_fail.xml'])
         self.assertEqual(2, ex.exception.code)
-

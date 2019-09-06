@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from mlx.warnings import WarningsPlugin, SphinxChecker, DoxyChecker, JUnitChecker, XMLRunnerChecker
+from mlx.warnings import DoxyChecker, JUnitChecker, SphinxChecker, WarningsPlugin, XMLRunnerChecker
 
 
 class TestConfig(TestCase):
@@ -321,4 +321,3 @@ class TestConfig(TestCase):
         self.assertEqual(warnings.get_checker(DoxyChecker().name).get_minimum(), 3)
         self.assertEqual(warnings.get_checker(JUnitChecker().name).get_minimum(), 5)
         self.assertEqual(warnings.get_checker(XMLRunnerChecker().name).get_minimum(), 5)
-

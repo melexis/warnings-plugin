@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import abc
@@ -20,7 +20,7 @@ COVERITY_WARNING_REGEX = r"(?:((?:[/.]|[A-Za-z]).+?):(-?\d+):) (CID) \d+ \(#(?P<
 coverity_pattern = re.compile(COVERITY_WARNING_REGEX)
 
 
-class WarningsChecker(object):
+class WarningsChecker:
     name = 'checker'
 
     def __init__(self, verbose=False):
