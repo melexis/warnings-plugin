@@ -10,8 +10,7 @@ stages:
   - check
   - docs
   - test
-  - name: coverity
-    if: tag
+  - coverity
   - name: deploy
     if: tag
 
