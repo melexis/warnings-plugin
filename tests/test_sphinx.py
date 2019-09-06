@@ -73,3 +73,10 @@ class TestSphinxWarnings(TestCase):
             self.warnings.check(dut)
         self.assertEqual(self.warnings.return_count(), 1)
         self.assertEqual(fake_out.getvalue(), duterr1)
+
+    def test_warning_no_docname(self):
+        duterr1 = "WARNING: List item 'CL-UNDEFINED_CL_ITEM' in merge/pull request 138 is not defined as a checklist-item.\n"
+        with patch('sys.stdout', new=StringIO()) as fake_out:
+            self.warnings.check(duterr1)
+        self.assertEqual(self.warnings.return_count(), 1)
+        self.assertEqual(fake_out.getvalue(), duterr1)
