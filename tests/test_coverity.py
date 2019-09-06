@@ -2,10 +2,10 @@ try:
     from StringIO import StringIO
 except ImportError:
     from io import StringIO
-from mock import patch
 from unittest import TestCase
 
 from mlx.warnings import WarningsPlugin
+from mock import patch
 
 
 class TestCoverityWarnings(TestCase):
@@ -49,4 +49,3 @@ class TestCoverityWarnings(TestCase):
             self.warnings.check(dut3)
         self.assertEqual(self.warnings.return_count(), 1)
         self.assertIn(dut2, fake_out.getvalue())
-
