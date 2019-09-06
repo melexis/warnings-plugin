@@ -54,8 +54,8 @@ jobs:
     - stage: coverity
       python: '3.6'
       env:
-        # TOXENV=py27 COVERITY_SCAN_TOKEN
-        - secure: "VjiASJr/DgmDA5Gpy021ZVWAImhTdeKP8PreWWMRQlw02ZT96Ro39M/wtNUPKbbvph9q6gMIfF9bjBRxxcgmp73evyfbZu1ScyFQ7poFOOlX59tduDsmTaLMOdF3/uM3SwPEQJ40fSFXiHfFP6j26aFUNOwa7fUPhQuZ8aGofBaoRocL3llsDURIi5DjZBG9WmmNnHKh6X95aex4svj6hRq4/8L1EQiuignrQZmLFePCKz/FQ+AIperZZQyNNE7umLE8yHuVLWjH0gpBqyVqis2KSv4rU281oN/madi9de40sRdBS1pkyjdaBEnUn7QAPa8cwwkzRKmmL+YYKGe2zBfVydNzH/+B+N+f+dExbmK2vnCgpucNb7qAh4+ESPTXiO+9KtKNRocs5dgIC4SyvXUNEgYGpg0MViQKHaqGFpI3E750jY2bfvnrk/2DB3aYlR2FHfdsct214j0Ask/4eEwKqcY/AljVbDOm0ELAlhmhz1OfmphIRBMZPCT0qGJ4+zlyoe+CbW62lNYdDn+V5jiz43VNbtuxTIzYACxe10sRx5uNOCHlskOoy8m9hpXNpOMAqfNry/Vt33Nm7UCK4J9WF+kD87So/xaux+FKYat07PbPAocBCjVp490szPqXAMfX2RapIdpwFsy+JSyh/buWibmTWG5HF6ImTagM5f8="
+        # TOXENV=py36 COVERITY_SCAN_TOKEN=
+        - secure: "My6ZGoUjjZ0ZYw1f6MVeOTw+0u2q4Yj/QMbplYb1exyRuN+ojFqx7QFzPHxErtOQ3yGoIAadXXdqF4/oHv9UAsrkmQ4ImPDiL8olmB2nGYe/BZqX8Kj+Q6uqXJfqMfOwVZL8lj+gGIWECptfX7A97OmJRlBSjIOwwEQdQVyQozHkLI6yjcb3o16HuBJ7ejKs+XyB2E1Rmm4NB7Y3tfcB6K2cWi8tobLDd6JbXXs0wa5wBJLTYRngxrHS7Xbx4goEt/GX11gZh/u82miDO7ZrRmj9hY0MtCDsO7+ex3Rf/cvfWPsA7fl7ZNJfQziY9MVLdG2UXC22ZMXwQpCuFroLiSevjoaY4IbNZ6pDn9sYHaI4ckwD6YYNchK1I72+Xy7vDPOVLotIG6OterXeYvYmnSUbPhwVjvxmwSuCS99LEmSpxakbu3sv+sjUQUwy8arH/jnAjK94UdUnMKQC/GwtBGdt3raXbnKNirQfb35jlqj0u47lmnW8h8Xa4oXjeH3JhGKv6SBI+1rJ9uW6zlGcuDktzHjrQBPjpUytbtmqGWul2l4NsMUQJRupcy6AyK9MtQDYpANtF2Rx4p1uDGWzDEJzlxBhjAmISyJWhSmwwOmqa4BbDm+XZFbJusuzh0tn1Duf1DpkC4UMgVi8dL+/LgPMCVkkdlKxjhi4scVWmRc="
       before_install:
         - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
       addons:
