@@ -2,7 +2,8 @@
     "sphinx":{
         "enabled": true,
         "min": 0,
-        "max": 0
+        "max": 0,
+        "exclude": "RemovedInSphinx\\d+Warning"
     },
     "doxygen":{
         "enabled": false,

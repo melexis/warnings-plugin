@@ -32,6 +32,7 @@ class WarningsChecker:
         '''
         self.verbose = verbose
         self.reset()
+        self.exclude_pattern = None
 
     def reset(self):
         ''' Reset function (resets min, max and counter values) '''
@@ -95,6 +96,14 @@ class WarningsChecker:
         '''
         return self.warn_min
 
+    def set_exclude_pattern(self, exclude_regex):
+        ''' Setter function for the exclude pattern (re.Pattern)
+
+        Args:
+            exclude_regex (str): regex to ignore certain matched warning messages
+        '''
+        self.exclude_pattern = re.compile(exclude_regex)
+
     def return_count(self):
         ''' Getter function for the amount of warnings found
 
@@ -144,9 +153,14 @@ class RegexChecker(WarningsChecker):
         '''
         matches = re.finditer(self.pattern, content)
         for match in matches:
+            match_string = match.group(0).strip()
+            if self.exclude_pattern and self.exclude_pattern.search(match_string):
+                if self.verbose:
+                    print("Excluded {!r} because of configured regex {!r}".format(match_string, self.exclude_pattern.pattern))
+                continue
             self.count += 1
             if self.verbose:
-                print(match.group(0).strip())
+                print(match_string)
 
 
 class SphinxChecker(RegexChecker):

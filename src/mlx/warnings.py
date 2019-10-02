@@ -8,7 +8,7 @@ import json
 import subprocess
 import sys
 
-from mlx.warnings_checker import CoverityChecker, DoxyChecker, JUnitChecker, SphinxChecker, XMLRunnerChecker
+from mlx.warnings_checker import CoverityChecker, DoxyChecker, JUnitChecker, RegexChecker, SphinxChecker, XMLRunnerChecker
 
 from .__warnings_version__ import version as warnings_version
 
@@ -173,8 +173,13 @@ class WarningsPlugin:
             try:
                 if bool(config[checker.name]['enabled']):
                     self.activate_checker(checker)
-                    self.get_checker(checker.name).set_maximum(int(config[checker.name]['max']))
-                    self.get_checker(checker.name).set_minimum(int(config[checker.name]['min']))
+                    checker.set_maximum(int(config[checker.name]['max']))
+                    checker.set_minimum(int(config[checker.name]['min']))
+                    if config[checker.name].get("exclude"):
+                        if not isinstance(checker, RegexChecker):
+                            raise Exception("Feature of regex to exclude warnings is not configurable for the {name} "
+                                            "checker.".format(name=checker.name))
+                        checker.set_exclude_pattern(config[checker.name]["exclude"])
                     print("Config parsing for {name} completed".format(name=checker.name))
             except KeyError as err:
                 print("Incomplete config. Missing: {key}".format(key=err))
