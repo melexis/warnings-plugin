@@ -42,13 +42,24 @@ class WarningsChecker:
 
     @abc.abstractmethod
     def check(self, content):
-        '''
-        Function for counting the number of warnings in a specific text
+        ''' Function for counting the number of warnings in a specific text
 
         Args:
             content (str): The content to parse
         '''
         return
+
+    def set_exclude_pattern(self, exclude_regex):
+        '''
+        Args:
+            exclude_regex (str|None): regex to ignore certain matched warning messages
+
+        Raises:
+            Exception: Feature of regex to exclude warnings is only configurable for RegexChecker classes
+        '''
+        if exclude_regex:
+            raise Exception("Feature of regex to exclude warnings is not configurable for the {}."
+                            .format(self.__class__.__name__))
 
     def set_maximum(self, maximum):
         ''' Setter function for the maximum amount of warnings
@@ -96,14 +107,6 @@ class WarningsChecker:
         '''
         return self.warn_min
 
-    def set_exclude_pattern(self, exclude_regex):
-        ''' Setter function for the exclude pattern (re.Pattern)
-
-        Args:
-            exclude_regex (str): regex to ignore certain matched warning messages
-        '''
-        self.exclude_pattern = re.compile(exclude_regex)
-
     def return_count(self):
         ''' Getter function for the amount of warnings found
 
@@ -135,14 +138,16 @@ class RegexChecker(WarningsChecker):
     name = 'regex'
     pattern = None
 
-    def __init__(self, verbose=False):
-        ''' Constructor
+    def set_exclude_pattern(self, exclude_regex):
+        ''' Setter function for the exclude pattern (re.Pattern)
 
         Args:
-            name (str): Name of the checker
-            pattern (str): Regular expression used by the checker in order to find warnings
+            exclude_regex (str|None): regex to ignore certain matched warning messages
         '''
-        super(RegexChecker, self).__init__(verbose=verbose)
+        if exclude_regex:
+            self.exclude_pattern = re.compile(exclude_regex)
+        else:
+            self.exclude_pattern = None
 
     def check(self, content):
         '''
