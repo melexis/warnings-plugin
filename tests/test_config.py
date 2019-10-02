@@ -24,8 +24,8 @@ class TestConfig(TestCase):
             self.assertEqual(warnings.return_count(), 1)
         excluded_deprecation_warning = "Excluded {!r} because of configured regex {!r}".format(deprecation_warning, "RemovedInSphinx\\d+Warning")
         self.assertIn(excluded_deprecation_warning, verbose_output.getvalue())
-        warning_found = "home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'"
-        self.assertIn(warning_found, verbose_output.getvalue())
+        warning_echo = "home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'"
+        self.assertIn(warning_echo, verbose_output.getvalue())
 
     def test_partial_sphinx_config_parsing(self):
         warnings = WarningsPlugin()
