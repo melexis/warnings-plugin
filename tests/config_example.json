@@ -1,26 +1,26 @@
 {
-    "sphinx":{
+    "sphinx": {
         "enabled": true,
         "min": 0,
         "max": 0,
         "exclude": "RemovedInSphinx\\d+Warning"
     },
-    "doxygen":{
+    "doxygen": {
         "enabled": false,
         "min": 0,
         "max": 0
     },
-    "junit":{
+    "junit": {
         "enabled": false,
         "min": 0,
         "max": 0
     },
-    "xmlrunner":{
+    "xmlrunner": {
         "enabled": false,
         "min": 0,
         "max": 0
     },
-    "coverity":{
+    "coverity": {
         "enabled": false,
         "min": 0,
         "max": 0
