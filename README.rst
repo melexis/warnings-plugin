@@ -264,8 +264,7 @@ Configuration file is in JSON format with a simple structure.
         "sphinx":{
     	    "enabled": true,
     	    "min": 0,
-    	    "max": 0,
-            "exclude": "exclude": "RemovedInSphinx\\d+Warning"
+    	    "max": 0
         },
         "doxygen":{
     	    "enabled": false,
