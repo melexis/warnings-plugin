@@ -103,7 +103,7 @@ class TestConfig(TestCase):
         with self.assertRaises(Exception) as exc:
             warnings.config_parser_json(tmpjson)
         self.assertEqual(str(exc.exception),
-                         "Feature of regex to exclude warnings is not configurable for the junit checker.")
+                         "Feature of regex to exclude warnings is not configurable for the JUnitChecker.")
 
     def test_partial_xmlrunner_config_parsing(self):
         warnings = WarningsPlugin()
