@@ -186,14 +186,6 @@ class XMLRunnerChecker(RegexChecker):
 class JUnitChecker(WarningsChecker):
     name = 'junit'
 
-    def __init__(self, verbose=False):
-        ''' Constructor
-
-        Args:
-            verbose (bool): Enable/disable verbose logging
-        '''
-        super(JUnitChecker, self).__init__(verbose=verbose)
-
     def check(self, content):
         '''
         Function for counting the number of JUnit failures in a specific text

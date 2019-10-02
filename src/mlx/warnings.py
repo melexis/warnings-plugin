@@ -25,7 +25,7 @@ class WarningsPlugin:
             verbose (bool): optional - enable verbose logging
             config_file (str): optional - configuration file with setup
         '''
-        self.checker_list = {}
+        self.activated_checkers = {}
         self.verbose = verbose
         self.public_checkers = [SphinxChecker(self.verbose), DoxyChecker(self.verbose), JUnitChecker(self.verbose),
                                 XMLRunnerChecker(self.verbose), CoverityChecker(self.verbose)]
@@ -48,7 +48,7 @@ class WarningsPlugin:
             checker (WarningsChecker): checker object
         '''
         checker.reset()
-        self.checker_list[checker.name] = checker
+        self.activated_checkers[checker.name] = checker
 
     def activate_checker_name(self, name):
         '''
@@ -72,7 +72,7 @@ class WarningsPlugin:
         Return:
             checker object (WarningsChecker)
         '''
-        return self.checker_list[name]
+        return self.activated_checkers[name]
 
     def check(self, content):
         '''
@@ -84,10 +84,10 @@ class WarningsPlugin:
         if self.printout:
             print(content)
 
-        if not self.checker_list:
+        if not self.activated_checkers:
             print("No checkers activated. Please use activate_checker function")
         else:
-            for checker in self.checker_list.values():
+            for checker in self.activated_checkers.values():
                 checker.check(content)
 
     def set_maximum(self, maximum):
@@ -96,7 +96,7 @@ class WarningsPlugin:
         Args:
             maximum (int): maximum amount of warnings allowed
         '''
-        for checker in self.checker_list.values():
+        for checker in self.activated_checkers.values():
             checker.set_maximum(maximum)
 
     def set_minimum(self, minimum):
@@ -105,7 +105,7 @@ class WarningsPlugin:
         Args:
             minimum (int): minimum amount of warnings allowed
         '''
-        for checker in self.checker_list.values():
+        for checker in self.activated_checkers.values():
             checker.set_minimum(minimum)
 
     def return_count(self, name=None):
@@ -123,10 +123,10 @@ class WarningsPlugin:
         '''
         self.count = 0
         if name is None:
-            for checker in self.checker_list.values():
+            for checker in self.activated_checkers.values():
                 self.count += checker.return_count()
         else:
-            self.count = self.checker_list[name].return_count()
+            self.count = self.activated_checkers[name].return_count()
         return self.count
 
     def return_check_limits(self, name=None):
@@ -143,12 +143,12 @@ class WarningsPlugin:
             int: 0 if the amount of warnings is within limits, 1 otherwise
         '''
         if name is None:
-            for checker in self.checker_list.values():
+            for checker in self.activated_checkers.values():
                 retval = checker.return_check_limits()
                 if retval:
                     return retval
         else:
-            return self.checker_list[name].return_check_limits()
+            return self.activated_checkers[name].return_check_limits()
 
         return 0
 
