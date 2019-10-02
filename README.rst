@@ -264,7 +264,8 @@ Configuration file is in JSON format with a simple structure.
         "sphinx":{
     	    "enabled": true,
     	    "min": 0,
-    	    "max": 0
+    	    "max": 0,
+            "exclude": "exclude": "RemovedInSphinx\\d+Warning"
         },
         "doxygen":{
     	    "enabled": false,
@@ -293,19 +294,41 @@ path to configuration file
 .. code-block:: bash
 
     # command line log file
-    mlx-warnings --config pathtoconfig.json junit_output.xml
+    mlx-warnings --config path/to/config.json junit_output.xml
     # command line command execution
-    mlx-warnings --config patchtoconfig.json --command <commandforjunit>
+    mlx-warnings --config path/to/config.json --command <commandforjunit>
 
 
 -------------
 Other options
 -------------
 
-Since plugin is under active development there are new Features added fast.
+Since the plugin is under active development there are new Features added fast.
 Important options currently include setting maximum number of warnings or
 minimum number of warnings, that are still acceptable to return 0 (success)
 return code. Look at scripts help, for more details about the options.
+
+Exclude matches with regex
+--------------------------
+
+In case you want a checker to exclude certain matches, you can configure
+a regular expression in the configuration file on a per-checker basis. (Only
+sphinx, doxygen and xmlrunner checkers are currently supported by this feature.)
+If this regex' pattern is found in a match of the checker's regex, the checker
+won't count that match. Add the regex as a string value for the `exclude` key.
+An example configuration for the sphinx checker is given below:
+
+.. code-block:: json
+
+    {
+        "sphinx":{
+    	    "enabled": true,
+    	    "min": 0,
+    	    "max": 0,
+            "exclude": "RemovedInSphinx\\d+Warning"
+        }
+    }
+
 
 =======================
 Issues and new Features
