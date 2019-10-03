@@ -49,7 +49,7 @@ class WarningsChecker:
         '''
         return
 
-    def set_exclude_patterns(self, exclude_regexes):
+    def add_exclude_patterns(self, exclude_regexes):
         ''' Abstract setter function for the exclude patterns list[re.Pattern]
 
         Args:
@@ -148,13 +148,12 @@ class RegexChecker(WarningsChecker):
     name = 'regex'
     pattern = None
 
-    def set_exclude_patterns(self, exclude_regexes):
+    def add_exclude_patterns(self, exclude_regexes):
         ''' Setter function for the exclude patterns list[re.Pattern]
 
         Args:
             exclude_regexes (list|None): List of regexes to ignore certain matched warning messages
         '''
-        self.exclude_patterns = []
         if exclude_regexes:
             if not isinstance(exclude_regexes, list):
                 raise TypeError("Excpected a list value for exclude key in configuration file; got {}"
@@ -196,6 +195,11 @@ class RegexChecker(WarningsChecker):
 class SphinxChecker(RegexChecker):
     name = 'sphinx'
     pattern = sphinx_pattern
+    sphinx_deprecation_regex = "RemovedInSphinx\\d+Warning"
+
+    def exclude_sphinx_deprecation(self):
+        ''' Adds the pattern for sphinx_deprecation_regex to the list patterns to exclude '''
+        self.add_exclude_patterns([self.sphinx_deprecation_regex])
 
 
 class DoxyChecker(RegexChecker):

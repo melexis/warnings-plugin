@@ -74,6 +74,18 @@ class TestSphinxWarnings(TestCase):
         self.assertEqual(self.warnings.return_count(), 1)
         self.assertEqual(fake_out.getvalue(), duterr1)
 
+    def test_deprecation_warning_excluded(self):
+        self.warnings.get_checker('sphinx').exclude_sphinx_deprecation()
+        duterr1 = "/usr/local/lib/python3.5/dist-packages/sphinx/application.py:402: RemovedInSphinx20Warning: "\
+            "app.info() is now deprecated. Use sphinx.util.logging instead. RemovedInSphinx20Warning\n"
+        dut = "This1 should not be treated as warning\n"
+        dut += duterr1
+        with patch('sys.stdout', new=StringIO()) as fake_out:
+            self.warnings.check(dut)
+        self.assertEqual(self.warnings.return_count(), 0)
+        verbose_print = "Excluded {warning!r}".format(warning=duterr1.rstrip("\n"))
+        self.assertIn(verbose_print, fake_out.getvalue(), verbose_print)
+
     def test_warning_no_docname(self):
         duterr1 = "WARNING: List item 'CL-UNDEFINED_CL_ITEM' in merge/pull request 138 is not defined as a checklist-item.\n"
         with patch('sys.stdout', new=StringIO()) as fake_out:
