@@ -32,7 +32,7 @@ class WarningsChecker:
         '''
         self.verbose = verbose
         self.reset()
-        self.exclude_pattern = None
+        self.exclude_patterns = []
 
     def reset(self):
         ''' Reset function (resets min, max and counter values) '''
@@ -49,16 +49,17 @@ class WarningsChecker:
         '''
         return
 
-    def set_exclude_pattern(self, exclude_regex):
-        '''
+    def set_exclude_patterns(self, exclude_regexes):
+        ''' Abstract setter function for the exclude patterns list[re.Pattern]
+
         Args:
-            exclude_regex (str|None): regex to ignore certain matched warning messages
+            exclude_regexes (list|None): List of regexes to ignore certain matched warning messages
 
         Raises:
-            Exception: Feature of regex to exclude warnings is only configurable for RegexChecker classes
+            Exception: Feature of regexes to exclude warnings is only configurable for RegexChecker classes
         '''
-        if exclude_regex:
-            raise Exception("Feature of regex to exclude warnings is not configurable for the {}."
+        if exclude_regexes:
+            raise Exception("Feature of regexes to exclude warnings is not configurable for the {}."
                             .format(self.__class__.__name__))
 
     def set_maximum(self, maximum):
@@ -138,20 +139,22 @@ class RegexChecker(WarningsChecker):
     name = 'regex'
     pattern = None
 
-    def set_exclude_pattern(self, exclude_regex):
-        ''' Setter function for the exclude pattern (re.Pattern)
+    def set_exclude_patterns(self, exclude_regexes):
+        ''' Setter function for the exclude patterns list[re.Pattern]
 
         Args:
-            exclude_regex (str|None): regex to ignore certain matched warning messages
+            exclude_regexes (list|None): List of regexes to ignore certain matched warning messages
         '''
-        if exclude_regex:
-            self.exclude_pattern = re.compile(exclude_regex)
-        else:
-            self.exclude_pattern = None
+        self.exclude_patterns = []
+        if exclude_regexes:
+            if not isinstance(exclude_regexes, list):
+                raise TypeError("Excpected a list value for exclude key in configuration file; got {}"
+                                .format(exclude_regexes.__class__.__name__))
+            for regex in exclude_regexes:
+                self.exclude_patterns.append(re.compile(regex))
 
     def check(self, content):
-        '''
-        Function for counting the number of warnings in a specific text
+        ''' Function for counting the number of warnings in a specific text
 
         Args:
             content (str): The content to parse
@@ -159,13 +162,27 @@ class RegexChecker(WarningsChecker):
         matches = re.finditer(self.pattern, content)
         for match in matches:
             match_string = match.group(0).strip()
-            if self.exclude_pattern and self.exclude_pattern.search(match_string):
-                if self.verbose:
-                    print("Excluded {!r} because of configured regex {!r}".format(match_string, self.exclude_pattern.pattern))
+            if self._is_excluded(match_string):
                 continue
             self.count += 1
             if self.verbose:
                 print(match_string)
+
+    def _is_excluded(self, content):
+        ''' Checks if the specific text must be excluded based on the configured regexes for exclusion.
+
+        Args:
+            content (str): The content to parse
+
+        Returns:
+            bool: True for exclusion, False for inclusion
+        '''
+        for pattern in self.exclude_patterns:
+            if pattern.search(content):
+                if self.verbose:
+                    print("Excluded {!r} because of configured regex {!r}".format(content, pattern.pattern))
+                return True
+        return False
 
 
 class SphinxChecker(RegexChecker):

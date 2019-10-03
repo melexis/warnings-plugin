@@ -3,7 +3,10 @@
         "enabled": true,
         "min": 0,
         "max": 0,
-        "exclude": "RemovedInSphinx\\d+Warning"
+        "exclude": [
+            "RemovedInSphinx\\d+Warning",
+            "WARNING: toctree"
+        ]
     },
     "doxygen": {
         "enabled": false,

@@ -175,7 +175,7 @@ class WarningsPlugin:
                     self.activate_checker(checker)
                     checker.set_maximum(int(config[checker.name]['max']))
                     checker.set_minimum(int(config[checker.name]['min']))
-                    checker.set_exclude_pattern(config[checker.name].get("exclude"))
+                    checker.set_exclude_patterns(config[checker.name].get("exclude"))
                     print("Config parsing for {name} completed".format(name=checker.name))
             except KeyError as err:
                 print("Incomplete config. Missing: {key}".format(key=err))
