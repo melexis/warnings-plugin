@@ -134,6 +134,15 @@ class WarningsChecker:
         print("Number of warnings ({0.count}) is between limits {0.warn_min} and {0.warn_max}. Well done.".format(self))
         return 0
 
+    def print_when_verbose(self, message):
+        ''' Prints message only when verbose mode is enabled.
+
+        Args:
+            message (str): Message to conditionally print
+        '''
+        if self.verbose:
+            print(message)
+
 
 class RegexChecker(WarningsChecker):
     name = 'regex'
@@ -165,8 +174,7 @@ class RegexChecker(WarningsChecker):
             if self._is_excluded(match_string):
                 continue
             self.count += 1
-            if self.verbose:
-                print(match_string)
+            self.print_when_verbose(match_string)
 
     def _is_excluded(self, content):
         ''' Checks if the specific text must be excluded based on the configured regexes for exclusion.
@@ -179,8 +187,8 @@ class RegexChecker(WarningsChecker):
         '''
         for pattern in self.exclude_patterns:
             if pattern.search(content):
-                if self.verbose:
-                    print("Excluded {!r} because of configured regex {!r}".format(content, pattern.pattern))
+                self.print_when_verbose("Excluded {!r} because of configured regex {!r}"
+                                        .format(content, pattern.pattern))
                 return True
         return False
 
@@ -241,5 +249,4 @@ class CoverityChecker(RegexChecker):
             if (match.group('curr') == match.group('max')) and \
                     (match.group('classification') in self.CLASSIFICATION):
                 self.count += 1
-                if self.verbose:
-                    print(match.group(0).strip())
+                self.print_when_verbose(match.group(0).strip())
