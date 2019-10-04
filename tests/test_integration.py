@@ -100,12 +100,12 @@ class TestIntegration(TestCase):
 
     def test_sphinx_deprecation(self):
         retval = warnings_wrapper(['--sphinx', 'tests/sphinx_double_deprecation_warning.txt'])
-        self.assertEqual(2, retval)
-
-    def test_exclude_sphinx_deprecation(self):
-        retval = warnings_wrapper(['--sphinx', '--exclude-sphinx-deprecation', 'tests/sphinx_double_deprecation_warning.txt'])
         self.assertEqual(0, retval)
 
+    def test_exclude_sphinx_deprecation(self):
+        retval = warnings_wrapper(['--sphinx', '--include-sphinx-deprecation', 'tests/sphinx_double_deprecation_warning.txt'])
+        self.assertEqual(2, retval)
+
     def test_ignore_sphinx_deprecation_flag(self):
-        retval = warnings_wrapper(['--junit', '--exclude-sphinx-deprecation', 'tests/junit*.xml'])
+        retval = warnings_wrapper(['--junit', '--include-sphinx-deprecation', 'tests/junit*.xml'])
         self.assertEqual(self.junit_warning_cnt, retval)

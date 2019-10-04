@@ -175,7 +175,7 @@ class WarningsPlugin:
                     self.activate_checker(checker)
                     checker.set_maximum(int(config[checker.name]['max']))
                     checker.set_minimum(int(config[checker.name]['min']))
-                    checker.add_exclude_patterns(config[checker.name].get("exclude"))
+                    checker.add_patterns(config[checker.name].get("exclude"), checker.exclude_patterns)
                     print("Config parsing for {name} completed".format(name=checker.name))
             except KeyError as err:
                 print("Incomplete config. Missing: {key}".format(key=err))
@@ -196,8 +196,8 @@ def warnings_wrapper(args):
     group2 = parser.add_argument_group('Configuration file with options')
     group2.add_argument('--config', dest='configfile', action='store', required=False,
                         help='Config file in JSON format provides toggle of checkers and their limits')
-    group2.add_argument('--exclude-sphinx-deprecation', dest='exclude_sphinx_deprecation', action='store_true',
-                        help="Sphinx checker will exclude warnings matching (RemovedInSphinx\\d+Warning) regex")
+    group2.add_argument('--include-sphinx-deprecation', dest='include_sphinx_deprecation', action='store_true',
+                        help="Sphinx checker will include warnings matching (RemovedInSphinx\\d+Warning) regex")
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true')
     parser.add_argument('--command', dest='command', action='store_true',
                         help='Treat program arguments as command to execute to obtain data')
@@ -232,8 +232,8 @@ def warnings_wrapper(args):
         warnings.set_maximum(args.maxwarnings)
         warnings.set_minimum(args.minwarnings)
 
-    if args.exclude_sphinx_deprecation and 'sphinx' in warnings.activated_checkers.keys():
-        warnings.get_checker('sphinx').exclude_sphinx_deprecation()
+    if args.include_sphinx_deprecation and 'sphinx' in warnings.activated_checkers.keys():
+        warnings.get_checker('sphinx').include_sphinx_deprecation()
 
     if args.command:
         cmd = args.logfile

@@ -10,7 +10,7 @@ from junitparser import Error, Failure, JUnitXml
 DOXYGEN_WARNING_REGEX = r"(?:((?:[/.]|[A-Za-z]).+?):(-?\d+):\s*([Ww]arning|[Ee]rror)|<.+>:-?\d+(?::\s*([Ww]arning|[Ee]rror))?): ((?!notes).+(?:(?!\s*(?:[Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*(\b[Nn]otice|\b[Ww]arning|\b[Ee]rror): (?!notes)(.+)\n?"
 doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
 
-SPHINX_WARNING_REGEX = r"(?m)^(?:(.+?:(?:\d+|None)?):?\s*)?(DEBUG|INFO|WARNING|ERROR|SEVERE|(?:\w+Sphinx\d+Warning)):\s*(.+)$"
+SPHINX_WARNING_REGEX = r"(?m)^(?:(.+?:(?:\d+|None)?):?\s*)?(DEBUG|INFO|WARNING|ERROR|SEVERE):\s*(.+)$"
 sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 
 PYTHON_XMLRUNNER_REGEX = r"(\s*(ERROR|FAILED) (\[\d+.\d\d\ds\]: \s*(.+)))\n?"
@@ -33,6 +33,7 @@ class WarningsChecker:
         self.verbose = verbose
         self.reset()
         self.exclude_patterns = []
+        self.include_patterns = []
 
     def reset(self):
         ''' Reset function (resets min, max and counter values) '''
@@ -49,17 +50,18 @@ class WarningsChecker:
         '''
         return
 
-    def add_exclude_patterns(self, exclude_regexes):
-        ''' Abstract setter function for the exclude patterns list[re.Pattern]
+    def add_patterns(self, regexes, pattern_container):
+        ''' Raises an Exception to explain that this feature is not available for the targeted checker
 
         Args:
-            exclude_regexes (list|None): List of regexes to ignore certain matched warning messages
+            regexes (list[str]|None): List of regexes to add
+            pattern_container (list[re.Pattern]): Target storage container for patterns
 
         Raises:
-            Exception: Feature of regexes to exclude warnings is only configurable for RegexChecker classes
+            Exception: Feature of regexes to include/exclude warnings is only configurable for the RegexChecker classes
         '''
-        if exclude_regexes:
-            raise Exception("Feature of regexes to exclude warnings is not configurable for the {}."
+        if regexes:
+            raise Exception("Feature of regexes to include/exclude warnings is not configurable for the {}."
                             .format(self.__class__.__name__))
 
     def set_maximum(self, maximum):
@@ -148,18 +150,19 @@ class RegexChecker(WarningsChecker):
     name = 'regex'
     pattern = None
 
-    def add_exclude_patterns(self, exclude_regexes):
-        ''' Setter function for the exclude patterns list[re.Pattern]
+    def add_patterns(self, regexes, pattern_container):
+        ''' Adds regexes as patterns to the specified container
 
         Args:
-            exclude_regexes (list|None): List of regexes to ignore certain matched warning messages
+            regexes (list[str]|None): List of regexes to add
+            pattern_container (list[re.Pattern]): Target storage container for patterns
         '''
-        if exclude_regexes:
-            if not isinstance(exclude_regexes, list):
-                raise TypeError("Excpected a list value for exclude key in configuration file; got {}"
-                                .format(exclude_regexes.__class__.__name__))
-            for regex in exclude_regexes:
-                self.exclude_patterns.append(re.compile(regex))
+        if regexes:
+            if not isinstance(regexes, list):
+                raise TypeError("Expected a list value for exclude key in configuration file; got {}"
+                                .format(regexes.__class__.__name__))
+            for regex in regexes:
+                pattern_container.append(re.compile(regex))
 
     def check(self, content):
         ''' Function for counting the number of warnings in a specific text
@@ -176,7 +179,9 @@ class RegexChecker(WarningsChecker):
             self.print_when_verbose(match_string)
 
     def _is_excluded(self, content):
-        ''' Checks if the specific text must be excluded based on the configured regexes for exclusion.
+        ''' Checks if the specific text must be excluded based on the configured regexes for exclusion and inclusion.
+
+        Inclusion has priority over exclusion.
 
         Args:
             content (str): The content to parse
@@ -184,22 +189,34 @@ class RegexChecker(WarningsChecker):
         Returns:
             bool: True for exclusion, False for inclusion
         '''
-        for pattern in self.exclude_patterns:
-            if pattern.search(content):
-                self.print_when_verbose("Excluded {!r} because of configured regex {!r}"
-                                        .format(content, pattern.pattern))
-                return True
+        matching_exclude_pattern = self._search_patterns(content, self.exclude_patterns)
+        if not self._search_patterns(content, self.include_patterns) and matching_exclude_pattern:
+            self.print_when_verbose("Excluded {!r} because of configured regex {!r}"
+                                    .format(content, matching_exclude_pattern))
+            return True
         return False
+
+    @staticmethod
+    def _search_patterns(content, patterns):
+        ''' Returns the regex of the first pattern that matches specified content, None if nothing matches '''
+        for pattern in patterns:
+            if pattern.search(content):
+                return pattern.pattern
+        return None
 
 
 class SphinxChecker(RegexChecker):
     name = 'sphinx'
     pattern = sphinx_pattern
-    sphinx_deprecation_regex = "RemovedInSphinx\\d+Warning"
+    sphinx_deprecation_regex = r"(?m)^(?:(.+?:(?:\d+|None)?):?\s*)?(DEBUG|INFO|WARNING|ERROR|SEVERE|(?:\w+Sphinx\d+Warning)):\s*(.+)$"
+    sphinx_deprecation_regex_in_match = "RemovedInSphinx\\d+Warning"
 
-    def exclude_sphinx_deprecation(self):
-        ''' Adds the pattern for sphinx_deprecation_regex to the list patterns to exclude '''
-        self.add_exclude_patterns([self.sphinx_deprecation_regex])
+    def include_sphinx_deprecation(self):
+        '''
+        Adds the pattern for sphinx_deprecation_regex to the list patterns to include and alters the main pattern
+        '''
+        self.pattern = re.compile(self.sphinx_deprecation_regex)
+        self.add_patterns([self.sphinx_deprecation_regex_in_match], self.include_patterns)
 
 
 class DoxyChecker(RegexChecker):
