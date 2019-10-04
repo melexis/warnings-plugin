@@ -32,6 +32,7 @@ class WarningsChecker:
         '''
         self.verbose = verbose
         self.reset()
+        self.exclude_patterns = []
 
     def reset(self):
         ''' Reset function (resets min, max and counter values) '''
@@ -41,13 +42,25 @@ class WarningsChecker:
 
     @abc.abstractmethod
     def check(self, content):
-        '''
-        Function for counting the number of warnings in a specific text
+        ''' Function for counting the number of warnings in a specific text
 
         Args:
             content (str): The content to parse
         '''
         return
+
+    def set_exclude_patterns(self, exclude_regexes):
+        ''' Abstract setter function for the exclude patterns list[re.Pattern]
+
+        Args:
+            exclude_regexes (list|None): List of regexes to ignore certain matched warning messages
+
+        Raises:
+            Exception: Feature of regexes to exclude warnings is only configurable for RegexChecker classes
+        '''
+        if exclude_regexes:
+            raise Exception("Feature of regexes to exclude warnings is not configurable for the {}."
+                            .format(self.__class__.__name__))
 
     def set_maximum(self, maximum):
         ''' Setter function for the maximum amount of warnings
@@ -121,32 +134,63 @@ class WarningsChecker:
         print("Number of warnings ({0.count}) is between limits {0.warn_min} and {0.warn_max}. Well done.".format(self))
         return 0
 
+    def print_when_verbose(self, message):
+        ''' Prints message only when verbose mode is enabled.
+
+        Args:
+            message (str): Message to conditionally print
+        '''
+        if self.verbose:
+            print(message)
+
 
 class RegexChecker(WarningsChecker):
     name = 'regex'
     pattern = None
 
-    def __init__(self, verbose=False):
-        ''' Constructor
+    def set_exclude_patterns(self, exclude_regexes):
+        ''' Setter function for the exclude patterns list[re.Pattern]
 
         Args:
-            name (str): Name of the checker
-            pattern (str): Regular expression used by the checker in order to find warnings
+            exclude_regexes (list|None): List of regexes to ignore certain matched warning messages
         '''
-        super(RegexChecker, self).__init__(verbose=verbose)
+        self.exclude_patterns = []
+        if exclude_regexes:
+            if not isinstance(exclude_regexes, list):
+                raise TypeError("Excpected a list value for exclude key in configuration file; got {}"
+                                .format(exclude_regexes.__class__.__name__))
+            for regex in exclude_regexes:
+                self.exclude_patterns.append(re.compile(regex))
 
     def check(self, content):
-        '''
-        Function for counting the number of warnings in a specific text
+        ''' Function for counting the number of warnings in a specific text
 
         Args:
             content (str): The content to parse
         '''
         matches = re.finditer(self.pattern, content)
         for match in matches:
+            match_string = match.group(0).strip()
+            if self._is_excluded(match_string):
+                continue
             self.count += 1
-            if self.verbose:
-                print(match.group(0).strip())
+            self.print_when_verbose(match_string)
+
+    def _is_excluded(self, content):
+        ''' Checks if the specific text must be excluded based on the configured regexes for exclusion.
+
+        Args:
+            content (str): The content to parse
+
+        Returns:
+            bool: True for exclusion, False for inclusion
+        '''
+        for pattern in self.exclude_patterns:
+            if pattern.search(content):
+                self.print_when_verbose("Excluded {!r} because of configured regex {!r}"
+                                        .format(content, pattern.pattern))
+                return True
+        return False
 
 
 class SphinxChecker(RegexChecker):
@@ -166,14 +210,6 @@ class XMLRunnerChecker(RegexChecker):
 
 class JUnitChecker(WarningsChecker):
     name = 'junit'
-
-    def __init__(self, verbose=False):
-        ''' Constructor
-
-        Args:
-            verbose (bool): Enable/disable verbose logging
-        '''
-        super(JUnitChecker, self).__init__(verbose=verbose)
 
     def check(self, content):
         '''
@@ -213,5 +249,4 @@ class CoverityChecker(RegexChecker):
             if (match.group('curr') == match.group('max')) and \
                     (match.group('classification') in self.CLASSIFICATION):
                 self.count += 1
-                if self.verbose:
-                    print(match.group(0).strip())
+                self.print_when_verbose(match.group(0).strip())
