@@ -97,3 +97,15 @@ class TestIntegration(TestCase):
         with self.assertRaises(SystemExit) as ex:
             warnings_wrapper(['--config', 'tests/config_example.json', '--junit', 'tests/junit_single_fail.xml'])
         self.assertEqual(2, ex.exception.code)
+
+    def test_sphinx_deprecation(self):
+        retval = warnings_wrapper(['--sphinx', 'tests/sphinx_double_deprecation_warning.txt'])
+        self.assertEqual(0, retval)
+
+    def test_exclude_sphinx_deprecation(self):
+        retval = warnings_wrapper(['--sphinx', '--include-sphinx-deprecation', 'tests/sphinx_double_deprecation_warning.txt'])
+        self.assertEqual(2, retval)
+
+    def test_ignore_sphinx_deprecation_flag(self):
+        retval = warnings_wrapper(['--junit', '--include-sphinx-deprecation', 'tests/junit*.xml'])
+        self.assertEqual(self.junit_warning_cnt, retval)

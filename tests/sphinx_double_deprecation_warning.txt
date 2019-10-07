@@ -1,0 +1,4 @@
+/usr/local/lib/python3.7/dist-packages/sphinx/util/docutils.py:286: RemovedInSphinx30Warning: function based directive support is now deprecated. Use class based directive instead.
+  RemovedInSphinx30Warning)
+/usr/local/lib/python3.7/dist-packages/sphinx_rtd_theme/search.html:20: RemovedInSphinx30Warning: To modify script_files in the theme is deprecated. Please insert a <script> tag directly in your theme instead.
+  {{ super() }}

@@ -331,6 +331,14 @@ An example configuration for the sphinx checker is given below:
         }
     }
 
+Exclude Sphinx deprecation warnings
+-----------------------------------
+
+There is a special flag `--exclude-sphinx-deprecation` that lets the sphinx checker exclude
+Sphinx deprecation warnings. These warnings match the following regular expression:
+`RemovedInSphinx\\d+Warning`. Using this flag results in the same behavior as adding this
+regex to the configuration file as value for the `exclude` key for the sphinx checker.
+
 
 =======================
 Issues and new Features
