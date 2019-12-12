@@ -1,38 +1,30 @@
-import io
 from glob import glob
-from os.path import basename, dirname, join, splitext
+from os.path import basename, splitext
 
 from setuptools import find_packages, setup
 
 PROJECT_URL = 'https://github.com/melexis/warnings-plugin'
-
-
-def read(*names, **kwargs):
-    return io.open(
-        join(dirname(__file__), *names),
-        encoding=kwargs.get('encoding', 'utf8')
-    ).read()
-
 
 requires = ['junitparser>=1.0.0']
 
 setup(
     name='mlx.warnings',
     url=PROJECT_URL,
-    use_scm_version = {
+    use_scm_version={
         'write_to': 'src/mlx/__warnings_version__.py'
     },
     setup_requires=['setuptools_scm'],
     author='Bavo Van Achte',
     author_email='bavo.van.achte@gmail.com',
-    description='Command-line alternative for https://github.com/jenkinsci/warnings-plugin. Useable with plugin-less CI systems.',
+    description='Command-line alternative for https://github.com/jenkinsci/warnings-plugin. '
+                'Useable with plugin-less CI systems.',
     long_description=open("README.rst").read(),
     zip_safe=False,
     license='Apache License, Version 2.0',
     platforms='any',
     packages=find_packages('src'),
     package_dir={'': 'src'},
-    entry_points = {'console_scripts': ['mlx-warnings = mlx.warnings:main']},
+    entry_points={'console_scripts': ['mlx-warnings = mlx.warnings:main']},
     py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
     include_package_data=True,
     install_requires=requires,
@@ -50,6 +42,7 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         # 'Programming Language :: Python :: Implementation :: CPython',
         # 'Programming Language :: Python :: Implementation :: PyPy',
         # uncomment if you test on these interpreters:
@@ -58,5 +51,5 @@ setup(
         # 'Programming Language :: Python :: Implementation :: Stackless',
         'Topic :: Utilities',
     ],
-    keywords = ['Gitlab CI', 'warnings', 'CI'],
+    keywords=['Gitlab CI', 'warnings', 'CI'],
 )
