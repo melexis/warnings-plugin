@@ -10,6 +10,10 @@
     :target: https://badge.fury.io/py/mlx.warnings
     :alt: Pypi packaged release
 
+.. image:: https://img.shields.io/badge/Documentation-published-brightgreen.png
+    :target: https://melexis.github.io/warnings-plugin/
+    :alt: Documentation
+
 .. image:: https://scan.coverity.com/projects/15266/badge.svg
     :target: https://scan.coverity.com/projects/melexis-warnings-plugin
     :alt: Coverity Scan Build Status
