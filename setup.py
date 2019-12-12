@@ -19,6 +19,7 @@ setup(
     description='Command-line alternative for https://github.com/jenkinsci/warnings-plugin. '
                 'Useable with plugin-less CI systems.',
     long_description=open("README.rst").read(),
+    long_description_content_type='text/x-rst',
     zip_safe=False,
     license='Apache License, Version 2.0',
     platforms='any',
