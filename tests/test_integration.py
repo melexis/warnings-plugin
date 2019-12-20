@@ -86,8 +86,32 @@ class TestIntegration(TestCase):
         self.assertEqual(self.junit_warning_cnt, retval)
 
     def test_min_but_still_ok(self):
-        retval = warnings_wrapper(['--junit', '--maxwarnings', '100', '--minwarnings', '2', 'tests/junit*.xml'])
+        retval = warnings_wrapper(['--junit', '--max-warnings', '100', '--min-warnings', '2', 'tests/junit*.xml'])
         self.assertEqual(0, retval)
+
+    def test_exact_sphinx(self):
+        retval = warnings_wrapper(['--sphinx', '--exact-warnings', '2', 'tests/sphinx_double_warning.txt'])
+        self.assertEqual(0, retval)
+
+    def test_exact_too_few(self):
+        retval = warnings_wrapper(['--sphinx', '--exact-warnings', '3', 'tests/sphinx_double_warning.txt'])
+        self.assertEqual(2, retval)
+
+    def test_exact_too_many(self):
+        retval = warnings_wrapper(['--sphinx', '--exact-warnings', '1', 'tests/sphinx_double_warning.txt'])
+        self.assertEqual(2, retval)
+
+    def test_exact_junit(self):
+        retval = warnings_wrapper(['--junit', '--exact-warnings', '3', 'tests/junit*.xml'])
+        self.assertEqual(0, retval)
+
+    def test_exact_with_min(self):
+        with self.assertRaises(SystemExit):
+            warnings_wrapper(['--junit', '--exact-warnings', '3', '--min-warnings', '3', 'tests/junit*.xml'])
+
+    def test_exact_with_max(self):
+        with self.assertRaises(SystemExit):
+            warnings_wrapper(['--junit', '--exact-warnings', '3', '--max-warnings', '3', 'tests/junit*.xml'])
 
     def test_configfile_ok(self):
         retval = warnings_wrapper(['--config', 'tests/config_example.json', 'tests/junit_single_fail.xml'])
