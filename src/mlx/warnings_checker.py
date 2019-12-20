@@ -123,17 +123,26 @@ class WarningsChecker:
         ''' Function for checking whether the warning count is within the configured limits
 
         Returns:
-            int: 0 if the amount of warnings is within limits. the count of warnings otherwise
+            int: 0 if the amount of warnings is within limits, the count of warnings otherwise
         '''
-        if self.count > self.warn_max:
+        if self.warn_max == self.warn_min:
+            if self.count != self.warn_max:
+                print("Number of warnings ({0.count}) differs from the amount of expected warnings ({0.warn_max}). "
+                      "Returning error code 1.")
+                return self.count
+            print("Number of warnings ({0.count}) is exactly as expected. Well done."
+                  .format(self))
+        elif self.count > self.warn_max:
             print("Number of warnings ({0.count}) is higher than the maximum limit ({0.warn_max}). "
                   "Returning error code 1.".format(self))
             return self.count
-        if self.count < self.warn_min:
+        elif self.count < self.warn_min:
             print("Number of warnings ({0.count}) is lower than the minimum limit ({0.warn_min}). "
                   "Returning error code 1.".format(self))
             return self.count
-        print("Number of warnings ({0.count}) is between limits {0.warn_min} and {0.warn_max}. Well done.".format(self))
+        else:
+            print("Number of warnings ({0.count}) is between limits {0.warn_min} and {0.warn_max}. Well done."
+                  .format(self))
         return 0
 
     def print_when_verbose(self, message):
