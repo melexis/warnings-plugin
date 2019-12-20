@@ -8,11 +8,12 @@ import json
 import subprocess
 import sys
 
+from pkg_resources import require
+
 from mlx.warnings_checker import CoverityChecker, DoxyChecker, JUnitChecker, SphinxChecker, XMLRunnerChecker
 
-from .__warnings_version__ import version as warnings_version
 
-__version__ = warnings_version
+__version__ = require('mlx.warnings')[0].version
 
 
 class WarningsPlugin:
