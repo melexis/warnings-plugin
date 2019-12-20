@@ -307,9 +307,9 @@ Other options
 -------------
 
 Since the plugin is under active development there are new Features added fast.
-Important options currently include setting maximum number of warnings or
-minimum number of warnings, that are still acceptable to return 0 (success)
-return code. Look at scripts help, for more details about the options.
+Important options currently include setting a minimum and a maximum number of warnings
+that are still acceptable to return 0 (success) return code. Requiring an exact amount
+of warnings is also possible. Look at scripts help, for more details about the options.
 
 Exclude matches with regexes
 ----------------------------
