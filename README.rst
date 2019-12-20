@@ -6,11 +6,11 @@
     :target: https://travis-ci.org/melexis/warnings-plugin
     :alt: Build status
 
-.. image:: https://badge.fury.io/py/mlx.warnings.png
+.. image:: https://badge.fury.io/py/mlx.warnings.svg
     :target: https://badge.fury.io/py/mlx.warnings
     :alt: Pypi packaged release
 
-.. image:: https://img.shields.io/badge/Documentation-published-brightgreen.png
+.. image:: https://img.shields.io/badge/Documentation-published-brightgreen.svg
     :target: https://melexis.github.io/warnings-plugin/
     :alt: Documentation
 
