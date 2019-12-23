@@ -141,7 +141,8 @@ class WarningsPlugin:
             name (WarningsChecker): The checker for which to check the return value
 
         Return:
-            int: 0 if the amount of warnings is within limits, 1 otherwise
+            int: 0 if the amount of warnings is within limits, the count of warnings otherwise
+                (or 1 in case of a count of 0 warnings)
         '''
         if name is None:
             for checker in self.activated_checkers.values():

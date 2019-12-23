@@ -124,22 +124,27 @@ class WarningsChecker:
 
         Returns:
             int: 0 if the amount of warnings is within limits, the count of warnings otherwise
+                (or 1 in case of a count of 0 warnings)
         '''
+        error_code = self.count
         if self.warn_min == self.warn_max and self.count == self.warn_max:
             print("Number of warnings ({0.count}) is exactly as expected. Well done."
                   .format(self))
+            return 0
         elif self.count > self.warn_max:
-            print("Number of warnings ({0.count}) is higher than the maximum limit ({0.warn_max}). "
-                  "Returning error code 1.".format(self))
-            return self.count
+            error_reason = "higher than the maximum limit"
         elif self.count < self.warn_min:
-            print("Number of warnings ({0.count}) is lower than the minimum limit ({0.warn_min}). "
-                  "Returning error code 1.".format(self))
-            return self.count
+            error_reason = "lower than the minimum limit"
         else:
             print("Number of warnings ({0.count}) is between limits {0.warn_min} and {0.warn_max}. Well done."
                   .format(self))
-        return 0
+            return 0
+        # code below is only reached after failure; don't allow error code 0
+        if error_code == 0:
+            error_code = 1
+        print("Number of warnings ({0.count}) is {1} ({0.warn_min}). Returning error code {2}."
+              .format(self, error_reason, error_code))
+        return error_code
 
     def print_when_verbose(self, message):
         ''' Prints message only when verbose mode is enabled.
