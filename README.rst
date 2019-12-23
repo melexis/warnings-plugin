@@ -234,7 +234,7 @@ command:
 Parse for XMLRunner errors
 --------------------------
 
-When you run [XMLRunner](https://github.com/xmlrunner/unittest-xml-reporting)
+When you run XMLRunner_,
 the errors are reported on the output, but they are not marked as failures in
 the test reports xml files. Since command exits as 1, we could not detect tests
 that just did not run (not failed). warnings-plugin now parses for the output
@@ -254,6 +254,7 @@ with command:
     python3 -m mlx.warnings --xmlrunner --command <commandforxmlrunner>
     python -m mlx.warnings --xmlrunner --command <commandforxmlrunner>
 
+.. _XMLRunner: https://github.com/xmlrunner/unittest-xml-reporting
 
 ----------------------------------
 Configuration file to pass options
