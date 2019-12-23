@@ -190,10 +190,12 @@ def warnings_wrapper(args):
     group1.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
     group1.add_argument('-j', '--junit', dest='junit', action='store_true')
     group1.add_argument('-x', '--xmlrunner', dest='xmlrunner', action='store_true')
-    group1.add_argument('-m', '--maxwarnings', type=int, required=False, default=0,
+    group1.add_argument('-m', '--maxwarnings', '--max-warnings', type=int, default=0,
                         help='Maximum amount of warnings accepted')
-    group1.add_argument('--minwarnings', type=int, required=False, default=0,
+    group1.add_argument('--minwarnings', '--min-warnings', type=int, default=0,
                         help='Minimum amount of warnings accepted')
+    group1.add_argument('--exact-warnings', type=int, default=0,
+                        help='Exact amount of warnings expected')
     group2 = parser.add_argument_group('Configuration file with options')
     group2.add_argument('--config', dest='configfile', action='store', required=False,
                         help='Config file in JSON format provides toggle of checkers and their limits')
@@ -213,8 +215,9 @@ def warnings_wrapper(args):
 
     # Read config file
     if args.configfile is not None:
-        checkersflag = args.sphinx or args.doxygen or args.junit or args.coverity or args.xmlrunner
-        if checkersflag or (args.maxwarnings != 0) or (args.minwarnings != 0):
+        checker_flags = args.sphinx or args.doxygen or args.junit or args.coverity or args.xmlrunner
+        warning_args = (args.maxwarnings != 0) or (args.minwarnings != 0) or (args.exact_warnings != 0)
+        if checker_flags or warning_args:
             print("Configfile cannot be provided with other arguments")
             sys.exit(2)
         warnings = WarningsPlugin(verbose=args.verbose, config_file=args.configfile)
@@ -230,8 +233,15 @@ def warnings_wrapper(args):
             warnings.activate_checker_name('xmlrunner')
         if args.coverity:
             warnings.activate_checker_name('coverity')
-        warnings.set_maximum(args.maxwarnings)
-        warnings.set_minimum(args.minwarnings)
+        if args.exact_warnings:
+            if args.maxwarnings | args.minwarnings:
+                print("expected-warnings cannot be provided with maxwarnings or minwarnings")
+                sys.exit(2)
+            warnings.set_maximum(args.exact_warnings)
+            warnings.set_minimum(args.exact_warnings)
+        else:
+            warnings.set_maximum(args.maxwarnings)
+            warnings.set_minimum(args.minwarnings)
 
     if args.include_sphinx_deprecation and 'sphinx' in warnings.activated_checkers.keys():
         warnings.get_checker('sphinx').include_sphinx_deprecation()
