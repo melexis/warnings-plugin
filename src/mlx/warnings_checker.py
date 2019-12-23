@@ -131,11 +131,11 @@ class WarningsChecker:
         elif self.count > self.warn_max:
             print("Number of warnings ({0.count}) is higher than the maximum limit ({0.warn_max}). "
                   "Returning error code 1.".format(self))
-            return self.count
+            return 1
         elif self.count < self.warn_min:
             print("Number of warnings ({0.count}) is lower than the minimum limit ({0.warn_min}). "
                   "Returning error code 1.".format(self))
-            return self.count
+            return 1
         else:
             print("Number of warnings ({0.count}) is between limits {0.warn_min} and {0.warn_max}. Well done."
                   .format(self))
