@@ -145,7 +145,9 @@ class WarningsPlugin:
         '''
         if name is None:
             for checker in self.activated_checkers.values():
-                return checker.return_check_limits()
+                retval = checker.return_check_limits()
+                if retval:
+                    return retval
         else:
             return self.activated_checkers[name].return_check_limits()
 
