@@ -1,0 +1,26 @@
+C:\Users\jce\projects\git\sphinx-traceability-extension\doc\integration_test_report.rst:79: WARNING: duplicating r005 trace r002
+C:\Users\jce\projects\git\sphinx-traceability-extension\doc\integration_test_report.rst:91: WARNING: duplicating r005
+C:\Users\jce\projects\git\sphinx-traceability-extension\doc\integration_test_report.rst:112: WARNING: item r007 attribute does not match defined attributes (asil=X)
+C:\Users\jce\projects\git\sphinx-traceability-extension\doc\integration_test_report.rst:109: WARNING: Error in "item" directive:
+unknown option: "non_existing_relation_or_attribute".
+
+.. item:: r009 Requirement with invalid relation kind or attribute
+    :non_existing_relation_or_attribute: r007
+
+    Ai caramba, this should report a warning as the relation kind or attribute does not exist.
+C:\Users\jce\projects\git\sphinx-traceability-extension\doc\integration_test_report.rst:205: WARNING: item ITEST_REP-CAPTION attribute does not match defined attributes (result=RUNNING)
+C:\Users\jce\projects\git\sphinx-traceability-extension\doc\integration_test_report.rst:270: WARNING: Found attribute description which is not defined in configuration (non_existing_attribute)
+C:\Users\jce\projects\git\sphinx-traceability-extension\doc\integration_test_report.rst:373: WARNING: Traceability: unknown relation for item-matrix: non_existing_relation
+C:\Users\jce\projects\git\sphinx-traceability-extension\doc\integration_test_report.rst:467: WARNING: Traceability: unknown attribute for item-attributes-matrix: non_existing_relation_or_attribute
+C:\Users\jce\projects\git\sphinx-traceability-extension\doc\integration_test_report.rst:473: WARNING: Traceability: unknown sorting attribute for item-attributes-matrix: non_existing_relation_or_attribute
+C:\Users\jce\projects\git\sphinx-traceability-extension\doc\integration_test_report.rst:513: WARNING: Traceability: unknown relation for item-2d-matrix: non_existing_relation
+C:\Users\jce\projects\git\sphinx-traceability-extension\doc\integration_test_report.rst:557: WARNING: Traceability: unknown relation for item-tree: non_existing_relation
+C:\Users\jce\projects\git\sphinx-traceability-extension\doc\integration_test_report.rst:565: WARNING: Traceability: unknown relation for item-tree: non_existing_relation
+C:\Users\jce\projects\git\sphinx-traceability-extension\doc\integration_test_report.rst:599: WARNING: sources argument required for item-link directive
+C:\Users\jce\projects\git\sphinx-traceability-extension\doc\integration_test_report.rst:605: WARNING: targets argument required for item-link directive
+C:\Users\jce\projects\git\sphinx-traceability-extension\doc\integration_test_report.rst:611: WARNING: type argument required for item-link directive
+WARNING: Item 'non_existing_requirement' has no reference to source document.
+WARNING: List item 'CL-UNDEFINED_CL_ITEM' in merge/pull request 138 is not defined as a checklist-item.
+C:\Users\jce\projects\git\sphinx-traceability-extension\doc\integration_test_report.rst:140: WARNING: Traceability: cannot link to 'non_existing_requirement', item is not defined
+c:\users\jce\projects\git\sphinx-traceability-extension\.tox\sphinx-latest\lib\site-packages\sphinx_rtd_theme\search.html:20: RemovedInSphinx30Warning: To modify script_files in the theme is deprecated. Please insert a <script> tag directly in your theme instead.
+  {{ super() }}

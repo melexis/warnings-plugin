@@ -125,7 +125,7 @@ Help prints all currently supported commands and their usages.
 The command returns (shell $? variable):
 
 - value 0 when the number of counted warnings is within the supplied minimum and maximum limits: ok,
-- number of counted warnings (positive) when the counter number is not within those limit.
+- number of counted warnings (positive) when the counter number is not within those limit (1 in case of 0 counted warnings).
 
 ---------------------------
 Simple Command line options
@@ -234,7 +234,7 @@ command:
 Parse for XMLRunner errors
 --------------------------
 
-When you run [XMLRunner](https://github.com/xmlrunner/unittest-xml-reporting)
+When you run XMLRunner_,
 the errors are reported on the output, but they are not marked as failures in
 the test reports xml files. Since command exits as 1, we could not detect tests
 that just did not run (not failed). warnings-plugin now parses for the output
@@ -254,6 +254,7 @@ with command:
     python3 -m mlx.warnings --xmlrunner --command <commandforxmlrunner>
     python -m mlx.warnings --xmlrunner --command <commandforxmlrunner>
 
+.. _XMLRunner: https://github.com/xmlrunner/unittest-xml-reporting
 
 ----------------------------------
 Configuration file to pass options

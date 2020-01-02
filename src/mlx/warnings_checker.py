@@ -74,8 +74,8 @@ class WarningsChecker:
             ValueError: Invalid argument (min limit higher than max limit)
         '''
         if self.warn_min > maximum:
-            raise ValueError("Invalid argument: mininum limit ({0.warn_min}) is higher than maximum limit "
-                             "({0.warn_max}). Cannot enter {value}". format(self, value=maximum))
+            raise ValueError("Invalid argument: minimum limit ({0.warn_min}) is higher than maximum limit "
+                             "({0.warn_max}). Cannot enter {value}.". format(self, value=maximum))
         else:
             self.warn_max = maximum
 
@@ -97,8 +97,8 @@ class WarningsChecker:
             ValueError: Invalid argument (min limit higher than max limit)
         '''
         if minimum > self.warn_max:
-            raise ValueError("Invalid argument: mininum limit ({0.warn_min}) is higher than maximum limit "
-                             "({0.warn_max}). Cannot enter {value}".format(self, value=minimum))
+            raise ValueError("Invalid argument: minimum limit ({0.warn_min}) is higher than maximum limit "
+                             "({0.warn_max}). Cannot enter {value}.".format(self, value=minimum))
         else:
             self.warn_min = minimum
 
@@ -124,22 +124,35 @@ class WarningsChecker:
 
         Returns:
             int: 0 if the amount of warnings is within limits, the count of warnings otherwise
+                (or 1 in case of a count of 0 warnings)
         '''
-        if self.warn_min == self.warn_max and self.count == self.warn_max:
+        if self.count > self.warn_max or self.count < self.warn_min:
+            return self._return_error_code()
+        elif self.warn_min == self.warn_max and self.count == self.warn_max:
             print("Number of warnings ({0.count}) is exactly as expected. Well done."
                   .format(self))
-        elif self.count > self.warn_max:
-            print("Number of warnings ({0.count}) is higher than the maximum limit ({0.warn_max}). "
-                  "Returning error code 1.".format(self))
-            return self.count
-        elif self.count < self.warn_min:
-            print("Number of warnings ({0.count}) is lower than the minimum limit ({0.warn_min}). "
-                  "Returning error code 1.".format(self))
-            return self.count
         else:
             print("Number of warnings ({0.count}) is between limits {0.warn_min} and {0.warn_max}. Well done."
                   .format(self))
         return 0
+
+    def _return_error_code(self):
+        ''' Function for determining the return code and message on failure
+
+        Returns:
+            int: The count of warnings (or 1 in case of a count of 0 warnings)
+        '''
+        if self.count > self.warn_max:
+            error_reason = "higher than the maximum limit"
+        else:
+            error_reason = "lower than the minimum limit"
+
+        error_code = self.count
+        if error_code == 0:
+            error_code = 1
+        print("Number of warnings ({0.count}) is {1} ({0.warn_min}). Returning error code {2}."
+              .format(self, error_reason, error_code))
+        return error_code
 
     def print_when_verbose(self, message):
         ''' Prints message only when verbose mode is enabled.

@@ -20,6 +20,7 @@ class TestIntegration(TestCase):
             warnings_wrapper([])
         self.assertEqual(2, ex.exception.code)
 
+    min_ret_val_on_failure = 1
     junit_warning_cnt = 3
 
     def test_single_argument(self):
@@ -133,3 +134,20 @@ class TestIntegration(TestCase):
     def test_ignore_sphinx_deprecation_flag(self):
         retval = warnings_wrapper(['--junit', '--include-sphinx-deprecation', 'tests/junit*.xml'])
         self.assertEqual(self.junit_warning_cnt, retval)
+
+    def test_multiple_checkers_ret_val(self):
+        retval = warnings_wrapper(['--sphinx', '--junit', 'tests/junit*.xml'])
+        self.assertEqual(self.junit_warning_cnt, retval)
+
+    def test_non_zero_ret_val_on_failure(self):
+        retval = warnings_wrapper(['--sphinx', '--exact-warnings', '2', 'tests/junit*.xml'])
+        self.assertEqual(self.min_ret_val_on_failure, retval)
+
+    def test_various_sphinx_warnings(self):
+        """ Use the output log of the example documentation of mlx.traceability as input.
+
+        The input file contains 18 Sphinx warnings, but exactly 19 are required to pass.
+        The number of warnings (18) must be returned as return code.
+        """
+        retval = warnings_wrapper(['--sphinx', '--exact-warnings', '19', 'tests/sphinx_traceability_output.txt'])
+        self.assertEqual(18, retval)
