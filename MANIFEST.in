@@ -7,7 +7,7 @@ include README.rst
 include LICENSE
 exclude src/mlx/__warnings_version__.py
 
-include tox.ini .travis.yml .codeclimate.yml
+include tox.ini .travis.yml .codeclimate.yml codecov.yml
 
 global-exclude *.py[cod] __pycache__ *.so *.dylib
 
