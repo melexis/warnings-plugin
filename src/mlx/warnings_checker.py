@@ -143,14 +143,14 @@ class WarningsChecker:
             int: The count of warnings (or 1 in case of a count of 0 warnings)
         '''
         if self.count > self.warn_max:
-            error_reason = "higher than the maximum limit"
+            error_reason = "higher than the maximum limit ({0.warn_max})".format(self)
         else:
-            error_reason = "lower than the minimum limit"
+            error_reason = "lower than the minimum limit ({0.warn_min})".format(self)
 
         error_code = self.count
         if error_code == 0:
             error_code = 1
-        print("Number of warnings ({0.count}) is {1} ({0.warn_min}). Returning error code {2}."
+        print("Number of warnings ({0.count}) is {1}. Returning error code {2}."
               .format(self, error_reason, error_code))
         return error_code
 
