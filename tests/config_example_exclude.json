@@ -27,5 +27,20 @@
         "enabled": false,
         "min": 0,
         "max": 0
+    },
+    "robot": {
+        "enabled": false,
+        "suites": [
+            {
+                "name": "Suite name 1",
+                "min": 10,
+                "max": 10
+            },
+            {
+                "name": "Suite name 2",
+                "min": 0,
+                "max": 0
+            }
+        ]
     }
 }

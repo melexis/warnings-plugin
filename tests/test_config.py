@@ -2,7 +2,7 @@ from io import StringIO
 from unittest import TestCase
 from unittest.mock import patch
 
-from mlx.warnings import DoxyChecker, JUnitChecker, SphinxChecker, WarningsPlugin, XMLRunnerChecker
+from mlx.warnings import (DoxyChecker, JUnitChecker, RobotChecker, SphinxChecker, WarningsPlugin, XMLRunnerChecker)
 
 
 class TestConfig(TestCase):
@@ -278,6 +278,26 @@ class TestConfig(TestCase):
                 'enabled': True,
                 'min': 0,
                 'max': 6
+            },
+            'robot': {
+                'enabled': True,
+                'suites': [
+                    {
+                        'name': 'dummy1',
+                        'min': 5,
+                        'max': 7,
+                    },
+                    {
+                        'name': 'dummy2',
+                        'min': 1,
+                        'max': 9,
+                    },
+                    {
+                        'name': 'dummy3',
+                        'min': 2,
+                        'max': 2,
+                    }
+                ]
             }
         }
 
@@ -286,6 +306,7 @@ class TestConfig(TestCase):
         self.assertEqual(warnings.get_checker(DoxyChecker().name).get_maximum(), 5)
         self.assertEqual(warnings.get_checker(JUnitChecker().name).get_maximum(), 6)
         self.assertEqual(warnings.get_checker(XMLRunnerChecker().name).get_maximum(), 6)
+        self.assertEqual(warnings.get_checker(RobotChecker().name).get_maximum(), 9)
 
     def test_sphinx_config_min(self):
         warnings = WarningsPlugin()
@@ -361,6 +382,26 @@ class TestConfig(TestCase):
                 'enabled': True,
                 'min': 5,
                 'max': 7
+            },
+            'robot': {
+                'enabled': True,
+                'suites': [
+                    {
+                        'name': 'dummy1',
+                        'min': 5,
+                        'max': 7,
+                    },
+                    {
+                        'name': 'dummy2',
+                        'min': 1,
+                        'max': 9,
+                    },
+                    {
+                        'name': 'dummy3',
+                        'min': 2,
+                        'max': 2,
+                    }
+                ]
             }
         }
 
@@ -369,3 +410,4 @@ class TestConfig(TestCase):
         self.assertEqual(warnings.get_checker(DoxyChecker().name).get_minimum(), 3)
         self.assertEqual(warnings.get_checker(JUnitChecker().name).get_minimum(), 5)
         self.assertEqual(warnings.get_checker(XMLRunnerChecker().name).get_minimum(), 5)
+        self.assertEqual(warnings.get_checker(RobotChecker().name).get_minimum(), 1)
