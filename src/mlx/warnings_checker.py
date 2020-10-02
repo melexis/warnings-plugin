@@ -251,23 +251,34 @@ class JUnitChecker(WarningsChecker):
     name = 'junit'
 
     def check(self, content):
-        '''
-        Function for counting the number of JUnit failures in a specific text
+        ''' Function for counting the number of JUnit failures in a specific text
+
+        If this class is subclassed, the test cases with a ``classname`` that does
+        not end with the ``name`` class attribute are ignored.
 
         Args:
             content (str): The content to parse
         '''
         try:
-            result = JUnitXml.fromstring(content.encode('utf-8'))
-            if self.verbose:
-                for suite in result:
-                    for testcase in filter(lambda testcase: isinstance(testcase.result, (Failure, Error)), suite):
+            root_input = ET.fromstring(content)
+            if root_input.tag == 'testsuites':
+                test_suites = root_input
+            else:
+                test_suites = ET.Element("testsuites")
+                test_suites.append(root_input)
+
+            suites = JUnitXml.fromelem(test_suites)
+            for suite in suites:
+                for testcase in tuple(suite):
+                    if type(self) != JUnitChecker and not testcase.classname.endswith(self.name):
+                        suite.remove_testcase(testcase)
+                    elif self.verbose and isinstance(testcase.result, (Failure, Error)):
                         print('{classname}.{testname}'.format(classname=testcase.classname,
                                                               testname=testcase.name))
-            result.update_statistics()
-            self.count += result.errors + result.failures
-        except ET.ParseError:
-            return
+            suites.update_statistics()
+            self.count += suites.failures + suites.errors
+        except ET.ParseError as err:
+            print(err)
 
 
 class CoverityChecker(RegexChecker):
@@ -386,24 +397,6 @@ class RobotSuiteChecker(JUnitChecker):
         '''
         super().__init__(**kwargs)
         self.name = name
-
-    def check(self, content):
-        try:
-            root_input = ET.fromstring(content)
-            if root_input.tag == 'testsuites':
-                test_suites = root_input
-            else:
-                test_suites = ET.Element("testsuites")
-                test_suites.append(root_input)
-
-            suites = JUnitXml.fromelem(test_suites)
-            for suite in suites:
-                for testcase in tuple(suite):
-                    if not testcase.classname.endswith(self.name):
-                        suite.remove_testcase(testcase)
-            self.count += suites.failures + suites.errors
-        except ET.ParseError as err:
-            print(err)
 
     def return_count(self):
         ''' Getter function for the amount of warnings found
