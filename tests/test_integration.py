@@ -1,4 +1,7 @@
+from io import StringIO
 from unittest import TestCase
+
+from mock import patch
 
 from mlx.warnings import warnings_wrapper
 
@@ -144,18 +147,40 @@ class TestIntegration(TestCase):
         self.assertEqual(self.min_ret_val_on_failure, retval)
 
     def test_various_sphinx_warnings(self):
-        """ Use the output log of the example documentation of mlx.traceability as input.
+        ''' Use the output log of the example documentation of mlx.traceability as input.
 
         The input file contains 18 Sphinx warnings, but exactly 19 are required to pass.
         The number of warnings (18) must be returned as return code.
-        """
+        '''
         retval = warnings_wrapper(['--sphinx', '--exact-warnings', '19', 'tests/sphinx_traceability_output.txt'])
         self.assertEqual(18, retval)
 
     def test_robot_with_name_arg(self):
-        retval = warnings_wrapper(['--robot', '--name', 'Suite Two', 'tests/robot_double_fail.txt'])
+        retval = warnings_wrapper(['--robot', '--name', "Suite Two", 'tests/robot_double_fail.xml'])
         self.assertEqual(1, retval)
 
-    def test_robot_missing_name_arg(self):
-        with self.assertRaises(SystemExit):
-            warnings_wrapper(['--robot', 'tests/robot_double_fail.txt'])
+    def test_robot_default_name_arg(self):
+        ''' If no suite name is configured, all suites must be taken into account '''
+        retval = warnings_wrapper(['--robot', 'tests/robot_double_fail.xml'])
+        self.assertEqual(2, retval)
+
+    def test_robot_verbose(self):
+        ''' If no suite name is configured, all suites must be taken into account '''
+        with patch('sys.stdout', new=StringIO()) as fake_out:
+            retval = warnings_wrapper(['--verbose', '--robot', '--name', 'Suite Two', 'tests/robot_double_fail.xml'])
+        stdout_log = fake_out.getvalue()
+        print(stdout_log)
+        self.assertEqual(1, retval)
+        self.assertEqual(
+            '\n'.join([
+                "Suite One &amp; Suite Two.Suite Two.Another test",
+                "Suite 'Suite Two': 1 warnings found",
+                "Counted failures for test suite 'Suite Two'.",
+                "Number of warnings (1) is higher than the maximum limit (0). Returning error code 1.",
+            ]) + '\n',
+            stdout_log
+        )
+
+    def test_robot_config(self):
+        retval = warnings_wrapper(['--config', 'tests/config_example_robot.json', 'tests/robot_double_fail.xml'])
+        self.assertEqual(0, retval)
