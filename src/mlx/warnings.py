@@ -199,7 +199,7 @@ def warnings_wrapper(args):
     group1.add_argument('-r', '--robot', dest='robot', action='store_true')
     group1.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
     group1.add_argument('-x', '--xmlrunner', dest='xmlrunner', action='store_true')
-    group1.add_argument('--name',
+    group1.add_argument('--name', default='',
                         help='Name of the Robot Framework test suite to check results of')
     group1.add_argument('-m', '--maxwarnings', '--max-warnings', type=int, default=0,
                         help='Maximum amount of warnings accepted')
@@ -245,11 +245,8 @@ def warnings_wrapper(args):
         if args.coverity:
             warnings.activate_checker_name('coverity')
         if args.robot:
-            if not args.name:
-                print("robot checker requires a --name input argument to select")
-                sys.exit(2)
             robot_checker = warnings.activate_checker_name('robot')
-            robot_checker.suite_checkers = [RobotSuiteChecker(args.name)]
+            robot_checker.checkers = [RobotSuiteChecker(args.name, verbose=args.verbose)]
         if args.exact_warnings:
             if args.maxwarnings | args.minwarnings:
                 print("expected-warnings cannot be provided with maxwarnings or minwarnings")

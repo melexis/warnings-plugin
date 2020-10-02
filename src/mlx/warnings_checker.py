@@ -3,7 +3,7 @@
 
 import abc
 import re
-import xml.etree.ElementTree as ET
+from lxml import etree as ET
 
 from junitparser import Error, Failure, JUnitXml
 
@@ -260,7 +260,7 @@ class JUnitChecker(WarningsChecker):
             content (str): The content to parse
         '''
         try:
-            root_input = ET.fromstring(content)
+            root_input = ET.fromstring(content.encode('utf-8'))
             if root_input.tag == 'testsuites':
                 test_suites = root_input
             else:
@@ -270,11 +270,11 @@ class JUnitChecker(WarningsChecker):
             suites = JUnitXml.fromelem(test_suites)
             for suite in suites:
                 for testcase in tuple(suite):
-                    if type(self) != JUnitChecker and not testcase.classname.endswith(self.name):
+                    if type(self) != JUnitChecker and self.name and not testcase.classname.endswith(self.name):
                         suite.remove_testcase(testcase)
-                    elif self.verbose and isinstance(testcase.result, (Failure, Error)):
-                        print('{classname}.{testname}'.format(classname=testcase.classname,
-                                                              testname=testcase.name))
+                    elif isinstance(testcase.result, (Failure, Error)):
+                        self.print_when_verbose('{classname}.{testname}'.format(classname=testcase.classname,
+                                                                                testname=testcase.name))
             suites.update_statistics()
             self.count += suites.failures + suites.errors
         except ET.ParseError as err:
@@ -375,14 +375,17 @@ class RobotChecker(WarningsChecker):
         '''
         count = 0
         for checker in self.checkers:
-            print('Checking warnings for suite {checker.name!r}:')
+            if checker.name:
+                print('Counted failures for test suite {!r}.'.format(checker.name))
+            else:
+                print('Counted failures for all test suites.')
             count += checker.return_check_limits()
         return count
 
     def parse_suites_config(self, suite_configs):
         self.checkers = []
         for config in suite_configs:
-            checker = RobotSuiteChecker(config['name'])
+            checker = RobotSuiteChecker(config['name'], verbose=self.verbose)
             checker.set_maximum(int(config['max']))
             checker.set_minimum(int(config['min']))
             self.checkers.append(checker)
@@ -404,5 +407,8 @@ class RobotSuiteChecker(JUnitChecker):
         Returns:
             int: Number of warnings found
         '''
-        print("Suite {0.name!r}: {0.count} warnings found".format(self))
+        msg = "{} warnings found".format(self.count)
+        if self.name:
+            msg = "Suite {!r}: {}".format(self.name, msg)
+        print(msg)
         return self.count
