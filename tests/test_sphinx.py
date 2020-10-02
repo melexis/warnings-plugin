@@ -1,7 +1,4 @@
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
+from io import StringIO
 from unittest import TestCase
 
 from mlx.warnings import WarningsPlugin
