@@ -261,13 +261,17 @@ Parse for Robot Framework test failures
 
 When running `Robot Framework`_ tests with `--xunit report.xml`_ as an input
 argument, an xUnit compatible result file is generated. The warnings-plugin can
-parse this file and check the amount of failures per test suite. If you want
-to check the results of more than one suite in the XML file, a
-`configuration file to pass options`_ is needed.
+parse this file and check the amount of failures. By default, the test results
+of all test suites in the file are taken into account. If you only care about
+one specific test suite, you can use ``--name <<suite name>>``. The warning
+limits can be configured for multiple test suites individually by means of a
+`configuration file to pass options`_.
 
 .. code-block:: bash
 
-    # command line
+    # command line xunit file
+    mlx-warnings --robot report.xml
+    # ignore all but the specified suite
     mlx-warnings --robot --name "Suite Name" report.xml
 
     # explicitly as python module
