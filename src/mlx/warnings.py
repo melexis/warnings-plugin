@@ -66,7 +66,8 @@ class WarningsPlugin:
             if checker.name == name:
                 self.activate_checker(checker)
                 return checker
-        print("Checker %s does not exist" % name)
+        else:
+            print("Checker %s does not exist" % name)
 
     def get_checker(self, name):
         ''' Get checker by name
