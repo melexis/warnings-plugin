@@ -5,7 +5,7 @@ from setuptools import find_packages, setup
 
 PROJECT_URL = 'https://github.com/melexis/warnings-plugin'
 
-requires = ['junitparser>=1.0.0', 'lxml>=4.3.0']
+requires = ['junitparser>=1.0.0', 'lxml']
 
 setup(
     name='mlx.warnings',
