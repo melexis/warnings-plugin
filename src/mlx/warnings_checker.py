@@ -3,7 +3,7 @@
 
 import abc
 import re
-from xml.etree.ElementTree import ParseError
+import xml.etree.ElementTree as ET
 
 from junitparser import Error, Failure, JUnitXml
 
@@ -18,8 +18,6 @@ xmlrunner_pattern = re.compile(PYTHON_XMLRUNNER_REGEX)
 
 COVERITY_WARNING_REGEX = r"(?:((?:[/.]|[A-Za-z]).+?):(-?\d+):) (CID) \d+ \(#(?P<curr>\d+) of (?P<max>\d+)\): (?P<checker>.+)\): (?P<classification>\w+), *(.+)\n?"
 coverity_pattern = re.compile(COVERITY_WARNING_REGEX)
-
-robot_pattern = re.compile('.*')  # TODO
 
 
 class WarningsChecker:
@@ -268,7 +266,7 @@ class JUnitChecker(WarningsChecker):
                                                               testname=testcase.name))
             result.update_statistics()
             self.count += result.errors + result.failures
-        except ParseError:
+        except ET.ParseError:
             return
 
 
@@ -295,7 +293,7 @@ class CoverityChecker(RegexChecker):
 
 class RobotChecker(WarningsChecker):
     name = 'robot'
-    suite_checkers = []
+    checkers = []
 
     def get_minimum(self):
         ''' Gets the lowest minimum amount of warnings
@@ -303,8 +301,8 @@ class RobotChecker(WarningsChecker):
         Returns:
             int: the lowest minimum for warnings
         '''
-        if self.suite_checkers:
-            return min(x.get_minimum() for x in self.suite_checkers)
+        if self.checkers:
+            return min(x.get_minimum() for x in self.checkers)
         return 0
 
     def set_minimum(self, minimum):
@@ -313,7 +311,7 @@ class RobotChecker(WarningsChecker):
         Args:
             minimum (int): minimum amount of warnings allowed
         '''
-        for checker in self.suite_checkers:
+        for checker in self.checkers:
             checker.set_minimum(minimum)
 
     def get_maximum(self):
@@ -322,8 +320,8 @@ class RobotChecker(WarningsChecker):
         Returns:
             int: the highest maximum for warnings
         '''
-        if self.suite_checkers:
-            return max(x.get_maximum() for x in self.suite_checkers)
+        if self.checkers:
+            return max(x.get_maximum() for x in self.checkers)
         return 0
 
     def set_maximum(self, maximum):
@@ -332,7 +330,7 @@ class RobotChecker(WarningsChecker):
         Args:
             maximum (int): maximum amount of warnings allowed
         '''
-        for checker in self.suite_checkers:
+        for checker in self.checkers:
             checker.set_maximum(maximum)
 
     def check(self, content):
@@ -343,8 +341,19 @@ class RobotChecker(WarningsChecker):
         Args:
             content (str): The content to parse
         '''
-        for checker in self.suite_checkers:
+        for checker in self.checkers:
             checker.check(content)
+
+    def return_count(self):
+        ''' Getter function for the amount of warnings found
+
+        Returns:
+            int: Number of warnings found
+        '''
+        self.count = 0
+        for checker in self.checkers:
+            self.count += checker.return_count()
+        return self.count
 
     def return_check_limits(self):
         ''' Function for checking whether the warning count is within the configured limits
@@ -354,23 +363,21 @@ class RobotChecker(WarningsChecker):
                 (or 1 in case of a count of 0 warnings)
         '''
         count = 0
-        for checker in self.suite_checkers:
+        for checker in self.checkers:
+            print('Checking warnings for suite {checker.name!r}:')
             count += checker.return_check_limits()
         return count
 
     def parse_suites_config(self, suite_configs):
-        self.suite_checkers = []
+        self.checkers = []
         for config in suite_configs:
             checker = RobotSuiteChecker(config['name'])
             checker.set_maximum(int(config['max']))
             checker.set_minimum(int(config['min']))
-            self.suite_checkers.append(checker)
+            self.checkers.append(checker)
 
 
-class RobotSuiteChecker(RegexChecker):
-    name = 'suite name'
-    pattern = robot_pattern
-
+class RobotSuiteChecker(JUnitChecker):
     def __init__(self, name, **kwargs):
         ''' Constructor
 
@@ -381,16 +388,28 @@ class RobotSuiteChecker(RegexChecker):
         self.name = name
 
     def check(self, content):
-        ''' Function for counting the number of failures for a suite in a robot test report
+        try:
+            root_input = ET.fromstring(content)
+            if root_input.tag == 'testsuites':
+                test_suites = root_input
+            else:
+                test_suites = ET.Element("testsuites")
+                test_suites.append(root_input)
 
-        Args:
-            content (str): The content to parse
+            suites = JUnitXml.fromelem(test_suites)
+            for suite in suites:
+                for testcase in tuple(suite):
+                    if not testcase.classname.endswith(self.name):
+                        suite.remove_testcase(testcase)
+            self.count += suites.failures + suites.errors
+        except ET.ParseError as err:
+            print(err)
+
+    def return_count(self):
+        ''' Getter function for the amount of warnings found
+
+        Returns:
+            int: Number of warnings found
         '''
-        # TODO
-        matches = re.finditer(self.pattern, content)
-        for match in matches:
-            match_string = match.group(0).strip()
-            if self._is_excluded(match_string):
-                continue
-            self.count += 1
-            self.print_when_verbose(match_string)
+        print("Suite {0.name!r}: {0.count} warnings found".format(self))
+        return self.count
