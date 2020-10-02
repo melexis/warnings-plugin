@@ -163,6 +163,11 @@ class WarningsChecker:
         if self.verbose:
             print(message)
 
+    def parse_config(self, config):
+        self.set_maximum(int(config['max']))
+        self.set_minimum(int(config['min']))
+        self.add_patterns(config.get("exclude"), self.exclude_patterns)
+
 
 class RegexChecker(WarningsChecker):
     name = 'regex'
@@ -382,12 +387,11 @@ class RobotChecker(WarningsChecker):
             count += checker.return_check_limits()
         return count
 
-    def parse_suites_config(self, suite_configs):
+    def parse_config(self, config):
         self.checkers = []
-        for config in suite_configs:
-            checker = RobotSuiteChecker(config['name'], verbose=self.verbose)
-            checker.set_maximum(int(config['max']))
-            checker.set_minimum(int(config['min']))
+        for suite_config in config['suites']:
+            checker = RobotSuiteChecker(suite_config['name'], verbose=self.verbose)
+            checker.parse_config(suite_config)
             self.checkers.append(checker)
 
 

@@ -179,12 +179,7 @@ class WarningsPlugin:
             try:
                 if bool(config[checker.name]['enabled']):
                     self.activate_checker(checker)
-                    if checker.name == 'robot':
-                        checker.parse_suites_config(config[checker.name]['suites'])
-                    else:
-                        checker.set_maximum(int(config[checker.name]['max']))
-                        checker.set_minimum(int(config[checker.name]['min']))
-                        checker.add_patterns(config[checker.name].get("exclude"), checker.exclude_patterns)
+                    checker.parse_config(config[checker.name])
                     print("Config parsing for {name} completed".format(name=checker.name))
             except KeyError as err:
                 print("Incomplete config. Missing: {key}".format(key=err))
