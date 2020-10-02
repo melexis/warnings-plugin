@@ -256,6 +256,27 @@ with command:
 
 .. _XMLRunner: https://github.com/xmlrunner/unittest-xml-reporting
 
+Parse for Robot Framework test failures
+---------------------------------------
+
+When running `Robot Framework`_ tests with `--xunit report.xml`_ as an input
+argument, an xUnit compatible result file is generated. The warnings-plugin can
+parse this file and check the amount of failures per test suite. If you want
+to check the results of more than one suite in the XML file, a
+`configuration file to pass options`_ is needed.
+
+.. code-block:: bash
+
+    # command line
+    mlx-warnings --robot --name "Suite Name" report.xml
+
+    # explicitly as python module
+    python3 -m mlx.warnings --robot --name "Suite Name" report.xml
+
+.. _`Robot Framework`: https://robotframework.org/
+.. _`--xunit report.xml`: https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#xunit-compatible-result-file
+
+
 ----------------------------------
 Configuration file to pass options
 ----------------------------------
@@ -266,27 +287,48 @@ Configuration file is in JSON format with a simple structure.
 .. code-block:: json
 
     {
-        "sphinx":{
+        "sphinx": {
+            "enabled": false,
+            "min": 0,
+            "max": 0
+        },
+        "doxygen": {
+            "enabled": false,
+            "min": 0,
+            "max": 0
+        },
+        "junit": {
             "enabled": true,
             "min": 0,
             "max": 0
         },
-        "doxygen":{
+        "xmlrunner": {
             "enabled": false,
             "min": 0,
             "max": 0
         },
-        "junit":{
+        "coverity": {
             "enabled": false,
             "min": 0,
             "max": 0
         },
-        "xmlrunner":{
+        "robot": {
             "enabled": false,
-            "min": 0,
-            "max": 0
+            "suites": [
+                {
+                    "name": "My First Suite",
+                    "min": 8,
+                    "max": 10
+                },
+                {
+                    "name": "My Second Suite",
+                    "min": 0,
+                    "max": 0
+                }
+            ]
         }
     }
+
 
 First key is `checkername`, then it contains a boolean value for key `enabled`,
 value for minimum number of warnings with key `min` and value for maximum
@@ -360,4 +402,3 @@ Contribute
 
 There is a Contribution guide available if you would like to get involved in
 development of the plugin. We encourage anyone to contribute to our repository.
-
