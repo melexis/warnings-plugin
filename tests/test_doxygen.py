@@ -2,8 +2,9 @@ from io import StringIO
 from pathlib import Path
 from unittest import TestCase
 
+from unittest.mock import patch
+
 from mlx.warnings import WarningsPlugin
-from mock import patch
 
 
 class TestDoxygenWarnings(TestCase):

@@ -1,6 +1,7 @@
 from unittest import TestCase
 
-from mlx.warnings import WarningsPlugin, DoxyChecker
+from mlx.regex_checker import DoxyChecker
+from mlx.warnings import WarningsPlugin
 
 
 class TestLimits(TestCase):
@@ -64,5 +65,3 @@ class TestLimits(TestCase):
             else:
                 self.assertEqual(self.warnings.return_check_limits(), 2)
             self.warnings.set_minimum(x)
-
-

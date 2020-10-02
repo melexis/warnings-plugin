@@ -1,8 +1,10 @@
 from io import StringIO
 from unittest import TestCase
 
-from mlx.warnings import WarningsPlugin, RobotSuiteChecker
-from mock import patch
+from unittest.mock import patch
+
+from mlx.robot_checker import RobotSuiteChecker
+from mlx.warnings import WarningsPlugin
 
 
 class TestRobotWarnings(TestCase):

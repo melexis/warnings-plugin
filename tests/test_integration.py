@@ -1,7 +1,7 @@
 from io import StringIO
 from unittest import TestCase
 
-from mock import patch
+from unittest.mock import patch
 
 from mlx.warnings import warnings_wrapper
 

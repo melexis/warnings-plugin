@@ -1,8 +1,13 @@
 from io import StringIO
 from unittest import TestCase
+
 from unittest.mock import patch
 
-from mlx.warnings import (DoxyChecker, JUnitChecker, RobotChecker, SphinxChecker, WarningsPlugin, XMLRunnerChecker)
+from mlx.junit_checker import JUnitChecker
+from mlx.regex_checker import DoxyChecker, SphinxChecker, XMLRunnerChecker
+from mlx.robot_checker import RobotChecker
+
+from mlx.warnings import WarningsPlugin
 
 
 class TestConfig(TestCase):
