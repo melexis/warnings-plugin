@@ -151,3 +151,11 @@ class TestIntegration(TestCase):
         """
         retval = warnings_wrapper(['--sphinx', '--exact-warnings', '19', 'tests/sphinx_traceability_output.txt'])
         self.assertEqual(18, retval)
+
+    def test_robot_with_name_arg(self):
+        retval = warnings_wrapper(['--robot', '--name', 'Suite Two', 'tests/robot_double_fail.txt'])
+        self.assertEqual(1, retval)
+
+    def test_robot_missing_name_arg(self):
+        with self.assertRaises(SystemExit):
+            warnings_wrapper(['--robot', 'tests/robot_double_fail.txt'])
