@@ -12,7 +12,7 @@ from pkg_resources import require
 
 from mlx.junit_checker import JUnitChecker
 from mlx.regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker
-from mlx.robot_checker import RobotChecker, RobotSuiteChecker
+from mlx.robot_checker import RobotChecker
 
 __version__ = require('mlx.warnings')[0].version
 

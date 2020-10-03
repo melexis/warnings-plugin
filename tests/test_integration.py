@@ -186,7 +186,6 @@ class TestIntegration(TestCase):
             retval = warnings_wrapper(['--config', 'tests/test_in/config_example_robot.json', 'tests/test_in/robot_double_fail.xml'])
         stdout_log = fake_out.getvalue()
 
-
         self.assertEqual(
             '\n'.join([
                 "Config parsing for robot completed",
