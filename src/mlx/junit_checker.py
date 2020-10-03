@@ -1,6 +1,4 @@
-from os import stat
 from junitparser import Error, Failure, JUnitXml
-from junitparser.junitparser import System
 from lxml import etree as ET
 
 from mlx.warnings_checker import WarningsChecker
