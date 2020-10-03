@@ -1,4 +1,6 @@
+from os import stat
 from junitparser import Error, Failure, JUnitXml
+from junitparser.junitparser import System
 from lxml import etree as ET
 
 from mlx.warnings_checker import WarningsChecker
@@ -18,13 +20,8 @@ class JUnitChecker(WarningsChecker):
         '''
         try:
             root_input = ET.fromstring(content.encode('utf-8'))
-            if root_input.tag == 'testsuites':
-                test_suites = root_input
-            else:
-                test_suites = ET.Element("testsuites")
-                test_suites.append(root_input)
-
-            suites = JUnitXml.fromelem(test_suites)
+            testsuites_root = self.prepare_tree(root_input)
+            suites = JUnitXml.fromelem(testsuites_root)
             for suite in suites:
                 for testcase in tuple(suite):
                     if type(self) != JUnitChecker and self.name and not testcase.classname.endswith(self.name):
@@ -36,3 +33,20 @@ class JUnitChecker(WarningsChecker):
             self.count += suites.failures + suites.errors
         except ET.ParseError as err:
             print(err)
+
+    @staticmethod
+    def prepare_tree(root_input):
+        ''' Prepares the tree element by adding a testsuites element as root when missing (to please JUnitXml)
+
+        Args:
+            root_input (lxml.etree._Element): Top-level XML element from input file
+
+        Returns:
+            lxml.etree._Element: Top-level XML element with testsuites tag
+        '''
+        if root_input.tag == 'testsuites':
+            testsuites_root = root_input
+        else:
+            testsuites_root = ET.Element("testsuites")
+            testsuites_root.append(root_input)
+        return testsuites_root
