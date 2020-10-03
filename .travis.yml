@@ -41,15 +41,15 @@ jobs:
             python: 3.6
     # Stage TEST
     - stage: test
-    - python: '3.4'
-      env:
-        - TOXENV=py34,codecov
     - python: '3.5'
       env:
         - TOXENV=py35,codecov
     - python: '3.6'
       env:
         - TOXENV=py36,codecov
+    - python: '3.8'
+        env:
+          - TOXENV=py38,codecov
     # Stage COVERITY
     - stage: coverity
       python: '3.6'
@@ -107,6 +107,3 @@ notifications:
   email:
     on_success: never
     on_failure: always
-
-
-
