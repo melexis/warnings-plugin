@@ -40,7 +40,7 @@
 
 
 ============================
-Command Line warnings-plugin
+Command Line Warnings Plugin
 ============================
 
 Command-line alternative for https://github.com/jenkinsci/warnings-plugin.
