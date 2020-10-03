@@ -256,6 +256,31 @@ with command:
 
 .. _XMLRunner: https://github.com/xmlrunner/unittest-xml-reporting
 
+Parse for Robot Framework test failures
+---------------------------------------
+
+When running `Robot Framework`_ tests with `--xunit report.xml`_ as an input
+argument, an xUnit compatible result file is generated. The warnings-plugin can
+parse this file and check the amount of failures. By default, the test results
+of all test suites in the file are taken into account. If you only care about
+one specific test suite, you can use ``--name <<suite name>>``. The warning
+limits can be configured for multiple test suites individually by means of a
+`configuration file to pass options`_.
+
+.. code-block:: bash
+
+    # command line xunit file
+    mlx-warnings --robot report.xml
+    # ignore all but the specified suite
+    mlx-warnings --robot --name "Suite Name" report.xml
+
+    # explicitly as python module
+    python3 -m mlx.warnings --robot --name "Suite Name" report.xml
+
+.. _`Robot Framework`: https://robotframework.org/
+.. _`--xunit report.xml`: https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#xunit-compatible-result-file
+
+
 ----------------------------------
 Configuration file to pass options
 ----------------------------------
@@ -266,27 +291,48 @@ Configuration file is in JSON format with a simple structure.
 .. code-block:: json
 
     {
-        "sphinx":{
+        "sphinx": {
+            "enabled": false,
+            "min": 0,
+            "max": 0
+        },
+        "doxygen": {
+            "enabled": false,
+            "min": 0,
+            "max": 0
+        },
+        "junit": {
             "enabled": true,
             "min": 0,
             "max": 0
         },
-        "doxygen":{
+        "xmlrunner": {
             "enabled": false,
             "min": 0,
             "max": 0
         },
-        "junit":{
+        "coverity": {
             "enabled": false,
             "min": 0,
             "max": 0
         },
-        "xmlrunner":{
+        "robot": {
             "enabled": false,
-            "min": 0,
-            "max": 0
+            "suites": [
+                {
+                    "name": "My First Suite",
+                    "min": 8,
+                    "max": 10
+                },
+                {
+                    "name": "My Second Suite",
+                    "min": 0,
+                    "max": 0
+                }
+            ]
         }
     }
+
 
 First key is `checkername`, then it contains a boolean value for key `enabled`,
 value for minimum number of warnings with key `min` and value for maximum
@@ -360,4 +406,3 @@ Contribute
 
 There is a Contribution guide available if you would like to get involved in
 development of the plugin. We encourage anyone to contribute to our repository.
-

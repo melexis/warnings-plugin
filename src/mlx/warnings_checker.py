@@ -3,7 +3,7 @@
 
 import abc
 import re
-from xml.etree.ElementTree import ParseError
+from lxml import etree as ET
 
 from junitparser import Error, Failure, JUnitXml
 
@@ -163,6 +163,11 @@ class WarningsChecker:
         if self.verbose:
             print(message)
 
+    def parse_config(self, config):
+        self.set_maximum(int(config['max']))
+        self.set_minimum(int(config['min']))
+        self.add_patterns(config.get("exclude"), self.exclude_patterns)
+
 
 class RegexChecker(WarningsChecker):
     name = 'regex'
@@ -251,23 +256,34 @@ class JUnitChecker(WarningsChecker):
     name = 'junit'
 
     def check(self, content):
-        '''
-        Function for counting the number of JUnit failures in a specific text
+        ''' Function for counting the number of JUnit failures in a specific text
+
+        If this class is subclassed, the test cases with a ``classname`` that does
+        not end with the ``name`` class attribute are ignored.
 
         Args:
             content (str): The content to parse
         '''
         try:
-            result = JUnitXml.fromstring(content.encode('utf-8'))
-            if self.verbose:
-                for suite in result:
-                    for testcase in filter(lambda testcase: isinstance(testcase.result, (Failure, Error)), suite):
-                        print('{classname}.{testname}'.format(classname=testcase.classname,
-                                                              testname=testcase.name))
-            result.update_statistics()
-            self.count += result.errors + result.failures
-        except ParseError:
-            return
+            root_input = ET.fromstring(content.encode('utf-8'))
+            if root_input.tag == 'testsuites':
+                test_suites = root_input
+            else:
+                test_suites = ET.Element("testsuites")
+                test_suites.append(root_input)
+
+            suites = JUnitXml.fromelem(test_suites)
+            for suite in suites:
+                for testcase in tuple(suite):
+                    if type(self) != JUnitChecker and self.name and not testcase.classname.endswith(self.name):
+                        suite.remove_testcase(testcase)
+                    elif isinstance(testcase.result, (Failure, Error)):
+                        self.print_when_verbose('{classname}.{testname}'.format(classname=testcase.classname,
+                                                                                testname=testcase.name))
+            suites.update_statistics()
+            self.count += suites.failures + suites.errors
+        except ET.ParseError as err:
+            print(err)
 
 
 class CoverityChecker(RegexChecker):
@@ -289,3 +305,114 @@ class CoverityChecker(RegexChecker):
                     (match.group('classification') in self.CLASSIFICATION):
                 self.count += 1
                 self.print_when_verbose(match.group(0).strip())
+
+
+class RobotChecker(WarningsChecker):
+    name = 'robot'
+    checkers = []
+
+    def get_minimum(self):
+        ''' Gets the lowest minimum amount of warnings
+
+        Returns:
+            int: the lowest minimum for warnings
+        '''
+        if self.checkers:
+            return min(x.get_minimum() for x in self.checkers)
+        return 0
+
+    def set_minimum(self, minimum):
+        ''' Setter function for the minimum amount of warnings
+
+        Args:
+            minimum (int): minimum amount of warnings allowed
+        '''
+        for checker in self.checkers:
+            checker.set_minimum(minimum)
+
+    def get_maximum(self):
+        ''' Gets the highest minimum amount of warnings
+
+        Returns:
+            int: the highest maximum for warnings
+        '''
+        if self.checkers:
+            return max(x.get_maximum() for x in self.checkers)
+        return 0
+
+    def set_maximum(self, maximum):
+        ''' Setter function for the maximum amount of warnings
+
+        Args:
+            maximum (int): maximum amount of warnings allowed
+        '''
+        for checker in self.checkers:
+            checker.set_maximum(maximum)
+
+    def check(self, content):
+        '''
+        Function for counting the number of failures in a specific Robot
+        Framework test suite
+
+        Args:
+            content (str): The content to parse
+        '''
+        for checker in self.checkers:
+            checker.check(content)
+
+    def return_count(self):
+        ''' Getter function for the amount of warnings found
+
+        Returns:
+            int: Number of warnings found
+        '''
+        self.count = 0
+        for checker in self.checkers:
+            self.count += checker.return_count()
+        return self.count
+
+    def return_check_limits(self):
+        ''' Function for checking whether the warning count is within the configured limits
+
+        Returns:
+            int: 0 if the amount of warnings is within limits, the count of warnings otherwise
+                (or 1 in case of a count of 0 warnings)
+        '''
+        count = 0
+        for checker in self.checkers:
+            if checker.name:
+                print('Counted failures for test suite {!r}.'.format(checker.name))
+            else:
+                print('Counted failures for all test suites.')
+            count += checker.return_check_limits()
+        return count
+
+    def parse_config(self, config):
+        self.checkers = []
+        for suite_config in config['suites']:
+            checker = RobotSuiteChecker(suite_config['name'], verbose=self.verbose)
+            checker.parse_config(suite_config)
+            self.checkers.append(checker)
+
+
+class RobotSuiteChecker(JUnitChecker):
+    def __init__(self, name, **kwargs):
+        ''' Constructor
+
+        Args:
+            name: Name of the test suite to check the results of
+        '''
+        super().__init__(**kwargs)
+        self.name = name
+
+    def return_count(self):
+        ''' Getter function for the amount of warnings found
+
+        Returns:
+            int: Number of warnings found
+        '''
+        msg = "{} warnings found".format(self.count)
+        if self.name:
+            msg = "Suite {!r}: {}".format(self.name, msg)
+        print(msg)
+        return self.count

@@ -10,8 +10,8 @@ import sys
 
 from pkg_resources import require
 
-from mlx.warnings_checker import CoverityChecker, DoxyChecker, JUnitChecker, SphinxChecker, XMLRunnerChecker
-
+from mlx.warnings_checker import (CoverityChecker, DoxyChecker, JUnitChecker, RobotChecker, SphinxChecker,
+                                  RobotSuiteChecker, XMLRunnerChecker)
 
 __version__ = require('mlx.warnings')[0].version
 
@@ -29,7 +29,8 @@ class WarningsPlugin:
         self.activated_checkers = {}
         self.verbose = verbose
         self.public_checkers = [SphinxChecker(self.verbose), DoxyChecker(self.verbose), JUnitChecker(self.verbose),
-                                XMLRunnerChecker(self.verbose), CoverityChecker(self.verbose)]
+                                XMLRunnerChecker(self.verbose), CoverityChecker(self.verbose),
+                                RobotChecker(self.verbose)]
 
         if config_file:
             with open(config_file, 'r') as open_file:
@@ -53,15 +54,18 @@ class WarningsPlugin:
 
     def activate_checker_name(self, name):
         '''
-        Activate checker by name
+        Activates checker by name
 
         Args:
             name (str): checker name
+
+        Returns:
+            WarningsChecker: activated checker object, or None when no checker with the given name exists
         '''
         for checker in self.public_checkers:
             if checker.name == name:
                 self.activate_checker(checker)
-                break
+                return checker
         else:
             print("Checker %s does not exist" % name)
 
@@ -175,9 +179,7 @@ class WarningsPlugin:
             try:
                 if bool(config[checker.name]['enabled']):
                     self.activate_checker(checker)
-                    checker.set_maximum(int(config[checker.name]['max']))
-                    checker.set_minimum(int(config[checker.name]['min']))
-                    checker.add_patterns(config[checker.name].get("exclude"), checker.exclude_patterns)
+                    checker.parse_config(config[checker.name])
                     print("Config parsing for {name} completed".format(name=checker.name))
             except KeyError as err:
                 print("Incomplete config. Missing: {key}".format(key=err))
@@ -188,9 +190,12 @@ def warnings_wrapper(args):
     group1 = parser.add_argument_group('Configuration command line options')
     group1.add_argument('--coverity', dest='coverity', action='store_true')
     group1.add_argument('-d', '--doxygen', dest='doxygen', action='store_true')
-    group1.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
     group1.add_argument('-j', '--junit', dest='junit', action='store_true')
+    group1.add_argument('-r', '--robot', dest='robot', action='store_true')
+    group1.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
     group1.add_argument('-x', '--xmlrunner', dest='xmlrunner', action='store_true')
+    group1.add_argument('--name', default='',
+                        help='Name of the Robot Framework test suite to check results of')
     group1.add_argument('-m', '--maxwarnings', '--max-warnings', type=int, default=0,
                         help='Maximum amount of warnings accepted')
     group1.add_argument('--minwarnings', '--min-warnings', type=int, default=0,
@@ -216,8 +221,8 @@ def warnings_wrapper(args):
 
     # Read config file
     if args.configfile is not None:
-        checker_flags = args.sphinx or args.doxygen or args.junit or args.coverity or args.xmlrunner
-        warning_args = (args.maxwarnings != 0) or (args.minwarnings != 0) or (args.exact_warnings != 0)
+        checker_flags = args.sphinx or args.doxygen or args.junit or args.coverity or args.xmlrunner or args.robot
+        warning_args = args.maxwarnings or args.minwarnings or args.exact_warnings
         if checker_flags or warning_args:
             print("Configfile cannot be provided with other arguments")
             sys.exit(2)
@@ -234,6 +239,9 @@ def warnings_wrapper(args):
             warnings.activate_checker_name('xmlrunner')
         if args.coverity:
             warnings.activate_checker_name('coverity')
+        if args.robot:
+            robot_checker = warnings.activate_checker_name('robot')
+            robot_checker.checkers = [RobotSuiteChecker(args.name, verbose=args.verbose)]
         if args.exact_warnings:
             if args.maxwarnings | args.minwarnings:
                 print("expected-warnings cannot be provided with maxwarnings or minwarnings")

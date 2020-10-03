@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Suite One &amp; Suite Two" tests="3" errors="0" failures="1" skipped="0" time="0.049">
+    <testcase classname="Suite One &amp; Suite Two.Suite One" name="First Test" time="0.002">
+        <failure message="Directory 'C:\nonexistent' does not exist." type="AssertionError"></failure>
+    </testcase>
+    <testcase classname="Suite One &amp; Suite Two.Suite Two" name="An Unlinked Test" time="0.002">
+    </testcase>
+    <testcase classname="Suite One &amp; Suite Two.Suite Two" name="Another test" time="0.002">
+    </testcase>
+</testsuite>
