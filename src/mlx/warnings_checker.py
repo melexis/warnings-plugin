@@ -55,8 +55,8 @@ class WarningsChecker:
             ValueError: Invalid argument (min limit higher than max limit)
         '''
         if self.warn_min > maximum:
-            raise ValueError("Invalid argument: minimum limit ({0.warn_min}) is higher than maximum limit "
-                             "({0.warn_max}). Cannot enter {value}.". format(self, value=maximum))
+            raise ValueError("Invalid argument: maximum limit of {max} cannot be set lower than minimum limit ({min})."
+                             .format(max=maximum, min=self.warn_min))
         else:
             self.warn_max = maximum
 
@@ -78,8 +78,8 @@ class WarningsChecker:
             ValueError: Invalid argument (min limit higher than max limit)
         '''
         if minimum > self.warn_max:
-            raise ValueError("Invalid argument: minimum limit ({0.warn_min}) is higher than maximum limit "
-                             "({0.warn_max}). Cannot enter {value}.".format(self, value=minimum))
+            raise ValueError("Invalid argument: minimum limit of {min} cannot be set higher than maximum limit ({max})."
+                             .format(min=minimum, max=self.warn_max))
         else:
             self.warn_min = minimum
 
