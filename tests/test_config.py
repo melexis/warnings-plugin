@@ -416,3 +416,32 @@ class TestConfig(TestCase):
         self.assertEqual(warnings.get_checker(JUnitChecker().name).get_minimum(), 5)
         self.assertEqual(warnings.get_checker(XMLRunnerChecker().name).get_minimum(), 5)
         self.assertEqual(warnings.get_checker(RobotChecker().name).get_minimum(), 1)
+
+    def test_invalid_config(self):
+        warnings = WarningsPlugin()
+        tmpjson = {
+            'robot': {
+                'enabled': True,
+                'suites': [
+                    {
+                        'name': '',
+                        'min': 5,
+                        'max': 7,
+                    },
+                    {
+                        'name': 'dummy2',
+                        'min': 10,
+                        'max': 9,
+                    },
+                    {
+                        'name': 'dummy3',
+                        'min': 2,
+                        'max': 2,
+                    }
+                ]
+            }
+        }
+        with self.assertRaises(ValueError) as c_m:
+            warnings.config_parser_json(tmpjson)
+        self.assertEqual(str(c_m.exception),
+                         'Invalid argument: minimum limit must be lower than maximum limit (9); cannot set 10.')
