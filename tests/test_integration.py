@@ -169,7 +169,7 @@ class TestIntegration(TestCase):
         with patch('sys.stdout', new=StringIO()) as fake_out:
             retval = warnings_wrapper(['--verbose', '--robot', '--name', 'Suite Two', 'tests/test_in/robot_double_fail.xml'])
         stdout_log = fake_out.getvalue()
-        print(stdout_log)
+
         self.assertEqual(1, retval)
         self.assertEqual(
             '\n'.join([
@@ -182,5 +182,24 @@ class TestIntegration(TestCase):
         )
 
     def test_robot_config(self):
-        retval = warnings_wrapper(['--config', 'tests/test_in/config_example_robot.json', 'tests/test_in/robot_double_fail.xml'])
-        self.assertEqual(0, retval)
+        with patch('sys.stdout', new=StringIO()) as fake_out:
+            retval = warnings_wrapper(['--config', 'tests/test_in/config_example_robot.json', 'tests/test_in/robot_double_fail.xml'])
+        stdout_log = fake_out.getvalue()
+
+
+        self.assertEqual(
+            '\n'.join([
+                "Config parsing for robot completed",
+                "Suite 'Suite One': 1 warnings found",
+                "2 warnings found",
+                "Suite 'Suite Two': 1 warnings found",
+                "Counted failures for test suite 'Suite One'.",
+                "Number of warnings (1) is between limits 0 and 1. Well done.",
+                "Counted failures for all test suites.",
+                "Number of warnings (2) is higher than the maximum limit (1). Returning error code 2.",
+                "Counted failures for test suite 'Suite Two'.",
+                "Number of warnings (1) is between limits 1 and 2. Well done.",
+            ]) + '\n',
+            stdout_log
+        )
+        self.assertEqual(2, retval)

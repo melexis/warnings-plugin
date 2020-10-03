@@ -178,9 +178,10 @@ class WarningsPlugin:
         # activate checker
         for checker in self.public_checkers:
             try:
-                if bool(config[checker.name]['enabled']):
+                checker_config = config[checker.name]
+                if bool(checker_config['enabled']):
                     self.activate_checker(checker)
-                    checker.parse_config(config[checker.name])
+                    checker.parse_config(checker_config)
                     print("Config parsing for {name} completed".format(name=checker.name))
             except KeyError as err:
                 print("Incomplete config. Missing: {key}".format(key=err))
@@ -242,7 +243,7 @@ def warnings_wrapper(args):
             warnings.activate_checker_name('coverity')
         if args.robot:
             robot_checker = warnings.activate_checker_name('robot')
-            robot_checker.checkers = [RobotSuiteChecker(args.name, verbose=args.verbose)]
+            robot_checker.parse_config({'suites': [{'name': args.name, 'min': 0, 'max': 0}]})
         if args.exact_warnings:
             if args.maxwarnings | args.minwarnings:
                 print("expected-warnings cannot be provided with maxwarnings or minwarnings")
