@@ -71,7 +71,7 @@ class TestLimits(TestCase):
         with self.assertRaises(ValueError) as c_m:
             self.warnings.set_minimum(11)
         self.assertEqual(str(c_m.exception),
-                         'Invalid argument: minimum limit must be higher than maximum limit (10); cannot set 11.')
+                         'Invalid argument: minimum limit must be lower than maximum limit (10); cannot set 11.')
 
     def test_invalid_maximum(self):
         self.warnings.set_maximum(10)
@@ -79,4 +79,4 @@ class TestLimits(TestCase):
         with self.assertRaises(ValueError) as c_m:
             self.warnings.set_maximum(9)
         self.assertEqual(str(c_m.exception),
-                         'Invalid argument: maximum limit must be lower than minimum limit (10); cannot set 9.')
+                         'Invalid argument: maximum limit must be higher than minimum limit (10); cannot set 9.')
