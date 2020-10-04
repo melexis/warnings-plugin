@@ -1,8 +1,10 @@
 from io import StringIO
 from unittest import TestCase
 
-from mlx.warnings import WarningsPlugin, RobotSuiteChecker
-from mock import patch
+from unittest.mock import patch
+
+from mlx.robot_checker import RobotSuiteChecker
+from mlx.warnings import WarningsPlugin
 
 
 class TestRobotWarnings(TestCase):
@@ -17,12 +19,12 @@ class TestRobotWarnings(TestCase):
         ]
 
     def test_no_warning(self):
-        with open('tests/junit_no_fail.xml', 'r') as xmlfile:
+        with open('tests/test_in/junit_no_fail.xml', 'r') as xmlfile:
             self.warnings.check(xmlfile.read())
         self.assertEqual(self.warnings.return_count(), 0)
 
     def test_single_warning(self):
-        with open('tests/robot_single_fail.xml', 'r') as xmlfile:
+        with open('tests/test_in/robot_single_fail.xml', 'r') as xmlfile:
             with patch('sys.stdout', new=StringIO()) as fake_out:
                 self.warnings.check(xmlfile.read())
                 count = self.warnings.return_count()
@@ -33,7 +35,7 @@ class TestRobotWarnings(TestCase):
         self.assertIn("Suite {!r}: 0 warnings found".format(self.suite2), stdout_log)
 
     def test_double_warning_and_verbosity(self):
-        with open('tests/robot_double_fail.xml', 'r') as xmlfile:
+        with open('tests/test_in/robot_double_fail.xml', 'r') as xmlfile:
             with patch('sys.stdout', new=StringIO()) as fake_out:
                 self.warnings.check(xmlfile.read())
                 count = self.warnings.return_count()
@@ -59,7 +61,7 @@ class TestRobotWarnings(TestCase):
             RobotSuiteChecker('test_warn_plugin_double_fail'),
             RobotSuiteChecker('test_warn_plugin_no_double_fail'),
         ]
-        with open('tests/junit_double_fail.xml', 'r') as xmlfile:
+        with open('tests/test_in/junit_double_fail.xml', 'r') as xmlfile:
             self.warnings.check(xmlfile.read())
             count = self.warnings.return_count()
         self.assertEqual(count, 2)

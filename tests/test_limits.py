@@ -1,6 +1,7 @@
 from unittest import TestCase
 
-from mlx.warnings import WarningsPlugin, DoxyChecker
+from mlx.regex_checker import DoxyChecker
+from mlx.warnings import WarningsPlugin
 
 
 class TestLimits(TestCase):
@@ -65,4 +66,17 @@ class TestLimits(TestCase):
                 self.assertEqual(self.warnings.return_check_limits(), 2)
             self.warnings.set_minimum(x)
 
+    def test_invalid_minimum(self):
+        self.warnings.set_maximum(10)
+        with self.assertRaises(ValueError) as c_m:
+            self.warnings.set_minimum(11)
+        self.assertEqual(str(c_m.exception),
+                         'Invalid argument: minimum limit must be lower than maximum limit (10); cannot set 11.')
 
+    def test_invalid_maximum(self):
+        self.warnings.set_maximum(10)
+        self.warnings.set_minimum(10)
+        with self.assertRaises(ValueError) as c_m:
+            self.warnings.set_maximum(9)
+        self.assertEqual(str(c_m.exception),
+                         'Invalid argument: maximum limit must be higher than minimum limit (10); cannot set 9.')

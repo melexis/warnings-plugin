@@ -1,8 +1,9 @@
 from io import StringIO
 from unittest import TestCase
 
+from unittest.mock import patch
+
 from mlx.warnings import WarningsPlugin
-from mock import patch
 
 
 class TestCoverityWarnings(TestCase):

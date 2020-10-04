@@ -1,9 +1,9 @@
 from io import StringIO
-from pathlib import Path
 from unittest import TestCase
 
+from unittest.mock import patch
+
 from mlx.warnings import WarningsPlugin
-from mock import patch
 
 
 class TestDoxygenWarnings(TestCase):
@@ -71,7 +71,7 @@ class TestDoxygenWarnings(TestCase):
         self.assertRegex(fake_out.getvalue(), duterr1)
 
     def test_doxygen_warnings_txt(self):
-        dut_file = Path(Path(__file__).parent, 'doxygen_warnings.txt')
-        with open(str(dut_file), 'r') as open_file:
+        dut_file = 'tests/test_in/doxygen_warnings.txt'
+        with open(dut_file, 'r') as open_file:
             self.warnings.check(open_file.read())
         self.assertEqual(self.warnings.return_count(), 22)

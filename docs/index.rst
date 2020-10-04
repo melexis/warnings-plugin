@@ -11,7 +11,7 @@ Contents
    contributing
    authors
 
-Indices and tables
+Indices and Tables
 ==================
 
 * :ref:`genindex`

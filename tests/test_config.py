@@ -1,13 +1,18 @@
 from io import StringIO
 from unittest import TestCase
+
 from unittest.mock import patch
 
-from mlx.warnings import (DoxyChecker, JUnitChecker, RobotChecker, SphinxChecker, WarningsPlugin, XMLRunnerChecker)
+from mlx.junit_checker import JUnitChecker
+from mlx.regex_checker import DoxyChecker, SphinxChecker, XMLRunnerChecker
+from mlx.robot_checker import RobotChecker
+
+from mlx.warnings import WarningsPlugin
 
 
 class TestConfig(TestCase):
     def test_configfile_parsing(self):
-        warnings = WarningsPlugin(config_file="tests/config_example.json")
+        warnings = WarningsPlugin(config_file="tests/test_in/config_example.json")
         warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
         self.assertEqual(warnings.return_count(), 0)
         warnings.check('<testcase classname="dummy_class" name="dummy_name"><failure message="some random message from test case" /></testcase>')
@@ -20,7 +25,7 @@ class TestConfig(TestCase):
         self.assertEqual(warnings.return_count(), 1)
 
     def test_configfile_parsing_exclude(self):
-        warnings = WarningsPlugin(verbose=True, config_file="tests/config_example_exclude.json")
+        warnings = WarningsPlugin(verbose=True, config_file="tests/test_in/config_example_exclude.json")
         with patch('sys.stdout', new=StringIO()) as verbose_output:
             warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
             self.assertEqual(warnings.return_count(), 0)
@@ -44,7 +49,7 @@ class TestConfig(TestCase):
         self.assertIn(warning_echo, verbose_output.getvalue())
 
     def test_configfile_parsing_include_priority(self):
-        warnings = WarningsPlugin(verbose=True, config_file="tests/config_example_exclude.json")
+        warnings = WarningsPlugin(verbose=True, config_file="tests/test_in/config_example_exclude.json")
         warnings.get_checker('sphinx').include_sphinx_deprecation()
         deprecation_warning = 'sphinx/application.py:402: RemovedInSphinx20Warning: app.info() is now deprecated. Use sphinx.util.logging instead.'
         warnings.check(deprecation_warning)
@@ -63,7 +68,7 @@ class TestConfig(TestCase):
         warnings.config_parser_json(tmpjson)
         warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
         self.assertEqual(warnings.return_count(), 0)
-        with open('tests/junit_single_fail.xml', 'r') as xmlfile:
+        with open('tests/test_in/junit_single_fail.xml', 'r') as xmlfile:
             warnings.check(xmlfile.read())
         self.assertEqual(warnings.return_count(), 0)
         warnings.check('ERROR [0.000s]: test_some_error_test (something.anything.somewhere)')
@@ -82,7 +87,7 @@ class TestConfig(TestCase):
         }
 
         warnings.config_parser_json(tmpjson)
-        with open('tests/junit_single_fail.xml', 'r') as xmlfile:
+        with open('tests/test_in/junit_single_fail.xml', 'r') as xmlfile:
             warnings.check(xmlfile.read())
         self.assertEqual(warnings.return_count(), 0)
         warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
@@ -109,7 +114,7 @@ class TestConfig(TestCase):
         self.assertEqual(warnings.return_count(), 0)
         warnings.check('ERROR [0.000s]: test_some_error_test (something.anything.somewhere)')
         self.assertEqual(warnings.return_count(), 0)
-        with open('tests/junit_single_fail.xml', 'r') as xmlfile:
+        with open('tests/test_in/junit_single_fail.xml', 'r') as xmlfile:
             warnings.check(xmlfile.read())
         self.assertEqual(warnings.return_count(), 1)
 
@@ -139,7 +144,7 @@ class TestConfig(TestCase):
         }
 
         warnings.config_parser_json(tmpjson)
-        with open('tests/junit_single_fail.xml', 'r') as xmlfile:
+        with open('tests/test_in/junit_single_fail.xml', 'r') as xmlfile:
             warnings.check(xmlfile.read())
         self.assertEqual(warnings.return_count(), 0)
         warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
@@ -169,7 +174,7 @@ class TestConfig(TestCase):
         self.assertEqual(warnings.return_count(), 0)
         warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
         self.assertEqual(warnings.return_count(), 1)
-        with open('tests/junit_single_fail.xml', 'r') as xmlfile:
+        with open('tests/test_in/junit_single_fail.xml', 'r') as xmlfile:
             warnings.check(xmlfile.read())
         self.assertEqual(warnings.return_count(), 2)
 
@@ -189,14 +194,14 @@ class TestConfig(TestCase):
         }
 
         warnings.config_parser_json(tmpjson)
-        with open('tests/junit_single_fail.xml', 'r') as xmlfile:
+        with open('tests/test_in/junit_single_fail.xml', 'r') as xmlfile:
             warnings.check(xmlfile.read())
         self.assertEqual(warnings.return_count(), 0)
         warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
         self.assertEqual(warnings.return_count(), 1)
         warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
         self.assertEqual(warnings.return_count(), 2)
-        with open('tests/junit_single_fail.xml', 'r') as xmlfile:
+        with open('tests/test_in/junit_single_fail.xml', 'r') as xmlfile:
             warnings.check(xmlfile.read())
         self.assertEqual(warnings.return_count(), 2)
         warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
@@ -411,3 +416,32 @@ class TestConfig(TestCase):
         self.assertEqual(warnings.get_checker(JUnitChecker().name).get_minimum(), 5)
         self.assertEqual(warnings.get_checker(XMLRunnerChecker().name).get_minimum(), 5)
         self.assertEqual(warnings.get_checker(RobotChecker().name).get_minimum(), 1)
+
+    def test_invalid_config(self):
+        warnings = WarningsPlugin()
+        tmpjson = {
+            'robot': {
+                'enabled': True,
+                'suites': [
+                    {
+                        'name': '',
+                        'min': 5,
+                        'max': 7,
+                    },
+                    {
+                        'name': 'dummy2',
+                        'min': 10,
+                        'max': 9,
+                    },
+                    {
+                        'name': 'dummy3',
+                        'min': 2,
+                        'max': 2,
+                    }
+                ]
+            }
+        }
+        with self.assertRaises(ValueError) as c_m:
+            warnings.config_parser_json(tmpjson)
+        self.assertEqual(str(c_m.exception),
+                         'Invalid argument: minimum limit must be lower than maximum limit (9); cannot set 10.')

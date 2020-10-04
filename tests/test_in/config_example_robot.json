@@ -29,13 +29,18 @@
         "suites": [
             {
                 "name": "Suite One",
+                "min": 0,
+                "max": 1
+            },
+            {
+                "name": "",
                 "min": 1,
                 "max": 1
             },
             {
                 "name": "Suite Two",
                 "min": 1,
-                "max": 1
+                "max": 2
             }
         ]
     }

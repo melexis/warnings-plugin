@@ -40,7 +40,7 @@
 
 
 ============================
-Command line warnings-plugin
+Command Line Warnings Plugin
 ============================
 
 Command-line alternative for https://github.com/jenkinsci/warnings-plugin.
@@ -77,7 +77,7 @@ arguments after that are discarded, because they are considered as command
 arguments (with or without command flag).
 
 ------------
-Pipe example
+Pipe Example
 ------------
 
 Below is one of the ways to redirect your stderr to stdout and save it inside
@@ -88,7 +88,7 @@ file.
     yourcommand 2>&1 | tee doc_log.txt
 
 ---------------
-Command example
+Command Example
 ---------------
 
 Below is the command example for the plugin (keep in mind that parse commands are
@@ -99,7 +99,7 @@ required).
     mlx-warnings --command <yourcommand>
 
 ---------------
-Running command
+Running Command
 ---------------
 
 There are few ways to run warnings plugin. If you are playing with Python on
@@ -128,7 +128,7 @@ The command returns (shell $? variable):
 - number of counted warnings (positive) when the counter number is not within those limit (1 in case of 0 counted warnings).
 
 ---------------------------
-Simple Command line options
+Simple Command Line Options
 ---------------------------
 
 Plugin has two forms of passing the arguments to checkers. The command line
@@ -137,7 +137,7 @@ individually, or the configuration file option which provides more flexibility
 and also traceability as it resides inside repository and provides option to
 adjust minimum and maximum per individual checker.
 
-Parse for Sphinx warnings
+Parse for Sphinx Warnings
 -------------------------
 
 After you saved your Sphinx warnings to the file, you can parse it with
@@ -158,7 +158,7 @@ command:
     python -m mlx.warnings --sphinx --command <commandforsphinx>
 
 
-Parse for Doxygen warnings
+Parse for Doxygen Warnings
 --------------------------
 
 After you saved your Doxygen warnings to the file, you can parse it with
@@ -210,7 +210,7 @@ the `--command` argument and execute the `cov-run-desktop` through
     python -m mlx.warnings --coverity --command <commandforcoverity>
 
 
-Parse for JUnit failures
+Parse for JUnit Failures
 ------------------------
 
 After you saved your JUnit XML output to the file, you can parse it with
@@ -231,7 +231,7 @@ command:
     python -m mlx.warnings --junit --command <commandforjunit>
 
 
-Parse for XMLRunner errors
+Parse for XMLRunner Errors
 --------------------------
 
 When you run XMLRunner_,
@@ -256,7 +256,7 @@ with command:
 
 .. _XMLRunner: https://github.com/xmlrunner/unittest-xml-reporting
 
-Parse for Robot Framework test failures
+Parse for Robot Framework Test Failures
 ---------------------------------------
 
 When running `Robot Framework`_ tests with `--xunit report.xml`_ as an input
@@ -282,7 +282,7 @@ limits can be configured for multiple test suites individually by means of a
 
 
 ----------------------------------
-Configuration file to pass options
+Configuration File to Pass Options
 ----------------------------------
 
 Beside command line, you can pass options through the configuration file.
@@ -350,7 +350,7 @@ path to configuration file
 
 
 -------------
-Other options
+Other Options
 -------------
 
 Since the plugin is under active development there are new Features added fast.
@@ -358,7 +358,7 @@ Important options currently include setting a minimum and a maximum number of wa
 that are still acceptable to return 0 (success). Requiring an exact amount of warnings
 using a single option is also possible. Look at scripts help for more details about the options.
 
-Exclude matches with regexes
+Exclude Matches With Regexes
 ----------------------------
 
 In case you want a checker to exclude certain matches, you can configure
@@ -382,7 +382,7 @@ An example configuration for the sphinx checker is given below:
         }
     }
 
-Exclude Sphinx deprecation warnings
+Exclude Sphinx Deprecation Warnings
 -----------------------------------
 
 There is a special flag `--exclude-sphinx-deprecation` that lets the sphinx checker exclude
@@ -392,7 +392,7 @@ regex to the configuration file as value for the `exclude` key for the sphinx ch
 
 
 =======================
-Issues and new Features
+Issues and New Features
 =======================
 
 In case you have any problems with usage of the plugin, please open an issue
