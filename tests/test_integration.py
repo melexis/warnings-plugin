@@ -183,7 +183,11 @@ class TestIntegration(TestCase):
 
     def test_robot_config(self):
         with patch('sys.stdout', new=StringIO()) as fake_out:
-            retval = warnings_wrapper(['--config', 'tests/test_in/config_example_robot.json', 'tests/test_in/robot_double_fail.xml'])
+            retval = warnings_wrapper([
+                '--config',
+                'tests/test_in/config_example_robot.json',
+                'tests/test_in/robot_double_fail.xml',
+            ])
         stdout_log = fake_out.getvalue()
 
         self.assertEqual(
@@ -192,13 +196,52 @@ class TestIntegration(TestCase):
                 "Suite 'Suite One': 1 warnings found",
                 "2 warnings found",
                 "Suite 'Suite Two': 1 warnings found",
+                "Suite 'b4d su1te name': 0 warnings found",
                 "Counted failures for test suite 'Suite One'.",
                 "Number of warnings (1) is between limits 0 and 1. Well done.",
                 "Counted failures for all test suites.",
                 "Number of warnings (2) is higher than the maximum limit (1). Returning error code 2.",
                 "Counted failures for test suite 'Suite Two'.",
                 "Number of warnings (1) is between limits 1 and 2. Well done.",
+                "Counted failures for test suite 'b4d su1te name'.",
+                "Number of warnings (0) is exactly as expected. Well done.",
             ]) + '\n',
             stdout_log
         )
         self.assertEqual(2, retval)
+
+    def test_robot_config_check_names(self):
+        self.maxDiff = None
+        with patch('sys.stdout', new=StringIO()) as fake_out:
+            with self.assertRaises(SystemExit) as cm_err:
+                warnings_wrapper([
+                    '--config',
+                    'tests/test_in/config_example_robot_invalid_suite.json',
+                    'tests/test_in/robot_double_fail.xml',
+                ])
+        stdout_log = fake_out.getvalue()
+
+        self.assertEqual(
+            '\n'.join([
+                "Config parsing for robot completed",
+                "ERROR: No suite with name 'b4d su1te name' found. Returning error code -1.",
+            ]) + '\n',
+            stdout_log
+        )
+        self.assertEqual(cm_err.exception.code, -1)
+
+    def test_robot_cli_check_name(self):
+        self.maxDiff = None
+        with patch('sys.stdout', new=StringIO()) as fake_out:
+            with self.assertRaises(SystemExit) as cm_err:
+                retval = warnings_wrapper(['--verbose', '--robot', '--name', 'Inv4lid Name',
+                                           'tests/test_in/robot_double_fail.xml'])
+        stdout_log = fake_out.getvalue()
+
+        self.assertEqual(
+            '\n'.join([
+                "ERROR: No suite with name 'Inv4lid Name' found. Returning error code -1.",
+            ]) + '\n',
+            stdout_log
+        )
+        self.assertEqual(cm_err.exception.code, -1)

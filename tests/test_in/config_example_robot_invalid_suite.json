@@ -26,9 +26,10 @@
     },
     "robot": {
         "enabled": true,
+        "check_suite_names": true,
         "suites": [
             {
-                "name": "Suite One",
+                "name": "b4d su1te name",
                 "min": 0,
                 "max": 1
             },
@@ -41,11 +42,6 @@
                 "name": "Suite Two",
                 "min": 1,
                 "max": 2
-            },
-            {
-                "name": "b4d su1te name",
-                "min": 0,
-                "max": 0
             }
         ]
     }
