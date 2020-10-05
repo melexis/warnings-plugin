@@ -214,11 +214,8 @@ class TestIntegration(TestCase):
         self.maxDiff = None
         with patch('sys.stdout', new=StringIO()) as fake_out:
             with self.assertRaises(SystemExit) as cm_err:
-                warnings_wrapper([
-                    '--config',
-                    'tests/test_in/config_example_robot_invalid_suite.json',
-                    'tests/test_in/robot_double_fail.xml',
-                ])
+                warnings_wrapper(['--config', 'tests/test_in/config_example_robot_invalid_suite.json',
+                                  'tests/test_in/robot_double_fail.xml'])
         stdout_log = fake_out.getvalue()
 
         self.assertEqual(
@@ -234,8 +231,8 @@ class TestIntegration(TestCase):
         self.maxDiff = None
         with patch('sys.stdout', new=StringIO()) as fake_out:
             with self.assertRaises(SystemExit) as cm_err:
-                retval = warnings_wrapper(['--verbose', '--robot', '--name', 'Inv4lid Name',
-                                           'tests/test_in/robot_double_fail.xml'])
+                warnings_wrapper(['--verbose', '--robot', '--name', 'Inv4lid Name',
+                                  'tests/test_in/robot_double_fail.xml'])
         stdout_log = fake_out.getvalue()
 
         self.assertEqual(
