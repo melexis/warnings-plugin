@@ -263,9 +263,12 @@ When running `Robot Framework`_ tests with `--xunit report.xml`_ as an input
 argument, an xUnit compatible result file is generated. The warnings-plugin can
 parse this file and check the amount of failures. By default, the test results
 of all test suites in the file are taken into account. If you only care about
-one specific test suite, you can use ``--name <<suite name>>``. The warning
+one specific test suite, you can use ``--name <<suite name>>``. If this suite
+name doesn't exist in the input file, an error is raised. The warning
 limits can be configured for multiple test suites individually by means of a
-`configuration file to pass options`_.
+`configuration file to pass options`_. If the setting ``"check_suite_names"``
+is false, no error is raised when a suite name doesn't exist in the
+input file. When this setting is missing, the default value ``true`` is used.
 
 .. code-block:: bash
 
@@ -318,6 +321,7 @@ Configuration file is in JSON format with a simple structure.
         },
         "robot": {
             "enabled": false,
+            "check_suite_names": true,
             "suites": [
                 {
                     "name": "My First Suite",

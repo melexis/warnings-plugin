@@ -243,7 +243,10 @@ def warnings_wrapper(args):
             warnings.activate_checker_name('coverity')
         if args.robot:
             robot_checker = warnings.activate_checker_name('robot')
-            robot_checker.parse_config({'suites': [{'name': args.name, 'min': 0, 'max': 0}]})
+            robot_checker.parse_config({
+                'suites': [{'name': args.name, 'min': 0, 'max': 0}],
+                'check_suite_names': True,
+            })
         if args.exact_warnings:
             if args.maxwarnings | args.minwarnings:
                 print("expected-warnings cannot be provided with maxwarnings or minwarnings")

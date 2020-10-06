@@ -84,21 +84,25 @@ class RobotChecker(WarningsChecker):
 
     def parse_config(self, config):
         self.checkers = []
+        check_suite_name = config.get('check_suite_names', True)
         for suite_config in config['suites']:
-            checker = RobotSuiteChecker(suite_config['name'], verbose=self.verbose)
+            checker = RobotSuiteChecker(suite_config['name'], check_suite_name=check_suite_name,
+                                        verbose=self.verbose)
             checker.parse_config(suite_config)
             self.checkers.append(checker)
 
 
 class RobotSuiteChecker(JUnitChecker):
-    def __init__(self, name, **kwargs):
+    def __init__(self, name, check_suite_name=False, **kwargs):
         ''' Constructor
 
         Args:
-            name: Name of the test suite to check the results of
+            name (str): Name of the test suite to check the results of
+            check_suite_name (bool): Whether to raise an error when no test in suite with given name is found
         '''
         super().__init__(**kwargs)
         self.name = name
+        self.check_suite_name = check_suite_name
 
     def return_count(self):
         ''' Getter function for the amount of warnings found
