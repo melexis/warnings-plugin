@@ -26,7 +26,6 @@
     },
     "robot": {
         "enabled": true,
-        "check_suite_names": true,
         "suites": [
             {
                 "name": "b4d su1te name",

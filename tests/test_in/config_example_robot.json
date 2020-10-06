@@ -26,6 +26,7 @@
     },
     "robot": {
         "enabled": true,
+        "check_suite_names": false,
         "suites": [
             {
                 "name": "Suite One",

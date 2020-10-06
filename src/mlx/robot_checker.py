@@ -84,7 +84,7 @@ class RobotChecker(WarningsChecker):
 
     def parse_config(self, config):
         self.checkers = []
-        check_suite_name = config.get('check_suite_names', False)
+        check_suite_name = config.get('check_suite_names', True)
         for suite_config in config['suites']:
             checker = RobotSuiteChecker(suite_config['name'], check_suite_name=check_suite_name,
                                         verbose=self.verbose)
