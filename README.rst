@@ -34,6 +34,10 @@
     :target: https://github.com/melexis/warnings-plugin/issues
     :alt: Contributions welcome
 
+.. image:: https://bestpractices.coreinfrastructure.org/projects/4368/badge
+    :target: https://bestpractices.coreinfrastructure.org/projects/4368
+    :alt: CII Best Practices
+
 
 ============================
 Command line warnings-plugin
