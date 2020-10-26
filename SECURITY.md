@@ -12,5 +12,5 @@ Currently supported versions are 3.0.0 and 1.3.1 . Please use 3.0.0 as default s
 
 ## Reporting a Vulnerability
 
-Please report all vulnerabilities thought [GitHub Issue Tracker](https://github.com/melexis/warnings-plugin/issues). 
-Make sure you include ways to replicate it and if possible propose a Pull Request with a potential fix.
+Please report all vulnerabilities through [GitHub Issue Tracker](https://github.com/melexis/warnings-plugin/issues).
+Make sure you include ways to replicate it and, if possible, propose a Pull Request with a potential fix.
