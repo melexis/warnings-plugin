@@ -26,7 +26,7 @@ Documentation
 -------------
 Basic documentation is expected, but every bit of detail you can include will help in
 the future. It might look obvious, but it will also help person reviewing the code to
-correctly understand the intended functionality, so that he can focus more on implementation
+correctly understand the intended functionality, so that he/she can focus more on implementation
 aspect.
 
 Code Review
