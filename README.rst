@@ -64,7 +64,9 @@ Every release is uploaded to pip so it can be installed simply by using pip.
     # Python3
     pip3 install mlx.warnings
 
-You can find more details in `Installation guide <docs/installation.rst>`_
+You can find more details in the `Installation guide`_.
+
+.. _`Installation guide`: https://melexis.github.io/warnings-plugin/installation.html
 
 =====
 Usage
