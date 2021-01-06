@@ -1,7 +1,7 @@
 import sys
+import xml.etree.ElementTree as ET
 
 from junitparser import Error, Failure, JUnitXml
-from lxml import etree as ET
 
 from mlx.warnings_checker import WarningsChecker
 

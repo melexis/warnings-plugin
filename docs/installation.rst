@@ -16,10 +16,5 @@ Installation is as simple as:
     git clone https://github.com/melexis/warnings-plugin.git
     pip3 install -e warnings-plugin
 
-.. note::
-    mlx.warnings has a dependency to lxml, which may require your to install
-    additional libraries on Linux. If this is the case, please refer to the
-    `installation guide of lxml <https://lxml.de/installation.html>`_.
-
 So far we are not aware of any problems with installation of the plugin, but in
 case you have any please open an Issue.
