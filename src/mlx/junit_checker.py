@@ -23,17 +23,20 @@ class JUnitChecker(WarningsChecker):
             root_input = ET.fromstring(content.encode('utf-8'))
             testsuites_root = self.prepare_tree(root_input)
             suites = JUnitXml.fromelem(testsuites_root)
+            amount_to_exclude = 0
             for suite in suites:
                 for testcase in tuple(suite):
                     if type(self) != JUnitChecker and self.name and not testcase.classname.endswith(self.name):
                         suite.remove_testcase(testcase)
                     elif isinstance(testcase.result, (Failure, Error)):
+                        if self._is_excluded(testcase.result.message):
+                            amount_to_exclude += 1
                         self.print_when_verbose('{classname}.{testname}'.format(classname=testcase.classname,
                                                                                 testname=testcase.name))
                     if testcase.classname.endswith(self.name):
                         is_valid_suite_name = True
             suites.update_statistics()
-            self.count += suites.failures + suites.errors
+            self.count += suites.failures + suites.errors - amount_to_exclude
             if not is_valid_suite_name and hasattr(self, 'check_suite_name') and self.check_suite_name:
                 print('ERROR: No suite with name {!r} found. Returning error code -1.'.format(self.name))
                 sys.exit(-1)
