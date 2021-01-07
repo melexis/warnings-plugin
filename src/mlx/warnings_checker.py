@@ -1,5 +1,4 @@
 import abc
-import re
 
 
 class WarningsChecker:
@@ -33,18 +32,18 @@ class WarningsChecker:
         return
 
     def add_patterns(self, regexes, pattern_container):
-        ''' Adds regexes as patterns to the specified container
+        ''' Raises an Exception to explain that this feature is not available for the targeted checker
 
         Args:
             regexes (list[str]|None): List of regexes to add
             pattern_container (list[re.Pattern]): Target storage container for patterns
+
+        Raises:
+            Exception: Feature of regexes to include/exclude warnings is only configurable for the RegexChecker classes
         '''
         if regexes:
-            if not isinstance(regexes, list):
-                raise TypeError("Expected a list value for exclude key in configuration file; got {}"
-                                .format(regexes.__class__.__name__))
-            for regex in regexes:
-                pattern_container.append(re.compile(regex))
+            raise Exception("Feature of regexes to include/exclude warnings is not configurable for the {}."
+                            .format(self.__class__.__name__))
 
     def set_maximum(self, maximum):
         ''' Setter function for the maximum amount of warnings
@@ -147,29 +146,3 @@ class WarningsChecker:
         self.set_maximum(int(config['max']))
         self.set_minimum(int(config['min']))
         self.add_patterns(config.get("exclude"), self.exclude_patterns)
-
-    def _is_excluded(self, content):
-        ''' Checks if the specific text must be excluded based on the configured regexes for exclusion and inclusion.
-
-        Inclusion has priority over exclusion.
-
-        Args:
-            content (str): The content to parse
-
-        Returns:
-            bool: True for exclusion, False for inclusion
-        '''
-        matching_exclude_pattern = self._search_patterns(content, self.exclude_patterns)
-        if not self._search_patterns(content, self.include_patterns) and matching_exclude_pattern:
-            self.print_when_verbose("Excluded {!r} because of configured regex {!r}"
-                                    .format(content, matching_exclude_pattern))
-            return True
-        return False
-
-    @staticmethod
-    def _search_patterns(content, patterns):
-        ''' Returns the regex of the first pattern that matches specified content, None if nothing matches '''
-        for pattern in patterns:
-            if pattern.search(content):
-                return pattern.pattern
-        return None

@@ -125,40 +125,13 @@ class TestConfig(TestCase):
                 'enabled': True,
                 'min': 0,
                 'max': 0,
-                "exclude": ["able to trace this random failure msg"]
+                "exclude": ["junit_checker_is_not_a_regex_checker"]
             }
         }
-        warnings.config_parser_json(tmpjson)
-        with open('tests/test_in/junit_single_fail.xml', 'r') as xmlfile:
-            warnings.check(xmlfile.read())
-        self.assertEqual(warnings.return_count(), 0)
-
-    def test_partial_junit_config_parsing_exclude_regex(self):
-        warnings = WarningsPlugin()
-        tmpjson = {
-            'robot': {
-                'enabled': True,
-                'suites': [
-                    {
-                        'name': 'Suite One',
-                        'min': 0,
-                        'max': 0,
-                        "exclude": ["does not exist"]  # excludes failure in suite
-                    },
-                    {
-                        'name': 'Suite Two',
-                        'min': 1,
-                        'max': 1,
-                        "exclude": ["does not exist"]  # no match for failure in suite
-                    }
-                ]
-            }
-        }
-        warnings.config_parser_json(tmpjson)
-        with open('tests/test_in/robot_double_fail.xml', 'r') as xmlfile:
-            warnings.check(xmlfile.read())
-        self.assertEqual(warnings.return_count(), 1)
-        self.assertEqual(warnings.return_check_limits(), 0)
+        with self.assertRaises(Exception) as exc:
+            warnings.config_parser_json(tmpjson)
+        self.assertEqual(str(exc.exception),
+                         "Feature of regexes to include/exclude warnings is not configurable for the JUnitChecker.")
 
     def test_partial_xmlrunner_config_parsing(self):
         warnings = WarningsPlugin()
