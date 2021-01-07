@@ -50,6 +50,8 @@ jobs:
     - python: '3.8'
       env:
         - TOXENV=py38,codecov
+    - python: '3.8'
+      env:
         - TOXENV=test-lxml
     # Stage COVERITY
     - stage: coverity
