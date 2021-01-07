@@ -48,10 +48,10 @@ class JUnitChecker(WarningsChecker):
         ''' Prepares the tree element by adding a testsuites element as root when missing (to please JUnitXml)
 
         Args:
-            root_input (lxml.etree._Element): Top-level XML element from input file
+            root_input (lxml.etree._Element/xml.etree.ElementTree.Element): Top-level XML element from input file
 
         Returns:
-            lxml.etree._Element: Top-level XML element with testsuites tag
+            lxml.etree._Element/xml.etree.ElementTree.Element: Top-level XML element with testsuites tag
         '''
         if root_input.tag == 'testsuites':
             testsuites_root = root_input
