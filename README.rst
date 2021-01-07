@@ -373,7 +373,6 @@ Exclude Matches With Regexes
 
 In case you want a checker to exclude certain matches, you can configure
 one or more regular expressions in the configuration file on a per-checker basis.
-(Only sphinx, doxygen and xmlrunner checkers are currently supported by this feature.)
 If a pattern of a regex to exclude is found in a match of the checker's regex, the checker
 won't count that match. Add the regex(es) as a list of string values for the `exclude` key.
 An example configuration for the sphinx checker is given below:
