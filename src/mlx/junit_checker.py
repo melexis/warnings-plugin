@@ -19,25 +19,16 @@ class JUnitChecker(WarningsChecker):
             content (str): The content to parse
         '''
         try:
-            is_valid_suite_name = False
             root_input = ET.fromstring(content.encode('utf-8'))
             testsuites_root = self.prepare_tree(root_input)
             suites = JUnitXml.fromelem(testsuites_root)
             amount_to_exclude = 0
             for suite in suites:
-                for testcase in tuple(suite):
-                    if type(self) != JUnitChecker and self.name and not testcase.classname.endswith(self.name):
-                        suite.remove_testcase(testcase)
-                    elif isinstance(testcase.result, (Failure, Error)):
-                        if self._is_excluded(testcase.result.message):
-                            amount_to_exclude += 1
-                        self.print_when_verbose('{classname}.{testname}'.format(classname=testcase.classname,
-                                                                                testname=testcase.name))
-                    if testcase.classname.endswith(self.name):
-                        is_valid_suite_name = True
+                for testcase in suite:
+                    amount_to_exclude += self._check_testcase(testcase)
             suites.update_statistics()
             self.count += suites.failures + suites.errors - amount_to_exclude
-            if not is_valid_suite_name and hasattr(self, 'check_suite_name') and self.check_suite_name:
+            if not getattr(self, 'is_valid_suite_name', True) and getattr(self, 'check_suite_name', False):
                 print('ERROR: No suite with name {!r} found. Returning error code -1.'.format(self.name))
                 sys.exit(-1)
         except ET.ParseError as err:
@@ -59,3 +50,22 @@ class JUnitChecker(WarningsChecker):
             testsuites_root = ET.Element("testsuites")
             testsuites_root.append(root_input)
         return testsuites_root
+
+    def _check_testcase(self, testcase):
+        """ Handles the check of a test case element by checking if the result is a failure/error.
+
+        If it is to be excluded by a configured regex, 1 is returned.
+        Otherwise, when in verbose mode, the suite name and test case name are printed.
+
+        Args:
+            testcase (junitparser.TestCase): Test case element to check for failure or error
+
+        Returns:
+            int: 1 if a failure/error is to be subtracted from the final count, 0 otherwise
+        """
+        if isinstance(testcase.result, (Failure, Error)):
+            if self._is_excluded(testcase.result.message):
+                return 1
+            self.print_when_verbose('{classname}.{testname}'.format(classname=testcase.classname,
+                                                                    testname=testcase.name))
+        return 0
