@@ -1,4 +1,7 @@
-import xml.etree.ElementTree as ET
+try:
+    from lxml import etree
+except ImportError:
+    from xml.etree import ElementTree as etree
 
 from junitparser import Error, Failure, JUnitXml
 
@@ -15,7 +18,7 @@ class JUnitChecker(WarningsChecker):
             content (str): The content to parse
         '''
         try:
-            root_input = ET.fromstring(content.encode('utf-8'))
+            root_input = root_input = etree.fromstring(content.encode('utf-8'))
             testsuites_root = self.prepare_tree(root_input)
             suites = JUnitXml.fromelem(testsuites_root)
             amount_to_exclude = 0
@@ -24,7 +27,7 @@ class JUnitChecker(WarningsChecker):
                     amount_to_exclude += self._check_testcase(testcase)
             suites.update_statistics()
             self.count += suites.failures + suites.errors - amount_to_exclude
-        except ET.ParseError as err:
+        except etree.ParseError as err:
             print(err)
 
     @staticmethod
@@ -32,15 +35,15 @@ class JUnitChecker(WarningsChecker):
         ''' Prepares the tree element by adding a testsuites element as root when missing (to please JUnitXml)
 
         Args:
-            root_input (lxml.etree._Element): Top-level XML element from input file
+            root_input (lxml.etree._Element/xml.etree.ElementTree.Element): Top-level XML element from input file
 
         Returns:
-            lxml.etree._Element: Top-level XML element with testsuites tag
+            lxml.etree._Element/xml.etree.ElementTree.Element: Top-level XML element with testsuites tag
         '''
         if root_input.tag == 'testsuites':
             testsuites_root = root_input
         else:
-            testsuites_root = ET.Element("testsuites")
+            testsuites_root = etree.Element("testsuites")
             testsuites_root.append(root_input)
         return testsuites_root
 
