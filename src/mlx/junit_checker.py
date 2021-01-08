@@ -1,4 +1,3 @@
-import sys
 import xml.etree.ElementTree as ET
 
 from junitparser import Error, Failure, JUnitXml
@@ -28,9 +27,6 @@ class JUnitChecker(WarningsChecker):
                     amount_to_exclude += self._check_testcase(testcase)
             suites.update_statistics()
             self.count += suites.failures + suites.errors - amount_to_exclude
-            if not getattr(self, 'is_valid_suite_name', True) and getattr(self, 'check_suite_name', False):
-                print('ERROR: No suite with name {!r} found. Returning error code -1.'.format(self.name))
-                sys.exit(-1)
         except ET.ParseError as err:
             print(err)
 

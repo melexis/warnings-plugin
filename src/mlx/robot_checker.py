@@ -1,3 +1,5 @@
+import sys
+
 from junitparser import Error, Failure
 
 from mlx.junit_checker import JUnitChecker
@@ -135,3 +137,19 @@ class RobotSuiteChecker(JUnitChecker):
             self.is_valid_suite_name = True
             return super()._check_testcase(testcase)
         return int(self.name and isinstance(testcase.result, (Failure, Error)))
+
+    def check(self, content):
+        """ Function for counting the number of JUnit failures in a specific text
+
+        The test cases with a ``classname`` that does not end with the ``name`` class attribute are ignored.
+
+        Args:
+            content (str): The content to parse
+
+        Raises:
+            SystemExit: No suite with name ``self.name`` found. Returning error code -1.
+        """
+        super().check(content)
+        if not self.is_valid_suite_name and self.check_suite_name:
+            print('ERROR: No suite with name {!r} found. Returning error code -1.'.format(self.name))
+            sys.exit(-1)
