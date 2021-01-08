@@ -133,7 +133,7 @@ class TestConfig(TestCase):
             warnings.check(xmlfile.read())
         self.assertEqual(warnings.return_count(), 0)
 
-    def test_partial_robot_config_parsing_exclude_regex(self):
+    def test_partial_junit_config_parsing_exclude_regex(self):
         warnings = WarningsPlugin()
         tmpjson = {
             'robot': {
