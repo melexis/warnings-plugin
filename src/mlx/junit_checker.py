@@ -11,9 +11,6 @@ class JUnitChecker(WarningsChecker):
     def check(self, content):
         ''' Function for counting the number of JUnit failures in a specific text
 
-        If this class is subclassed, the test cases with a ``classname`` that does
-        not end with the ``name`` class attribute are ignored.
-
         Args:
             content (str): The content to parse
         '''
