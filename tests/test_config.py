@@ -130,6 +130,7 @@ class TestConfig(TestCase):
         }
         with self.assertRaises(TypeError) as c_m:
             warnings.config_parser_json(tmpjson)
+        self.assertEqual(str(c_m.exception), "Expected a list value for exclude key in configuration file; got str")
 
     def test_partial_junit_config_parsing_exclude_regex(self):
         warnings = WarningsPlugin()
