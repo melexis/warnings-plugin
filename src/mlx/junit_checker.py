@@ -18,7 +18,7 @@ class JUnitChecker(WarningsChecker):
             content (str): The content to parse
         '''
         try:
-            root_input = root_input = etree.fromstring(content.encode('utf-8'))
+            root_input = etree.fromstring(content.encode('utf-8'))
             testsuites_root = self.prepare_tree(root_input)
             suites = JUnitXml.fromelem(testsuites_root)
             amount_to_exclude = 0
