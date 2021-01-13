@@ -1,3 +1,7 @@
+import sys
+
+from junitparser import Error, Failure
+
 from mlx.junit_checker import JUnitChecker
 from mlx.warnings_checker import WarningsChecker
 
@@ -103,6 +107,7 @@ class RobotSuiteChecker(JUnitChecker):
         super().__init__(**kwargs)
         self.name = name
         self.check_suite_name = check_suite_name
+        self.is_valid_suite_name = False
 
     def return_count(self):
         ''' Getter function for the amount of warnings found
@@ -115,3 +120,36 @@ class RobotSuiteChecker(JUnitChecker):
             msg = "Suite {!r}: {}".format(self.name, msg)
         print(msg)
         return self.count
+
+    def _check_testcase(self, testcase):
+        """ Handles the check of a test case element by checking if the result is a failure/error.
+
+        If it is to be excluded by a configured regex, or the test case does not belong to the suite, 1 is returned.
+        Otherwise, when in verbose mode, the suite name and test case name are printed.
+
+        Args:
+            testcase (junitparser.TestCase): Test case element to check for failure or error
+
+        Returns:
+            int: 1 if a failure/error is to be subtracted from the final count, 0 otherwise
+        """
+        if testcase.classname.endswith(self.name):
+            self.is_valid_suite_name = True
+            return super()._check_testcase(testcase)
+        return int(self.name and isinstance(testcase.result, (Failure, Error)))
+
+    def check(self, content):
+        """ Function for counting the number of JUnit failures in a specific text
+
+        The test cases with a ``classname`` that does not end with the ``name`` class attribute are ignored.
+
+        Args:
+            content (str): The content to parse
+
+        Raises:
+            SystemExit: No suite with name ``self.name`` found. Returning error code -1.
+        """
+        super().check(content)
+        if not self.is_valid_suite_name and self.check_suite_name:
+            print('ERROR: No suite with name {!r} found. Returning error code -1.'.format(self.name))
+            sys.exit(-1)

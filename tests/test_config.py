@@ -118,6 +118,20 @@ class TestConfig(TestCase):
             warnings.check(xmlfile.read())
         self.assertEqual(warnings.return_count(), 1)
 
+    def test_exclude_feature_type_error(self):
+        warnings = WarningsPlugin()
+        tmpjson = {
+            'junit': {
+                'enabled': True,
+                'min': 0,
+                'max': 0,
+                "exclude": "able to trace this random failure msg"
+            }
+        }
+        with self.assertRaises(TypeError) as c_m:
+            warnings.config_parser_json(tmpjson)
+        self.assertEqual(str(c_m.exception), "Expected a list value for exclude key in configuration file; got str")
+
     def test_partial_junit_config_parsing_exclude_regex(self):
         warnings = WarningsPlugin()
         tmpjson = {
@@ -125,13 +139,82 @@ class TestConfig(TestCase):
                 'enabled': True,
                 'min': 0,
                 'max': 0,
-                "exclude": ["junit_checker_is_not_a_regex_checker"]
+                "exclude": ["able to trace this random failure msg"]
             }
         }
-        with self.assertRaises(Exception) as exc:
-            warnings.config_parser_json(tmpjson)
-        self.assertEqual(str(exc.exception),
-                         "Feature of regexes to include/exclude warnings is not configurable for the JUnitChecker.")
+        warnings.config_parser_json(tmpjson)
+        with open('tests/test_in/junit_single_fail.xml', 'r') as xmlfile:
+            warnings.check(xmlfile.read())
+        self.assertEqual(warnings.return_count(), 0)
+
+    def test_partial_robot_config_parsing_exclude_regex(self):
+        warnings = WarningsPlugin(verbose=True)
+        tmpjson = {
+            'robot': {
+                'enabled': True,
+                'suites': [
+                    {
+                        'name': 'Suite One',
+                        'min': 0,
+                        'max': 0,
+                        "exclude": ["does not exist"]  # excludes failure in suite
+                    },
+                    {
+                        'name': 'Suite Two',
+                        'min': 1,
+                        'max': 1,
+                        "exclude": ["does not exist"]  # no match for failure in suite
+                    }
+                ]
+            }
+        }
+        warnings.config_parser_json(tmpjson)
+        with open('tests/test_in/robot_double_fail.xml', 'r') as xmlfile:
+            with patch('sys.stdout', new=StringIO()) as verbose_output:
+                warnings.check(xmlfile.read())
+                count = warnings.return_count()
+        self.assertEqual(count, 1)
+        self.assertEqual(warnings.return_check_limits(), 0)
+        self.assertEqual(
+            '\n'.join([
+                r"Excluded 'Directory &#x27;C:\\nonexistent&#x27; does not exist.' because of configured regex 'does not exist'",
+                "Suite One &amp; Suite Two.Suite Two.Another test",
+                "Suite 'Suite One': 0 warnings found",
+                "Suite 'Suite Two': 1 warnings found",
+            ]) + '\n',
+            verbose_output.getvalue()
+        )
+
+    def test_partial_robot_config_empty_name(self):
+        warnings = WarningsPlugin(verbose=True)
+        tmpjson = {
+            'robot': {
+                'enabled': True,
+                'suites': [
+                    {
+                        'name': '',
+                        'min': 1,
+                        'max': 1,
+                        "exclude": ["does not exist"]  # excludes 1 out of 2 failures in suites
+                    }
+                ]
+            }
+        }
+        warnings.config_parser_json(tmpjson)
+        with open('tests/test_in/robot_double_fail.xml', 'r') as xmlfile:
+            with patch('sys.stdout', new=StringIO()) as verbose_output:
+                warnings.check(xmlfile.read())
+                count = warnings.return_count()
+        self.assertEqual(count, 1)
+        self.assertEqual(warnings.return_check_limits(), 0)
+        self.assertEqual(
+            '\n'.join([
+                r"Excluded 'Directory &#x27;C:\\nonexistent&#x27; does not exist.' because of configured regex 'does not exist'",
+                "Suite One &amp; Suite Two.Suite Two.Another test",
+                "1 warnings found",
+            ]) + '\n',
+            verbose_output.getvalue()
+        )
 
     def test_partial_xmlrunner_config_parsing(self):
         warnings = WarningsPlugin()

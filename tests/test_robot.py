@@ -65,3 +65,12 @@ class TestRobotWarnings(TestCase):
             self.warnings.check(xmlfile.read())
             count = self.warnings.return_count()
         self.assertEqual(count, 2)
+
+    def test_check_suite_name(self):
+        self.dut.checkers = [
+            RobotSuiteChecker('nonexistent_suite_name', check_suite_name=True),
+        ]
+        with open('tests/test_in/robot_double_fail.xml', 'r') as xmlfile:
+            with self.assertRaises(SystemExit) as c_m:
+                self.warnings.check(xmlfile.read())
+        self.assertEqual(c_m.exception.code, -1)
