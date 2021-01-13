@@ -1,0 +1,4 @@
+readme.rst:0: [redirected with Found] https://bestpractices.coreinfrastructure.org/projects/4368 to https://bestpractices.coreinfrastructure.org/en/projects/4368
+readme.rst:0: [redirected with Found] https://codeclimate.com/github/melexis/warnings-plugin/badges/gpa.svg to https://api.codeclimate.com/v1/badges/c287cf98885a503c8a09/maintainability.svg
+readme.rst:0: [redirected permanently] https://travis-ci.org/melexis/warnings-plugin.svg?branch=master to https://api.travis-ci.org/melexis/warnings-plugin.svg?branch=master
+readme.rst:0: [redirected permanently] https://badge.fury.io/py/mlx.warnings to https://pypi.org/project/mlx.warnings/3.1.1/

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Software Design &#8212; warning-plugin 3.1.2.dev14+g6f821f5 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    
+    <script src="_static/sidebar.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contribution Guide" href="contributing.html" />
+    <link rel="prev" title="Installation Guide" href="installation.html" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <link rel="shortcut icon" type="image/png" href="_static/favicon.png" />
+    <meta name="viewport" content="width=device-width,initial-scale=0.8">
+    
+    
+
+  </head><body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
+        <li><a href="index.html">warning-plugin-3.1.2.dev14+g6f821f5</a> &#187;</li> 
+      </ul>
+    </div>
+    
+        <div class="badge">
+            <a href="https://github.com/melexis/warnings-plugin">Fork me on GitHub</a>
+            <img src="_static/right-red@2x.png">
+        </div>
+    
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="software-design">
+<span id="id1"></span><h1>Software Design<a class="headerlink" href="#software-design" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="class-diagram">
+<span id="id2"></span><h2>Class Diagram<a class="headerlink" href="#class-diagram" title="Permalink to this headline">¶</a></h2>
+<p class="plantuml">
+<img src="_images/plantuml-727dc255d2fc4aea0b3e8737f180975bcc53ad53.png" alt="&#64;startuml
+class WarningsPlugin {
+    #checkerList : WarningsChecker
+    +__init__(sphinx=False, doxygen=False, junit=False, verbose=False)
+}
+
+class WarningsChecker {
+    #min_count = 0
+    #max_count = 0
+    #count = 0
+    #verbose = False
+
+    #{abstract} __init__(name, verbose=False)
+    +set_limits(min_count=0, max_count=0,
+    +{abstract}check(content)
+    +get_count()
+}
+
+class RegexChecker {
+    #{abstract} __init__(name, regex, verbose=False)
+    +check(content)
+}
+
+class SphinxChecker {
+    #{static} String name
+    #{static} String regex
+    +__init__(verbose=False)
+}
+
+class DoxyChecker {
+    #{static} String name
+    #{static} String regex
+    +__init__(verbose=False)
+}
+
+class JUnitChecker {
+    #{static} String name
+    +__init__(verbose=False)
+    +check(content)
+}
+
+WarningsPlugin o-- WarningsChecker
+WarningsChecker &lt;|-- RegexChecker
+RegexChecker &lt;|-- SphinxChecker
+RegexChecker &lt;|-- DoxyChecker
+WarningsChecker &lt;|-- JUnitChecker
+
+&#64;enduml"/>
+</p>
+</div>
+<div class="section" id="string-handling">
+<h2>String Handling<a class="headerlink" href="#string-handling" title="Permalink to this headline">¶</a></h2>
+<p>Convention is to use plain python strings everywhere. Where needed the strings can be converted to anything else.</p>
+<p>Example: junitparser expects byte array objects, so we encode our string right before passing it to junitparser.</p>
+</div>
+<div class="section" id="module-mlx.warnings">
+<span id="instrument-module"></span><h2>Instrument Module<a class="headerlink" href="#module-mlx.warnings" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="mlx.warnings.WarningsPlugin">
+<em class="property">class </em><code class="sig-prename descclassname">mlx.warnings.</code><code class="sig-name descname">WarningsPlugin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">config_file</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="mlx.warnings.WarningsPlugin.activate_checker">
+<code class="sig-name descname">activate_checker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">checker</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin.activate_checker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.activate_checker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Activate additional checkers after initialization</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>checker</strong> (<em>WarningsChecker</em>) – checker object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mlx.warnings.WarningsPlugin.activate_checker_name">
+<code class="sig-name descname">activate_checker_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin.activate_checker_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.activate_checker_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Activates checker by name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – checker name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>WarningsChecker</em> – activated checker object, or None when no checker with the given name exists</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mlx.warnings.WarningsPlugin.check">
+<code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for counting the number of warnings in a specific text</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>content</strong> (<em>str</em>) – The text to parse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mlx.warnings.WarningsPlugin.config_parser_json">
+<code class="sig-name descname">config_parser_json</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin.config_parser_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.config_parser_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parsing configuration dict extracted by previously opened JSON file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config</strong> (<em>dict</em>) – JSON dump of the configuration</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mlx.warnings.WarningsPlugin.get_checker">
+<code class="sig-name descname">get_checker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin.get_checker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.get_checker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get checker by name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – checker name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>checker object (WarningsChecker)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mlx.warnings.WarningsPlugin.return_check_limits">
+<code class="sig-name descname">return_check_limits</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin.return_check_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.return_check_limits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for determining the return value of the script</p>
+<p>If the name parameter is set, this function will check (and return) the
+return value of that checker. If not, this function checks whether the
+warnings for each registered checker are within the configured limits.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>WarningsChecker</em>) – The checker for which to check the return value</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><em>int</em> –</p>
+<dl class="simple">
+<dt>0 if the amount of warnings is within limits, the count of warnings otherwise</dt><dd><p>(or 1 in case of a count of 0 warnings)</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mlx.warnings.WarningsPlugin.return_count">
+<code class="sig-name descname">return_count</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin.return_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.return_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter function for the amount of found warnings</p>
+<p>If the name parameter is set, this function will return the amount of
+warnings found by that checker. If not, the function will return the sum
+of the warnings found by all registered checkers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>WarningsChecker</em>) – The checker for which to return the amount of warnings (if set)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>int</em> – Amount of found warnings</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mlx.warnings.WarningsPlugin.set_maximum">
+<code class="sig-name descname">set_maximum</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">maximum</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin.set_maximum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.set_maximum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setter function for the maximum amount of warnings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>maximum</strong> (<em>int</em>) – maximum amount of warnings allowed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mlx.warnings.WarningsPlugin.set_minimum">
+<code class="sig-name descname">set_minimum</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">minimum</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin.set_minimum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.set_minimum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setter function for the minimum amount of warnings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>minimum</strong> (<em>int</em>) – minimum amount of warnings allowed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mlx.warnings.WarningsPlugin.toggle_printout">
+<code class="sig-name descname">toggle_printout</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">printout</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin.toggle_printout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.toggle_printout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Toggle printout of all the parsed content</p>
+<p>Useful for command input where we want to print content as well</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>printout</strong> (<em>bool</em>) – True enables the printout, False provides more silent mode</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="mlx.warnings.main">
+<code class="sig-prename descclassname">mlx.warnings.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlx.warnings.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="mlx.warnings.warnings_command">
+<code class="sig-prename descclassname">mlx.warnings.</code><code class="sig-name descname">warnings_command</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">warnings</span></em>, <em class="sig-param"><span class="n">cmd</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#warnings_command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlx.warnings.warnings_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute command to obtain input for parsing for warnings</p>
+<p>Usually log files are output of the commands. To avoid this additional step
+this function runs a command instead and parses the stderr and stdout of the
+command for warnings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>warnings</strong> (<em>WarningsPlugin</em>) – Object for warnings where errors should be logged</p></li>
+<li><p><strong>cmd</strong> (<em>list</em>) – List of commands (str), which should be executed to obtain input for parsing</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>int</em> – Return value of executed command(s)</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>OSError</strong> – When program is not installed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mlx.warnings.warnings_logfile">
+<code class="sig-prename descclassname">mlx.warnings.</code><code class="sig-name descname">warnings_logfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">warnings</span></em>, <em class="sig-param"><span class="n">log</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#warnings_logfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlx.warnings.warnings_logfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse logfile for warnings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>warnings</strong> (<em>WarningsPlugin</em>) – Object for warnings where errors should be logged</p></li>
+<li><p><strong>log</strong> – Logfile for parsing</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>0</em> – Log files existed and are parsed successfully
+1: Log files did not exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mlx.warnings.warnings_wrapper">
+<code class="sig-prename descclassname">mlx.warnings.</code><code class="sig-name descname">warnings_wrapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">args</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#warnings_wrapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlx.warnings.warnings_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="sidebar-anchor"></a>
+    
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Command Line Warnings Plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html#issues-and-new-features">Issues and New Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html#contribute">Contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Software Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#class-diagram">Class Diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#string-handling">String Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-mlx.warnings">Instrument Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contribution Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#getting-started">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#reporting-issues-or-requesting-a-new-feature">Reporting Issues or Requesting a New Feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/design.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="contributing.html" title="Contribution Guide"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation Guide"
+             accesskey="P">previous</a> |</li>
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017-2019, Bavo Van Achte.
+      Last updated on Jan 13, 2021.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>
