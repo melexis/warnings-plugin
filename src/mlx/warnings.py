@@ -186,6 +186,16 @@ class WarningsPlugin:
             except KeyError as err:
                 print("Incomplete config. Missing: {key}".format(key=err))
 
+    def write_counted_warnings(self, out_file):
+        ''' Writes counted warnings to the given file
+
+        Args:
+            out_file (str): Location for the output file
+        '''
+        with open(out_file, 'w', encoding='utf-8') as open_file:
+            for checker in self.activated_checkers.values():
+                open_file.write("\n".join(checker.counted_warnings) + "\n")
+
 
 def warnings_wrapper(args):
     parser = argparse.ArgumentParser(prog='mlx-warnings')
@@ -209,6 +219,8 @@ def warnings_wrapper(args):
                         help='Config file in JSON format provides toggle of checkers and their limits')
     group2.add_argument('--include-sphinx-deprecation', dest='include_sphinx_deprecation', action='store_true',
                         help="Sphinx checker will include warnings matching (RemovedInSphinx\\d+Warning) regex")
+    parser.add_argument('-o', '--output',
+                        help='Output file that contains all counted warnings')
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true')
     parser.add_argument('--command', dest='command', action='store_true',
                         help='Treat program arguments as command to execute to obtain data')
@@ -275,6 +287,8 @@ def warnings_wrapper(args):
             return retval
 
     warnings.return_count()
+    if args.output:
+        warnings.write_counted_warnings(args.output)
     return warnings.return_check_limits()
 
 

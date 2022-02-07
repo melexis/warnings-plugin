@@ -86,7 +86,7 @@ arguments (with or without command flag).
 Pipe Example
 ------------
 
-Below is one of the ways to redirect your stderr to stdout and save it inside
+Below is one of the ways to redirect your stderr to stdout and save it inside a
 file.
 
 .. code-block:: bash
@@ -399,6 +399,10 @@ Sphinx deprecation warnings. These warnings match the following regular expressi
 `RemovedInSphinx\\d+Warning`. Using this flag results in the same behavior as adding this
 regex to the configuration file as value for the `exclude` key for the sphinx checker.
 
+Store All Counted Warnings
+--------------------------
+
+Use `-o, --output <file_path>` to let the plugin write all counted warnings as strings to a file.
 
 =======================
 Issues and New Features

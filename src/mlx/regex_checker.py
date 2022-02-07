@@ -31,6 +31,7 @@ class RegexChecker(WarningsChecker):
             if self._is_excluded(match_string):
                 continue
             self.count += 1
+            self.counted_warnings.append(match_string)
             self.print_when_verbose(match_string)
 
 
@@ -52,7 +53,9 @@ class CoverityChecker(RegexChecker):
             if (match.group('curr') == match.group('max')) and \
                     (match.group('classification') in self.CLASSIFICATION):
                 self.count += 1
-                self.print_when_verbose(match.group(0).strip())
+                match_string = match.group(0).strip()
+                self.counted_warnings.append(match_string)
+                self.print_when_verbose(match_string)
 
 
 class DoxyChecker(RegexChecker):
