@@ -402,7 +402,7 @@ regex to the configuration file as value for the `exclude` key for the sphinx ch
 Store All Counted Warnings
 --------------------------
 
-Use `-o, --output <file_path>` to let the plugin write all counted warnings as strings to a file.
+Use `-o, --output <file_path>` to let the plugin write all counted warnings/failures as strings to a file.
 
 =======================
 Issues and New Features
