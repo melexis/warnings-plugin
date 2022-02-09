@@ -6,6 +6,7 @@ graft tests
 include README.rst
 include LICENSE
 exclude src/mlx/__warnings_version__.py
+recursive-exclude docs _build *
 
 include tox.ini .travis.yml .codeclimate.yml codecov.yml
 
