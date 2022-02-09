@@ -63,6 +63,6 @@ class JUnitChecker(WarningsChecker):
             if self._is_excluded(testcase.result.message):
                 return 1
             string = '{classname}.{testname}'.format(classname=testcase.classname, testname=testcase.name)
-            self.counted_warnings.append(string)
+            self.counted_warnings.append('{}: {}'.format(string, testcase.result.message))
             self.print_when_verbose(string)
         return 0
