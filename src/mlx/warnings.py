@@ -192,7 +192,7 @@ class WarningsPlugin:
         Args:
             out_file (str): Location for the output file
         '''
-        with open(out_file, 'w', encoding='utf-8') as open_file:
+        with open(out_file, 'w', encoding='utf-8', newline='\n') as open_file:
             for checker in self.activated_checkers.values():
                 open_file.write("\n".join(checker.counted_warnings) + "\n")
 
