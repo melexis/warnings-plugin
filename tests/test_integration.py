@@ -283,3 +283,15 @@ class TestIntegration(TestCase):
         ])
         self.assertEqual(2, retval)
         self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
+
+    def test_output_file_junit(self):
+        filename = 'junit_double_fail_summary.txt'
+        out_file = str(TEST_OUT_DIR / filename)
+        ref_file = str(TEST_IN_DIR / filename)
+        retval = warnings_wrapper([
+            '--output', out_file,
+            '--junit',
+            'tests/test_in/junit_double_fail.xml',
+        ])
+        self.assertEqual(2, retval)
+        self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
