@@ -402,7 +402,17 @@ regex to the configuration file as value for the `exclude` key for the sphinx ch
 Store All Counted Warnings
 --------------------------
 
-Use `-o, --output <file_path>` to let the plugin write all counted warnings/failures as strings to a file.
+Use `-o, --output <file_path>` to let the plugin write all counted warnings/failures as strings to a text file.
+This can help you separate the warnings/failures that matter from those that are excluded or from irrelevant text that
+may exist in the input file (or produced by the given command).
+
+Example entries:
+
+    Sphinx:
+      /home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'
+
+    JUnit/RobotFramework:
+      test_warn_plugin_double_fail.myfirstfai1ure: Is our warnings plugin able to trace this random failure msg?
 
 =======================
 Issues and New Features
