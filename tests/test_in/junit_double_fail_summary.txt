@@ -1,0 +1,2 @@
+test_warn_plugin_double_fail.myfirstfai1ure: Is our warnings plugin able to trace this random failure msg?
+test_warn_plugin_no_double_fail.mysecondfai1ure: Second failure

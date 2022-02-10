@@ -22,6 +22,12 @@ class WarningsChecker:
         self.count = 0
         self.warn_min = 0
         self.warn_max = 0
+        self._counted_warnings = []
+
+    @property
+    def counted_warnings(self):
+        ''' List: list of counted warnings (str) '''
+        return self._counted_warnings
 
     @abc.abstractmethod
     def check(self, content):

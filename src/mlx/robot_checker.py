@@ -10,6 +10,14 @@ class RobotChecker(WarningsChecker):
     name = 'robot'
     checkers = []
 
+    @property
+    def counted_warnings(self):
+        ''' List: list of counted warnings (str) '''
+        all_counted_warnings = []
+        for checker in self.checkers:
+            all_counted_warnings.extend(checker.counted_warnings)
+        return all_counted_warnings
+
     def get_minimum(self):
         ''' Gets the lowest minimum amount of warnings
 

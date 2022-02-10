@@ -7,6 +7,7 @@ include README.rst
 include LICENSE
 exclude src/mlx/__warnings_version__.py
 recursive-exclude docs _build *
+recursive-exclude tests test_out *
 
 include tox.ini .travis.yml .codeclimate.yml codecov.yml
 
