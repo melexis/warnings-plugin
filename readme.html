@@ -3,12 +3,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Command Line Warnings Plugin &#8212; warning-plugin 3.1.2.dev14+g6f821f5 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Command Line Warnings Plugin &#8212; warning-plugin 4.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pydoctheme.css" />
     
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -30,7 +31,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="index.html">warning-plugin-3.1.2.dev14+g6f821f5</a> &#187;</li> 
+        <li><a href="index.html">warning-plugin-4.0.0</a> &#187;</li> 
       </ul>
     </div>
     
@@ -57,14 +58,14 @@
 <a class="reference external image-reference" href="https://requires.io/github/melexis/warnings-plugin/requirements/?branch=master"><img alt="Requirements Status" src="https://requires.io/github/melexis/warnings-plugin/requirements.svg?branch=master" /></a>
 <a class="reference external image-reference" href="https://github.com/melexis/warnings-plugin/issues"><img alt="Contributions welcome" src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat" /></a>
 <a class="reference external image-reference" href="https://bestpractices.coreinfrastructure.org/projects/4368"><img alt="CII Best Practices" src="https://bestpractices.coreinfrastructure.org/projects/4368/badge" /></a>
-<div class="section" id="command-line-warnings-plugin">
+<section id="command-line-warnings-plugin">
 <h1>Command Line Warnings Plugin<a class="headerlink" href="#command-line-warnings-plugin" title="Permalink to this headline">¶</a></h1>
 <p>Command-line alternative for <a class="reference external" href="https://github.com/jenkinsci/warnings-plugin">https://github.com/jenkinsci/warnings-plugin</a>.
 Useable with plugin-less CI systems. It can be used with GitLab-CI to enable
 warning threshold setting for failing the job and for parsing warnings from
 various tools and report them as errors.</p>
-</div>
-<div class="section" id="installation">
+</section>
+<section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <p>Every release is uploaded to pip so it can be installed simply by using pip.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python3</span>
@@ -72,8 +73,8 @@ pip3 install mlx.warnings
 </pre></div>
 </div>
 <p>You can find more details in the <a class="reference external" href="https://melexis.github.io/warnings-plugin/installation.html">Installation guide</a>.</p>
-</div>
-<div class="section" id="usage">
+</section>
+<section id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
 <p>Warnings plugin parses log messages as well as direct command stream. In case you
 want to create log file, you will need to redirect your stderr to some text file.
@@ -83,23 +84,23 @@ instead of stderr). Be aware that some commands print warnings on stdout.</p>
 <p>Also warnings plugin log files need to be the last argument as otherwise the
 arguments after that are discarded, because they are considered as command
 arguments (with or without command flag).</p>
-<div class="section" id="pipe-example">
+<section id="pipe-example">
 <h2>Pipe Example<a class="headerlink" href="#pipe-example" title="Permalink to this headline">¶</a></h2>
-<p>Below is one of the ways to redirect your stderr to stdout and save it inside
+<p>Below is one of the ways to redirect your stderr to stdout and save it inside a
 file.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yourcommand <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee doc_log.txt
 </pre></div>
 </div>
-</div>
-<div class="section" id="command-example">
+</section>
+<section id="command-example">
 <h2>Command Example<a class="headerlink" href="#command-example" title="Permalink to this headline">¶</a></h2>
 <p>Below is the command example for the plugin (keep in mind that parse commands are
 required).</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mlx-warnings --command &lt;yourcommand&gt;
 </pre></div>
 </div>
-</div>
-<div class="section" id="running-command">
+</section>
+<section id="running-command">
 <h2>Running Command<a class="headerlink" href="#running-command" title="Permalink to this headline">¶</a></h2>
 <p>There are few ways to run warnings plugin. If you are playing with Python on
 your computer you want to use <cite>virtualenv</cite>. This will separate your packages
@@ -120,15 +121,15 @@ that case command will look like:</p>
 <li><p>value 0 when the number of counted warnings is within the supplied minimum and maximum limits: ok,</p></li>
 <li><p>number of counted warnings (positive) when the counter number is not within those limit (1 in case of 0 counted warnings).</p></li>
 </ul>
-</div>
-<div class="section" id="simple-command-line-options">
+</section>
+<section id="simple-command-line-options">
 <h2>Simple Command Line Options<a class="headerlink" href="#simple-command-line-options" title="Permalink to this headline">¶</a></h2>
 <p>Plugin has two forms of passing the arguments to checkers. The command line
 option which enables checkers and sets minimum and maximum to each checker
 individually, or the configuration file option which provides more flexibility
 and also traceability as it resides inside repository and provides option to
 adjust minimum and maximum per individual checker.</p>
-<div class="section" id="parse-for-sphinx-warnings">
+<section id="parse-for-sphinx-warnings">
 <h3>Parse for Sphinx Warnings<a class="headerlink" href="#parse-for-sphinx-warnings" title="Permalink to this headline">¶</a></h3>
 <p>After you saved your Sphinx warnings to the file, you can parse it with
 command:</p>
@@ -145,8 +146,8 @@ python3 -m mlx.warnings --sphinx --command &lt;commandforsphinx&gt;
 python -m mlx.warnings --sphinx --command &lt;commandforsphinx&gt;
 </pre></div>
 </div>
-</div>
-<div class="section" id="parse-for-doxygen-warnings">
+</section>
+<section id="parse-for-doxygen-warnings">
 <h3>Parse for Doxygen Warnings<a class="headerlink" href="#parse-for-doxygen-warnings" title="Permalink to this headline">¶</a></h3>
 <p>After you saved your Doxygen warnings to the file, you can parse it with
 command:</p>
@@ -163,8 +164,8 @@ python3 -m mlx.warnings --doxygen --command &lt;commandfordoxygen&gt;
 python -m mlx.warnings --doxygen --command &lt;commandfordoxygen&gt;
 </pre></div>
 </div>
-</div>
-<div class="section" id="parse-for-coverity-defects">
+</section>
+<section id="parse-for-coverity-defects">
 <h3>Parse for Coverity Defects<a class="headerlink" href="#parse-for-coverity-defects" title="Permalink to this headline">¶</a></h3>
 <p>Coverity is a static analysis tool which has option to run desktop analysis
 on your local changes and report the results back directly in the console.
@@ -188,8 +189,8 @@ python3 -m mlx.warnings --coverity --command &lt;commandforcoverity&gt;
 python -m mlx.warnings --coverity --command &lt;commandforcoverity&gt;
 </pre></div>
 </div>
-</div>
-<div class="section" id="parse-for-junit-failures">
+</section>
+<section id="parse-for-junit-failures">
 <h3>Parse for JUnit Failures<a class="headerlink" href="#parse-for-junit-failures" title="Permalink to this headline">¶</a></h3>
 <p>After you saved your JUnit XML output to the file, you can parse it with
 command:</p>
@@ -206,8 +207,8 @@ python3 -m mlx.warnings --junit --command &lt;commandforjunit&gt;
 python -m mlx.warnings --junit --command &lt;commandforjunit&gt;
 </pre></div>
 </div>
-</div>
-<div class="section" id="parse-for-xmlrunner-errors">
+</section>
+<section id="parse-for-xmlrunner-errors">
 <h3>Parse for XMLRunner Errors<a class="headerlink" href="#parse-for-xmlrunner-errors" title="Permalink to this headline">¶</a></h3>
 <p>When you run <a class="reference external" href="https://github.com/xmlrunner/unittest-xml-reporting">XMLRunner</a>,
 the errors are reported on the output, but they are not marked as failures in
@@ -227,8 +228,8 @@ python3 -m mlx.warnings --xmlrunner --command &lt;commandforxmlrunner&gt;
 python -m mlx.warnings --xmlrunner --command &lt;commandforxmlrunner&gt;
 </pre></div>
 </div>
-</div>
-<div class="section" id="parse-for-robot-framework-test-failures">
+</section>
+<section id="parse-for-robot-framework-test-failures">
 <h3>Parse for Robot Framework Test Failures<a class="headerlink" href="#parse-for-robot-framework-test-failures" title="Permalink to this headline">¶</a></h3>
 <p>When running <a class="reference external" href="https://robotframework.org/">Robot Framework</a> tests with <a class="reference external" href="https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#xunit-compatible-result-file">–xunit report.xml</a> as an input
 argument, an xUnit compatible result file is generated. The warnings-plugin can
@@ -249,55 +250,55 @@ mlx-warnings --robot --name <span class="s2">&quot;Suite Name&quot;</span> repor
 python3 -m mlx.warnings --robot --name <span class="s2">&quot;Suite Name&quot;</span> report.xml
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="configuration-file-to-pass-options">
+</section>
+</section>
+<section id="configuration-file-to-pass-options">
 <h2>Configuration File to Pass Options<a class="headerlink" href="#configuration-file-to-pass-options" title="Permalink to this headline">¶</a></h2>
 <p>Beside command line, you can pass options through the configuration file.
 Configuration file is in JSON format with a simple structure.</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="nt">&quot;sphinx&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">&quot;enabled&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-        <span class="nt">&quot;min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nt">&quot;max&quot;</span><span class="p">:</span> <span class="mi">0</span>
-    <span class="p">},</span>
-    <span class="nt">&quot;doxygen&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">&quot;enabled&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-        <span class="nt">&quot;min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nt">&quot;max&quot;</span><span class="p">:</span> <span class="mi">0</span>
-    <span class="p">},</span>
-    <span class="nt">&quot;junit&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">&quot;enabled&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-        <span class="nt">&quot;min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nt">&quot;max&quot;</span><span class="p">:</span> <span class="mi">0</span>
-    <span class="p">},</span>
-    <span class="nt">&quot;xmlrunner&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">&quot;enabled&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-        <span class="nt">&quot;min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nt">&quot;max&quot;</span><span class="p">:</span> <span class="mi">0</span>
-    <span class="p">},</span>
-    <span class="nt">&quot;coverity&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">&quot;enabled&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-        <span class="nt">&quot;min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nt">&quot;max&quot;</span><span class="p">:</span> <span class="mi">0</span>
-    <span class="p">},</span>
-    <span class="nt">&quot;robot&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">&quot;enabled&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-        <span class="nt">&quot;check_suite_names&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-        <span class="nt">&quot;suites&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">{</span>
-                <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;My First Suite&quot;</span><span class="p">,</span>
-                <span class="nt">&quot;min&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
-                <span class="nt">&quot;max&quot;</span><span class="p">:</span> <span class="mi">10</span>
-            <span class="p">},</span>
-            <span class="p">{</span>
-                <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;My Second Suite&quot;</span><span class="p">,</span>
-                <span class="nt">&quot;min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                <span class="nt">&quot;max&quot;</span><span class="p">:</span> <span class="mi">0</span>
-            <span class="p">}</span>
-        <span class="p">]</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;sphinx&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;doxygen&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;junit&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;xmlrunner&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;coverity&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;robot&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;check_suite_names&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;suites&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;My First Suite&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w"></span>
+<span class="w">            </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;My Second Suite&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 <p>First key is <cite>checkername</cite>, then it contains a boolean value for key <cite>enabled</cite>,
@@ -311,55 +312,70 @@ mlx-warnings --config path/to/config.json junit_output.xml
 mlx-warnings --config path/to/config.json --command &lt;commandforjunit&gt;
 </pre></div>
 </div>
-</div>
-<div class="section" id="other-options">
+</section>
+<section id="other-options">
 <h2>Other Options<a class="headerlink" href="#other-options" title="Permalink to this headline">¶</a></h2>
 <p>Since the plugin is under active development there are new Features added fast.
 Important options currently include setting a minimum and a maximum number of warnings
 that are still acceptable to return 0 (success). Requiring an exact amount of warnings
 using a single option is also possible. Look at scripts help for more details about the options.</p>
-<div class="section" id="exclude-matches-with-regexes">
+<section id="exclude-matches-with-regexes">
 <h3>Exclude Matches With Regexes<a class="headerlink" href="#exclude-matches-with-regexes" title="Permalink to this headline">¶</a></h3>
 <p>In case you want a checker to exclude certain matches, you can configure
 one or more regular expressions in the configuration file on a per-checker basis.
 If a pattern of a regex to exclude is found in a match of the checker’s regex, the checker
 won’t count that match. Add the regex(es) as a list of string values for the <cite>exclude</cite> key.
 An example configuration for the sphinx checker is given below:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="nt">&quot;sphinx&quot;</span><span class="p">:{</span>
-        <span class="nt">&quot;enabled&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-        <span class="nt">&quot;min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nt">&quot;max&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nt">&quot;exclude&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;RemovedInSphinx\\d+Warning&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;WARNING: toctree&quot;</span>
-        <span class="p">]</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;sphinx&quot;</span><span class="p">:{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;exclude&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">            </span><span class="s2">&quot;RemovedInSphinx\\d+Warning&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="s2">&quot;WARNING: toctree&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="exclude-sphinx-deprecation-warnings">
+</section>
+<section id="exclude-sphinx-deprecation-warnings">
 <h3>Exclude Sphinx Deprecation Warnings<a class="headerlink" href="#exclude-sphinx-deprecation-warnings" title="Permalink to this headline">¶</a></h3>
 <p>There is a special flag <cite>–exclude-sphinx-deprecation</cite> that lets the sphinx checker exclude
 Sphinx deprecation warnings. These warnings match the following regular expression:
 <cite>RemovedInSphinx\d+Warning</cite>. Using this flag results in the same behavior as adding this
 regex to the configuration file as value for the <cite>exclude</cite> key for the sphinx checker.</p>
-</div>
-</div>
-</div>
-<div class="section" id="issues-and-new-features">
+</section>
+<section id="store-all-counted-warnings">
+<h3>Store All Counted Warnings<a class="headerlink" href="#store-all-counted-warnings" title="Permalink to this headline">¶</a></h3>
+<p>Use <cite>-o, –output &lt;file_path&gt;</cite> to let the plugin write all counted warnings/failures as strings to a text file.
+This can help you separate the warnings/failures that matter from those that are excluded or from irrelevant text that
+may exist in the input file (or produced by the given command).</p>
+<p>Example entries:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>Sphinx:</dt><dd><p>/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u’installation’</p>
+</dd>
+<dt>JUnit/RobotFramework:</dt><dd><p>test_warn_plugin_double_fail.myfirstfai1ure: Is our warnings plugin able to trace this random failure msg?</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+</section>
+</section>
+<section id="issues-and-new-features">
 <h1>Issues and New Features<a class="headerlink" href="#issues-and-new-features" title="Permalink to this headline">¶</a></h1>
 <p>In case you have any problems with usage of the plugin, please open an issue
 on GitHub. Provide as many valid information as possible, as this will help us
 to resolve Issues faster. We would also like to hear your suggestions about new
 features which would help your Continuous Integration run better.</p>
-</div>
-<div class="section" id="contribute">
+</section>
+<section id="contribute">
 <h1>Contribute<a class="headerlink" href="#contribute" title="Permalink to this headline">¶</a></h1>
 <p>There is a Contribution guide available if you would like to get involved in
 development of the plugin. We encourage anyone to contribute to our repository.</p>
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -375,7 +391,7 @@ development of the plugin. We encourage anyone to contribute to our repository.<
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -434,8 +450,8 @@ development of the plugin. We encourage anyone to contribute to our repository.<
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Jan 13, 2021.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Last updated on Feb 10, 2022.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
     </div>
   </body>
 </html>
