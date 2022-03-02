@@ -2,8 +2,8 @@
     :target: http://www.apache.org/licenses/LICENSE-2.0
     :alt: Apache2 License
 
-.. image:: https://travis-ci.org/melexis/warnings-plugin.svg?branch=master
-    :target: https://travis-ci.org/melexis/warnings-plugin
+.. image:: https://github.com/melexis/warnings-plugin/actions/workflows/python-package.yml/badge.svg?branch=master
+    :target: https://github.com/melexis/warnings-plugin/actions/workflows/python-package.yml
     :alt: Build status
 
 .. image:: https://badge.fury.io/py/mlx.warnings.svg
