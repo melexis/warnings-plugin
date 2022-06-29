@@ -27,16 +27,19 @@ class TestSphinxWarnings(TestCase):
         dut2 = "/home/bljah/test/index.rst:None: WARNING: toctree contains reference to nonexisting document u'installation'"
         dut3 = "/home/bljah/test/index.rst:: WARNING: toctree contains reference to nonexisting document u'installation'"
         dut4 = "/home/bljah/test/SRS.rst: WARNING: item non_existing_requirement is not defined"
+        dut5 = "CRITICAL: Problems with \"include\" directive path:"
         with patch('sys.stdout', new=StringIO()) as fake_out:
             self.warnings.check(dut1)
             self.warnings.check(dut2)
             self.warnings.check(dut3)
             self.warnings.check(dut4)
-        self.assertEqual(self.warnings.return_count(), 4)
+            self.warnings.check(dut5)
+        self.assertEqual(self.warnings.return_count(), 5)
         self.assertRegex(fake_out.getvalue(), dut1)
         self.assertRegex(fake_out.getvalue(), dut2)
         self.assertRegex(fake_out.getvalue(), dut3)
         self.assertRegex(fake_out.getvalue(), dut4)
+        self.assertRegex(fake_out.getvalue(), dut5)
 
     def test_single_warning_mixed(self):
         dut1 = 'This1 should not be treated as warning'
