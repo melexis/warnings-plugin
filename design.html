@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Software Design &#8212; warning-plugin 4.0.0 documentation</title>
+    <title>Software Design &#8212; warning-plugin 4.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pydoctheme.css" />
     
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     
     <script src="_static/sidebar.js"></script>
@@ -31,7 +32,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="index.html">warning-plugin-4.0.0</a> &#187;</li> 
+        <li><a href="index.html">warning-plugin-4.1.0</a> &#187;</li> 
       </ul>
     </div>
     
@@ -48,9 +49,9 @@
           <div class="body" role="main">
             
   <section id="software-design">
-<span id="id1"></span><h1>Software Design<a class="headerlink" href="#software-design" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>Software Design<a class="headerlink" href="#software-design" title="Permalink to this heading">¶</a></h1>
 <section id="class-diagram">
-<span id="id2"></span><h2>Class Diagram<a class="headerlink" href="#class-diagram" title="Permalink to this headline">¶</a></h2>
+<span id="id2"></span><h2>Class Diagram<a class="headerlink" href="#class-diagram" title="Permalink to this heading">¶</a></h2>
 <p class="plantuml">
 <img src="_images/plantuml-727dc255d2fc4aea0b3e8737f180975bcc53ad53.png" alt="&#64;startuml
 class WarningsPlugin {
@@ -103,12 +104,12 @@ WarningsChecker &lt;|-- JUnitChecker
 </p>
 </section>
 <section id="string-handling">
-<h2>String Handling<a class="headerlink" href="#string-handling" title="Permalink to this headline">¶</a></h2>
+<h2>String Handling<a class="headerlink" href="#string-handling" title="Permalink to this heading">¶</a></h2>
 <p>Convention is to use plain python strings everywhere. Where needed the strings can be converted to anything else.</p>
 <p>Example: junitparser expects byte array objects, so we encode our string right before passing it to junitparser.</p>
 </section>
 <section id="module-mlx.warnings">
-<span id="instrument-module"></span><h2>Instrument Module<a class="headerlink" href="#module-mlx.warnings" title="Permalink to this headline">¶</a></h2>
+<span id="instrument-module"></span><h2>Instrument Module<a class="headerlink" href="#module-mlx.warnings" title="Permalink to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsPlugin">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">WarningsPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin" title="Permalink to this definition">¶</a></dt>
@@ -118,7 +119,7 @@ WarningsChecker &lt;|-- JUnitChecker
 <span class="sig-name descname"><span class="pre">activate_checker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">checker</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin.activate_checker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.activate_checker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Activate additional checkers after initialization</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>checker</strong> (<em>WarningsChecker</em>) – checker object</p>
 </dd>
 </dl>
@@ -129,10 +130,10 @@ WarningsChecker &lt;|-- JUnitChecker
 <span class="sig-name descname"><span class="pre">activate_checker_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin.activate_checker_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.activate_checker_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Activates checker by name</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – checker name</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>WarningsChecker</em> – activated checker object, or None when no checker with the given name exists</p>
 </dd>
 </dl>
@@ -143,7 +144,7 @@ WarningsChecker &lt;|-- JUnitChecker
 <span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function for counting the number of warnings in a specific text</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>content</strong> (<em>str</em>) – The text to parse</p>
 </dd>
 </dl>
@@ -154,7 +155,7 @@ WarningsChecker &lt;|-- JUnitChecker
 <span class="sig-name descname"><span class="pre">config_parser_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin.config_parser_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.config_parser_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parsing configuration dict extracted by previously opened JSON file</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>config</strong> (<em>dict</em>) – JSON dump of the configuration</p>
 </dd>
 </dl>
@@ -165,10 +166,10 @@ WarningsChecker &lt;|-- JUnitChecker
 <span class="sig-name descname"><span class="pre">get_checker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin.get_checker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.get_checker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get checker by name</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – checker name</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>checker object (WarningsChecker)</p>
 </dd>
 </dl>
@@ -182,10 +183,10 @@ WarningsChecker &lt;|-- JUnitChecker
 return value of that checker. If not, this function checks whether the
 warnings for each registered checker are within the configured limits.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>name</strong> (<em>WarningsChecker</em>) – The checker for which to check the return value</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p><em>int</em> –</p>
 <dl class="simple">
 <dt>0 if the amount of warnings is within limits, the count of warnings otherwise</dt><dd><p>(or 1 in case of a count of 0 warnings)</p>
@@ -204,10 +205,10 @@ warnings for each registered checker are within the configured limits.</p>
 warnings found by that checker. If not, the function will return the sum
 of the warnings found by all registered checkers.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>name</strong> (<em>WarningsChecker</em>) – The checker for which to return the amount of warnings (if set)</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>int</em> – Amount of found warnings</p>
 </dd>
 </dl>
@@ -218,7 +219,7 @@ of the warnings found by all registered checkers.</p>
 <span class="sig-name descname"><span class="pre">set_maximum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin.set_maximum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.set_maximum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Setter function for the maximum amount of warnings</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>maximum</strong> (<em>int</em>) – maximum amount of warnings allowed</p>
 </dd>
 </dl>
@@ -229,7 +230,7 @@ of the warnings found by all registered checkers.</p>
 <span class="sig-name descname"><span class="pre">set_minimum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minimum</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin.set_minimum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.set_minimum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Setter function for the minimum amount of warnings</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>minimum</strong> (<em>int</em>) – minimum amount of warnings allowed</p>
 </dd>
 </dl>
@@ -241,7 +242,7 @@ of the warnings found by all registered checkers.</p>
 <dd><p>Toggle printout of all the parsed content</p>
 <p>Useful for command input where we want to print content as well</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>printout</strong> (<em>bool</em>) – True enables the printout, False provides more silent mode</p>
 </dd>
 </dl>
@@ -252,7 +253,7 @@ of the warnings found by all registered checkers.</p>
 <span class="sig-name descname"><span class="pre">write_counted_warnings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#WarningsPlugin.write_counted_warnings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.write_counted_warnings" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes counted warnings to the given file</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>out_file</strong> (<em>str</em>) – Location for the output file</p>
 </dd>
 </dl>
@@ -273,16 +274,16 @@ of the warnings found by all registered checkers.</p>
 this function runs a command instead and parses the stderr and stdout of the
 command for warnings.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>warnings</strong> (<em>WarningsPlugin</em>) – Object for warnings where errors should be logged</p></li>
 <li><p><strong>cmd</strong> (<em>list</em>) – List of commands (str), which should be executed to obtain input for parsing</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>int</em> – Return value of executed command(s)</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>OSError</strong> – When program is not installed.</p>
 </dd>
 </dl>
@@ -293,13 +294,13 @@ command for warnings.</p>
 <span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">warnings_logfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">warnings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings.html#warnings_logfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.warnings_logfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse logfile for warnings</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>warnings</strong> (<em>WarningsPlugin</em>) – Object for warnings where errors should be logged</p></li>
 <li><p><strong>log</strong> – Logfile for parsing</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>0</em> – Log files existed and are parsed successfully
 1: Log files did not exist</p>
 </dd>
@@ -333,7 +334,7 @@ command for warnings.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3><a href="index.html">Table Of Contents</a></h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3><a href="index.html">Table Of Contents</a></h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme.html">Command Line Warnings Plugin</a></li>
 <li class="toctree-l1"><a class="reference internal" href="readme.html#installation">Installation</a></li>
@@ -361,6 +362,10 @@ command for warnings.</p>
     </ul>
    </div>
         </div>
+<div id="sidebarbutton" title="Collapse sidebar">
+<span>«</span>
+</div>
+
       </div>
       <div class="clearer"></div>
     </div>
@@ -384,8 +389,8 @@ command for warnings.</p>
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Feb 10, 2022.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+      Last updated on Jun 30, 2022.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
     </div>
   </body>
 </html>
