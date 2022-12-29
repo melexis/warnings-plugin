@@ -84,5 +84,6 @@ class TestRobotWarnings(unittest.TestCase):
             count = self.warnings.return_count()
         self.assertEqual(count, 6)
 
+
 if __name__ == '__main__':
     unittest.main()
