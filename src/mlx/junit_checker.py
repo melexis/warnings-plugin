@@ -40,7 +40,7 @@ class JUnitChecker(WarningsChecker):
         Returns:
             lxml.etree._Element/xml.etree.ElementTree.Element: Top-level XML element with testsuites tag
         '''
-        if root_input.tag == 'testsuites':
+        if root_input.tag.startswith('testsuite') and root_input.find('testsuite') is not None:
             testsuites_root = root_input
         else:
             testsuites_root = etree.Element("testsuites")
