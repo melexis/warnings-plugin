@@ -1,5 +1,5 @@
 from io import StringIO
-from unittest import TestCase
+import unittest
 
 from unittest.mock import patch
 
@@ -7,7 +7,7 @@ from mlx.robot_checker import RobotSuiteChecker
 from mlx.warnings import WarningsPlugin
 
 
-class TestRobotWarnings(TestCase):
+class TestRobotWarnings(unittest.TestCase):
     def setUp(self):
         self.warnings = WarningsPlugin(verbose=True)
         self.dut = self.warnings.activate_checker_name('robot')
@@ -74,3 +74,15 @@ class TestRobotWarnings(TestCase):
             with self.assertRaises(SystemExit) as c_m:
                 self.warnings.check(xmlfile.read())
         self.assertEqual(c_m.exception.code, -1)
+
+    def test_robot_version_5(self):
+        self.dut.checkers = [
+            RobotSuiteChecker('Empty Flash Product Id', check_suite_name=True),
+        ]
+        with open('tests/test_in/robot_version_5.xml', 'r') as xmlfile:
+            self.warnings.check(xmlfile.read())
+            count = self.warnings.return_count()
+        self.assertEqual(count, 6)
+
+if __name__ == '__main__':
+    unittest.main()
