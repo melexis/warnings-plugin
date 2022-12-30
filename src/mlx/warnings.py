@@ -7,8 +7,10 @@ import glob
 import json
 import subprocess
 import sys
+from pathlib import Path
 
 from pkg_resources import require
+from ruamel.yaml import YAML
 
 from mlx.junit_checker import JUnitChecker
 from mlx.regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker
@@ -25,7 +27,7 @@ class WarningsPlugin:
 
         Args:
             verbose (bool): optional - enable verbose logging
-            config_file (str): optional - configuration file with setup
+            config_file (Path): optional - configuration file with setup
         '''
         self.activated_checkers = {}
         self.verbose = verbose
@@ -34,9 +36,12 @@ class WarningsPlugin:
                                 RobotChecker(self.verbose)]
 
         if config_file:
-            with open(config_file, 'r') as open_file:
-                config = json.load(open_file)
-            self.config_parser_json(config)
+            with open(config_file, 'r', encoding='utf-8') as open_file:
+                if config_file.suffix.lower().startswith('.y'):
+                    config = YAML().load(open_file)
+                else:
+                    config = json.load(open_file)
+            self.config_parser(config)
 
         self.warn_min = 0
         self.warn_max = 0
@@ -169,11 +174,11 @@ class WarningsPlugin:
         '''
         self.printout = printout
 
-    def config_parser_json(self, config):
+    def config_parser(self, config):
         ''' Parsing configuration dict extracted by previously opened JSON file
 
         Args:
-            config (dict): JSON dump of the configuration
+            config (dict): Content of configuration file
         '''
         # activate checker
         for checker in self.public_checkers:
@@ -215,7 +220,7 @@ def warnings_wrapper(args):
     group1.add_argument('--exact-warnings', type=int, default=0,
                         help='Exact amount of warnings expected')
     group2 = parser.add_argument_group('Configuration file with options')
-    group2.add_argument('--config', dest='configfile', action='store', required=False,
+    group2.add_argument('--config', dest='configfile', action='store', required=False, type=Path,
                         help='Config file in JSON format provides toggle of checkers and their limits')
     group2.add_argument('--include-sphinx-deprecation', dest='include_sphinx_deprecation', action='store_true',
                         help="Sphinx checker will include warnings matching (RemovedInSphinx\\d+Warning) regex")
