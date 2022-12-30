@@ -295,7 +295,7 @@ Configuration File to Pass Options
 ----------------------------------
 
 Beside command line, you can pass options through the configuration file.
-Configuration file is in JSON format with a simple structure.
+Configuration file is in JSON or YAML_ format with a simple structure.
 
 .. code-block:: json
 
@@ -429,3 +429,5 @@ Contribute
 
 There is a Contribution guide available if you would like to get involved in
 development of the plugin. We encourage anyone to contribute to our repository.
+
+.. _YAML: https://yaml.org/spec/1.2.2/
