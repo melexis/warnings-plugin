@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Empty Flash Product Id &amp; Empty Flash Mlx Device Project Id" tests="15"
+    errors="0" failures="8" skipped="0" time="279.670" timestamp="2022-12-16T10:29:52.153000">
+    <testsuite name="Empty Flash Product Id" tests="9" errors="0" failures="6" skipped="0"
+        time="227.056" timestamp="2022-12-16T10:29:52.513000">
+        <testcase
+            classname="Empty Flash Product Id &amp; Empty Flash Mlx Device Project Id.Empty Flash Product Id"
+            name="read by id 0 test 1" time="5.380">
+            <failure message="'1 == 51932' should be true." type="AssertionError" />
+        </testcase>
+        <testcase
+            classname="Empty Flash Product Id &amp; Empty Flash Mlx Device Project Id.Empty Flash Product Id"
+            name="read by id 0 test 2" time="5.316">
+            <failure
+                message="Calling method 'read_product_id' failed: Timeout: S2M frame receiving failed with error code: 3 - Rx timeout error"
+                type="AssertionError" />
+        </testcase>
+        <testcase
+            classname="Empty Flash Product Id &amp; Empty Flash Mlx Device Project Id.Empty Flash Product Id"
+            name="read by id 0 test 3" time="5.071">
+</testcase>
+        <testcase
+            classname="Empty Flash Product Id &amp; Empty Flash Mlx Device Project Id.Empty Flash Product Id"
+            name="read by id 0 test 4" time="5.288">
+            <failure
+                message="Calling method 'read_product_id' failed: Timeout: S2M frame receiving failed with error code: 3 - Rx timeout error"
+                type="AssertionError" />
+        </testcase>
+        <testcase
+            classname="Empty Flash Product Id &amp; Empty Flash Mlx Device Project Id.Empty Flash Product Id"
+            name="read by id 0 test 5" time="5.276">
+</testcase>
+        <testcase
+            classname="Empty Flash Product Id &amp; Empty Flash Mlx Device Project Id.Empty Flash Product Id"
+            name="read by id 0 test 6" time="5.065">
+            <failure
+                message="Calling method 'read_product_id' failed: Timeout: S2M frame receiving failed with error code: 3 - Rx timeout error"
+                type="AssertionError" />
+        </testcase>
+        <testcase
+            classname="Empty Flash Product Id &amp; Empty Flash Mlx Device Project Id.Empty Flash Product Id"
+            name="read by id 0 test 7" time="5.086">
+            <failure
+                message="Calling method 'read_product_id' failed: Timeout: S2M frame receiving failed with error code: 3 - Rx timeout error"
+                type="AssertionError" />
+        </testcase>
+        <testcase
+            classname="Empty Flash Product Id &amp; Empty Flash Mlx Device Project Id.Empty Flash Product Id"
+            name="read by id 0 test 8" time="5.280">
+            <failure
+                message="Calling method 'read_product_id' failed: Timeout: S2M frame receiving failed with error code: 3 - Rx timeout error"
+                type="AssertionError" />
+        </testcase>
+        <testcase
+            classname="Empty Flash Product Id &amp; Empty Flash Mlx Device Project Id.Empty Flash Product Id"
+            name="read by id 0 test 9" time="5.273">
+</testcase>
+        <properties>
+            <property name="Documentation"
+                value="LIN integration tests for devices which contain Melexis LIN device identification functionality&#10;and are in empty Flash mode" />
+            <property name="More Info" value="Running some LIN communication tests" />
+            <property name="Version" value="1.0" />
+        </properties>
+    </testsuite>
+    <testsuite name="Empty Flash Mlx Device Project Id" tests="6" errors="0" failures="2"
+        skipped="0" time="52.184" timestamp="2022-12-16T10:33:39.602000">
+        <testcase
+            classname="Empty Flash Product Id &amp; Empty Flash Mlx Device Project Id.Empty Flash Mlx Device Project Id"
+            name="read mlx device project id 1" time="9.073">
+            <failure
+                message="Calling method 'read_by_id_mlx_project_id' failed: Timeout: S2M frame receiving failed with error code: 3 - Rx timeout error"
+                type="AssertionError" />
+        </testcase>
+        <testcase
+            classname="Empty Flash Product Id &amp; Empty Flash Mlx Device Project Id.Empty Flash Mlx Device Project Id"
+            name="read mlx device project id 2" time="5.284">
+</testcase>
+        <testcase
+            classname="Empty Flash Product Id &amp; Empty Flash Mlx Device Project Id.Empty Flash Mlx Device Project Id"
+            name="read mlx device project id 3" time="5.070">
+</testcase>
+        <testcase
+            classname="Empty Flash Product Id &amp; Empty Flash Mlx Device Project Id.Empty Flash Mlx Device Project Id"
+            name="read mlx device project id 4" time="5.069">
+</testcase>
+        <testcase
+            classname="Empty Flash Product Id &amp; Empty Flash Mlx Device Project Id.Empty Flash Mlx Device Project Id"
+            name="read mlx device project id 5" time="5.070">
+            <failure
+                message="Calling method 'read_by_id_mlx_project_id' failed: Timeout: S2M frame receiving failed with error code: 3 - Rx timeout error"
+                type="AssertionError" />
+        </testcase>
+        <testcase
+            classname="Empty Flash Product Id &amp; Empty Flash Mlx Device Project Id.Empty Flash Mlx Device Project Id"
+            name="read mlx device project id 6" time="5.072">
+</testcase>
+        <properties>
+            <property name="Documentation"
+                value="LIN integration tests for devices which contain Melexis LIN device identification functionality" />
+            <property name="More Info" value="Running some LIN communication tests" />
+            <property name="Version" value="1.0" />
+        </properties>
+    </testsuite>
+</testsuite>
