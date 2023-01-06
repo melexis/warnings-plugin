@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx.warnings &#8212; warning-plugin 4.1.0 documentation</title>
+    <title>mlx.warnings &#8212; warning-plugin 4.2.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/pydoctheme.css" />
     
@@ -13,6 +13,7 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     
     <script src="../../_static/sidebar.js"></script>
     
@@ -29,7 +30,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="../../index.html">warning-plugin-4.1.0</a> &#187;</li>
+        <li><a href="../../index.html">warning-plugin-4.2.0</a> &#187;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -56,8 +57,10 @@
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">from</span> <span class="nn">pkg_resources</span> <span class="kn">import</span> <span class="n">require</span>
+<span class="kn">from</span> <span class="nn">ruamel.yaml</span> <span class="kn">import</span> <span class="n">YAML</span>
 
 <span class="kn">from</span> <span class="nn">mlx.junit_checker</span> <span class="kn">import</span> <span class="n">JUnitChecker</span>
 <span class="kn">from</span> <span class="nn">mlx.regex_checker</span> <span class="kn">import</span> <span class="n">CoverityChecker</span><span class="p">,</span> <span class="n">DoxyChecker</span><span class="p">,</span> <span class="n">SphinxChecker</span><span class="p">,</span> <span class="n">XMLRunnerChecker</span>
@@ -69,12 +72,12 @@
 <div class="viewcode-block" id="WarningsPlugin"><a class="viewcode-back" href="../../design.html#mlx.warnings.WarningsPlugin">[docs]</a><span class="k">class</span> <span class="nc">WarningsPlugin</span><span class="p">:</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Function for initializing the parsers</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            verbose (bool): optional - enable verbose logging</span>
-<span class="sd">            config_file (str): optional - configuration file with setup</span>
+<span class="sd">            config_file (Path): optional - configuration file with setup</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">activated_checkers</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
@@ -83,9 +86,12 @@
                                 <span class="n">RobotChecker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)]</span>
 
         <span class="k">if</span> <span class="n">config_file</span><span class="p">:</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_file</span><span class="p">:</span>
-                <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">open_file</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">config_parser_json</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_file</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">config_file</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;.y&#39;</span><span class="p">):</span>
+                    <span class="n">config</span> <span class="o">=</span> <span class="n">YAML</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">open_file</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">open_file</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config_parser</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">warn_min</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">warn_max</span> <span class="o">=</span> <span class="mi">0</span>
@@ -93,7 +99,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">printout</span> <span class="o">=</span> <span class="kc">False</span>
 
 <div class="viewcode-block" id="WarningsPlugin.activate_checker"><a class="viewcode-back" href="../../design.html#mlx.warnings.WarningsPlugin.activate_checker">[docs]</a>    <span class="k">def</span> <span class="nf">activate_checker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checker</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Activate additional checkers after initialization</span>
 
 <span class="sd">        Args:</span>
@@ -103,7 +109,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">activated_checkers</span><span class="p">[</span><span class="n">checker</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">checker</span></div>
 
 <div class="viewcode-block" id="WarningsPlugin.activate_checker_name"><a class="viewcode-back" href="../../design.html#mlx.warnings.WarningsPlugin.activate_checker_name">[docs]</a>    <span class="k">def</span> <span class="nf">activate_checker_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Activates checker by name</span>
 
 <span class="sd">        Args:</span>
@@ -120,7 +126,7 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Checker </span><span class="si">%s</span><span class="s2"> does not exist&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WarningsPlugin.get_checker"><a class="viewcode-back" href="../../design.html#mlx.warnings.WarningsPlugin.get_checker">[docs]</a>    <span class="k">def</span> <span class="nf">get_checker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; Get checker by name</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Get checker by name</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            name (str): checker name</span>
@@ -130,7 +136,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">activated_checkers</span><span class="p">[</span><span class="n">name</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="WarningsPlugin.check"><a class="viewcode-back" href="../../design.html#mlx.warnings.WarningsPlugin.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Function for counting the number of warnings in a specific text</span>
 
 <span class="sd">        Args:</span>
@@ -146,7 +152,7 @@
                 <span class="n">checker</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">content</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WarningsPlugin.set_maximum"><a class="viewcode-back" href="../../design.html#mlx.warnings.WarningsPlugin.set_maximum">[docs]</a>    <span class="k">def</span> <span class="nf">set_maximum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maximum</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; Setter function for the maximum amount of warnings</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Setter function for the maximum amount of warnings</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            maximum (int): maximum amount of warnings allowed</span>
@@ -155,7 +161,7 @@
             <span class="n">checker</span><span class="o">.</span><span class="n">set_maximum</span><span class="p">(</span><span class="n">maximum</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WarningsPlugin.set_minimum"><a class="viewcode-back" href="../../design.html#mlx.warnings.WarningsPlugin.set_minimum">[docs]</a>    <span class="k">def</span> <span class="nf">set_minimum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">minimum</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; Setter function for the minimum amount of warnings</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Setter function for the minimum amount of warnings</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            minimum (int): minimum amount of warnings allowed</span>
@@ -164,7 +170,7 @@
             <span class="n">checker</span><span class="o">.</span><span class="n">set_minimum</span><span class="p">(</span><span class="n">minimum</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WarningsPlugin.return_count"><a class="viewcode-back" href="../../design.html#mlx.warnings.WarningsPlugin.return_count">[docs]</a>    <span class="k">def</span> <span class="nf">return_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; Getter function for the amount of found warnings</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Getter function for the amount of found warnings</span>
 
 <span class="sd">        If the name parameter is set, this function will return the amount of</span>
 <span class="sd">        warnings found by that checker. If not, the function will return the sum</span>
@@ -185,7 +191,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span></div>
 
 <div class="viewcode-block" id="WarningsPlugin.return_check_limits"><a class="viewcode-back" href="../../design.html#mlx.warnings.WarningsPlugin.return_check_limits">[docs]</a>    <span class="k">def</span> <span class="nf">return_check_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; Function for determining the return value of the script</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Function for determining the return value of the script</span>
 
 <span class="sd">        If the name parameter is set, this function will check (and return) the</span>
 <span class="sd">        return value of that checker. If not, this function checks whether the</span>
@@ -209,7 +215,7 @@
         <span class="k">return</span> <span class="mi">0</span></div>
 
 <div class="viewcode-block" id="WarningsPlugin.toggle_printout"><a class="viewcode-back" href="../../design.html#mlx.warnings.WarningsPlugin.toggle_printout">[docs]</a>    <span class="k">def</span> <span class="nf">toggle_printout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">printout</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; Toggle printout of all the parsed content</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Toggle printout of all the parsed content</span>
 
 <span class="sd">        Useful for command input where we want to print content as well</span>
 
@@ -218,11 +224,11 @@
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">printout</span> <span class="o">=</span> <span class="n">printout</span></div>
 
-<div class="viewcode-block" id="WarningsPlugin.config_parser_json"><a class="viewcode-back" href="../../design.html#mlx.warnings.WarningsPlugin.config_parser_json">[docs]</a>    <span class="k">def</span> <span class="nf">config_parser_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; Parsing configuration dict extracted by previously opened JSON file</span>
+<div class="viewcode-block" id="WarningsPlugin.config_parser"><a class="viewcode-back" href="../../design.html#mlx.warnings.WarningsPlugin.config_parser">[docs]</a>    <span class="k">def</span> <span class="nf">config_parser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Parsing configuration dict extracted by previously opened JSON file</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            config (dict): JSON dump of the configuration</span>
+<span class="sd">            config (dict): Content of configuration file</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="c1"># activate checker</span>
         <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">public_checkers</span><span class="p">:</span>
@@ -236,7 +242,7 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Incomplete config. Missing: </span><span class="si">{key}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">err</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="WarningsPlugin.write_counted_warnings"><a class="viewcode-back" href="../../design.html#mlx.warnings.WarningsPlugin.write_counted_warnings">[docs]</a>    <span class="k">def</span> <span class="nf">write_counted_warnings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_file</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; Writes counted warnings to the given file</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Writes counted warnings to the given file</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            out_file (str): Location for the output file</span>
@@ -264,7 +270,7 @@
     <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--exact-warnings&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Exact amount of warnings expected&#39;</span><span class="p">)</span>
     <span class="n">group2</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_argument_group</span><span class="p">(</span><span class="s1">&#39;Configuration file with options&#39;</span><span class="p">)</span>
-    <span class="n">group2</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--config&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;configfile&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">group2</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--config&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;configfile&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">Path</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Config file in JSON format provides toggle of checkers and their limits&#39;</span><span class="p">)</span>
     <span class="n">group2</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--include-sphinx-deprecation&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;include_sphinx_deprecation&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Sphinx checker will include warnings matching (RemovedInSphinx</span><span class="se">\\</span><span class="s2">d+Warning) regex&quot;</span><span class="p">)</span>
@@ -342,7 +348,7 @@
 
 
 <div class="viewcode-block" id="warnings_command"><a class="viewcode-back" href="../../design.html#mlx.warnings.warnings_command">[docs]</a><span class="k">def</span> <span class="nf">warnings_command</span><span class="p">(</span><span class="n">warnings</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; Execute command to obtain input for parsing for warnings</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; Execute command to obtain input for parsing for warnings</span>
 
 <span class="sd">    Usually log files are output of the commands. To avoid this additional step</span>
 <span class="sd">    this function runs a command instead and parses the stderr and stdout of the</span>
@@ -384,7 +390,7 @@
 
 
 <div class="viewcode-block" id="warnings_logfile"><a class="viewcode-back" href="../../design.html#mlx.warnings.warnings_logfile">[docs]</a><span class="k">def</span> <span class="nf">warnings_logfile</span><span class="p">(</span><span class="n">warnings</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; Parse logfile for warnings</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; Parse logfile for warnings</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        warnings (WarningsPlugin): Object for warnings where errors should be logged</span>
@@ -475,8 +481,8 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Jun 30, 2022.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+      Last updated on Jan 06, 2023.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>
