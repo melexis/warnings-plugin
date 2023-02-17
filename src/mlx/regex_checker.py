@@ -59,7 +59,6 @@ class RegexChecker(WarningsChecker):
             }
         }
         groups = {name: result for name, result in match.groupdict().items() if result}
-        print(groups)
         for name, result in groups.items():
             if name.startswith("description"):
                 finding["description"] = result
@@ -79,7 +78,6 @@ class RegexChecker(WarningsChecker):
                 break
         for name, result in groups.items():
             if name.startswith("line"):
-                print(result)
                 try:
                     lineno = int(result, 0)
                 except TypeError:
