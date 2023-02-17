@@ -57,7 +57,6 @@ class WarningsPlugin:
         Args:
             checker (WarningsChecker): checker object
         '''
-        checker.reset()
         checker.cq_enabled = self.cq_enabled and checker.name in ('doxygen', 'sphinx', 'xmlrunner')
         self.activated_checkers[checker.name] = checker
 

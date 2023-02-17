@@ -23,15 +23,6 @@ class WarningsChecker:
         self.exclude_patterns = []
         self.include_patterns = []
 
-    def reset(self):
-        ''' Reset function (resets min, max and counter values) '''
-        self.count = 0
-        self.warn_min = 0
-        self.warn_max = 0
-        self._counted_warnings = []
-        self.cq_findings = []
-        self.cq_enabled = False
-
     @property
     def counted_warnings(self):
         ''' List: list of counted warnings (str) '''
