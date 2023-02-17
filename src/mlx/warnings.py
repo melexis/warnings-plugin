@@ -21,13 +21,14 @@ __version__ = require('mlx.warnings')[0].version
 
 class WarningsPlugin:
 
-    def __init__(self, verbose=False, config_file=None):
+    def __init__(self, verbose=False, config_file=None, cq_enabled=False):
         '''
         Function for initializing the parsers
 
         Args:
             verbose (bool): optional - enable verbose logging
             config_file (Path): optional - configuration file with setup
+            cq_enabled (bool): optional - enable generation of Code Quality report
         '''
         self.activated_checkers = {}
         self.verbose = verbose
@@ -47,6 +48,7 @@ class WarningsPlugin:
         self.warn_max = 0
         self.count = 0
         self.printout = False
+        self.cq_enabled = cq_enabled
 
     def activate_checker(self, checker):
         '''
@@ -56,6 +58,7 @@ class WarningsPlugin:
             checker (WarningsChecker): checker object
         '''
         checker.reset()
+        checker.cq_enabled = self.cq_enabled and checker.name in ('doxygen', 'sphinx', 'xmlrunner')
         self.activated_checkers[checker.name] = checker
 
     def activate_checker_name(self, name):
@@ -201,6 +204,18 @@ class WarningsPlugin:
             for checker in self.activated_checkers.values():
                 open_file.write("\n".join(checker.counted_warnings) + "\n")
 
+    def write_code_quality_report(self, out_file):
+        ''' Generates the Code Quality report artifact as a JSON file that implements a subset of the Code Climate spec
+
+        Args:
+            out_file (str): Location for the output file
+        '''
+        results = []
+        for checker in self.activated_checkers.values():
+            results.extend(checker.cq_findings)
+        with open(out_file, 'w', encoding='utf-8', newline='\n') as open_file:
+            json.dump(results, open_file, indent=4, sort_keys=False)
+
 
 def warnings_wrapper(args):
     parser = argparse.ArgumentParser(prog='mlx-warnings')
@@ -226,6 +241,8 @@ def warnings_wrapper(args):
                         help="Sphinx checker will include warnings matching (RemovedInSphinx\\d+Warning) regex")
     parser.add_argument('-o', '--output',
                         help='Output file that contains all counted warnings')
+    parser.add_argument('-C', '--code-quality',
+                        help='Output Code Quality report artifact for GitLab CI')
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true')
     parser.add_argument('--command', dest='command', action='store_true',
                         help='Treat program arguments as command to execute to obtain data')
@@ -237,6 +254,7 @@ def warnings_wrapper(args):
                         help='Possible not-used flags from above are considered as command flags')
 
     args = parser.parse_args(args)
+    code_quality_enabled = bool(args.code_quality)
 
     # Read config file
     if args.configfile is not None:
@@ -245,9 +263,9 @@ def warnings_wrapper(args):
         if checker_flags or warning_args:
             print("Configfile cannot be provided with other arguments")
             sys.exit(2)
-        warnings = WarningsPlugin(verbose=args.verbose, config_file=args.configfile)
+        warnings = WarningsPlugin(verbose=args.verbose, config_file=args.configfile, cq_enabled=code_quality_enabled)
     else:
-        warnings = WarningsPlugin(verbose=args.verbose)
+        warnings = WarningsPlugin(verbose=args.verbose, cq_enabled=code_quality_enabled)
         if args.sphinx:
             warnings.activate_checker_name('sphinx')
         if args.doxygen:
@@ -294,6 +312,8 @@ def warnings_wrapper(args):
     warnings.return_count()
     if args.output:
         warnings.write_counted_warnings(args.output)
+    if args.code_quality:
+        warnings.write_code_quality_report(args.code_quality)
     return warnings.return_check_limits()
 
 
