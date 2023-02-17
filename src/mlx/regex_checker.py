@@ -1,5 +1,6 @@
 import hashlib
 import re
+from pathlib import Path
 
 from mlx.warnings_checker import WarningsChecker
 
@@ -71,7 +72,10 @@ class RegexChecker(WarningsChecker):
                 break
         for name, result in groups.items():
             if name.startswith("path"):
-                finding["location"]["path"] = result
+                path = Path(result)
+                if path.is_absolute():
+                    path = path.relative_to(Path.cwd())
+                finding["location"]["path"] = str(path)
                 break
         for name, result in groups.items():
             if name.startswith("line"):
