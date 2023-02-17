@@ -32,6 +32,7 @@ class WarningsPlugin:
         '''
         self.activated_checkers = {}
         self.verbose = verbose
+        self.cq_enabled = cq_enabled
         self.public_checkers = [SphinxChecker(self.verbose), DoxyChecker(self.verbose), JUnitChecker(self.verbose),
                                 XMLRunnerChecker(self.verbose), CoverityChecker(self.verbose),
                                 RobotChecker(self.verbose)]
@@ -48,7 +49,6 @@ class WarningsPlugin:
         self.warn_max = 0
         self.count = 0
         self.printout = False
-        self.cq_enabled = cq_enabled
 
     def activate_checker(self, checker):
         '''
