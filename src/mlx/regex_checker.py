@@ -50,7 +50,7 @@ class RegexChecker(WarningsChecker):
 
     def add_code_quality_finding(self, match):
         finding = {
-            "severity": "minor",
+            "severity": "major",
             "location": {
                 "path": self.cq_default_path,
                 "lines": {
