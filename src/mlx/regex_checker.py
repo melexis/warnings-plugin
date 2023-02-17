@@ -11,7 +11,7 @@ sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 PYTHON_XMLRUNNER_REGEX = r"(\s*(ERROR|FAILED) (\[\d+\.\d{3}s\]: \s*(.+)))\n?"
 xmlrunner_pattern = re.compile(PYTHON_XMLRUNNER_REGEX)
 
-COVERITY_WARNING_REGEX = r"(?:((?:[/.]|[A-Za-z]).+?):(-?\d+):) (CID) \d+ \(#(?P<curr>\d+) of (?P<max>\d+)\): (?P<checker>.+)\): (?P<classification>\w+), *(.+)\n?"
+COVERITY_WARNING_REGEX = r"(?:((?:[/.]|[A-Za-z]).+?):(-?\d+):) (CID) \d+ \(#(?P<curr>\d+) of (?P<max>\d+)\): (?P<checker>.+\)): (?P<classification>\w+), *(.+)\n?"
 coverity_pattern = re.compile(COVERITY_WARNING_REGEX)
 
 
