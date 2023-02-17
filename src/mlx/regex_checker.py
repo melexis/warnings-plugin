@@ -119,7 +119,7 @@ class DoxyChecker(RegexChecker):
 class SphinxChecker(RegexChecker):
     name = 'sphinx'
     pattern = sphinx_pattern
-    sphinx_deprecation_regex = r"(?m)^(?:(.+?:(?:\d+|None)?):?\s*)?(DEBUG|INFO|WARNING|ERROR|SEVERE|(?:\w+Sphinx\d+Warning)):\s*(.+)$"  #r"(?m)^(?:(?P<path1>.+?:(?P<line1>\d+|None)?):?\s*)?(?P<severity1>DEBUG|INFO|WARNING|ERROR|SEVERE|(?:\w+Sphinx\d+Warning)):\s*(?P<description1>.+)$"
+    sphinx_deprecation_regex = r"(?m)^(?:(.+?:(?:\d+|None)?):?\s*)?(DEBUG|INFO|WARNING|ERROR|SEVERE|(?:\w+Sphinx\d+Warning)):\s*(.+)$"
     sphinx_deprecation_regex_in_match = "RemovedInSphinx\\d+Warning"
 
     def include_sphinx_deprecation(self):
