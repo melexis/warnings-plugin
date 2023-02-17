@@ -7,7 +7,7 @@ DOXYGEN_WARNING_REGEX = r"(?:(?P<path1>(?:[/.]|[A-Za-z]).+?):(?P<line1>-?\d+):\s
 doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
 
 SPHINX_WARNING_REGEX = r"(?m)^(?:((?P<path1>.+?):(?P<line1>\d+|None)?):?\s*)?(?P<severity1>DEBUG|INFO|WARNING|ERROR|SEVERE|CRITICAL):\s*(?P<description1>.+)$"
-ssphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
+sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 
 PYTHON_XMLRUNNER_REGEX = r"(\s*(?P<severity1>ERROR|FAILED) (\[\d+\.\d{3}s\]: \s*(?P<description1>.+)))\n?"
 xmlrunner_pattern = re.compile(PYTHON_XMLRUNNER_REGEX)
