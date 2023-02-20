@@ -2,13 +2,13 @@
     {
         "severity": "major",
         "location": {
-            "path": "git\\test\\index.rst",
+            "path": "git/test/index.rst",
             "lines": {
                 "begin": 1
             }
         },
         "description": "toctree contains reference to nonexisting document u'installation'",
-        "fingerprint": "2120c76e2a54a3b2212733c15ba62db3"
+        "fingerprint": "4112c9fb48c96c3d2d0f957215e2dd75"
     },
     {
         "severity": "major",
@@ -35,13 +35,13 @@
     {
         "severity": "critical",
         "location": {
-            "path": "\\home\\user\\myproject\\helper\\SimpleTimer.h",
+            "path": "helper/SimpleTimer.h",
             "lines": {
                 "begin": 19
             }
         },
         "description": "Unexpected character `\"'",
-        "fingerprint": "7c47a45e109d17f63562af16f258d242"
+        "fingerprint": "d71d9f49bd308ace916bce3c54f430c6"
     },
     {
         "severity": "major",

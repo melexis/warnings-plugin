@@ -1,6 +1,6 @@
 import hashlib
 import re
-from pathlib import Path
+from pathlib import PurePosixPath, Path
 
 from mlx.warnings_checker import WarningsChecker
 
