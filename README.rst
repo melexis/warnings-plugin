@@ -289,7 +289,7 @@ input file. When this setting is missing, the default value ``true`` is used.
 .. _`Robot Framework`: https://robotframework.org/
 .. _`--xunit report.xml`: https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#xunit-compatible-result-file
 
-.. _configuration file:
+.. _configuration_file:
 
 ----------------------------------
 Configuration File to Pass Options
@@ -423,7 +423,7 @@ Use `-C, --code-quality` to let the plugin generate `a Code Quality report`_ for
 Sphinx, Doxygen and XMLRunner will be included. Other checker types are not supported by this feature. The report is
 a JSON file that implements `a subset of the Code Climate spec`_. Declare this file `as an artifact`_ of the
 `code_quality` CI job.
-If a warning doesn't contain a path, `"cq_default_path"` from the :ref:`configuration file` will be used.
+If a warning doesn't contain a path, `"cq_default_path"` from the configuration_file_ will be used.
 If not configured, `.gitlab-ci.yml` will be used as a fallback path.
 
 =======================
