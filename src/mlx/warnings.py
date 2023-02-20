@@ -212,8 +212,9 @@ class WarningsPlugin:
         results = []
         for checker in self.activated_checkers.values():
             results.extend(checker.cq_findings)
+        content = json.dumps(results, indent=4, sort_keys=False)
         with open(out_file, 'w', encoding='utf-8', newline='\n') as open_file:
-            json.dump(results, open_file, indent=4, sort_keys=False)
+            open_file.write(f"{content}\n")
 
 
 def warnings_wrapper(args):
