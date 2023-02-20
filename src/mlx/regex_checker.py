@@ -80,7 +80,7 @@ class RegexChecker(WarningsChecker):
             if name.startswith("line"):
                 try:
                     lineno = int(result, 0)
-                except TypeError:
+                except (TypeError, ValueError):
                     lineno = 1
                 finding["location"]["lines"]["begin"] = lineno
                 break
