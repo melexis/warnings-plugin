@@ -23,6 +23,11 @@ setup(
                 'Useable with plugin-less CI systems.',
     long_description=open("README.rst").read(),
     long_description_content_type='text/x-rst',
+    project_urls={
+        'Documentation': 'https://melexis.github.io/warnings-plugin',
+        'Source': 'https://github.com/melexis/warnings-plugin',
+        'Tracker': 'https://github.com/melexis/warnings-plugin/issues',
+    },
     zip_safe=False,
     license='Apache License, Version 2.0',
     platforms='any',
