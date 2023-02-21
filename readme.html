@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Command Line Warnings Plugin &#8212; warning-plugin 4.2.0 documentation</title>
+    <title>Command Line Warnings Plugin &#8212; warning-plugin 4.3.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pydoctheme.css" />
     
@@ -33,7 +33,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="index.html">warning-plugin-4.2.0</a> &#187;</li> 
+        <li><a href="index.html">warning-plugin-4.3.2</a> &#187;</li> 
       </ul>
     </div>
     
@@ -255,17 +255,19 @@ python3<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class
 </section>
 </section>
 <section id="configuration-file-to-pass-options">
-<h2>Configuration File to Pass Options<a class="headerlink" href="#configuration-file-to-pass-options" title="Permalink to this heading">¶</a></h2>
+<span id="configuration-file"></span><h2>Configuration File to Pass Options<a class="headerlink" href="#configuration-file-to-pass-options" title="Permalink to this heading">¶</a></h2>
 <p>Beside command line, you can pass options through the configuration file.
 Configuration file is in JSON or <a class="reference external" href="https://yaml.org/spec/1.2.2/">YAML</a> format with a simple structure.</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
 <span class="w">    </span><span class="nt">&quot;sphinx&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;cq_default_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;doc/source/conf.py&quot;</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">&quot;min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">&quot;max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
 <span class="w">    </span><span class="p">},</span>
 <span class="w">    </span><span class="nt">&quot;doxygen&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;cq_default_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;doc/doxygen/Doxyfile&quot;</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">&quot;min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">&quot;max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
 <span class="w">    </span><span class="p">},</span>
@@ -364,6 +366,15 @@ may exist in the input file (or produced by the given command).</p>
 </dl>
 </div></blockquote>
 </section>
+<section id="code-quality-report">
+<h3>Code Quality Report<a class="headerlink" href="#code-quality-report" title="Permalink to this heading">¶</a></h3>
+<p>Use <cite>-C, –code-quality</cite> to let the plugin generate <a class="reference external" href="https://docs.gitlab.com/ee/ci/testing/code_quality.html">a Code Quality report</a> for GitLab CI. All counted
+Sphinx, Doxygen and XMLRunner will be included. Other checker types are not supported by this feature. The report is
+a JSON file that implements <a class="reference external" href="https://docs.gitlab.com/ee/ci/testing/code_quality.html#implement-a-custom-tool">a subset of the Code Climate spec</a>. Declare this file <a class="reference external" href="https://docs.gitlab.com/ee/ci/testing/code_quality.html#download-output-in-json-format">as an artifact</a> of the
+<cite>code_quality</cite> CI job.
+If a warning doesn’t contain a path, <cite>“cq_default_path”</cite> from the <a class="reference internal" href="#configuration-file">configuration_file</a> will be used.
+If not configured, <cite>.gitlab-ci.yml</cite> will be used as a fallback path.</p>
+</section>
 </section>
 </section>
 <section id="issues-and-new-features">
@@ -456,7 +467,7 @@ development of the plugin. We encourage anyone to contribute to our repository.<
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Jan 06, 2023.
+      Last updated on Feb 21, 2023.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
