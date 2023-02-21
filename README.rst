@@ -417,7 +417,8 @@ Example entries:
     JUnit/RobotFramework:
       test_warn_plugin_double_fail.myfirstfai1ure: Is our warnings plugin able to trace this random failure msg?
 
-Code Quality report
+Code Quality Report
+-------------------
 
 Use `-C, --code-quality` to let the plugin generate `a Code Quality report`_ for GitLab CI. All counted
 Sphinx, Doxygen and XMLRunner will be included. Other checker types are not supported by this feature. The report is
