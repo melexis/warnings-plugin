@@ -1,14 +1,16 @@
+import hashlib
 import re
+from pathlib import Path
 
 from mlx.warnings_checker import WarningsChecker
 
-DOXYGEN_WARNING_REGEX = r"(?:((?:[/.]|[A-Za-z]).+?):(-?\d+):\s*([Ww]arning|[Ee]rror)|<.+>:-?\d+(?::\s*([Ww]arning|[Ee]rror))?): (.+(?:(?!\s*(?:[Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*\b([Nn]otice|[Ww]arning|[Ee]rror): (?!notes)(.+)\n?"
+DOXYGEN_WARNING_REGEX = r"(?:(?P<path1>(?:[/.]|[A-Za-z]).+?):(?P<line1>-?\d+):\s*(?P<severity1>[Ww]arning|[Ee]rror)|<.+>:(?P<line2>-?\d+)(?::\s*(?P<severity2>[Ww]arning|[Ee]rror))?): (?P<description1>.+(?:(?!\s*([Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*\b(?P<severity3>[Nn]otice|[Ww]arning|[Ee]rror): (?!notes)(?P<description2>.+)\n?"
 doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)
 
-SPHINX_WARNING_REGEX = r"(?m)^(?:(.+?:(?:\d+|None)?):?\s*)?(DEBUG|INFO|WARNING|ERROR|SEVERE|CRITICAL):\s*(.+)$"
+SPHINX_WARNING_REGEX = r"(?m)^(?:((?P<path1>.+?):(?P<line1>\d+|None)?):?\s*)?(?P<severity1>DEBUG|INFO|WARNING|ERROR|SEVERE|CRITICAL):\s*(?P<description1>.+)$"
 sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 
-PYTHON_XMLRUNNER_REGEX = r"(\s*(ERROR|FAILED) (\[\d+\.\d{3}s\]: \s*(.+)))\n?"
+PYTHON_XMLRUNNER_REGEX = r"(\s*(?P<severity1>ERROR|FAILED) (\[\d+\.\d{3}s\]: \s*(?P<description1>.+)))\n?"
 xmlrunner_pattern = re.compile(PYTHON_XMLRUNNER_REGEX)
 
 COVERITY_WARNING_REGEX = r"(?:((?:[/.]|[A-Za-z]).+?):(-?\d+):) (CID) \d+ \(#(?P<curr>\d+) of (?P<max>\d+)\): (?P<checker>.+\)): (?P<classification>\w+), *(.+)\n?"
@@ -18,6 +20,16 @@ coverity_pattern = re.compile(COVERITY_WARNING_REGEX)
 class RegexChecker(WarningsChecker):
     name = 'regex'
     pattern = None
+    SEVERITY_MAP = {
+        'debug': 'info',
+        'info': 'info',
+        'notice': 'info',
+        'warning': 'major',
+        'error': 'critical',
+        'severe': 'critical',
+        'critical': 'critical',
+        'failed': 'critical',
+    }
 
     def check(self, content):
         ''' Function for counting the number of warnings in a specific text
@@ -33,6 +45,47 @@ class RegexChecker(WarningsChecker):
             self.count += 1
             self.counted_warnings.append(match_string)
             self.print_when_verbose(match_string)
+            if self.cq_enabled:
+                self.add_code_quality_finding(match)
+
+    def add_code_quality_finding(self, match):
+        finding = {
+            "severity": "major",
+            "location": {
+                "path": self.cq_default_path,
+                "lines": {
+                    "begin": 1,
+                }
+            }
+        }
+        groups = {name: result for name, result in match.groupdict().items() if result}
+        for name, result in groups.items():
+            if name.startswith("description"):
+                finding["description"] = result
+                break
+        else:
+            return  # no description was found, which is the bare minimum
+        for name, result in groups.items():
+            if name.startswith("severity"):
+                finding["severity"] = self.SEVERITY_MAP[result.lower()]
+                break
+        for name, result in groups.items():
+            if name.startswith("path"):
+                path = Path(result)
+                if path.is_absolute():
+                    path = path.relative_to(Path.cwd())
+                finding["location"]["path"] = str(path)
+                break
+        for name, result in groups.items():
+            if name.startswith("line"):
+                try:
+                    lineno = int(result, 0)
+                except (TypeError, ValueError):
+                    lineno = 1
+                finding["location"]["lines"]["begin"] = lineno
+                break
+        finding["fingerprint"] = hashlib.md5(str(finding).encode('utf8')).hexdigest()
+        self.cq_findings.append(finding)
 
 
 class CoverityChecker(RegexChecker):

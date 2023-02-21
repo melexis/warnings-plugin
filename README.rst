@@ -289,6 +289,7 @@ input file. When this setting is missing, the default value ``true`` is used.
 .. _`Robot Framework`: https://robotframework.org/
 .. _`--xunit report.xml`: https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#xunit-compatible-result-file
 
+.. _configuration_file:
 
 ----------------------------------
 Configuration File to Pass Options
@@ -302,11 +303,13 @@ Configuration file is in JSON or YAML_ format with a simple structure.
     {
         "sphinx": {
             "enabled": false,
+            "cq_default_path": "doc/source/conf.py",
             "min": 0,
             "max": 0
         },
         "doxygen": {
             "enabled": false,
+            "cq_default_path": "doc/doxygen/Doxyfile",
             "min": 0,
             "max": 0
         },
@@ -414,6 +417,16 @@ Example entries:
     JUnit/RobotFramework:
       test_warn_plugin_double_fail.myfirstfai1ure: Is our warnings plugin able to trace this random failure msg?
 
+Code Quality Report
+-------------------
+
+Use `-C, --code-quality` to let the plugin generate `a Code Quality report`_ for GitLab CI. All counted
+Sphinx, Doxygen and XMLRunner will be included. Other checker types are not supported by this feature. The report is
+a JSON file that implements `a subset of the Code Climate spec`_. Declare this file `as an artifact`_ of the
+`code_quality` CI job.
+If a warning doesn't contain a path, `"cq_default_path"` from the configuration_file_ will be used.
+If not configured, `.gitlab-ci.yml` will be used as a fallback path.
+
 =======================
 Issues and New Features
 =======================
@@ -431,3 +444,6 @@ There is a Contribution guide available if you would like to get involved in
 development of the plugin. We encourage anyone to contribute to our repository.
 
 .. _YAML: https://yaml.org/spec/1.2.2/
+.. _a Code Quality report: https://docs.gitlab.com/ee/ci/testing/code_quality.html
+.. _a subset of the Code Climate spec: https://docs.gitlab.com/ee/ci/testing/code_quality.html#implement-a-custom-tool
+.. _as an artifact: https://docs.gitlab.com/ee/ci/testing/code_quality.html#download-output-in-json-format

@@ -1,11 +1,13 @@
 {
     "sphinx": {
         "enabled": true,
+        "cq_default_path": "doc/source/conf.py",
         "min": 0,
         "max": 0
     },
     "doxygen": {
-        "enabled": false,
+        "enabled": true,
+        "cq_default_path": "doc/doxygen/Doxyfile",
         "min": 0,
         "max": 0
     },
@@ -15,12 +17,12 @@
         "max": 0
     },
     "xmlrunner": {
-        "enabled": false,
+        "enabled": true,
         "min": 0,
         "max": 0
     },
     "coverity": {
-        "enabled": false,
+        "enabled": true,
         "min": 0,
         "max": 0
     },
