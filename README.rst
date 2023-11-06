@@ -302,6 +302,7 @@ Configuration file is in JSON or YAML_ format with a simple structure.
         "sphinx": {
             "enabled": false,
             "cq_default_path": "doc/source/conf.py",
+            "cq_description_format": "{PRODUCT} | {description}",
             "min": 0,
             "max": 0
         },
@@ -422,8 +423,13 @@ Use `-C, --code-quality` to let the plugin generate `a Code Quality report`_ for
 Sphinx, Doxygen and XMLRunner will be included. Other checker types are not supported by this feature. The report is
 a JSON file that implements `a subset of the Code Climate spec`_. Define this file `as a codequality report artifact`_
 of the CI job.
+
 If a warning doesn't contain a path, `"cq_default_path"` from the `configuration file to pass options`_ will be used.
 If not configured, `.gitlab-ci.yml` will be used as a fallback path.
+
+You can customize the description with `"cq_description_format"`, see `configuration file to pass options`_.
+Its value should be a Python string template that uses the predefined variable `description`. In addition,
+environment variables are also available.
 
 =======================
 Issues and New Features

@@ -1,4 +1,5 @@
 import abc
+import os
 import re
 
 
@@ -20,6 +21,7 @@ class WarningsChecker:
         self.cq_findings = []
         self.cq_enabled = False
         self.cq_default_path = '.gitlab-ci.yml'
+        self.cq_description_format = '{description}'
         self.exclude_patterns = []
         self.include_patterns = []
 
@@ -27,6 +29,12 @@ class WarningsChecker:
     def counted_warnings(self):
         ''' List: list of counted warnings (str) '''
         return self._counted_warnings
+
+    def assemble_cq_description(self, raw_description):
+        try:
+            return self.cq_description_format.format(description=raw_description, **os.environ)
+        except KeyError as err:
+            raise ValueError(f"Failed to find environment value while assembling code quality description: {err}")
 
     @abc.abstractmethod
     def check(self, content):
@@ -154,6 +162,8 @@ class WarningsChecker:
         self.add_patterns(config.get("exclude"), self.exclude_patterns)
         if 'cq_default_path' in config:
             self.cq_default_path = config['cq_default_path']
+        if 'cq_description_format' in config:
+            self.cq_description_format = config['cq_description_format']
 
     def _is_excluded(self, content):
         ''' Checks if the specific text must be excluded based on the configured regexes for exclusion and inclusion.
