@@ -30,10 +30,6 @@
     :target: https://codeclimate.com/github/melexis/warnings-plugin
     :alt: Issue Count
 
-.. image:: https://requires.io/github/melexis/warnings-plugin/requirements.svg?branch=master
-    :target: https://requires.io/github/melexis/warnings-plugin/requirements/?branch=master
-    :alt: Requirements Status
-
 .. image:: https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat
     :target: https://github.com/melexis/warnings-plugin/issues
     :alt: Contributions welcome
