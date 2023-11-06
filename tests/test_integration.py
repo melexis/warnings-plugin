@@ -17,6 +17,11 @@ class TestIntegration(TestCase):
         if not TEST_OUT_DIR.exists():
             TEST_OUT_DIR.mkdir()
 
+    def tearDown(self):
+        for var in ('FIRST_ENVVAR', 'SECOND_ENVVAR'):
+            if var in os.environ:
+                del os.environ[var]
+
     def test_help(self):
         with self.assertRaises(SystemExit) as ex:
             warnings_wrapper(['--help'])
