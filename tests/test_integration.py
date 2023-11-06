@@ -1,4 +1,5 @@
 import filecmp
+import os
 from io import StringIO
 from pathlib import Path
 from unittest import TestCase
@@ -305,6 +306,22 @@ class TestIntegration(TestCase):
         retval = warnings_wrapper([
             '--code-quality', out_file,
             '--config', 'tests/test_in/config_example.json',
+            'tests/test_in/mixed_warnings.txt',
+        ])
+        self.assertEqual(2, retval)
+        self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
+
+    @patch('pathlib.Path.cwd')
+    def test_cq_description_format(self, path_cwd_mock):
+        os.environ['FIRST_ENVVAR'] = 'envvar_value'
+        os.environ['SECOND_ENVVAR'] = '12345'
+        path_cwd_mock.return_value = '/home/user/myproject'
+        filename = 'code_quality_format.json'
+        out_file = str(TEST_OUT_DIR / filename)
+        ref_file = str(TEST_IN_DIR / filename)
+        retval = warnings_wrapper([
+            '--code-quality', out_file,
+            '--config', 'tests/test_in/config_code_quality_format.json',
             'tests/test_in/mixed_warnings.txt',
         ])
         self.assertEqual(2, retval)

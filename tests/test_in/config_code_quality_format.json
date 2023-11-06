@@ -1,0 +1,31 @@
+{
+    "sphinx": {
+        "enabled": true,
+        "cq_default_path": "doc/source/conf.py",
+        "cq_description_format": "{FIRST_ENVVAR} | {description} ({SECOND_ENVVAR})",
+        "min": 0,
+        "max": 0
+    },
+    "doxygen": {
+        "enabled": true,
+        "cq_default_path": "doc/doxygen/Doxyfile",
+        "min": 0,
+        "max": 0
+    },
+    "junit": {
+        "enabled": false
+    },
+    "xmlrunner": {
+        "enabled": true,
+        "min": 0,
+        "max": 0
+    },
+    "coverity": {
+        "enabled": true,
+        "min": 0,
+        "max": 0
+    },
+    "robot": {
+        "enabled": false
+    }
+}
