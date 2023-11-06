@@ -311,6 +311,20 @@ class TestIntegration(TestCase):
         self.assertEqual(2, retval)
         self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
 
+    def test_cq_description_format_missing_envvar(self):
+        os.environ['FIRST_ENVVAR'] = 'envvar_value'
+        filename = 'code_quality_format.json'
+        out_file = str(TEST_OUT_DIR / filename)
+        with self.assertRaises(ValueError) as c_m:
+            warnings_wrapper([
+                '--code-quality', out_file,
+                '--config', 'tests/test_in/config_code_quality_format.json',
+                'tests/test_in/mixed_warnings.txt',
+            ])
+        self.assertEqual(
+            str(c_m.exception),
+            "Failed to find environment value while assembling code quality description: 'SECOND_ENVVAR'")
+
     @patch('pathlib.Path.cwd')
     def test_cq_description_format(self, path_cwd_mock):
         os.environ['FIRST_ENVVAR'] = 'envvar_value'
