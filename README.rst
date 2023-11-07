@@ -424,7 +424,7 @@ If a warning doesn't contain a path, `"cq_default_path"` from the `configuration
 If not configured, `.gitlab-ci.yml` will be used as a fallback path.
 
 You can customize the description with `"cq_description_template"`, see `configuration file to pass options`_.
-Its value should be a template for Python's string.Template. The template should contain `$description` and has access
+Its value should be a template for Python's `string.Template`_. The template should contain `$description` and has access
 to all environment variables, e.g. `$HOME`.
 
 =======================
@@ -447,3 +447,4 @@ development of the plugin. We encourage anyone to contribute to our repository.
 .. _a Code Quality report: https://docs.gitlab.com/ee/ci/testing/code_quality.html
 .. _a subset of the Code Climate spec: https://docs.gitlab.com/ee/ci/testing/code_quality.html#implement-a-custom-tool
 .. _as a codequality report artifact: https://docs.gitlab.com/ee/ci/yaml/artifacts_reports.html#artifactsreportscodequality
+.. _string.Template: https://docs.python.org/3/library/string.html#string.Template.template
