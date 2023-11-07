@@ -39,7 +39,7 @@ class WarningsChecker:
     @cq_description_template.setter
     def cq_description_template(self, template_obj):
         try:
-            template_obj.substitute(os.environ, description='test')
+            template_obj.template = template_obj.substitute(os.environ, description='$description')
         except KeyError as err:
             raise ValueError(f"Failed to find environment variable from configuration value "
                              f"'cq_description_template': {err}") from err
