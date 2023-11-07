@@ -261,7 +261,7 @@ with command:
 Parse for Robot Framework Test Failures
 ---------------------------------------
 
-When running `Robot Framework`_ tests with `--xunit report.xml`_ as an input
+When running `Robot Framework`_ tests with |--xunit report.xml|_ as an input
 argument, an xUnit compatible result file is generated. The warnings-plugin can
 parse this file and check the amount of failures. By default, the test results
 of all test suites in the file are taken into account. If you only care about
@@ -283,6 +283,7 @@ input file. When this setting is missing, the default value ``true`` is used.
     python3 -m mlx.warnings --robot --name "Suite Name" report.xml
 
 .. _`Robot Framework`: https://robotframework.org/
+.. |--xunit report.xml| replace:: ``--xunit report.xml``
 .. _`--xunit report.xml`: https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#xunit-compatible-result-file
 
 ----------------------------------
