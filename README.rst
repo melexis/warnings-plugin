@@ -105,9 +105,9 @@ Running Command
 ---------------
 
 There are few ways to run warnings plugin. If you are playing with Python on
-your computer you want to use `virtualenv`. This will separate your packages
+your computer you want to use ``virtualenv``. This will separate your packages
 per project and there is less chance of some dependency hell. You can
-initialize virtual environment in current directory by `virtualenv .` .
+initialize virtual environment in current directory by ``virtualenv .`` .
 
 Melexis Warnings plugin can be called directly from shell/console using:
 
@@ -115,7 +115,7 @@ Melexis Warnings plugin can be called directly from shell/console using:
 
     mlx-warnings -h
 
-It has also possibility to be called as module from `Python3`. In
+It has also possibility to be called as module from ``python3``. In
 that case command will look like:
 
 .. code-block:: bash
@@ -187,7 +187,7 @@ Parse for Coverity Defects
 Coverity is a static analysis tool which has option to run desktop analysis
 on your local changes and report the results back directly in the console.
 You only need to list affected files and below example lists changed files
-between your branch and master, which it then forwards to `cov-run-desktop`:
+between your branch and master, which it then forwards to ``cov-run-desktop``:
 
 .. code-block:: bash
 
@@ -195,7 +195,7 @@ between your branch and master, which it then forwards to `cov-run-desktop`:
 
 
 You can pipe the results to logfile, which you pass to warnings-plugin, or you use
-the `--command` argument and execute the `cov-run-desktop` through
+the ``--command`` argument and execute the ``cov-run-desktop`` through
 
 .. code-block:: bash
 
@@ -342,11 +342,11 @@ Configuration file is in JSON or YAML_ format with a simple structure.
     }
 
 
-First key is `checkername`, then it contains a boolean value for key `enabled`,
-value for minimum number of warnings with key `min` and value for maximum
-number of warnings with key `max`. This structure allows simple expansion.
+First key is ``checkername``, then it contains a boolean value for key ``enabled``,
+value for minimum number of warnings with key ``min`` and value for maximum
+number of warnings with key ``max``. This structure allows simple expansion.
 
-To run the plugin with configuration file you simply pass `--config` flag with
+To run the plugin with configuration file you simply pass ``--config`` flag with
 path to configuration file
 
 .. code-block:: bash
@@ -372,7 +372,7 @@ Exclude Matches With Regexes
 In case you want a checker to exclude certain matches, you can configure
 one or more regular expressions in the configuration file on a per-checker basis.
 If a pattern of a regex to exclude is found in a match of the checker's regex, the checker
-won't count that match. Add the regex(es) as a list of string values for the `exclude` key.
+won't count that match. Add the regex(es) as a list of string values for the ``exclude`` key.
 An example configuration for the sphinx checker is given below:
 
 .. code-block:: json
@@ -392,10 +392,10 @@ An example configuration for the sphinx checker is given below:
 Exclude Sphinx Deprecation Warnings
 -----------------------------------
 
-There is a special flag `--exclude-sphinx-deprecation` that lets the sphinx checker exclude
+There is a special flag ``--exclude-sphinx-deprecation`` that lets the sphinx checker exclude
 Sphinx deprecation warnings. These warnings match the following regular expression:
-`RemovedInSphinx\\d+Warning`. Using this flag results in the same behavior as adding this
-regex to the configuration file as value for the `exclude` key for the sphinx checker.
+``RemovedInSphinx\\d+Warning``. Using this flag results in the same behavior as adding this
+regex to the configuration file as value for the ``exclude`` key for the sphinx checker.
 
 Store All Counted Warnings
 --------------------------
@@ -415,17 +415,17 @@ Example entries:
 Code Quality Report
 -------------------
 
-Use `-C, --code-quality` to let the plugin generate `a Code Quality report`_ for GitLab CI. All counted
+Use ``-C, --code-quality`` to let the plugin generate `a Code Quality report`_ for GitLab CI. All counted
 Sphinx, Doxygen and XMLRunner will be included. Other checker types are not supported by this feature. The report is
 a JSON file that implements `a subset of the Code Climate spec`_. Define this file `as a codequality report artifact`_
 of the CI job.
 
-If a warning doesn't contain a path, `"cq_default_path"` from the `configuration file to pass options`_ will be used.
-If not configured, `.gitlab-ci.yml` will be used as a fallback path.
+If a warning doesn't contain a path, ``"cq_default_path"`` from the `configuration file to pass options`_ will be used.
+If not configured, ``.gitlab-ci.yml`` will be used as a fallback path.
 
-You can customize the description with `"cq_description_template"`, see `configuration file to pass options`_.
-Its value should be a template for Python's `string.Template`_. The template should contain `$description` and has access
-to all environment variables, e.g. `$HOME`.
+You can customize the description with ``"cq_description_template"``, see `configuration file to pass options`_.
+Its value should be a template for Python's ``string.Template``_. The template should contain ``$description`` and has
+access to all environment variables, e.g. ``$HOME``.
 
 =======================
 Issues and New Features
