@@ -298,7 +298,7 @@ Configuration file is in JSON or YAML_ format with a simple structure.
         "sphinx": {
             "enabled": false,
             "cq_default_path": "doc/source/conf.py",
-            "cq_description_format": "{PRODUCT} | {description}",
+            "cq_description_template": "$PRODUCT | $description",
             "min": 0,
             "max": 0
         },
@@ -423,9 +423,9 @@ of the CI job.
 If a warning doesn't contain a path, `"cq_default_path"` from the `configuration file to pass options`_ will be used.
 If not configured, `.gitlab-ci.yml` will be used as a fallback path.
 
-You can customize the description with `"cq_description_format"`, see `configuration file to pass options`_.
-Its value should be a Python string template that uses the predefined variable `description`. In addition,
-environment variables are also available.
+You can customize the description with `"cq_description_template"`, see `configuration file to pass options`_.
+Its value should be a template for Python's string.Template. The template should contain `$description` and has access
+to all environment variables, e.g. `$HOME`.
 
 =======================
 Issues and New Features
