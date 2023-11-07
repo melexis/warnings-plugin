@@ -2,7 +2,7 @@
     "sphinx": {
         "enabled": true,
         "cq_default_path": "doc/source/conf.py",
-        "cq_description_format": "{FIRST_ENVVAR} | {description} ({SECOND_ENVVAR})",
+        "cq_description_template": "$FIRST_ENVVAR | $description ($SECOND_ENVVAR)",
         "min": 0,
         "max": 0
     },

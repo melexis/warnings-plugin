@@ -323,12 +323,12 @@ class TestIntegration(TestCase):
         with self.assertRaises(ValueError) as c_m:
             warnings_wrapper([
                 '--code-quality', out_file,
-                '--config', 'tests/test_in/config_code_quality_format.json',
+                '--config', 'tests/test_in/config_cq_description_format.json',
                 'tests/test_in/mixed_warnings.txt',
             ])
         self.assertEqual(
             str(c_m.exception),
-            "Failed to find environment value while assembling code quality description: 'SECOND_ENVVAR'")
+            "Failed to find environment variable from configuration value 'cq_description_template': 'SECOND_ENVVAR'")
 
     @patch('pathlib.Path.cwd')
     def test_cq_description_format(self, path_cwd_mock):
@@ -340,7 +340,7 @@ class TestIntegration(TestCase):
         ref_file = str(TEST_IN_DIR / filename)
         retval = warnings_wrapper([
             '--code-quality', out_file,
-            '--config', 'tests/test_in/config_code_quality_format.json',
+            '--config', 'tests/test_in/config_cq_description_format.json',
             'tests/test_in/mixed_warnings.txt',
         ])
         self.assertEqual(2, retval)
