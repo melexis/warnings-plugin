@@ -1,4 +1,5 @@
 import filecmp
+import os
 from io import StringIO
 from pathlib import Path
 from unittest import TestCase
@@ -15,6 +16,11 @@ class TestIntegration(TestCase):
     def setUp(self):
         if not TEST_OUT_DIR.exists():
             TEST_OUT_DIR.mkdir()
+
+    def tearDown(self):
+        for var in ('FIRST_ENVVAR', 'SECOND_ENVVAR'):
+            if var in os.environ:
+                del os.environ[var]
 
     def test_help(self):
         with self.assertRaises(SystemExit) as ex:
@@ -305,6 +311,36 @@ class TestIntegration(TestCase):
         retval = warnings_wrapper([
             '--code-quality', out_file,
             '--config', 'tests/test_in/config_example.json',
+            'tests/test_in/mixed_warnings.txt',
+        ])
+        self.assertEqual(2, retval)
+        self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
+
+    def test_cq_description_format_missing_envvar(self):
+        os.environ['FIRST_ENVVAR'] = 'envvar_value'
+        filename = 'code_quality_format.json'
+        out_file = str(TEST_OUT_DIR / filename)
+        with self.assertRaises(ValueError) as c_m:
+            warnings_wrapper([
+                '--code-quality', out_file,
+                '--config', 'tests/test_in/config_cq_description_format.json',
+                'tests/test_in/mixed_warnings.txt',
+            ])
+        self.assertEqual(
+            str(c_m.exception),
+            "Failed to find environment variable from configuration value 'cq_description_template': 'SECOND_ENVVAR'")
+
+    @patch('pathlib.Path.cwd')
+    def test_cq_description_format(self, path_cwd_mock):
+        os.environ['FIRST_ENVVAR'] = 'envvar_value'
+        os.environ['SECOND_ENVVAR'] = '12345'
+        path_cwd_mock.return_value = '/home/user/myproject'
+        filename = 'code_quality_format.json'
+        out_file = str(TEST_OUT_DIR / filename)
+        ref_file = str(TEST_IN_DIR / filename)
+        retval = warnings_wrapper([
+            '--code-quality', out_file,
+            '--config', 'tests/test_in/config_cq_description_format.json',
             'tests/test_in/mixed_warnings.txt',
         ])
         self.assertEqual(2, retval)

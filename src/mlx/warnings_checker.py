@@ -1,5 +1,7 @@
 import abc
+import os
 import re
+from string import Template
 
 
 class WarningsChecker:
@@ -20,6 +22,7 @@ class WarningsChecker:
         self.cq_findings = []
         self.cq_enabled = False
         self.cq_default_path = '.gitlab-ci.yml'
+        self._cq_description_template = Template('$description')
         self.exclude_patterns = []
         self.include_patterns = []
 
@@ -27,6 +30,20 @@ class WarningsChecker:
     def counted_warnings(self):
         ''' List: list of counted warnings (str) '''
         return self._counted_warnings
+
+    @property
+    def cq_description_template(self):
+        ''' Template: string.Template instance based on the configured template string '''
+        return self._cq_description_template
+
+    @cq_description_template.setter
+    def cq_description_template(self, template_obj):
+        try:
+            template_obj.template = template_obj.substitute(os.environ, description='$description')
+        except KeyError as err:
+            raise ValueError(f"Failed to find environment variable from configuration value "
+                             f"'cq_description_template': {err}") from err
+        self._cq_description_template = template_obj
 
     @abc.abstractmethod
     def check(self, content):
@@ -154,6 +171,8 @@ class WarningsChecker:
         self.add_patterns(config.get("exclude"), self.exclude_patterns)
         if 'cq_default_path' in config:
             self.cq_default_path = config['cq_default_path']
+        if 'cq_description_template' in config:
+            self.cq_description_template = Template(config['cq_description_template'])
 
     def _is_excluded(self, content):
         ''' Checks if the specific text must be excluded based on the configured regexes for exclusion and inclusion.

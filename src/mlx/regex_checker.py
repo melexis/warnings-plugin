@@ -61,7 +61,7 @@ class RegexChecker(WarningsChecker):
         groups = {name: result for name, result in match.groupdict().items() if result}
         for name, result in groups.items():
             if name.startswith("description"):
-                finding["description"] = result
+                finding["description"] = self.cq_description_template.substitute(description=result)
                 break
         else:
             return  # no description was found, which is the bare minimum
