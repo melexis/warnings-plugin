@@ -2,7 +2,7 @@ import hashlib
 import re
 from pathlib import Path
 
-from mlx.warnings_checker import WarningsChecker
+from .warnings_checker import WarningsChecker
 
 DOXYGEN_WARNING_REGEX = r"(?:(?P<path1>(?:[/.]|[A-Za-z]).+?):(?P<line1>-?\d+):\s*(?P<severity1>[Ww]arning|[Ee]rror)|<.+>:(?P<line2>-?\d+)(?::\s*(?P<severity2>[Ww]arning|[Ee]rror))?): (?P<description1>.+(?:(?!\s*([Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*\b(?P<severity3>[Nn]otice|[Ww]arning|[Ee]rror): (?!notes)(?P<description2>.+)\n?"
 doxy_pattern = re.compile(DOXYGEN_WARNING_REGEX)

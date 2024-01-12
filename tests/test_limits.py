@@ -1,7 +1,6 @@
 from unittest import TestCase
 
-from mlx.regex_checker import DoxyChecker
-from mlx.warnings import WarningsPlugin
+from mlx.warnings import DoxyChecker, WarningsPlugin
 
 
 class TestLimits(TestCase):

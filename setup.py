@@ -1,7 +1,7 @@
 from glob import glob
 from os.path import basename, splitext
 
-from setuptools import find_packages, setup
+from setuptools import find_namespace_packages, setup
 
 PROJECT_URL = 'https://github.com/melexis/warnings-plugin'
 
@@ -14,7 +14,7 @@ setup(
     name='mlx.warnings',
     url=PROJECT_URL,
     use_scm_version={
-        'write_to': 'src/mlx/__warnings_version__.py'
+        'write_to': 'src/mlx/warnings/__version__.py'
     },
     setup_requires=['setuptools_scm'],
     author='Bavo Van Achte',
@@ -31,13 +31,10 @@ setup(
     zip_safe=False,
     license='Apache License, Version 2.0',
     platforms='any',
-    packages=find_packages('src'),
+    packages=find_namespace_packages(where='src/', include=['mlx.warnings']),
     package_dir={'': 'src'},
-    entry_points={'console_scripts': ['mlx-warnings = mlx.warnings:main']},
-    py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
-    include_package_data=True,
+    entry_points={'console_scripts': ['mlx-warnings = mlx.warnings.warnings:main']},
     install_requires=requires,
-    namespace_packages=['mlx'],
     classifiers=[
         # complete classifier list: http://pypi.python.org/pypi?%3Aaction=list_classifiers
         'Development Status :: 5 - Production/Stable',

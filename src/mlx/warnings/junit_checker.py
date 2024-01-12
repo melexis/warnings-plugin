@@ -5,7 +5,7 @@ except ImportError:
 
 from junitparser import Error, Failure, JUnitXml
 
-from mlx.warnings_checker import WarningsChecker
+from .warnings_checker import WarningsChecker
 
 
 class JUnitChecker(WarningsChecker):

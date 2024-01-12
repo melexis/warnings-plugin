@@ -3,8 +3,7 @@ import unittest
 
 from unittest.mock import patch
 
-from mlx.robot_checker import RobotSuiteChecker
-from mlx.warnings import WarningsPlugin
+from mlx.warnings import RobotSuiteChecker, WarningsPlugin
 
 
 class TestRobotWarnings(unittest.TestCase):

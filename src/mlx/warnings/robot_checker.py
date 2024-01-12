@@ -2,8 +2,8 @@ import sys
 
 from junitparser import Error, Failure
 
-from mlx.junit_checker import JUnitChecker
-from mlx.warnings_checker import WarningsChecker
+from .junit_checker import JUnitChecker
+from .warnings_checker import WarningsChecker
 
 
 class RobotChecker(WarningsChecker):

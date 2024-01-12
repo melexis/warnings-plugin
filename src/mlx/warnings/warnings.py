@@ -7,16 +7,16 @@ import glob
 import json
 import subprocess
 import sys
+from importlib.metadata import distribution
 from pathlib import Path
 
-from pkg_resources import require
 from ruamel.yaml import YAML
 
-from mlx.junit_checker import JUnitChecker
-from mlx.regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker
-from mlx.robot_checker import RobotChecker
+from .junit_checker import JUnitChecker
+from .regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker
+from .robot_checker import RobotChecker
 
-__version__ = require('mlx.warnings')[0].version
+__version__ = distribution('mlx.warnings').version
 
 
 class WarningsPlugin:
