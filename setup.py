@@ -1,6 +1,3 @@
-from glob import glob
-from os.path import basename, splitext
-
 from setuptools import find_namespace_packages, setup
 
 PROJECT_URL = 'https://github.com/melexis/warnings-plugin'
@@ -21,7 +18,7 @@ setup(
     author_email='bavo.van.achte@gmail.com',
     description='Command-line alternative for https://github.com/jenkinsci/warnings-plugin. '
                 'Useable with plugin-less CI systems.',
-    long_description=open("README.rst").read(),
+    long_description=open("README.rst", encoding="utf-8").read(),
     long_description_content_type='text/x-rst',
     project_urls={
         'Documentation': 'https://melexis.github.io/warnings-plugin',
