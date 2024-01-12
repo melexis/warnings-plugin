@@ -3,11 +3,7 @@ from pathlib import Path
 from unittest import TestCase
 from unittest.mock import patch
 
-from mlx.junit_checker import JUnitChecker
-from mlx.regex_checker import DoxyChecker, SphinxChecker, XMLRunnerChecker
-from mlx.robot_checker import RobotChecker
-
-from mlx.warnings import WarningsPlugin
+from mlx.warnings import JUnitChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker, RobotChecker, WarningsPlugin
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
 

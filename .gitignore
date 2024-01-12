@@ -97,4 +97,4 @@ pip-selfcheck.json
 *.swp
 
 # Offline version file
-src/mlx/__warnings_version__.py
+src/mlx/warnings/__version__.py

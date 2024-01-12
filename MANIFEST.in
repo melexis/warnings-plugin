@@ -5,7 +5,7 @@ graft tests
 # Include the readme file
 include README.rst
 include LICENSE
-exclude src/mlx/__warnings_version__.py
+exclude src/mlx/warnings/__version__.py
 recursive-exclude docs _build *
 recursive-exclude tests test_out *
 
