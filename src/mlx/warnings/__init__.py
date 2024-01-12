@@ -1,20 +1,23 @@
 """ Melexis fork of warnings plugin """
 
 __all__ = [
-    'JUnitChecker',
+    'CoverityChecker',
     'DoxyChecker',
-    'SphinxChecker',
-    'XMLRunnerChecker',
+    'JUnitChecker',
     'RobotChecker',
     'RobotSuiteChecker',
-    'warnings_wrapper',
+    'SphinxChecker',
+    'WarningsChecker',
     'WarningsPlugin',
+    'XMLRunnerChecker',
     '__version__',
+    'warnings_wrapper',
 ]
 
 
 from .__version__ import __version__
-from .warnings import WarningsPlugin, warnings_wrapper
 from .junit_checker import JUnitChecker
-from .regex_checker import DoxyChecker, SphinxChecker, XMLRunnerChecker
+from .regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker
 from .robot_checker import RobotChecker, RobotSuiteChecker
+from .warnings import WarningsPlugin, warnings_wrapper
+from .warnings_checker import WarningsChecker
