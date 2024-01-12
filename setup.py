@@ -35,6 +35,7 @@ setup(
     package_dir={'': 'src'},
     entry_points={'console_scripts': ['mlx-warnings = mlx.warnings.warnings:main']},
     install_requires=requires,
+    python_requires='>=3.8',
     classifiers=[
         # complete classifier list: http://pypi.python.org/pypi?%3Aaction=list_classifiers
         'Development Status :: 5 - Production/Stable',
@@ -45,7 +46,6 @@ setup(
         'Operating System :: Microsoft :: Windows',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
