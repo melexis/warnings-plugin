@@ -305,6 +305,9 @@ def warnings_wrapper(args):
         if (not args.ignore) and (retval != 0):
             return retval
     else:
+        if args.flags:
+            print(f"WARNING: Some keyword arguments have been ignored because they followed positional arguments: "
+                  f"{' '.join(args.flags)!r}")
         retval = warnings_logfile(warnings, args.logfile)
         if retval != 0:
             return retval
