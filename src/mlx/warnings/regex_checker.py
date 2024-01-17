@@ -73,7 +73,11 @@ class RegexChecker(WarningsChecker):
             if name.startswith("path"):
                 path = Path(result)
                 if path.is_absolute():
-                    path = path.relative_to(Path.cwd())
+                    try:
+                        path = path.relative_to(Path.cwd())
+                    except ValueError as err:
+                        raise ValueError("Failed to convert abolute path to relative path for Code Quality report: "
+                                         f"{err}") from err
                 finding["location"]["path"] = str(path)
                 break
         for name, result in groups.items():
