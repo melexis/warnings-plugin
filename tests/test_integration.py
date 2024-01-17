@@ -316,6 +316,21 @@ class TestIntegration(TestCase):
         self.assertEqual(2, retval)
         self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
 
+    def test_code_quality_abspath_failure(self):
+        filename = 'code_quality.json'
+        out_file = str(TEST_OUT_DIR / filename)
+        with self.assertRaises(ValueError) as c_m:
+            warnings_wrapper([
+                '--code-quality', out_file,
+                '--config', 'tests/test_in/config_example.json',
+                'tests/test_in/mixed_warnings.txt',
+            ])
+        self.assertEqual(
+            str(c_m.exception),
+            "Failed to convert abolute path to relative path for Code Quality report: "
+            f"'/home/user/myproject/helper/SimpleTimer.h' is not in the subpath of '{Path.cwd()}' OR "
+            "one path is relative and the other is absolute.")
+
     def test_cq_description_format_missing_envvar(self):
         os.environ['FIRST_ENVVAR'] = 'envvar_value'
         filename = 'code_quality_format.json'
