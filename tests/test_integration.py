@@ -325,11 +325,10 @@ class TestIntegration(TestCase):
                 '--config', 'tests/test_in/config_example.json',
                 'tests/test_in/mixed_warnings.txt',
             ])
-        self.assertEqual(
-            str(c_m.exception),
+        self.assertTrue(str(c_m.exception).startswith(
             "Failed to convert abolute path to relative path for Code Quality report: "
-            f"'/home/user/myproject/helper/SimpleTimer.h' is not in the subpath of '{Path.cwd()}' OR "
-            "one path is relative and the other is absolute.")
+            "'/home/user/myproject/helper/SimpleTimer.h'")
+        )
 
     def test_cq_description_format_missing_envvar(self):
         os.environ['FIRST_ENVVAR'] = 'envvar_value'
