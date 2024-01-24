@@ -14,7 +14,7 @@
     "junit": {
         "enabled": false,
         "min": 0,
-        "max": 0
+        "max": "$NONEXISTENT_ENVVAR"
     },
     "xmlrunner": {
         "enabled": true,

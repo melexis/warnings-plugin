@@ -211,8 +211,8 @@ class WarningsPlugin:
         for checker in self.public_checkers:
             try:
                 checker_config = config[checker.name]
-                substitute_envvar(checker_config, {'min', 'max'})
                 if bool(checker_config['enabled']):
+                    substitute_envvar(checker_config, {'min', 'max'})
                     self.activate_checker(checker)
                     checker.parse_config(checker_config)
                     print("Config parsing for {name} completed".format(name=checker.name))
