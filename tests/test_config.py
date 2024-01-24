@@ -12,7 +12,7 @@ TEST_IN_DIR = Path(__file__).parent / 'test_in'
 class TestConfig(TestCase):
     def setUp(self):
         os.environ['MIN_SPHINX_WARNINGS'] = '0'
-        os.environ['MAX_SPHINX_WARNINGS'] = '2'
+        os.environ['MAX_SPHINX_WARNINGS'] = '0'
 
     def test_configfile_parsing(self):
         warnings = WarningsPlugin(config_file=(TEST_IN_DIR / "config_example.json"))
