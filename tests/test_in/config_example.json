@@ -2,13 +2,13 @@
     "sphinx": {
         "enabled": true,
         "cq_default_path": "doc/source/conf.py",
-        "min": 0,
-        "max": 0
+        "min": "$MIN_SPHINX_WARNINGS",
+        "max": "${MAX_SPHINX_WARNINGS}"
     },
     "doxygen": {
         "enabled": true,
         "cq_default_path": "doc/doxygen/Doxyfile",
-        "min": 0,
+        "min": "0",
         "max": 0
     },
     "junit": {

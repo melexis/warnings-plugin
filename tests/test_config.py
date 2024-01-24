@@ -1,3 +1,4 @@
+import os
 from io import StringIO
 from pathlib import Path
 from unittest import TestCase
@@ -9,6 +10,10 @@ TEST_IN_DIR = Path(__file__).parent / 'test_in'
 
 
 class TestConfig(TestCase):
+    def setUp(self):
+        os.environ['MIN_SPHINX_WARNINGS'] = '0'
+        os.environ['MAX_SPHINX_WARNINGS'] = '2'
+
     def test_configfile_parsing(self):
         warnings = WarningsPlugin(config_file=(TEST_IN_DIR / "config_example.json"))
         warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
