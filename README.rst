@@ -292,7 +292,8 @@ Configuration File to Pass Options
 
 Beside command line, you can pass options through the configuration file.
 Configuration file is in JSON or YAML_ format with a simple structure.
-The values for 'min' and 'max' can be set with environment variables.
+The values for 'min' and 'max' can be set with environment variables via a
+|string.Template|_, e.g. ``"${MAX_SPHINX_WARNINGS}"``.
 
 .. code-block:: json
 
@@ -302,13 +303,13 @@ The values for 'min' and 'max' can be set with environment variables.
             "cq_default_path": "doc/source/conf.py",
             "cq_description_template": "$PRODUCT | $description",
             "min": 0,
-            "max": "$MAX_SPHINX_WARNINGS"
+            "max": "${MAX_SPHINX_WARNINGS}"
         },
         "doxygen": {
             "enabled": true,
             "cq_default_path": "doc/doxygen/Doxyfile",
-            "min": 0,
-            "max": "${MAX_DOXY_WARNINGS}"
+            "min": "$MIN_DOXY_WARNINGS",
+            "max": "$MAX_DOXY_WARNINGS"
         },
         "junit": {
             "enabled": false,
