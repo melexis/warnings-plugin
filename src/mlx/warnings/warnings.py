@@ -21,9 +21,6 @@ from .robot_checker import RobotChecker
 __version__ = distribution('mlx.warnings').version
 
 
-class WarningsConfigError(Exception):
-    pass
-
 
 def substitute_envvar(checker_config, keys):
     """Modifies configuration for checker in-place, resolving any environment variables for ``keys``

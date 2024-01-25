@@ -3,6 +3,8 @@ import os
 import re
 from string import Template
 
+from .exceptions import WarningsConfigError
+
 
 class WarningsChecker:
     name = 'checker'
@@ -41,8 +43,8 @@ class WarningsChecker:
         try:
             template_obj.template = template_obj.substitute(os.environ, description='$description')
         except KeyError as err:
-            raise ValueError(f"Failed to find environment variable from configuration value "
-                             f"'cq_description_template': {err}") from err
+            raise WarningsConfigError(f"Failed to find environment variable from configuration value "
+                                      f"'cq_description_template': {err}") from err
         self._cq_description_template = template_obj
 
     @abc.abstractmethod

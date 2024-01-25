@@ -6,7 +6,7 @@ from unittest import TestCase
 
 from unittest.mock import patch
 
-from mlx.warnings import warnings_wrapper
+from mlx.warnings import warnings_wrapper, WarningsConfigError
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
 TEST_OUT_DIR = Path(__file__).parent / 'test_out'
@@ -334,7 +334,7 @@ class TestIntegration(TestCase):
         os.environ['FIRST_ENVVAR'] = 'envvar_value'
         filename = 'code_quality_format.json'
         out_file = str(TEST_OUT_DIR / filename)
-        with self.assertRaises(ValueError) as c_m:
+        with self.assertRaises(WarningsConfigError) as c_m:
             warnings_wrapper([
                 '--code-quality', out_file,
                 '--config', 'tests/test_in/config_cq_description_format.json',
