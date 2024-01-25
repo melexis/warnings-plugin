@@ -14,12 +14,12 @@ from string import Template
 
 from ruamel.yaml import YAML
 
+from .exceptions import WarningsConfigError
 from .junit_checker import JUnitChecker
 from .regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker
 from .robot_checker import RobotChecker
 
 __version__ = distribution('mlx.warnings').version
-
 
 
 def substitute_envvar(checker_config, keys):
