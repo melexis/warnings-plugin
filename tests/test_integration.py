@@ -18,7 +18,7 @@ class TestIntegration(TestCase):
             TEST_OUT_DIR.mkdir()
 
     def tearDown(self):
-        for var in ('FIRST_ENVVAR', 'SECOND_ENVVAR'):
+        for var in ('FIRST_ENVVAR', 'SECOND_ENVVAR', 'MIN_SPHINX_WARNINGS', 'MAX_SPHINX_WARNINGS'):
             if var in os.environ:
                 del os.environ[var]
 
@@ -132,6 +132,8 @@ class TestIntegration(TestCase):
             warnings_wrapper(['--junit', '--exact-warnings', '3', '--max-warnings', '3', 'tests/test_in/junit*.xml'])
 
     def test_configfile_ok(self):
+        os.environ['MIN_SPHINX_WARNINGS'] = '0'
+        os.environ['MAX_SPHINX_WARNINGS'] = '0'
         retval = warnings_wrapper(['--config', 'tests/test_in/config_example.json', 'tests/test_in/junit_single_fail.xml'])
         self.assertEqual(0, retval)
 
@@ -304,6 +306,8 @@ class TestIntegration(TestCase):
 
     @patch('pathlib.Path.cwd')
     def test_code_quality(self, path_cwd_mock):
+        os.environ['MIN_SPHINX_WARNINGS'] = '0'
+        os.environ['MAX_SPHINX_WARNINGS'] = '0'
         path_cwd_mock.return_value = '/home/user/myproject'
         filename = 'code_quality.json'
         out_file = str(TEST_OUT_DIR / filename)
@@ -317,6 +321,8 @@ class TestIntegration(TestCase):
         self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
 
     def test_code_quality_abspath_failure(self):
+        os.environ['MIN_SPHINX_WARNINGS'] = '0'
+        os.environ['MAX_SPHINX_WARNINGS'] = '0'
         filename = 'code_quality.json'
         out_file = str(TEST_OUT_DIR / filename)
         with self.assertRaises(ValueError) as c_m:
