@@ -5,7 +5,7 @@ from unittest import TestCase
 from unittest.mock import patch
 
 from mlx.warnings import (JUnitChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker, RobotChecker, WarningsPlugin,
-    WarningsConfigError)
+                          WarningsConfigError)
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
 
