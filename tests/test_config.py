@@ -1,14 +1,25 @@
+import os
 from io import StringIO
 from pathlib import Path
 from unittest import TestCase
 from unittest.mock import patch
 
-from mlx.warnings import JUnitChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker, RobotChecker, WarningsPlugin
+from mlx.warnings import (JUnitChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker, RobotChecker, WarningsPlugin,
+                          WarningsConfigError)
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
 
 
 class TestConfig(TestCase):
+    def setUp(self):
+        os.environ['MIN_SPHINX_WARNINGS'] = '0'
+        os.environ['MAX_SPHINX_WARNINGS'] = '0'
+
+    def tearDown(self):
+        for var in ('MIN_SPHINX_WARNINGS', 'MAX_SPHINX_WARNINGS'):
+            if var in os.environ:
+                del os.environ[var]
+
     def test_configfile_parsing(self):
         warnings = WarningsPlugin(config_file=(TEST_IN_DIR / "config_example.json"))
         warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
@@ -21,6 +32,14 @@ class TestConfig(TestCase):
         self.assertEqual(warnings.return_count(), 2)
         warnings.check('ERROR [0.000s]: test_some_error_test (something.anything.somewhere)')
         self.assertEqual(warnings.return_count(), 3)
+
+    def test_configfile_parsing_missing_envvar(self):
+        del os.environ['MAX_SPHINX_WARNINGS']
+        with self.assertRaises(WarningsConfigError) as c_m:
+            WarningsPlugin(config_file=(TEST_IN_DIR / "config_example.json"))
+        self.assertEqual(
+            str(c_m.exception),
+            "Failed to find environment variable 'MAX_SPHINX_WARNINGS' for configuration value 'max'")
 
     def _helper_exclude(self, warnings):
         with patch('sys.stdout', new=StringIO()) as verbose_output:

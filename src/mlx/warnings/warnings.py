@@ -5,18 +5,41 @@ import argparse
 import errno
 import glob
 import json
+import os
 import subprocess
 import sys
 from importlib.metadata import distribution
 from pathlib import Path
+from string import Template
 
 from ruamel.yaml import YAML
 
+from .exceptions import WarningsConfigError
 from .junit_checker import JUnitChecker
 from .regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker
 from .robot_checker import RobotChecker
 
 __version__ = distribution('mlx.warnings').version
+
+
+def substitute_envvar(checker_config, keys):
+    """Modifies configuration for checker in-place, resolving any environment variables for ``keys``
+
+    Args:
+        checker_config (dict): Configuration for a specific WarningsChecker
+        keys (set): Set of keys to process the value of
+
+    Raises:
+        WarningsConfigError: Failed to find an environment variable
+    """
+    for key in keys:
+        if key in checker_config and isinstance(checker_config[key], str):
+            template_obj = Template(checker_config[key])
+            try:
+                checker_config[key] = template_obj.substitute(os.environ)
+            except KeyError as err:
+                raise WarningsConfigError(f"Failed to find environment variable {err} for configuration value {key!r}")\
+                    from None
 
 
 class WarningsPlugin:
@@ -187,6 +210,7 @@ class WarningsPlugin:
             try:
                 checker_config = config[checker.name]
                 if bool(checker_config['enabled']):
+                    substitute_envvar(checker_config, {'min', 'max'})
                     self.activate_checker(checker)
                     checker.parse_config(checker_config)
                     print("Config parsing for {name} completed".format(name=checker.name))
