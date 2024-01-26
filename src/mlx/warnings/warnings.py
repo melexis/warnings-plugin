@@ -38,7 +38,8 @@ def substitute_envvar(checker_config, keys):
             try:
                 checker_config[key] = template_obj.substitute(os.environ)
             except KeyError as err:
-                raise WarningsConfigError(f"Failed to find environment variable {err}") from None
+                raise WarningsConfigError(f"Failed to find environment variable {err} for configuration value {key!r}")\
+                    from None
 
 
 class WarningsPlugin:
