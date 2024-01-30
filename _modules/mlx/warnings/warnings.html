@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx.warnings.warnings &#8212; warning-plugin 5.1.0 documentation</title>
+    <title>mlx.warnings.warnings &#8212; warning-plugin 5.2.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pydoctheme.css" />
     
@@ -30,7 +30,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="../../../index.html">warning-plugin-5.1.0</a> &#187;</li>
+        <li><a href="../../../index.html">warning-plugin-5.2.0</a> &#187;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -55,18 +55,41 @@
 <span class="kn">import</span> <span class="nn">errno</span>
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">importlib.metadata</span> <span class="kn">import</span> <span class="n">distribution</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="n">Template</span>
 
 <span class="kn">from</span> <span class="nn">ruamel.yaml</span> <span class="kn">import</span> <span class="n">YAML</span>
 
+<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="kn">import</span> <span class="n">WarningsConfigError</span>
 <span class="kn">from</span> <span class="nn">.junit_checker</span> <span class="kn">import</span> <span class="n">JUnitChecker</span>
 <span class="kn">from</span> <span class="nn">.regex_checker</span> <span class="kn">import</span> <span class="n">CoverityChecker</span><span class="p">,</span> <span class="n">DoxyChecker</span><span class="p">,</span> <span class="n">SphinxChecker</span><span class="p">,</span> <span class="n">XMLRunnerChecker</span>
 <span class="kn">from</span> <span class="nn">.robot_checker</span> <span class="kn">import</span> <span class="n">RobotChecker</span>
 
 <span class="n">__version__</span> <span class="o">=</span> <span class="n">distribution</span><span class="p">(</span><span class="s1">&#39;mlx.warnings&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">version</span>
+
+
+<span class="k">def</span> <span class="nf">substitute_envvar</span><span class="p">(</span><span class="n">checker_config</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Modifies configuration for checker in-place, resolving any environment variables for ``keys``</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        checker_config (dict): Configuration for a specific WarningsChecker</span>
+<span class="sd">        keys (set): Set of keys to process the value of</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        WarningsConfigError: Failed to find an environment variable</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">checker_config</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">checker_config</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">template_obj</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">checker_config</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">checker_config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">template_obj</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">WarningsConfigError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to find environment variable </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2"> for configuration value </span><span class="si">{</span><span class="n">key</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>\
+                    <span class="kn">from</span> <span class="kc">None</span>
 
 
 <div class="viewcode-block" id="WarningsPlugin"><a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsPlugin">[docs]</a><span class="k">class</span> <span class="nc">WarningsPlugin</span><span class="p">:</span>
@@ -237,6 +260,7 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">checker_config</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">checker</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
                 <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="n">checker_config</span><span class="p">[</span><span class="s1">&#39;enabled&#39;</span><span class="p">]):</span>
+                    <span class="n">substitute_envvar</span><span class="p">(</span><span class="n">checker_config</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">})</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">activate_checker</span><span class="p">(</span><span class="n">checker</span><span class="p">)</span>
                     <span class="n">checker</span><span class="o">.</span><span class="n">parse_config</span><span class="p">(</span><span class="n">checker_config</span><span class="p">)</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Config parsing for </span><span class="si">{name}</span><span class="s2"> completed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">checker</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
@@ -504,7 +528,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Jan 17, 2024.
+      Last updated on Jan 30, 2024.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
