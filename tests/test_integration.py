@@ -365,3 +365,7 @@ class TestIntegration(TestCase):
         ])
         self.assertEqual(2, retval)
         self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
+
+    def test_coverity_no_credentials(self):
+        with self.assertRaises(ValueError):
+            warnings_wrapper(['--coverity', 'bla'])

@@ -18,6 +18,7 @@ from .exceptions import WarningsConfigError
 from .junit_checker import JUnitChecker
 from .regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker
 from .robot_checker import RobotChecker
+from .coverity_checker import CoverityServerChecker
 
 __version__ = distribution('mlx.warnings').version
 
@@ -58,7 +59,7 @@ class WarningsPlugin:
         self.cq_enabled = cq_enabled
         self.public_checkers = [SphinxChecker(self.verbose), DoxyChecker(self.verbose), JUnitChecker(self.verbose),
                                 XMLRunnerChecker(self.verbose), CoverityChecker(self.verbose),
-                                RobotChecker(self.verbose)]
+                                RobotChecker(self.verbose), CoverityServerChecker(self.verbose)]
 
         if config_file:
             with open(config_file, 'r', encoding='utf-8') as open_file:
