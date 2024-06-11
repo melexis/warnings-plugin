@@ -13,6 +13,7 @@ __all__ = [
     '__version__',
     'warnings_wrapper',
     'WarningsConfigError',
+    'CoverityServerChecker',
 ]
 
 
@@ -23,3 +24,4 @@ from .regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunne
 from .robot_checker import RobotChecker, RobotSuiteChecker
 from .warnings import WarningsPlugin, warnings_wrapper
 from .warnings_checker import WarningsChecker
+from .coverity_checker import CoverityServerChecker
