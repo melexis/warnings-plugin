@@ -30,3 +30,5 @@ robot:
   - name: Suite name 2
     min: 0
     max: 0
+coverityserver:
+  enabled: false

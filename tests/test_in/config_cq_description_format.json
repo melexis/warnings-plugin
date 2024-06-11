@@ -27,5 +27,8 @@
     },
     "robot": {
         "enabled": false
+    },
+    "coverityserver": {
+        "enabled": false
     }
 }

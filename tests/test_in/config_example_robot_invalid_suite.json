@@ -43,5 +43,8 @@
                 "max": 2
             }
         ]
+    },
+    "coverityserver": {
+        "enabled": false
     }
 }
