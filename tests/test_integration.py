@@ -367,5 +367,11 @@ class TestIntegration(TestCase):
         self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
 
     def test_coverity_no_credentials(self):
-        with self.assertRaises(ValueError):
+        with patch('sys.stdout', new=StringIO()) as fake_out:
             warnings_wrapper(['--coverity', 'bla'])
+        stdout_log = fake_out.getvalue()
+        self.assertEqual(
+            'FILE: bla does not exist',
+            stdout_log.strip()
+        )
+
