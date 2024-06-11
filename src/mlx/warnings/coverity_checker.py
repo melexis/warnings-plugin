@@ -4,10 +4,9 @@ from decouple import config, Config, RepositoryEnv
 
 from mlx.coverity import CoverityConfigurationService, CoverityDefectService
 from urllib.error import URLError
-from .warnings_checker import WarningsChecker
 from .regex_checker import CoverityChecker
 
-class CoverityServerChecker(WarningsChecker):
+class CoverityServerChecker(CoverityChecker):
     name = 'coverityserver'
     transport = 'http'
     port = '8080'
@@ -37,7 +36,7 @@ class CoverityServerChecker(WarningsChecker):
         self._fill_vars(config)
         self.classification = "Pending,Bug,Unclassified"
 
-        super(CoverityChecker, self).__init__(verbose=verbose)
+        super().__init__(verbose=verbose)
 
     def _extract_args(self, logfile):
         '''
