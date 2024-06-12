@@ -311,6 +311,7 @@ file to plugin.
 
 
 .. code-block:: bash
+
     # Coverity checker assumes logfile as configuration file (.env format)
     mlx-warnings --coverityserver .env.example
 
