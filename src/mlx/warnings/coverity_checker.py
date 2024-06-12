@@ -1,10 +1,9 @@
-import sys
-
 from decouple import config, Config, RepositoryEnv
 
 from mlx.coverity import CoverityConfigurationService, CoverityDefectService
 from urllib.error import URLError
 from .regex_checker import CoverityChecker
+
 
 class CoverityServerChecker(CoverityChecker):
     name = 'coverityserver'
@@ -65,7 +64,7 @@ class CoverityServerChecker(CoverityChecker):
         coverity_conf_service = CoverityConfigurationService(self.transport, self.hostname, self.port)
         coverity_conf_service.login(self.username, self.password)
         if self.verbose:
-            print("Retrieving stream from Coverity Server" % (self.transport, self.hostname, self.port))
+            print("Retrieving stream from Coverity Server: %s://%s:%s" % (self.transport, self.hostname, self.port))
         check_stream = coverity_conf_service.get_stream(self.stream)
         if check_stream is None:
             raise ValueError('Coverity checker failed. No such Coverity stream [%s] found on [%s]',
