@@ -21,3 +21,5 @@ recursive-include ci *.py
 
 # added by check_manifest.py
 include *.md
+
+include .env.example
