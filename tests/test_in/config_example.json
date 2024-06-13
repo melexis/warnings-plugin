@@ -40,5 +40,11 @@
                 "max": 0
             }
         ]
+    },
+    "code_prover": {
+        "enabled": false
+    },
+    "bug_finder": {
+        "enabled": false
     }
 }

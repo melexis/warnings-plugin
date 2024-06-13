@@ -30,3 +30,27 @@ robot:
   - name: Suite name 2
     min: 0
     max: 0
+code_prover:
+  enabled: false
+  severity:
+  - name: green
+    min: 0
+    max: -1
+  - name: orange
+    min: 0
+    max: 10
+  - name: red
+    min: 0
+    max: 0
+bug_finder:
+  enabled: false
+  severity:
+  - name: green
+    min: 0
+    max: -1
+  - name: orange
+    min: 0
+    max: 10
+  - name: red
+    min: 0
+    max: 0
