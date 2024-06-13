@@ -18,6 +18,7 @@ from .exceptions import WarningsConfigError
 from .junit_checker import JUnitChecker
 from .regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker
 from .robot_checker import RobotChecker
+from .polyspace_checker import CodeProverChecker, BugFinderChecker
 
 __version__ = distribution('mlx.warnings').version
 
@@ -58,7 +59,8 @@ class WarningsPlugin:
         self.cq_enabled = cq_enabled
         self.public_checkers = [SphinxChecker(self.verbose), DoxyChecker(self.verbose), JUnitChecker(self.verbose),
                                 XMLRunnerChecker(self.verbose), CoverityChecker(self.verbose),
-                                RobotChecker(self.verbose)]
+                                RobotChecker(self.verbose), CodeProverChecker(self.verbose),
+                                BugFinderChecker(self.verbose)]
 
         if config_file:
             with open(config_file, 'r', encoding='utf-8') as open_file:
@@ -80,7 +82,8 @@ class WarningsPlugin:
         Args:
             checker (WarningsChecker): checker object
         '''
-        checker.cq_enabled = self.cq_enabled and checker.name in ('doxygen', 'sphinx', 'xmlrunner')
+        checker.cq_enabled = self.cq_enabled and checker.name in ('doxygen', 'sphinx', 'xmlrunner', 'bug_finder',
+                                                                  'code_prover')
         self.activated_checkers[checker.name] = checker
 
     def activate_checker_name(self, name):
@@ -250,6 +253,8 @@ def warnings_wrapper(args):
     group1.add_argument('-r', '--robot', dest='robot', action='store_true')
     group1.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
     group1.add_argument('-x', '--xmlrunner', dest='xmlrunner', action='store_true')
+    group1.add_argument('--code-prover', dest='code_prover', action='store_true')
+    group1.add_argument('--bug-finder', dest='bug_finder', action='store_true')
     group1.add_argument('--name', default='',
                         help='Name of the Robot Framework test suite to check results of')
     group1.add_argument('-m', '--maxwarnings', '--max-warnings', type=int, default=0,
@@ -300,6 +305,10 @@ def warnings_wrapper(args):
             warnings.activate_checker_name('xmlrunner')
         if args.coverity:
             warnings.activate_checker_name('coverity')
+        if args.code_prover:
+            warnings.activate_checker_name('code_prover')
+        if args.bug_finder:
+            warnings.activate_checker_name('bug_finder')
         if args.robot:
             robot_checker = warnings.activate_checker_name('robot')
             robot_checker.parse_config({
