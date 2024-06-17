@@ -246,6 +246,7 @@ def warnings_wrapper(args):
     parser = argparse.ArgumentParser(prog='mlx-warnings')
     group1 = parser.add_argument_group('Configuration command line options')
     group1.add_argument('--coverity', dest='coverity', action='store_true')
+    group1.add_argument('--coverityserver', dest='coverityserver', action='store_true')
     group1.add_argument('-d', '--doxygen', dest='doxygen', action='store_true')
     group1.add_argument('-j', '--junit', dest='junit', action='store_true')
     group1.add_argument('-r', '--robot', dest='robot', action='store_true')
@@ -301,6 +302,8 @@ def warnings_wrapper(args):
             warnings.activate_checker_name('xmlrunner')
         if args.coverity:
             warnings.activate_checker_name('coverity')
+        if args.coverityserver:
+            warnings.activate_checker_name('coverityserver')
         if args.robot:
             robot_checker = warnings.activate_checker_name('robot')
             robot_checker.parse_config({
