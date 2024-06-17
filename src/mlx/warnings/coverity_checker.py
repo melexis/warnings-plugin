@@ -33,7 +33,16 @@ class CoverityServerChecker(CoverityChecker):
             verbose (bool): Enable/disable verbose logging
         '''
         self._fill_vars(config)
-        self.classification = "Pending,Bug,Unclassified"
+        self.filters = {
+            "checker": "",
+            "impact": "",
+            "kind": "",
+            "classification": "Pending,Bug,Intentional,Unclassified",
+            "action": "",
+            "component": "",
+            "cwe": "",
+            "cid": ""
+            }
 
         super().__init__(verbose=verbose)
 
@@ -83,8 +92,9 @@ class CoverityServerChecker(CoverityChecker):
         self._connect_to_coverity()
         print("Querying Coverity Server for defects on stream %s" % self.stream)
         try:
-            defects = self.coverity_service.get_defects(self.project_name, self.stream, classification=self.classification)
+            defects = self.coverity_service.get_defects(self.project_name, self.stream, self.filters)
         except (URLError, AttributeError) as error:
             print('Coverity checker failed with %s' % error)
             return
+        print(defects)
         self.count = defects.totalNumberOfRecords
