@@ -4,7 +4,8 @@ from .warnings_checker import WarningsChecker
 
 
 class PolyspaceChecker(WarningsChecker):
-    checkers = {}
+    name = 'polyspace'
+    checkers = []
 
     @property
     def counted_warnings(self, name):
@@ -14,33 +15,33 @@ class PolyspaceChecker(WarningsChecker):
             all_counted_warnings.extend(checker.counted_warnings)
         return all_counted_warnings
 
-    def get_minimum(self, name):
+    def get_minimum(self):
         ''' Gets the lowest minimum amount of warnings
 
         Returns:
             int: the lowest minimum for warnings
         '''
-        if self.checkers[name]:
-            return min(x.get_minimum() for x in self.checkers[name])
+        if self.checkers:
+            return min(x.get_minimum() for x in self.checkers)
         return 0
 
-    def set_minimum(self, minimum, name):
+    def set_minimum(self, minimum):
         ''' Setter function for the minimum amount of warnings
 
         Args:
             minimum (int): minimum amount of warnings allowed
         '''
-        for checker in self.checkers[name]:
+        for checker in self.checkers:
             checker.set_minimum(minimum)
 
-    def get_maximum(self, name):
+    def get_maximum(self):
         ''' Gets the highest minimum amount of warnings
 
         Returns:
             int: the highest maximum for warnings
         '''
-        if self.checkers[name]:
-            return max(x.get_maximum() for x in self.checkers[name])
+        if self.checkers:
+            return max(x.get_maximum() for x in self.checkers)
         return 0
 
     def set_maximum(self, maximum):
@@ -54,14 +55,24 @@ class PolyspaceChecker(WarningsChecker):
 
     def check(self, content):
         '''
-        Function for counting the number of failures in a specific Robot
-        Framework test suite
+        Function for counting the number of failures in a TSV file exported by Polyspace
 
         Args:
             content (str): The content to parse
         '''
         for checker in self.checkers:
             checker.check(content)
+
+    def return_count(self):
+        ''' Getter function for the amount of warnings found
+
+        Returns:
+            int: Number of warnings found
+        '''
+        self.count = 0
+        for checker in self.checkers:
+            self.count += checker.return_count()
+        return self.count
 
     def return_check_limits(self):
         ''' Function for checking whether the warning count is within the configured limits
@@ -77,91 +88,42 @@ class PolyspaceChecker(WarningsChecker):
             count += checker.return_check_limits()
         return count
 
-
-class CodeProverChecker(PolyspaceChecker):
-    name = 'code_prover'
-    _tsv_file = None
-
-    def __init__(self, name, **kwargs):
-        ''' Constructor
-
-        Args:
-            name (str): Name of the test suite to check the results of
-            check_suite_name (bool): Whether to raise an error when no test in suite with given name is found
-        '''
-        super().__init__(**kwargs)
-        self.name = name
-
-    @property
-    def tsv_file(self):
-        """The path of the TSV file"""
-        return self._tsv_file
-
-    @tsv_file.setter
-    def tsv_file(self, file_path):
-        if file_path.is_file():
-            self._tsv_file = file_path
-        else:
-            raise ValueError(f"{file_path} is not a file")
-
     def parse_config(self, config):
         self.checkers = []
-        for suite_config in config['severity']:
-            checker = PolyspaceChecker(verbose=self.verbose)
-            checker.parse_config(suite_config)
-            self.checkers.append(checker)
+        for family, data in config.items():
+            if family == "enabled":
+                continue
+            for check in data:
+                for key, value in check.items():
+                    if key == "min":
+                        minimum = value
+                    elif key == "max":
+                        maximum = value
+                    else:
+                        colomn = key
+                        check_value = value
+                if not (minimum and maximum and colomn and check_value):
+                    raise ValueError("Expected a dict with these key value pairs:"
+                                     "{\n   <colomn-name>: <value_to_check>,\n   min: <number>,\n   max: <number>\n}")
+                self.checkers.append(PolyspaceCheck(self.log_file, family, colomn, check_value, minimum, maximum))
 
-    def return_count(self):
-        ''' Getter function for the amount of warnings found
+class PolyspaceCheck:
 
-        Returns:
-            int: Number of warnings found
-        '''
-        self.count = 0
-        for checker in self.checkers:
-            self.count += checker.return_count()
-        return self.count
+    def __init__(self, log_file, family, colomn, check_value, minimum, maximum):
+        self.log_file = log_file
+        self.family = family
+        self.colomn = colomn
+        self.check_value = check_value
+        self.minimum = minimum
+        self.maximum = maximum
 
-class BugFinderChecker(PolyspaceChecker):
-    name = 'bug_finder'
-    checkers = []
-
-    def __init__(self, name, **kwargs):
-        ''' Constructor
+    def check(self, content):
+        """ Function for counting the number the specified value to be checked in a specified colomn of the TSV file.
 
         Args:
-            name (str): Name of the test suite to check the results of
-            check_suite_name (bool): Whether to raise an error when no test in suite with given name is found
-        '''
-        super().__init__(**kwargs)
-        self.name = name
+            content (str): The content to parse
 
-    @property
-    def tsv_file(self):
-        """The path of the TSV file"""
-        return self._tsv_file
-
-    @tsv_file.setter
-    def tsv_file(self, file_path):
-        if file_path.is_file():
-            self._tsv_file = file_path
-        else:
-            raise ValueError(f"{file_path} is not a file")
-
-    def parse_config(self, config):
-        self.checkers = []
-        for suite_config in config['severity']:
-            checker = PolyspaceChecker(verbose=self.verbose)
-            checker.parse_config(suite_config)
-            self.checkers.append(checker)
-
-    def return_count(self):
-        ''' Getter function for the amount of warnings found
-
-        Returns:
-            int: Number of warnings found
-        '''
-        self.count = 0
-        for checker in self.checkers:
-            self.count += checker.return_count()
-        return self.count
+        Raises:
+            SystemExit: No suite with name ``self.name`` found. Returning error code -1.
+        """
+        pass  #TODO: add the check

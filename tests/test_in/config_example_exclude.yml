@@ -30,27 +30,29 @@ robot:
   - name: Suite name 2
     min: 0
     max: 0
-code_prover:
+polyspace:
   enabled: false
-  severity:
-  - name: green
-    min: 0
-    max: -1
-  - name: orange
-    min: 0
-    max: 10
-  - name: red
+  run-time check:
+  - color: red
     min: 0
     max: 0
-bug_finder:
-  enabled: false
-  severity:
-  - name: green
-    min: 0
-    max: -1
-  - name: orange
+  - color: orange
     min: 0
     max: 10
-  - name: red
+  global variable:
+  - color: red
     min: 0
     max: 0
+  - color: orange
+    min: 0
+    max: 10
+  defect:
+  - information: "impact: high"
+    min: 0
+    max: 0
+  - information: "impact: medium"
+    min: 0
+    max: 10
+  - information: "impact: low"
+    min: 0
+    max: 30
