@@ -112,12 +112,13 @@ class WarningsPlugin:
         '''
         return self.activated_checkers[name]
 
-    def check(self, content):
+    def check(self, content, file_extension):
         '''
         Function for counting the number of warnings in a specific text
 
         Args:
-            content (str): The text to parse
+            content (str/_io.TextIOWrapper): The text to parse / The open file
+            file_extension (str): The file extension
         '''
         if self.printout:
             print(content)
@@ -126,7 +127,7 @@ class WarningsPlugin:
             print("No checkers activated. Please use activate_checker function")
         else:
             for checker in self.activated_checkers.values():
-                checker.check(content)
+                checker.check(content, file_extension=file_extension)
 
     def set_maximum(self, maximum):
         ''' Setter function for the maximum amount of warnings
@@ -202,7 +203,7 @@ class WarningsPlugin:
         self.printout = printout
 
     def config_parser(self, config):
-        ''' Parsing configuration dict extracted by previously opened JSON file
+        ''' Parsing configuration dict extracted by previously opened JSON or yaml/yml file
 
         Args:
             config (dict): Content of configuration file
@@ -252,7 +253,7 @@ def warnings_wrapper(args):
     group1.add_argument('-r', '--robot', dest='robot', action='store_true')
     group1.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
     group1.add_argument('-x', '--xmlrunner', dest='xmlrunner', action='store_true')
-    group1.add_argument('--polyspace', dest='polyspace', action='store_true')
+    group1.add_argument('-p', '--polyspace', dest='polyspace', action='store_true')
     group1.add_argument('--name', default='',
                         help='Name of the Robot Framework test suite to check results of')
     group1.add_argument('-m', '--maxwarnings', '--max-warnings', type=int, default=0,
@@ -263,7 +264,7 @@ def warnings_wrapper(args):
                         help='Exact amount of warnings expected')
     group2 = parser.add_argument_group('Configuration file with options')
     group2.add_argument('--config', dest='configfile', action='store', required=False, type=Path,
-                        help='Config file in JSON format provides toggle of checkers and their limits')
+                        help='Config file in JSON or yaml/yml format provides toggle of checkers and their limits')
     group2.add_argument('--include-sphinx-deprecation', dest='include_sphinx_deprecation', action='store_true',
                         help="Sphinx checker will include warnings matching (RemovedInSphinx\\d+Warning) regex")
     parser.add_argument('-o', '--output',
@@ -282,7 +283,6 @@ def warnings_wrapper(args):
 
     args = parser.parse_args(args)
     code_quality_enabled = bool(args.code_quality)
-
     # Read config file
     if args.configfile is not None:
         checker_flags = args.sphinx or args.doxygen or args.junit or args.coverity or args.xmlrunner or args.robot or args.polyspace
@@ -309,6 +309,8 @@ def warnings_wrapper(args):
                 'suites': [{'name': args.name, 'min': 0, 'max': 0}],
                 'check_suite_names': True,
             })
+        if args.polyspace:
+            warnings.activate_checker_name('polyspace')
         if args.exact_warnings:
             if args.maxwarnings | args.minwarnings:
                 print("expected-warnings cannot be provided with maxwarnings or minwarnings")
@@ -409,8 +411,13 @@ def warnings_logfile(warnings, log):
     for file_wildcard in log:
         if glob.glob(file_wildcard):
             for logfile in glob.glob(file_wildcard):
-                with open(logfile, 'r') as loghandle:
-                    warnings.check(loghandle.read())  #TODO: library for TSV files
+                _filename, file_extension = os.path.splitext(logfile)
+                if file_extension == ".cvs" or file_extension == ".tsv":
+                    with open(logfile, newline="") as file:
+                        warnings.check(file, file_extension)
+                else:
+                    with open(logfile, 'r') as loghandle:
+                        warnings.check(loghandle.read(), file_extension)
         else:
             print("FILE: %s does not exist" % file_wildcard)
             return 1
