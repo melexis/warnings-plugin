@@ -31,8 +31,11 @@ class PolyspaceChecker(WarningsChecker):
         # set colomn names to lowercase
         reader.fieldnames = [name.lower() for name in reader.fieldnames]
 
-        for checker in self.checkers:
-            checker.check(reader)
+        for row in reader:
+            for checker in self.checkers:
+                if row['family'].lower() == checker.family_value:
+                    if row[checker.colomn_name].lower() == checker.check_value:
+                        checker.count = checker.count + 1
 
     def return_count(self):
         ''' Getter function for the amount of warnings found
@@ -42,7 +45,8 @@ class PolyspaceChecker(WarningsChecker):
         '''
         self.count = 0
         for checker in self.checkers:
-            self.count += checker.return_count()
+            print("{0.count} warnings found for '{0.colomn_name}: {0.check_value}'".format(checker))
+            self.count += checker.count
         return self.count
 
     def return_check_limits(self):
@@ -67,6 +71,9 @@ class PolyspaceChecker(WarningsChecker):
             else:
                 print("Number of warnings ({0.count}) is between limits {0.warn_min} and {0.warn_max}. Well done."
                     .format(self))
+        self.warn_min = 0
+        self.warn_max = 0
+        self.count = check_failures
         return check_failures
 
     def parse_config(self, config):
@@ -125,19 +132,6 @@ class PolyspaceCheck:
         self.maximum = maximum
         self.count = 0
 
-    def check(self, reader):
-        """ Function for counting the number the specified value to be checked in a specified colomn of the
-        TSV/CSV file.
-
-        Args:
-            reader (csv.DictReader): The DictReader class of csv library
-        """
-        for row in reader:
-            if row['family'] == self.family_value:
-
-                if row[self.colomn_name].lower() == self.check_value:
-                    self.count += 1
-
     def get_minimum(self):
         ''' Gets the lowest minimum amount of warnings
 
@@ -153,11 +147,3 @@ class PolyspaceCheck:
             int: the highest maximum for warnings
         '''
         return self.maximum
-
-    def return_count(self):
-        ''' Getter function for the amount of warnings found
-
-        Returns:
-            int: Number of warnings found
-        '''
-        return self.count
