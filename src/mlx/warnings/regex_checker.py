@@ -31,7 +31,7 @@ class RegexChecker(WarningsChecker):
         'failed': 'critical',
     }
 
-    def check(self, content):
+    def check(self, content, **kwargs):
         ''' Function for counting the number of warnings in a specific text
 
         Args:
@@ -97,7 +97,7 @@ class CoverityChecker(RegexChecker):
     pattern = coverity_pattern
     CLASSIFICATION = "Unclassified"
 
-    def check(self, content):
+    def check(self, content, **kwargs):
         '''
         Function for counting the number of warnings, but adopted for Coverity
         output

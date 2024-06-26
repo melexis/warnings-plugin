@@ -48,7 +48,7 @@ class WarningsChecker:
         self._cq_description_template = template_obj
 
     @abc.abstractmethod
-    def check(self, content):
+    def check(self, content, **kwargs):
         ''' Function for counting the number of warnings in a specific text
 
         Args:
