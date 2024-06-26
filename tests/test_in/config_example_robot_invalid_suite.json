@@ -44,10 +44,7 @@
             }
         ]
     },
-    "code_prover": {
-        "enabled": false
-    },
-    "bug_finder": {
+    "polyspace": {
         "enabled": false
     }
 }
