@@ -8,6 +8,7 @@ from mlx.warnings import PolyspaceCheck, WarningsPlugin
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
 
+
 class TestPolyspaceWarnings(unittest.TestCase):
     def setUp(self):
         self.warnings = WarningsPlugin(verbose=True)

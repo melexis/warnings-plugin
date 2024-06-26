@@ -1,4 +1,3 @@
-import pathlib
 import csv
 
 from .warnings_checker import WarningsChecker
@@ -68,11 +67,12 @@ class PolyspaceChecker(WarningsChecker):
                 check_failures += 1
                 self._return_error_code()
             elif self.warn_min == self.warn_max and self.count == self.warn_max:
-                print("Number of warnings ({0.count}) is exactly as expected. Well done."
-                    .format(self))
+                print("Number of warnings ({0.count}) is exactly as expected. Well done.".format(self))
             else:
-                print("Number of warnings ({0.count}) is between limits {0.warn_min} and {0.warn_max}. Well done."
-                    .format(self))
+                print(
+                    "Number of warnings ({0.count}) is between limits {0.warn_min} and {0.warn_max}. Well done."
+                    .format(self)
+                )
         self.warn_min = 0
         self.warn_max = 0
         self.count = check_failures
@@ -108,12 +108,15 @@ class PolyspaceChecker(WarningsChecker):
                 if not maximum:
                     maximum = 0
                 if not (column_name and check_value):
-                    raise ValueError("Expected a list of dicts as value of the key which represents the value of the "
-                                    "'Family' column. These dicts need to consist 3 key-value pairs (Note: if 'min' or "
-                                    "'max' is not defined, it will get the default value of 0):\n"
-                                    "{\n    <column-name>: <value_to_check>,\n    min: <number>,\n    max: <number>\n};"
-                                    f"got\n{{\n    {column_name}: {check_value},\n    min: {minimum},\n    max: {maximum}\n}}\n")
+                    raise ValueError(
+                        "Expected a list of dicts as value of the key which represents the value of the "
+                        "'Family' column. These dicts need to consist 3 key-value pairs (Note: if 'min' or "
+                        "'max' is not defined, it will get the default value of 0):\n"
+                        "{\n    <column-name>: <value_to_check>,\n    min: <number>,\n    max: <number>\n};"
+                        f"got\n{{\n    {column_name}: {check_value},\n    min: {minimum},\n    max: {maximum}\n}}\n"
+                    )
                 self.checkers.append(PolyspaceCheck(family_value, column_name, check_value, minimum, maximum))
+
 
 class PolyspaceCheck:
 
