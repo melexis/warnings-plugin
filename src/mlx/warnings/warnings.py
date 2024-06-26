@@ -253,7 +253,6 @@ def warnings_wrapper(args):
     group1.add_argument('-r', '--robot', dest='robot', action='store_true')
     group1.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
     group1.add_argument('-x', '--xmlrunner', dest='xmlrunner', action='store_true')
-    group1.add_argument('-p', '--polyspace', dest='polyspace', action='store_true')
     group1.add_argument('--name', default='',
                         help='Name of the Robot Framework test suite to check results of')
     group1.add_argument('-m', '--maxwarnings', '--max-warnings', type=int, default=0,
@@ -285,7 +284,7 @@ def warnings_wrapper(args):
     code_quality_enabled = bool(args.code_quality)
     # Read config file
     if args.configfile is not None:
-        checker_flags = args.sphinx or args.doxygen or args.junit or args.coverity or args.xmlrunner or args.robot or args.polyspace
+        checker_flags = args.sphinx or args.doxygen or args.junit or args.coverity or args.xmlrunner or args.robot
         warning_args = args.maxwarnings or args.minwarnings or args.exact_warnings
         if checker_flags or warning_args:
             print("Configfile cannot be provided with other arguments")
@@ -309,8 +308,6 @@ def warnings_wrapper(args):
                 'suites': [{'name': args.name, 'min': 0, 'max': 0}],
                 'check_suite_names': True,
             })
-        if args.polyspace:
-            warnings.activate_checker_name('polyspace')
         if args.exact_warnings:
             if args.maxwarnings | args.minwarnings:
                 print("expected-warnings cannot be provided with maxwarnings or minwarnings")
