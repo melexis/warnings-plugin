@@ -28,13 +28,13 @@ class PolyspaceChecker(WarningsChecker):
             reader = csv.DictReader(content, delimiter="\t")
         elif kwargs["file_extension"] == ".csv":
             reader = csv.DictReader(content)
-        # set colomn names to lowercase
+        # set column names to lowercase
         reader.fieldnames = [name.lower() for name in reader.fieldnames]
 
         for row in reader:
             for checker in self.checkers:
                 if row['family'].lower() == checker.family_value:
-                    if row[checker.colomn_name].lower() == checker.check_value:
+                    if row[checker.column_name].lower() == checker.check_value:
                         checker.count = checker.count + 1
 
     def return_count(self):
@@ -45,7 +45,7 @@ class PolyspaceChecker(WarningsChecker):
         '''
         self.count = 0
         for checker in self.checkers:
-            print("{0.count} warnings found for '{0.colomn_name}: {0.check_value}'".format(checker))
+            print("{0.count} warnings found for '{0.column_name}: {0.check_value}'".format(checker))
             self.count += checker.count
         return self.count
 
@@ -57,8 +57,10 @@ class PolyspaceChecker(WarningsChecker):
                 (or 1 in case of a count of 0 warnings)
         '''
         check_failures = 0
+        if len(self.checkers) == 0:
+            print("Warning: There are no polyspace checks recognised. Please specify them in a configuration file.")
         for checker in self.checkers:
-            print('Counted failures for {!r}: {!r}.'.format(checker.colomn_name, checker.check_value))
+            print('Counted failures for {!r}: {!r}.'.format(checker.column_name, checker.check_value))
             self.count = checker.count
             self.warn_min = checker.minimum
             self.warn_max = checker.maximum
@@ -83,10 +85,10 @@ class PolyspaceChecker(WarningsChecker):
             config (dict): Content of configuration file
 
         Raises:
-            ValueError: Expected a list of dicts as value of the key which represents the value of the 'Family' colomn.
+            ValueError: Expected a list of dicts as value of the key which represents the value of the 'Family' column.
             These dicts need to consist 3 key-value pairs (Note: if 'min' or 'max' is not defined, it will get the
             default value of 0):
-            {\n    <colomn-name>: <value_to_check>,\n    min: <number>,\n    max: <number>\n}
+            {\n    <column-name>: <value_to_check>,\n    min: <number>,\n    max: <number>\n}
         """
         self.checkers = []
         for family_value, data in config.items():
@@ -99,34 +101,34 @@ class PolyspaceChecker(WarningsChecker):
                     elif key == "max":
                         maximum = value
                     else:
-                        colomn_name = key.lower()
+                        column_name = key.lower()
                         check_value = value.lower()
                 if not minimum:
                     minimum = 0
                 if not maximum:
                     maximum = 0
-                if not (colomn_name and check_value):
+                if not (column_name and check_value):
                     raise ValueError("Expected a list of dicts as value of the key which represents the value of the "
-                                    "'Family' colomn. These dicts need to consist 3 key-value pairs (Note: if 'min' or "
+                                    "'Family' column. These dicts need to consist 3 key-value pairs (Note: if 'min' or "
                                     "'max' is not defined, it will get the default value of 0):\n"
-                                    "{\n    <colomn-name>: <value_to_check>,\n    min: <number>,\n    max: <number>\n};"
-                                    f"got\n{{\n    {colomn_name}: {check_value},\n    min: {minimum},\n    max: {maximum}\n}}\n")
-                self.checkers.append(PolyspaceCheck(family_value, colomn_name, check_value, minimum, maximum))
+                                    "{\n    <column-name>: <value_to_check>,\n    min: <number>,\n    max: <number>\n};"
+                                    f"got\n{{\n    {column_name}: {check_value},\n    min: {minimum},\n    max: {maximum}\n}}\n")
+                self.checkers.append(PolyspaceCheck(family_value, column_name, check_value, minimum, maximum))
 
 class PolyspaceCheck:
 
-    def __init__(self, family_value, colomn_name, check_value, minimum, maximum):
+    def __init__(self, family_value, column_name, check_value, minimum, maximum):
         """Initialize the PolyspaceCheck
 
         Args:
-            family_value (str): The value to search for in the 'Family' colomn
-            colomn_name (str): The name of the colomn
-            check_value (str): The value to check in the colomn
+            family_value (str): The value to search for in the 'Family' column
+            column_name (str): The name of the column
+            check_value (str): The value to check in the column
             minimum (int): The minimum amount the check_value can occur
             maximum (int): The maximum amount the check_value can occur
         """
         self.family_value = family_value
-        self.colomn_name = colomn_name
+        self.column_name = column_name
         self.check_value = check_value
         self.minimum = minimum
         self.maximum = maximum
