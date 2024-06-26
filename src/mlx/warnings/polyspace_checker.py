@@ -99,7 +99,7 @@ class PolyspaceChecker(WarningsChecker):
         count = 0
         for checker in self.checkers:
             print(
-                'Counted failures for family {!r} \'{}: {}\''
+                'Counted failures for family {!r} \'{}\': \'{}\''
                 .format(checker.family_value, checker.column_name, checker.check_value)
             )
             count += checker.return_check_limits()
@@ -163,5 +163,5 @@ class PolyspaceCheck(WarningsChecker):
         Returns:
             int: Number of warnings found
         '''
-        print("{} warnings found".format(self.count))
+        print("{} warnings found for {!r}: {!r}".format(self.count, self.column_name, self.check_value))
         return self.count
