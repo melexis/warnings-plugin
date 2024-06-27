@@ -12,20 +12,20 @@ class TestLimits(TestCase):
     def test_set_maximum(self):
         for x in range(0, 10):
             self.warnings.set_maximum(x)
-            self.assertEqual(self.warnings.get_checker(DoxyChecker.name).get_maximum(), x)
+            self.assertEqual(self.warnings.get_checker(DoxyChecker.name).maximum, x)
 
     def test_set_minimum(self):
         # Setting minimum is tricky - we need to max out maximum
         self.warnings.set_maximum(11)
         for x in range(0, 10):
             self.warnings.set_minimum(x)
-            self.assertEqual(self.warnings.get_checker(DoxyChecker.name).get_minimum(), x)
+            self.assertEqual(self.warnings.get_checker(DoxyChecker.name).minimum, x)
 
     def test_set_minimum_fail(self):
         self.warnings.set_maximum(5)
         for x in range(1, 5):
             self.warnings.set_minimum(x)
-            self.assertEqual(self.warnings.get_checker(DoxyChecker.name).get_minimum(), x)
+            self.assertEqual(self.warnings.get_checker(DoxyChecker.name).minimum, x)
 
         for x in range(6, 10):
             self.assertRaises(ValueError, self.warnings.set_minimum, x)

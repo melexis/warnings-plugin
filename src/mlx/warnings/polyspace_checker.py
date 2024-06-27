@@ -26,43 +26,37 @@ class PolyspaceChecker(WarningsChecker):
     def cq_description_template(self, template_obj):
         self._cq_description_template = template_obj
 
-    def get_minimum(self):
+    @property
+    def minimum(self):
         ''' Gets the lowest minimum amount of warnings
 
         Returns:
             int: the lowest minimum for warnings
         '''
         if self.checkers:
-            return min(x.get_minimum() for x in self.checkers)
+            return min(x.minimum for x in self.checkers)
         return 0
 
-    def set_minimum(self, minimum):
-        ''' Setter function for the minimum amount of warnings
-
-        Args:
-            minimum (int): minimum amount of warnings allowed
-        '''
+    @minimum.setter
+    def minimum(self, minimum):
         for checker in self.checkers:
-            checker.set_minimum(minimum)
+            checker.minimum = minimum
 
-    def get_maximum(self):
+    @property
+    def maximum(self):
         ''' Gets the highest minimum amount of warnings
 
         Returns:
             int: the highest maximum for warnings
         '''
         if self.checkers:
-            return max(x.get_maximum() for x in self.checkers)
+            return max(x.maximum for x in self.checkers)
         return 0
 
-    def set_maximum(self, maximum):
-        ''' Setter function for the maximum amount of warnings
-
-        Args:
-            maximum (int): maximum amount of warnings allowed
-        '''
+    @maximum.setter
+    def maximum(self, maximum):
         for checker in self.checkers:
-            checker.set_maximum(maximum)
+            checker.maximum = maximum
 
     def add_code_quality_finding(self, row):
         '''Add code quality finding

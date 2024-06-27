@@ -327,7 +327,7 @@ class TestConfig(TestCase):
         }
 
         warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(SphinxChecker().name).get_maximum(), 5)
+        self.assertEqual(warnings.get_checker(SphinxChecker().name).maximum, 5)
 
     def test_doxygen_config_max(self):
         warnings = WarningsPlugin()
@@ -340,7 +340,7 @@ class TestConfig(TestCase):
         }
 
         warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(DoxyChecker().name).get_maximum(), 5)
+        self.assertEqual(warnings.get_checker(DoxyChecker().name).maximum, 5)
 
     def test_junit_config_max(self):
         warnings = WarningsPlugin()
@@ -353,7 +353,7 @@ class TestConfig(TestCase):
         }
 
         warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(JUnitChecker().name).get_maximum(), 5)
+        self.assertEqual(warnings.get_checker(JUnitChecker().name).maximum, 5)
 
     def test_xmlrunner_config_max(self):
         warnings = WarningsPlugin()
@@ -366,7 +366,7 @@ class TestConfig(TestCase):
         }
 
         warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(XMLRunnerChecker().name).get_maximum(), 5)
+        self.assertEqual(warnings.get_checker(XMLRunnerChecker().name).maximum, 5)
 
     def test_all_config_max(self):
         warnings = WarningsPlugin()
@@ -414,11 +414,11 @@ class TestConfig(TestCase):
         }
 
         warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(SphinxChecker().name).get_maximum(), 4)
-        self.assertEqual(warnings.get_checker(DoxyChecker().name).get_maximum(), 5)
-        self.assertEqual(warnings.get_checker(JUnitChecker().name).get_maximum(), 6)
-        self.assertEqual(warnings.get_checker(XMLRunnerChecker().name).get_maximum(), 6)
-        self.assertEqual(warnings.get_checker(RobotChecker().name).get_maximum(), 9)
+        self.assertEqual(warnings.get_checker(SphinxChecker().name).maximum, 4)
+        self.assertEqual(warnings.get_checker(DoxyChecker().name).maximum, 5)
+        self.assertEqual(warnings.get_checker(JUnitChecker().name).maximum, 6)
+        self.assertEqual(warnings.get_checker(XMLRunnerChecker().name).maximum, 6)
+        self.assertEqual(warnings.get_checker(RobotChecker().name).maximum, 9)
 
     def test_sphinx_config_min(self):
         warnings = WarningsPlugin()
@@ -431,7 +431,7 @@ class TestConfig(TestCase):
         }
 
         warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(SphinxChecker().name).get_minimum(), 5)
+        self.assertEqual(warnings.get_checker(SphinxChecker().name).minimum, 5)
 
     def test_doxygen_config_min(self):
         warnings = WarningsPlugin()
@@ -444,7 +444,7 @@ class TestConfig(TestCase):
         }
 
         warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(DoxyChecker().name).get_minimum(), 5)
+        self.assertEqual(warnings.get_checker(DoxyChecker().name).minimum, 5)
 
     def test_junit_config_min(self):
         warnings = WarningsPlugin()
@@ -457,7 +457,7 @@ class TestConfig(TestCase):
         }
 
         warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(JUnitChecker().name).get_minimum(), 5)
+        self.assertEqual(warnings.get_checker(JUnitChecker().name).minimum, 5)
 
     def test_xmlrunner_config_min(self):
         warnings = WarningsPlugin()
@@ -470,7 +470,7 @@ class TestConfig(TestCase):
         }
 
         warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(XMLRunnerChecker().name).get_minimum(), 5)
+        self.assertEqual(warnings.get_checker(XMLRunnerChecker().name).minimum, 5)
 
     def test_all_config_min(self):
         warnings = WarningsPlugin()
@@ -518,11 +518,11 @@ class TestConfig(TestCase):
         }
 
         warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(SphinxChecker().name).get_minimum(), 4)
-        self.assertEqual(warnings.get_checker(DoxyChecker().name).get_minimum(), 3)
-        self.assertEqual(warnings.get_checker(JUnitChecker().name).get_minimum(), 5)
-        self.assertEqual(warnings.get_checker(XMLRunnerChecker().name).get_minimum(), 5)
-        self.assertEqual(warnings.get_checker(RobotChecker().name).get_minimum(), 1)
+        self.assertEqual(warnings.get_checker(SphinxChecker().name).minimum, 4)
+        self.assertEqual(warnings.get_checker(DoxyChecker().name).minimum, 3)
+        self.assertEqual(warnings.get_checker(JUnitChecker().name).minimum, 5)
+        self.assertEqual(warnings.get_checker(XMLRunnerChecker().name).minimum, 5)
+        self.assertEqual(warnings.get_checker(RobotChecker().name).minimum, 1)
 
     def test_invalid_config(self):
         warnings = WarningsPlugin()

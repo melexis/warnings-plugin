@@ -47,6 +47,38 @@ class WarningsChecker:
                                       f"'cq_description_template': {err}") from err
         self._cq_description_template = template_obj
 
+    @property
+    def maximum(self):
+        ''' Getter function for the maximum amount of warnings
+
+        Returns:
+            int: Maximum amount of warnings
+        '''
+        return self.warn_max
+
+    @maximum.setter
+    def maximum(self, maximum):
+        if self.warn_min > maximum:
+            raise ValueError("Invalid argument: maximum limit must be higher than minimum limit ({min}); cannot "
+                             "set {max}.".format(max=maximum, min=self.warn_min))
+        self.warn_max = maximum
+
+    @property
+    def minimum(self):
+        ''' Getter function for the minimum amount of warnings
+
+        Returns:
+            int: Minimum amount of warnings
+        '''
+        return self.warn_min
+
+    @minimum.setter
+    def minimum(self, minimum):
+        if minimum > self.warn_max:
+            raise ValueError("Invalid argument: minimum limit must be lower than maximum limit ({max}); cannot "
+                             "set {min}.".format(min=minimum, max=self.warn_max))
+        self.warn_min = minimum
+
     @abc.abstractmethod
     def check(self, content, **kwargs):
         ''' Function for counting the number of warnings in a specific text
@@ -69,50 +101,6 @@ class WarningsChecker:
                                 .format(regexes.__class__.__name__))
             for regex in regexes:
                 pattern_container.append(re.compile(regex))
-
-    def set_maximum(self, maximum):
-        ''' Setter function for the maximum amount of warnings
-
-        Args:
-            maximum (int): maximum amount of warnings allowed
-
-        Raises:
-            ValueError: Invalid argument (min limit higher than max limit)
-        '''
-        if self.warn_min > maximum:
-            raise ValueError("Invalid argument: maximum limit must be higher than minimum limit ({min}); cannot "
-                             "set {max}.".format(max=maximum, min=self.warn_min))
-        self.warn_max = maximum
-
-    def get_maximum(self):
-        ''' Getter function for the maximum amount of warnings
-
-        Returns:
-            int: Maximum amount of warnings
-        '''
-        return self.warn_max
-
-    def set_minimum(self, minimum):
-        ''' Setter function for the minimum amount of warnings
-
-        Args:
-            minimum (int): minimum amount of warnings allowed
-
-        Raises:
-            ValueError: Invalid argument (min limit higher than max limit)
-        '''
-        if minimum > self.warn_max:
-            raise ValueError("Invalid argument: minimum limit must be lower than maximum limit ({max}); cannot "
-                             "set {min}.".format(min=minimum, max=self.warn_max))
-        self.warn_min = minimum
-
-    def get_minimum(self):
-        ''' Getter function for the minimum amount of warnings
-
-        Returns:
-            int: Minimum amount of warnings
-        '''
-        return self.warn_min
 
     def return_count(self):
         ''' Getter function for the amount of warnings found
@@ -168,8 +156,8 @@ class WarningsChecker:
             print(message)
 
     def parse_config(self, config):
-        self.set_maximum(int(config['max']))
-        self.set_minimum(int(config['min']))
+        self.maximum = int(config['max'])
+        self.minimum = int(config['min'])
         self.add_patterns(config.get("exclude"), self.exclude_patterns)
         if 'cq_default_path' in config:
             self.cq_default_path = config['cq_default_path']

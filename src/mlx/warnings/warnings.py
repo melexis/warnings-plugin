@@ -136,7 +136,7 @@ class WarningsPlugin:
             maximum (int): maximum amount of warnings allowed
         '''
         for checker in self.activated_checkers.values():
-            checker.set_maximum(maximum)
+            checker.maximum = maximum
 
     def set_minimum(self, minimum):
         ''' Setter function for the minimum amount of warnings
@@ -145,7 +145,7 @@ class WarningsPlugin:
             minimum (int): minimum amount of warnings allowed
         '''
         for checker in self.activated_checkers.values():
-            checker.set_minimum(minimum)
+            checker.minimum = minimum
 
     def return_count(self, name=None):
         ''' Getter function for the amount of found warnings
