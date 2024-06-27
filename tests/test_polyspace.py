@@ -2,12 +2,14 @@ import os
 from io import StringIO
 import unittest
 from pathlib import Path
+import filecmp
 
 from unittest.mock import patch
 
 from mlx.warnings import PolyspaceCheck, WarningsPlugin, warnings_wrapper
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
+TEST_OUT_DIR = Path(__file__).parent / 'test_out'
 
 
 class TestCodeProverWarnings(unittest.TestCase):
@@ -107,9 +109,23 @@ class TestPolyspaceWarnings(unittest.TestCase):
                 del os.environ[var]
 
     def test_config_file(self):
-        retval = warnings_wrapper(['--config', str(TEST_IN_DIR / 'config_example_polyspace.yml'),
-                                   str(TEST_IN_DIR / 'polyspace.tsv')])
+        retval = warnings_wrapper([
+            '--config', str(TEST_IN_DIR / 'config_example_polyspace.yml'),
+            str(TEST_IN_DIR / 'polyspace.tsv')
+        ])
         self.assertEqual(66, retval)
+
+    def test_code_quality(self):
+        filename = 'polyspace_code_quality.json'
+        out_file = str(TEST_OUT_DIR / filename)
+        ref_file = str(TEST_IN_DIR / filename)
+        retval = warnings_wrapper([
+            '--code-quality', out_file,
+            '--config', str(TEST_IN_DIR / 'config_example_polyspace.yml'),
+            str(TEST_IN_DIR / 'polyspace.tsv'),
+        ])
+        self.assertEqual(66, retval)
+        self.assertTrue(filecmp.cmp(out_file, ref_file))
 
 
 if __name__ == '__main__':
