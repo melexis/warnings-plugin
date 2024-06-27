@@ -1,4 +1,6 @@
 import csv
+import hashlib
+from string import Template
 
 from .warnings_checker import WarningsChecker
 
@@ -14,6 +16,15 @@ class PolyspaceChecker(WarningsChecker):
         for checker in self.checkers:
             all_counted_warnings.extend(checker.counted_warnings)
         return all_counted_warnings
+
+    @property
+    def cq_description_template(self):
+        ''' Template: string.Template instance based on the configured template string '''
+        return self._cq_description_template
+
+    @cq_description_template.setter
+    def cq_description_template(self, template_obj):
+        self._cq_description_template = template_obj
 
     def get_minimum(self):
         ''' Gets the lowest minimum amount of warnings
@@ -53,6 +64,29 @@ class PolyspaceChecker(WarningsChecker):
         for checker in self.checkers:
             checker.set_maximum(maximum)
 
+    def add_code_quality_finding(self, row):
+        '''Add code quality finding
+
+        Args:
+            row (dict): The row of the warning with the corresponding colomn names
+        '''
+        finding = {
+            "severity": "major",
+            "location": {
+                "path": self.cq_default_path,
+                "lines": {
+                    "begin": 1,
+                }
+            }
+        }
+        if row["file"]:
+            finding["location"]["path"] = row["file"]
+        if self.cq_description_template:
+            finding["description"] = self.cq_description_template.safe_substitute(row)
+
+        finding["fingerprint"] = hashlib.md5(str(finding).encode('utf8')).hexdigest()
+        self.cq_findings.append(finding)
+
     def check(self, content, **kwargs):
         '''
         Function for counting the number of failures in a TSV/CSV file exported by Polyspace
@@ -77,6 +111,8 @@ class PolyspaceChecker(WarningsChecker):
                             checker.column_name,
                             checker.check_value
                         ))
+                        if self.cq_enabled:
+                            self.add_code_quality_finding(row)
 
     def return_count(self):
         ''' Getter function for the amount of warnings found
@@ -120,6 +156,12 @@ class PolyspaceChecker(WarningsChecker):
         self.checkers = []
         for family_value, data in config.items():
             if family_value == "enabled":
+                continue
+            if family_value == "cq_description_template":
+                self.cq_description_template = Template(config['cq_description_template'])
+                continue
+            if family_value == "cq_default_path":
+                self.cq_default_path = config['cq_default_path']
                 continue
             for check in data:
                 for key, value in check.items():

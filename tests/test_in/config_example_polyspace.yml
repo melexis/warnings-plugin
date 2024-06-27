@@ -32,6 +32,7 @@ robot:
     max: 0
 polyspace:
   enabled: true
+  cq_description_template: "Polyspace: $check"
   run-time check:
   - color: red
     min: 0
