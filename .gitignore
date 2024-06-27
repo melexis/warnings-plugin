@@ -86,6 +86,7 @@ bin/
 include/
 local/
 pip-selfcheck.json
+pyvenv.cfg
 
 # Spyder project settings
 .spyderproject
@@ -98,3 +99,6 @@ pip-selfcheck.json
 
 # Offline version file
 src/mlx/warnings/__version__.py
+
+# plantuml generation
+src/*.plantuml
