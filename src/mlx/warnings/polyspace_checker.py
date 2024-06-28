@@ -8,6 +8,14 @@ from .warnings_checker import WarningsChecker
 class PolyspaceChecker(WarningsChecker):
     name = 'polyspace'
     checkers = []
+    code_quality_severity = {
+        "impact: high": "critical",
+        "impact: medium": "major",
+        "impact: low": "minor",
+        "red": "critical",
+        "orange": "major",
+        "green": "info",
+    }
 
     @property
     def counted_warnings(self):
@@ -73,6 +81,14 @@ class PolyspaceChecker(WarningsChecker):
                 }
             }
         }
+        # Attention to bug finder: items have color red for impact: high, medium and low.
+        if row["information"].lower() in self.code_quality_severity.keys():
+            finding["severity"] = self.code_quality_severity[row["information"].lower()]
+        elif row["color"].lower() in self.code_quality_severity.keys():
+            finding["severity"] = self.code_quality_severity[row["color"].lower()]
+        else:
+            finding["severity"] = "info"
+
         if row["file"]:
             finding["location"]["path"] = row["file"]
         if self.cq_description_template:
