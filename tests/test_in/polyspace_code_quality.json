@@ -264,7 +264,7 @@
         "fingerprint": "080086732f5a87c4653fa65eabeebf55"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.h",
             "lines": {
@@ -272,10 +272,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "f951a4c91dd83d4c36b2a9e1423cb482"
+        "fingerprint": "bd0b1f74786271e32c1dd6bdc03ced4a"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.h",
             "lines": {
@@ -283,10 +283,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "f951a4c91dd83d4c36b2a9e1423cb482"
+        "fingerprint": "bd0b1f74786271e32c1dd6bdc03ced4a"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -294,10 +294,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -305,10 +305,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.h",
             "lines": {
@@ -316,10 +316,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "f951a4c91dd83d4c36b2a9e1423cb482"
+        "fingerprint": "bd0b1f74786271e32c1dd6bdc03ced4a"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.h",
             "lines": {
@@ -327,10 +327,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "f951a4c91dd83d4c36b2a9e1423cb482"
+        "fingerprint": "bd0b1f74786271e32c1dd6bdc03ced4a"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -338,10 +338,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -349,10 +349,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -360,10 +360,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -371,10 +371,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -382,10 +382,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -393,10 +393,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.h",
             "lines": {
@@ -404,10 +404,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "f951a4c91dd83d4c36b2a9e1423cb482"
+        "fingerprint": "bd0b1f74786271e32c1dd6bdc03ced4a"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -415,10 +415,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.h",
             "lines": {
@@ -426,10 +426,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "f951a4c91dd83d4c36b2a9e1423cb482"
+        "fingerprint": "bd0b1f74786271e32c1dd6bdc03ced4a"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.h",
             "lines": {
@@ -437,10 +437,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "f951a4c91dd83d4c36b2a9e1423cb482"
+        "fingerprint": "bd0b1f74786271e32c1dd6bdc03ced4a"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -448,10 +448,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -459,10 +459,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -470,10 +470,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -481,10 +481,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -492,10 +492,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -503,10 +503,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -514,10 +514,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -525,10 +525,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -536,10 +536,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -547,10 +547,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.h",
             "lines": {
@@ -558,10 +558,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "f951a4c91dd83d4c36b2a9e1423cb482"
+        "fingerprint": "bd0b1f74786271e32c1dd6bdc03ced4a"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.h",
             "lines": {
@@ -569,10 +569,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "f951a4c91dd83d4c36b2a9e1423cb482"
+        "fingerprint": "bd0b1f74786271e32c1dd6bdc03ced4a"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -580,10 +580,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -591,10 +591,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -602,10 +602,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -613,10 +613,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.h",
             "lines": {
@@ -624,10 +624,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "f951a4c91dd83d4c36b2a9e1423cb482"
+        "fingerprint": "bd0b1f74786271e32c1dd6bdc03ced4a"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.h",
             "lines": {
@@ -635,10 +635,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "f951a4c91dd83d4c36b2a9e1423cb482"
+        "fingerprint": "bd0b1f74786271e32c1dd6bdc03ced4a"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -646,10 +646,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.h",
             "lines": {
@@ -657,10 +657,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "f951a4c91dd83d4c36b2a9e1423cb482"
+        "fingerprint": "bd0b1f74786271e32c1dd6bdc03ced4a"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -668,10 +668,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -679,10 +679,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -690,10 +690,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.h",
             "lines": {
@@ -701,10 +701,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "f951a4c91dd83d4c36b2a9e1423cb482"
+        "fingerprint": "bd0b1f74786271e32c1dd6bdc03ced4a"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -712,10 +712,10 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
-        "severity": "major",
+        "severity": "critical",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -723,7 +723,7 @@
             }
         },
         "description": "Polyspace: Data race",
-        "fingerprint": "0eb017ff3f8a4c43627cd2a8de39c208"
+        "fingerprint": "d72f6f4a4654703b19ae5fcdc9385c2d"
     },
     {
         "severity": "major",
@@ -825,7 +825,7 @@
         "fingerprint": "33d73a2b678d59cce3cf8a392b30a0b4"
     },
     {
-        "severity": "major",
+        "severity": "minor",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -833,10 +833,10 @@
             }
         },
         "description": "Polyspace: Dead code",
-        "fingerprint": "4d61d9a1f71a3274d2abcc4f6deef4b1"
+        "fingerprint": "b16cdc360bd0c1bfd205be576d70dc1b"
     },
     {
-        "severity": "major",
+        "severity": "minor",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -844,10 +844,10 @@
             }
         },
         "description": "Polyspace: Dead code",
-        "fingerprint": "4d61d9a1f71a3274d2abcc4f6deef4b1"
+        "fingerprint": "b16cdc360bd0c1bfd205be576d70dc1b"
     },
     {
-        "severity": "major",
+        "severity": "minor",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -855,10 +855,10 @@
             }
         },
         "description": "Polyspace: Dead code",
-        "fingerprint": "4d61d9a1f71a3274d2abcc4f6deef4b1"
+        "fingerprint": "b16cdc360bd0c1bfd205be576d70dc1b"
     },
     {
-        "severity": "major",
+        "severity": "minor",
         "location": {
             "path": "dummy_file_name.c",
             "lines": {
@@ -866,6 +866,6 @@
             }
         },
         "description": "Polyspace: Dead code",
-        "fingerprint": "4d61d9a1f71a3274d2abcc4f6deef4b1"
+        "fingerprint": "b16cdc360bd0c1bfd205be576d70dc1b"
     }
 ]
