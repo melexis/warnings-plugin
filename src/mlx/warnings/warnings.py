@@ -279,9 +279,8 @@ def warnings_wrapper(args):
     parser.add_argument('logfile', nargs='+', help='Logfile (or command) that might contain warnings')
     parser.add_argument('flags', nargs=argparse.REMAINDER,
                         help='Possible not-used flags from above are considered as command flags')
+
     args = parser.parse_args(args)
-    print(f"ALL ARGUMENTS:\n{args}")
-    print(f"CURRENT WORKING DIRECTORY: {os.getcwd()}")
     code_quality_enabled = bool(args.code_quality)
     # Read config file
     if args.configfile is not None:
