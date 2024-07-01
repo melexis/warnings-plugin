@@ -122,6 +122,7 @@ class PolyspaceChecker(WarningsChecker):
                             checker.check_value
                         ))
                         if self.cq_enabled:
+                            print(f"CODE QUALITY ENABLED: add {row}")
                             self.add_code_quality_finding(row)
 
     def return_count(self):
