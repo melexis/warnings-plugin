@@ -181,6 +181,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
                     check_value = value.lower()
                     checker = PolyspaceFamilyChecker(family_value, column_name, check_value, verbose=self.verbose)
                     checker.parse_config(check)
+                    checker.cq_findings = self.cq_findings  # share object with sub-checkers
                     self.checkers.append(checker)
                 if not (column_name and check_value):
                     raise ValueError(
