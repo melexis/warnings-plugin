@@ -80,11 +80,11 @@ class WarningsChecker:
         self._minimum = minimum
 
     @abc.abstractmethod
-    def check(self, file):
+    def check(self, content, **kwargs):
         ''' Function for counting the number of warnings in a specific text
 
         Args:
-            file (_io.TextIOWrapper/str): The open file / content to parse
+            content (str): The content to parse
         '''
         return
 

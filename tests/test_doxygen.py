@@ -73,5 +73,5 @@ class TestDoxygenWarnings(TestCase):
     def test_doxygen_warnings_txt(self):
         dut_file = 'tests/test_in/doxygen_warnings.txt'
         with open(dut_file, 'r') as open_file:
-            self.warnings.check(open_file)
+            self.warnings.check(open_file.read())
         self.assertEqual(self.warnings.return_count(), 22)

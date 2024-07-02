@@ -1,7 +1,6 @@
 import csv
 import hashlib
 from string import Template
-from io import TextIOWrapper
 
 from .warnings_checker import WarningsChecker
 
@@ -98,20 +97,20 @@ class PolyspaceChecker(WarningsChecker):
         finding["fingerprint"] = hashlib.md5(str(finding).encode('utf8')).hexdigest()
         self.cq_findings.append(finding)
 
-    def check(self, file):
+    def check(self, content, **kwargs):
         '''
         Function for counting the number of failures in a TSV/CSV file exported by Polyspace
 
         Args:
-            file (_io.TextIOWrapper): The open file to parse
+            content (_io.TextIOWrapper): The open file to parse
         '''
-        if not isinstance(file, TextIOWrapper):
-            raise TypeError(
-                f"PolyspaceFamilyChecker can't handle this type; expected {type(TextIOWrapper)}; got {type(file)}"
-            )
-        reader = csv.DictReader(file, dialect='excel-tab')
+        if kwargs["file_extension"] == ".tsv":
+            reader = csv.DictReader(content, delimiter="\t")
+        elif kwargs["file_extension"] == ".csv":
+            reader = csv.DictReader(content)
         # set column names to lowercase
         reader.fieldnames = [name.lower() for name in reader.fieldnames]
+
         for row in reader:
             for checker in self.checkers:
                 if row['family'].lower() == checker.family_value:

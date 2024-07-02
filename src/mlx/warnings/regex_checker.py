@@ -31,16 +31,13 @@ class RegexChecker(WarningsChecker):
         'failed': 'critical',
     }
 
-    def check(self, file):
+    def check(self, content, **kwargs):
         ''' Function for counting the number of warnings in a specific text
 
         Args:
-            file (_io.TextIOWrapper/str): The open file / content to parse
+            content (str): The content to parse
         '''
-        if isinstance(file, str):
-            matches = re.finditer(self.pattern, file)
-        else:
-            matches = re.finditer(self.pattern, file.read())
+        matches = re.finditer(self.pattern, content)
         for match in matches:
             match_string = match.group(0).strip()
             if self._is_excluded(match_string):
@@ -100,18 +97,15 @@ class CoverityChecker(RegexChecker):
     pattern = coverity_pattern
     CLASSIFICATION = "Unclassified"
 
-    def check(self, file):
+    def check(self, content, **kwargs):
         '''
         Function for counting the number of warnings, but adopted for Coverity
         output
 
         Args:
-            file (_io.TextIOWrapper/str): The open file / content to parse
+            content (str): The content to parse
         '''
-        if isinstance(file, str):
-            matches = re.finditer(self.pattern, file)
-        else:
-            matches = re.finditer(self.pattern, file.read())
+        matches = re.finditer(self.pattern, content)
         for match in matches:
             if (match.group('curr') == match.group('max')) and \
                     (match.group('classification') in self.CLASSIFICATION):

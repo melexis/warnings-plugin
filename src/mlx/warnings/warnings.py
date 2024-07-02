@@ -112,23 +112,22 @@ class WarningsPlugin:
         '''
         return self.activated_checkers[name]
 
-    def check(self, file):
+    def check(self, content, **kwargs):
         '''
         Function for counting the number of warnings in a specific text
 
         Args:
-            file (_io.TextIOWrapper/str): The open file / content to parse
+            content (str/_io.TextIOWrapper): The text to parse / The open file
+            file_extension (str): The file extension
         '''
         if self.printout:
-            if isinstance(file, str):
-                print(file)
-            else:
-                print(file.read())
+            print(content)
+
         if not self.activated_checkers:
             print("No checkers activated. Please use activate_checker function")
         else:
             for checker in self.activated_checkers.values():
-                checker.check(file)
+                checker.check(content, **kwargs)
 
     def set_maximum(self, maximum):
         ''' Setter function for the maximum amount of warnings
@@ -409,8 +408,13 @@ def warnings_logfile(warnings, log):
     for file_wildcard in log:
         if glob.glob(file_wildcard):
             for logfile in glob.glob(file_wildcard):
-                with open(logfile, 'r') as file:
-                    warnings.check(file)
+                _filename, file_extension = os.path.splitext(logfile)
+                if file_extension == ".cvs" or file_extension == ".tsv":
+                    with open(logfile, newline="") as file:
+                        warnings.check(file, file_extension=file_extension)
+                else:
+                    with open(logfile, 'r') as loghandle:
+                        warnings.check(loghandle.read(), file_extension=file_extension)
         else:
             print("FILE: %s does not exist" % file_wildcard)
             return 1

@@ -11,17 +11,14 @@ from .warnings_checker import WarningsChecker
 class JUnitChecker(WarningsChecker):
     name = 'junit'
 
-    def check(self, file):
+    def check(self, content, **kwargs):
         ''' Function for counting the number of JUnit failures in a specific text
 
         Args:
-            file (_io.TextIOWrapper/str): The open file / content to parse
+            content (str): The content to parse
         '''
         try:
-            if isinstance(file, str):
-                root_input = etree.fromstring(file.encode('utf-8'))
-            else:
-                root_input = etree.fromstring(file.read().encode('utf-8'))
+            root_input = etree.fromstring(content.encode('utf-8'))
             testsuites_root = self.prepare_tree(root_input)
             suites = JUnitXml.fromelem(testsuites_root)
             amount_to_exclude = 0

@@ -50,16 +50,16 @@ class RobotChecker(WarningsChecker):
         for checker in self.checkers:
             checker.maximum = maximum
 
-    def check(self, file):
+    def check(self, content, **kwargs):
         '''
         Function for counting the number of failures in a specific Robot
         Framework test suite
 
         Args:
-            file (_io.TextIOWrapper/str): The open file / content to parse
+            content (str): The content to parse
         '''
         for checker in self.checkers:
-            checker.check(file)
+            checker.check(content, **kwargs)
 
     def return_count(self):
         ''' Getter function for the amount of warnings found
@@ -140,18 +140,18 @@ class RobotSuiteChecker(JUnitChecker):
             return super()._check_testcase(testcase)
         return int(self.name and isinstance(testcase.result, (Failure, Error)))
 
-    def check(self, file):
+    def check(self, content, **kwargs):
         """ Function for counting the number of JUnit failures in a specific text
 
         The test cases with a ``classname`` that does not end with the ``name`` class attribute are ignored.
 
         Args:
-            file (_io.TextIOWrapper/str): The open file / content to parse
+            content (str): The content to parse
 
         Raises:
             SystemExit: No suite with name ``self.name`` found. Returning error code -1.
         """
-        super().check(file)
+        super().check(content, **kwargs)
         if not self.is_valid_suite_name and self.check_suite_name:
             print('ERROR: No suite with name {!r} found. Returning error code -1.'.format(self.name))
             sys.exit(-1)
