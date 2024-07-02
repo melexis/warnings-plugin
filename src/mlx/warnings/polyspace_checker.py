@@ -179,7 +179,7 @@ class PolyspaceChecker(WarningsChecker):
                         continue
                     column_name = key.lower()
                     check_value = value.lower()
-                    checker = PolyspaceCheck(family_value, column_name, check_value, verbose=self.verbose)
+                    checker = PolyspaceFamilyChecker(family_value, column_name, check_value, verbose=self.verbose)
                     checker.parse_config(check)
                     self.checkers.append(checker)
                 if not (column_name and check_value):
@@ -192,10 +192,10 @@ class PolyspaceChecker(WarningsChecker):
                     )
 
 
-class PolyspaceCheck(WarningsChecker):
+class PolyspaceFamilyChecker(WarningsChecker):
 
     def __init__(self, family_value, column_name, check_value, **kwargs):
-        """Initialize the PolyspaceCheck
+        """Initialize the PolyspaceFamilyChecker
 
         Args:
             family_value (str): The value to search for in the 'Family' column

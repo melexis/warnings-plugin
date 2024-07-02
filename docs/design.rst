@@ -32,7 +32,7 @@ class "JUnitChecker" as mlx.warnings.junit_checker.JUnitChecker {
   check(content)
   prepare_tree(root_input)
 }
-class "PolyspaceCheck" as mlx.warnings.polyspace_checker.PolyspaceCheck {
+class "PolyspaceFamilyChecker" as mlx.warnings.polyspace_checker.PolyspaceFamilyChecker {
   check_value
   column_name
   family_value
@@ -138,7 +138,7 @@ class "XMLRunnerChecker" as mlx.warnings.regex_checker.XMLRunnerChecker {
   pattern
 }
 mlx.warnings.junit_checker.JUnitChecker --|> mlx.warnings.warnings_checker.WarningsChecker
-mlx.warnings.polyspace_checker.PolyspaceCheck --|> mlx.warnings.warnings_checker.WarningsChecker
+mlx.warnings.polyspace_checker.PolyspaceFamilyChecker --|> mlx.warnings.warnings_checker.WarningsChecker
 mlx.warnings.polyspace_checker.PolyspaceChecker --|> mlx.warnings.warnings_checker.WarningsChecker
 mlx.warnings.regex_checker.CoverityChecker --|> mlx.warnings.regex_checker.RegexChecker
 mlx.warnings.regex_checker.DoxyChecker --|> mlx.warnings.regex_checker.RegexChecker

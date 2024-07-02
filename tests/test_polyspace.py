@@ -6,7 +6,7 @@ import filecmp
 
 from unittest.mock import patch
 
-from mlx.warnings import PolyspaceCheck, WarningsPlugin, warnings_wrapper
+from mlx.warnings import PolyspaceFamilyChecker, WarningsPlugin, warnings_wrapper
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
 TEST_OUT_DIR = Path(__file__).parent / 'test_out'
@@ -17,8 +17,8 @@ class TestCodeProverWarnings(unittest.TestCase):
         self.warnings = WarningsPlugin(verbose=True)
         self.dut = self.warnings.activate_checker_name('polyspace')
         self.dut.checkers = [
-            PolyspaceCheck("run-time check", "color", "red"),
-            PolyspaceCheck("run-time check", "color", "orange"),
+            PolyspaceFamilyChecker("run-time check", "color", "red"),
+            PolyspaceFamilyChecker("run-time check", "color", "orange"),
         ]
 
     def test_code_prover_tsv_file(self):
@@ -61,9 +61,9 @@ class TestBugFinderWarnings(unittest.TestCase):
         self.warnings = WarningsPlugin(verbose=True)
         self.dut = self.warnings.activate_checker_name('polyspace')
         self.dut.checkers = [
-            PolyspaceCheck("defect", "information", "impact: high"),
-            PolyspaceCheck("defect", "information", "impact: medium"),
-            PolyspaceCheck("defect", "information", "impact: low"),
+            PolyspaceFamilyChecker("defect", "information", "impact: high"),
+            PolyspaceFamilyChecker("defect", "information", "impact: medium"),
+            PolyspaceFamilyChecker("defect", "information", "impact: low"),
         ]
 
     def test_bug_finder_tsv_file(self):
