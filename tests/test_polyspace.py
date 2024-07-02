@@ -24,24 +24,7 @@ class TestCodeProverWarnings(unittest.TestCase):
     def test_code_prover_tsv_file(self):
         with open(TEST_IN_DIR / 'polyspace.tsv', newline="") as file:
             with patch('sys.stdout', new=StringIO()) as fake_out:
-                self.warnings.check(file, file_extension='.tsv')
-                count = self.warnings.return_count()
-        stdout_log = fake_out.getvalue()
-
-        count_sum = 0
-        for checker in self.dut.checkers:
-            count_sum += checker.count
-            self.assertIn(
-                f"{checker.count} warnings found for '{checker.column_name}': '{checker.check_value}'",
-                stdout_log
-            )
-        self.assertEqual(count, count_sum)
-        self.assertEqual(count, 24)
-
-    def test_code_prover_csv_file(self):
-        with open(TEST_IN_DIR / 'polyspace.csv', newline="") as file:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
-                self.warnings.check(file, file_extension='.csv')
+                self.warnings.check(file)
                 count = self.warnings.return_count()
         stdout_log = fake_out.getvalue()
 
@@ -69,7 +52,7 @@ class TestBugFinderWarnings(unittest.TestCase):
     def test_bug_finder_tsv_file(self):
         with open(TEST_IN_DIR / 'polyspace.tsv', newline="") as file:
             with patch('sys.stdout', new=StringIO()) as fake_out:
-                self.warnings.check(file, file_extension='.tsv')
+                self.warnings.check(file)
                 count = self.warnings.return_count()
         stdout_log = fake_out.getvalue()
 
@@ -78,23 +61,6 @@ class TestBugFinderWarnings(unittest.TestCase):
                 f"{checker.count} warnings found for '{checker.column_name}': '{checker.check_value}'",
                 stdout_log
             )
-        self.assertEqual(count, 55)
-
-    def test_bug_finder_csv_file(self):
-        with open(TEST_IN_DIR / 'polyspace.csv', newline="") as file:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
-                self.warnings.check(file, file_extension='.csv')
-                count = self.warnings.return_count()
-        stdout_log = fake_out.getvalue()
-
-        count_sum = 0
-        for checker in self.dut.checkers:
-            count_sum += checker.count
-            self.assertIn(
-                f"{checker.count} warnings found for '{checker.column_name}': '{checker.check_value}'",
-                stdout_log
-            )
-        self.assertEqual(count, count_sum)
         self.assertEqual(count, 55)
 
 

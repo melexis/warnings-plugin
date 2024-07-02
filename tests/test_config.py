@@ -93,7 +93,7 @@ class TestConfig(TestCase):
         warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
         self.assertEqual(warnings.return_count(), 0)
         with open('tests/test_in/junit_single_fail.xml', 'r') as xmlfile:
-            warnings.check(xmlfile.read())
+            warnings.check(xmlfile)
         self.assertEqual(warnings.return_count(), 0)
         warnings.check('ERROR [0.000s]: test_some_error_test (something.anything.somewhere)')
         self.assertEqual(warnings.return_count(), 0)
@@ -112,7 +112,7 @@ class TestConfig(TestCase):
 
         warnings.config_parser(tmpjson)
         with open('tests/test_in/junit_single_fail.xml', 'r') as xmlfile:
-            warnings.check(xmlfile.read())
+            warnings.check(xmlfile)
         self.assertEqual(warnings.return_count(), 0)
         warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
         self.assertEqual(warnings.return_count(), 0)
@@ -139,7 +139,7 @@ class TestConfig(TestCase):
         warnings.check('ERROR [0.000s]: test_some_error_test (something.anything.somewhere)')
         self.assertEqual(warnings.return_count(), 0)
         with open('tests/test_in/junit_single_fail.xml', 'r') as xmlfile:
-            warnings.check(xmlfile.read())
+            warnings.check(xmlfile)
         self.assertEqual(warnings.return_count(), 1)
 
     def test_exclude_feature_type_error(self):
@@ -168,7 +168,7 @@ class TestConfig(TestCase):
         }
         warnings.config_parser(tmpjson)
         with open('tests/test_in/junit_single_fail.xml', 'r') as xmlfile:
-            warnings.check(xmlfile.read())
+            warnings.check(xmlfile)
         self.assertEqual(warnings.return_count(), 0)
 
     def test_partial_robot_config_parsing_exclude_regex(self):
@@ -195,7 +195,7 @@ class TestConfig(TestCase):
         warnings.config_parser(tmpjson)
         with open('tests/test_in/robot_double_fail.xml', 'r') as xmlfile:
             with patch('sys.stdout', new=StringIO()) as verbose_output:
-                warnings.check(xmlfile.read())
+                warnings.check(xmlfile)
                 count = warnings.return_count()
         self.assertEqual(count, 1)
         self.assertEqual(warnings.return_check_limits(), 0)
@@ -227,7 +227,7 @@ class TestConfig(TestCase):
         warnings.config_parser(tmpjson)
         with open('tests/test_in/robot_double_fail.xml', 'r') as xmlfile:
             with patch('sys.stdout', new=StringIO()) as verbose_output:
-                warnings.check(xmlfile.read())
+                warnings.check(xmlfile)
                 count = warnings.return_count()
         self.assertEqual(count, 1)
         self.assertEqual(warnings.return_check_limits(), 0)
@@ -252,7 +252,7 @@ class TestConfig(TestCase):
 
         warnings.config_parser(tmpjson)
         with open('tests/test_in/junit_single_fail.xml', 'r') as xmlfile:
-            warnings.check(xmlfile.read())
+            warnings.check(xmlfile)
         self.assertEqual(warnings.return_count(), 0)
         warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
         self.assertEqual(warnings.return_count(), 0)
@@ -282,7 +282,7 @@ class TestConfig(TestCase):
         warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
         self.assertEqual(warnings.return_count(), 1)
         with open('tests/test_in/junit_single_fail.xml', 'r') as xmlfile:
-            warnings.check(xmlfile.read())
+            warnings.check(xmlfile)
         self.assertEqual(warnings.return_count(), 2)
 
     def test_sphinx_doxy_config_parsing(self):
@@ -302,14 +302,14 @@ class TestConfig(TestCase):
 
         warnings.config_parser(tmpjson)
         with open('tests/test_in/junit_single_fail.xml', 'r') as xmlfile:
-            warnings.check(xmlfile.read())
+            warnings.check(xmlfile)
         self.assertEqual(warnings.return_count(), 0)
         warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
         self.assertEqual(warnings.return_count(), 1)
         warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
         self.assertEqual(warnings.return_count(), 2)
         with open('tests/test_in/junit_single_fail.xml', 'r') as xmlfile:
-            warnings.check(xmlfile.read())
+            warnings.check(xmlfile)
         self.assertEqual(warnings.return_count(), 2)
         warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
         self.assertEqual(warnings.return_count(), 3)
