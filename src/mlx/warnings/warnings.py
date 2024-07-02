@@ -280,7 +280,7 @@ def warnings_wrapper(args):
                         help='Exact amount of warnings expected')
     group2 = parser.add_argument_group('Configuration file with options')
     group2.add_argument('--config', dest='configfile', action='store', required=False, type=Path,
-                        help='Config file in JSON or yaml/yml format provides toggle of checkers and their limits')
+                        help='Config file in JSON or YAML format provides toggle of checkers and their limits')
     group2.add_argument('--include-sphinx-deprecation', dest='include_sphinx_deprecation', action='store_true',
                         help="Sphinx checker will include warnings matching (RemovedInSphinx\\d+Warning) regex")
     parser.add_argument('-o', '--output',
