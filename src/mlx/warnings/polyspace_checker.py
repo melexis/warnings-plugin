@@ -5,7 +5,7 @@ from string import Template
 from .warnings_checker import WarningsChecker
 
 
-class PolyspaceFamilyChecker(WarningsChecker):
+class PolyspaceChecker(WarningsChecker):
     name = 'polyspace'
     checkers = []
     code_quality_severity = {
@@ -192,10 +192,10 @@ class PolyspaceFamilyChecker(WarningsChecker):
                     )
 
 
-class PolyspaceSubChecker(WarningsChecker):
+class PolyspaceFamilyChecker(WarningsChecker):
 
     def __init__(self, family_value, column_name, check_value, **kwargs):
-        """Initialize the PolyspaceSubChecker
+        """Initialize the PolyspaceFamilyChecker
 
         Args:
             family_value (str): The value to search for in the 'Family' column
