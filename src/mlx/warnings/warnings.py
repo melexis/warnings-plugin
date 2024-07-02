@@ -150,8 +150,8 @@ class WarningsPlugin:
                 else:
                     checker.check(content)
 
-    def set_maximum(self, maximum):
-        ''' Setter function for the maximum amount of warnings
+    def configure_maximum(self, maximum):
+        ''' Configure the maximum amount of warnings for each activated checker
 
         Args:
             maximum (int): maximum amount of warnings allowed
@@ -159,8 +159,8 @@ class WarningsPlugin:
         for checker in self.activated_checkers.values():
             checker.maximum = maximum
 
-    def set_minimum(self, minimum):
-        ''' Setter function for the minimum amount of warnings
+    def configure_minimum(self, minimum):
+        ''' Configure the minimum amount of warnings for each activated checker
 
         Args:
             minimum (int): minimum amount of warnings allowed
@@ -333,11 +333,11 @@ def warnings_wrapper(args):
             if args.maxwarnings | args.minwarnings:
                 print("expected-warnings cannot be provided with maxwarnings or minwarnings")
                 sys.exit(2)
-            warnings.set_maximum(args.exact_warnings)
-            warnings.set_minimum(args.exact_warnings)
+            warnings.configure_maximum(args.exact_warnings)
+            warnings.configure_minimum(args.exact_warnings)
         else:
-            warnings.set_maximum(args.maxwarnings)
-            warnings.set_minimum(args.minwarnings)
+            warnings.configure_maximum(args.maxwarnings)
+            warnings.configure_minimum(args.minwarnings)
 
     if args.include_sphinx_deprecation and 'sphinx' in warnings.activated_checkers.keys():
         warnings.get_checker('sphinx').include_sphinx_deprecation()
