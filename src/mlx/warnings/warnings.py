@@ -114,27 +114,41 @@ class WarningsPlugin:
 
     def check(self, content):
         '''
-        Function for counting the number of warnings in a specific text
+        Count the number of warnings in a specified content
 
         Args:
-            content (_io.TextIOWrapper/str): The open file / content to parse
+            content (str): The content to parse
         '''
         if self.printout:
-            if isinstance(content, str):
-                print(content)
-            else:
-                print(content.read())
+            print(content)
         if not self.activated_checkers:
             print("No checkers activated. Please use activate_checker function")
         else:
             for checker in self.activated_checkers.values():
                 if checker.name == "polyspace":
-                    checker.check(content)
+                    raise WarningsConfigError("Function check() cannot be used with Polyspace checker.")
                 else:
-                    if isinstance(content, str):
-                        checker.check(content)
-                    else:
-                        checker.check(content.read())
+                    checker.check(content)
+
+    def check_logfile(self, file):
+        '''
+        Count the number of warnings in a specified content
+
+        Args:
+            content (_io.TextIOWrapper): The open file to parse
+        '''
+        if not self.activated_checkers:
+            print("No checkers activated. Please use activate_checker function")
+        elif "polyspace" in self.activated_checkers:
+            self.activated_checkers["polyspace"].check(file)
+        else:
+            content = file.read()
+            for checker in self.activated_checkers.values():
+                if checker.name == "polyspace":
+                    print("Polyspace checker is skipped")
+                    continue
+                else:
+                    checker.check(content)
 
     def set_maximum(self, maximum):
         ''' Setter function for the maximum amount of warnings
@@ -329,6 +343,8 @@ def warnings_wrapper(args):
         warnings.get_checker('sphinx').include_sphinx_deprecation()
 
     if args.command:
+        if "polyspace" in warnings.activated_checkers:
+            raise WarningsConfigError("Input argument command cannot be combined with Polyspace checker enabled")
         cmd = args.logfile
         if args.flags:
             cmd.extend(args.flags)
@@ -416,7 +432,7 @@ def warnings_logfile(warnings, log):
         if glob.glob(file_wildcard):
             for logfile in glob.glob(file_wildcard):
                 with open(logfile, "r") as file:
-                    warnings.check(file)
+                    warnings.check_logfile(file)
         else:
             print("FILE: %s does not exist" % file_wildcard)
             return 1

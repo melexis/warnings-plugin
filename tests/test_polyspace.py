@@ -24,7 +24,7 @@ class TestCodeProverWarnings(unittest.TestCase):
     def test_code_prover_tsv_file(self):
         with open(TEST_IN_DIR / 'polyspace.tsv', newline="") as file:
             with patch('sys.stdout', new=StringIO()) as fake_out:
-                self.warnings.check(file)
+                self.warnings.check_logfile(file)
                 count = self.warnings.return_count()
         stdout_log = fake_out.getvalue()
 
@@ -52,7 +52,7 @@ class TestBugFinderWarnings(unittest.TestCase):
     def test_bug_finder_tsv_file(self):
         with open(TEST_IN_DIR / 'polyspace.tsv', newline="") as file:
             with patch('sys.stdout', new=StringIO()) as fake_out:
-                self.warnings.check(file)
+                self.warnings.check_logfile(file)
                 count = self.warnings.return_count()
         stdout_log = fake_out.getvalue()
 
