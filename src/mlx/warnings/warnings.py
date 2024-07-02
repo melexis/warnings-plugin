@@ -112,22 +112,29 @@ class WarningsPlugin:
         '''
         return self.activated_checkers[name]
 
-    def check(self, content, **kwargs):
+    def check(self, content):
         '''
         Function for counting the number of warnings in a specific text
 
         Args:
-            content (str/_io.TextIOWrapper): The text to parse / The open file
-            file_extension (str): The file extension
+            content (_io.TextIOWrapper/str): The open file / content to parse
         '''
         if self.printout:
-            print(content)
-
+            if isinstance(content, str):
+                print(content)
+            else:
+                print(content.read())
         if not self.activated_checkers:
             print("No checkers activated. Please use activate_checker function")
         else:
             for checker in self.activated_checkers.values():
-                checker.check(content, **kwargs)
+                if checker.name == "polyspace":
+                    checker.check(content)
+                else:
+                    if isinstance(content, str):
+                        checker.check(content)
+                    else:
+                        checker.check(content.read())
 
     def set_maximum(self, maximum):
         ''' Setter function for the maximum amount of warnings
@@ -408,13 +415,8 @@ def warnings_logfile(warnings, log):
     for file_wildcard in log:
         if glob.glob(file_wildcard):
             for logfile in glob.glob(file_wildcard):
-                _filename, file_extension = os.path.splitext(logfile)
-                if file_extension == ".cvs" or file_extension == ".tsv":
-                    with open(logfile, newline="") as file:
-                        warnings.check(file, file_extension=file_extension)
-                else:
-                    with open(logfile, 'r') as loghandle:
-                        warnings.check(loghandle.read(), file_extension=file_extension)
+                with open(logfile, "r") as file:
+                    warnings.check(file)
         else:
             print("FILE: %s does not exist" % file_wildcard)
             return 1
