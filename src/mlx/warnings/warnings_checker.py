@@ -18,8 +18,8 @@ class WarningsChecker:
         '''
         self.verbose = verbose
         self.count = 0
-        self.warn_min = 0
-        self.warn_max = 0
+        self._minimum = 0
+        self._maximum = 0
         self._counted_warnings = []
         self.cq_findings = []
         self.cq_enabled = False
@@ -54,14 +54,14 @@ class WarningsChecker:
         Returns:
             int: Maximum amount of warnings
         '''
-        return self.warn_max
+        return self._maximum
 
     @maximum.setter
     def maximum(self, maximum):
-        if self.warn_min > maximum:
+        if self._minimum > maximum:
             raise ValueError("Invalid argument: maximum limit must be higher than minimum limit ({min}); cannot "
-                             "set {max}.".format(max=maximum, min=self.warn_min))
-        self.warn_max = maximum
+                             "set {max}.".format(max=maximum, min=self._minimum))
+        self._maximum = maximum
 
     @property
     def minimum(self):
@@ -70,14 +70,14 @@ class WarningsChecker:
         Returns:
             int: Minimum amount of warnings
         '''
-        return self.warn_min
+        return self._minimum
 
     @minimum.setter
     def minimum(self, minimum):
-        if minimum > self.warn_max:
+        if minimum > self._maximum:
             raise ValueError("Invalid argument: minimum limit must be lower than maximum limit ({max}); cannot "
-                             "set {min}.".format(min=minimum, max=self.warn_max))
-        self.warn_min = minimum
+                             "set {min}.".format(min=minimum, max=self._maximum))
+        self._minimum = minimum
 
     @abc.abstractmethod
     def check(self, content, **kwargs):
@@ -118,13 +118,13 @@ class WarningsChecker:
             int: 0 if the amount of warnings is within limits, the count of warnings otherwise
                 (or 1 in case of a count of 0 warnings)
         '''
-        if self.count > self.warn_max or self.count < self.warn_min:
+        if self.count > self._maximum or self.count < self._minimum:
             return self._return_error_code()
-        elif self.warn_min == self.warn_max and self.count == self.warn_max:
+        elif self._minimum == self._maximum and self.count == self._maximum:
             print("Number of warnings ({0.count}) is exactly as expected. Well done."
                   .format(self))
         else:
-            print("Number of warnings ({0.count}) is between limits {0.warn_min} and {0.warn_max}. Well done."
+            print("Number of warnings ({0.count}) is between limits {0._minimum} and {0._maximum}. Well done."
                   .format(self))
         return 0
 
@@ -134,10 +134,10 @@ class WarningsChecker:
         Returns:
             int: The count of warnings (or 1 in case of a count of 0 warnings)
         '''
-        if self.count > self.warn_max:
-            error_reason = "higher than the maximum limit ({0.warn_max})".format(self)
+        if self.count > self._maximum:
+            error_reason = "higher than the maximum limit ({0._maximum})".format(self)
         else:
-            error_reason = "lower than the minimum limit ({0.warn_min})".format(self)
+            error_reason = "lower than the minimum limit ({0._minimum})".format(self)
 
         error_code = self.count
         if error_code == 0:

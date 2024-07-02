@@ -69,8 +69,8 @@ class WarningsPlugin:
                     config = json.load(open_file)
             self.config_parser(config)
 
-        self.warn_min = 0
-        self.warn_max = 0
+        self._minimum = 0
+        self._maximum = 0
         self.count = 0
         self.printout = False
 
