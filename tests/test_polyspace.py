@@ -64,7 +64,6 @@ class TestBugFinderWarnings(unittest.TestCase):
         self.assertEqual(count, 55)
 
 
-
 class TestPolyspaceWarnings(unittest.TestCase):
     def setUp(self):
         os.environ['MIN_SPHINX_WARNINGS'] = '0'
