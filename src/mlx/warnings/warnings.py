@@ -144,11 +144,7 @@ class WarningsPlugin:
         else:
             content = file.read()
             for checker in self.activated_checkers.values():
-                if checker.name == "polyspace":
-                    print("Polyspace checker is skipped")
-                    continue
-                else:
-                    checker.check(content)
+                checker.check(content)
 
     def configure_maximum(self, maximum):
         ''' Configure the maximum amount of warnings for each activated checker
