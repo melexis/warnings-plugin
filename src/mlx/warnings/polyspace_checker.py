@@ -16,6 +16,11 @@ class PolyspaceChecker(WarningsChecker):
         "orange": "major",
     }
 
+    def __init__(self, verbose):
+        '''Constructor to set the default code quality description template to "Polyspace: $check"'''
+        super().__init__(verbose)
+        self._cq_description_template = Template('Polyspace: $check')
+
     @property
     def counted_warnings(self):
         ''' List: list of counted warnings (str) '''

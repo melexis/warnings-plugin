@@ -315,6 +315,8 @@ In case of Code Prover, you want to check the `color` column on `red` or `orange
 In case of Bug Finder, you want to check the `information` column on `impact: high`, `impact: medium` or even `impact: low`.
 Other issues can also be handled, for example "Global variable". Even if you want to check another column's value, you can specify it in the configuration file.
 
+`Polyspace: $check` is the default of `cq_description_template`.
+
 .. code-block:: bash
     # basic Polyspace checker
     mlx-warnings --config <configuration_file> <tsv_file>
