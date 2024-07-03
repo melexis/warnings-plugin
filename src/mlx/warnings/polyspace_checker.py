@@ -1,5 +1,4 @@
 import csv
-import hashlib
 from string import Template
 from io import TextIOWrapper
 
@@ -94,7 +93,7 @@ class PolyspaceChecker(WarningsChecker):
         if self.cq_description_template:
             finding["description"] = self.cq_description_template.safe_substitute(row)
 
-        finding["fingerprint"] = hashlib.md5(str(finding).encode('utf8')).hexdigest()
+        finding["fingerprint"] = row["id"]
         self.cq_findings.append(finding)
 
     def check(self, content):
