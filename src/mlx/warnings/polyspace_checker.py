@@ -15,7 +15,6 @@ class PolyspaceChecker(WarningsChecker):
         "impact: low": "minor",
         "red": "critical",
         "orange": "major",
-        "green": "info",
     }
 
     @property
@@ -123,7 +122,7 @@ class PolyspaceChecker(WarningsChecker):
                             checker.column_name,
                             checker.check_value
                         ))
-                        if self.cq_enabled:
+                        if self.cq_enabled and row["color"] != "green":
                             self.add_code_quality_finding(row)
 
     def return_count(self):
