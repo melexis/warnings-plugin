@@ -93,6 +93,18 @@ class TestPolyspaceWarnings(unittest.TestCase):
         self.assertEqual(66, retval)
         self.assertTrue(filecmp.cmp(out_file, ref_file))
 
+    def test_code_quality_no_green(self):
+        filename = 'polyspace_code_quality.json'
+        out_file = str(TEST_OUT_DIR / filename)
+        ref_file = str(TEST_IN_DIR / filename)
+        retval = warnings_wrapper([
+            '--code-quality', out_file,
+            '--config', str(TEST_IN_DIR / 'config_example_polyspace_green.yml'),
+            str(TEST_IN_DIR / 'polyspace.tsv'),
+        ])
+        self.assertEqual(66, retval)
+        self.assertTrue(filecmp.cmp(out_file, ref_file))
+
 
 if __name__ == '__main__':
     unittest.main()

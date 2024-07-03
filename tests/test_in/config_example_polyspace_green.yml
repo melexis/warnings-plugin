@@ -1,0 +1,45 @@
+sphinx:
+  enabled: false
+doxygen:
+  enabled: false
+junit:
+  enabled: false
+xmlrunner:
+  enabled: false
+coverity:
+  enabled: false
+robot:
+  enabled: false
+polyspace:
+  enabled: true
+  cq_description_template: "Polyspace: $check"
+  run-time check:
+  - color: red
+    min: 0
+    max: 0
+  - color: orange
+    min: 0
+    max: 10
+  - color: green
+    min: 0
+    max: 1000
+  global variable:
+  - color: red
+    min: 0
+    max: 0
+  - color: orange
+    min: 0
+    max: 10
+  - color: green
+    min: 0
+    max: 1000
+  defect:
+  - information: "impact: high"
+    min: 0
+    max: 0
+  - information: "impact: medium"
+    min: 0
+    max: 10
+  - information: "impact: low"
+    min: 0
+    max: 30

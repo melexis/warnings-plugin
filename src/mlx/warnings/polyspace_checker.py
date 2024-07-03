@@ -121,7 +121,7 @@ class PolyspaceChecker(WarningsChecker):
                             checker.column_name,
                             checker.check_value
                         ))
-                        if self.cq_enabled and row["color"] != "green":
+                        if self.cq_enabled and row["color"].lower() != "green":
                             self.add_code_quality_finding(row)
 
     def return_count(self):
