@@ -286,6 +286,41 @@ input file. When this setting is missing, the default value ``true`` is used.
 .. |--xunit report.xml| replace:: ``--xunit report.xml``
 .. _`--xunit report.xml`: https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#xunit-compatible-result-file
 
+Parse for Polyspace Failures
+----------------------------
+
+In order to use Polyspace checker, a TSV file need to be exported from Polyspace.
+This can be done by one of the following commands:
+.. code-block:: bash
+    polyspace-results-export -format csv -results-dir <resultsFolder> <export options>
+    # or
+    polyspace-results-export -format csv -host <hostName> -run-id <runID> <export options> <polyspace access options>
+
+The format `csv` is set to output tab separated values (TSV).
+In the TSV format, each result consists of tab-separated information in columns such as ID,
+Family, Group, Color, Check, and so on.
+
+This file is necessary when you enable `polyspace` in the configuration file.
+Note that the Polyspace checker can only be used with a configuration file,
+and it cannot be used together with other checkers enabled.
+In case there are more checkers enabled, only Polyspace checker will run.
+
+When you enable the Polyspace in the configuration file,
+the checks consist of a key that represents the "Family" column of the TSV file.
+For example, "run-time check" is the family of Code Prover and "defect" is the family of Bug Finder.
+Next, there is a list as value of that key,
+which contains the name of the column name as key and the value of that column to check together with min and max.
+
+In case of Code Prover, you want to check the `color` column on `red` or `orange` issues.
+In case of Bug Finder, you want to check the `information` column on `impact: high`, `impact: medium` or even `impact: low`.
+Other issues can also be handled, for example "Global variable". Even if you want to check another column's value, you can specify it in the configuration file.
+
+.. code-block:: bash
+    # basic Polyspace checker
+    mlx-warnings --config <configuration_file> <tsv_file>
+    # Polyspace checker with code quality export
+    mlx-warnings --code-quality path/to/code_quality.json --config <configuration_file> <tsv_file>
+
 ----------------------------------
 Configuration File to Pass Options
 ----------------------------------
@@ -337,6 +372,16 @@ The values for 'min' and 'max' can be set with environment variables via a
                 },
                 {
                     "name": "My Second Suite",
+                    "min": 0,
+                    "max": 0
+                }
+            ]
+        },
+        "polyspace": {
+            "enabled": false,
+            "run-time check": [
+                {
+                    "color": "red",
                     "min": 0,
                     "max": 0
                 }
