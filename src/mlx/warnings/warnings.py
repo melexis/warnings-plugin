@@ -220,7 +220,7 @@ class WarningsPlugin:
         self.printout = printout
 
     def config_parser(self, config):
-        ''' Parsing configuration dict extracted by previously opened JSON or yaml/yml file
+        ''' Parsing configuration dict extracted by previously opened JSON or YAML file
 
         Args:
             config (dict): Content of configuration file
