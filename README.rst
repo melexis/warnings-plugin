@@ -293,7 +293,7 @@ To use the Polyspace checker, a TSV file must be exported from Polyspace.
 You can find instructions on exporting TSV files in the Polyspace documentation.
 
 Exporting the TSV File
-~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^
 
 The following commands export a TSV file from Polyspace:
 
@@ -310,7 +310,7 @@ Family, Group, Color, Check, and so on.
 This file is necessary when you enable Polyspace in the configuration file.
 
 Configuration
-~~~~~~~~~~~~~
+^^^^^^^^^^^^^
 
 Polyspace checking can only be used with a configuration file,
 and it cannot be used together with other checkers enabled.
@@ -323,7 +323,7 @@ The value of that key is a list, which contains the name of the column to check 
 the value of that column to check together with ``min`` and ``max`` values.
 
 Example Checks
-~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^
 
 In case of Code Prover, you might want to check the ``color`` column on ``red`` or ``orange`` issues.
 In case of Bug Finder, you might want to check the ``information`` column on ``impact: high``, ``impact: medium``, or even ``impact: low``.
@@ -331,12 +331,12 @@ Other issues, such as "Global variable", can also be handled.
 You can specify any column and value you want to check in the configuration file.
 
 Default Description Template
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``Polyspace: $check`` is the default value for the ``cq_description_template`` variable.
 
 Running the mlx-warnings plugin
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following commands demonstrate how to run the mlx-warnings plugin with the TSV file:
 
