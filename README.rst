@@ -307,6 +307,7 @@ The csv format outputs tab-separated values (TSV).
 Each result in the TSV format consists of tab-separated information in columns.
 Starting from Polyspace version R2024a these columns are available:
 ID, Family, Group, Color, New, Check, Information, Function, File, Status, Severity, Comment, Key, Line and Col.
+In previous versions of Polyspace the Line and Col column are not available yet.
 
 This file is necessary when you enable Polyspace in the configuration file.
 
