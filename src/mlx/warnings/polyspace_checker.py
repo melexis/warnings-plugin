@@ -205,7 +205,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
         print("{} warnings found for {!r}: {!r}".format(self.count, self.column_name, self.check_value))
         return self.count
 
-    def add_code_quality_finding(self, row, tab_sep_string):
+    def add_code_quality_finding(self, row):
         '''Add code quality finding
 
         Args:
@@ -245,6 +245,8 @@ class PolyspaceFamilyChecker(WarningsChecker):
         if "col" in row:
             finding["location"]["positions"]["begin"]["column"] = row["line"]
         finding["description"] = description
+        row_without_key = [value for key, value in row.items() if key != "key"]
+        tab_sep_string = "\t".join(row_without_key)
         finding["fingerprint"] = hashlib.md5(str(tab_sep_string).encode('utf8')).hexdigest()
         self.cq_findings.append(finding)
 
@@ -265,4 +267,4 @@ class PolyspaceFamilyChecker(WarningsChecker):
                     self.check_value
                 ))
                 if self.cq_enabled and content["color"].lower() != "green":
-                    self.add_code_quality_finding(content, tab_sep_string)
+                    self.add_code_quality_finding(content)
