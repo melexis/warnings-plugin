@@ -331,11 +331,6 @@ In case of Bug Finder, you might want to check the ``information`` column on ``i
 Other issues, such as "Global variable", can also be handled.
 You can specify any column and value you want to check in the configuration file.
 
-Default Description Template
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-``Polyspace: $check`` is the default value for the ``cq_description_template`` variable.
-
 Running the mlx-warnings plugin
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
