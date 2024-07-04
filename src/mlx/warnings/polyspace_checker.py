@@ -68,7 +68,7 @@ class PolyspaceChecker(WarningsChecker):
 
     def check(self, content):
         '''
-        Function for counting the number of failures in a TSV/CSV file exported by Polyspace
+        Function for counting the number of failures in a TSV file exported by Polyspace
 
         Args:
             content (_io.TextIOWrapper): The open file to parse
