@@ -403,7 +403,7 @@ The values for 'min' and 'max' can be set with environment variables via a
             "enabled": false,
             "cq_description_template": "$PRODUCT $family: $check",
             "exclude": [
-                ".+dummy_function\(\)|dummy_file_name\.c"
+                ".+dummy_function()|dummy_file_name.c"
             ],
             "run-time check": [
                 {
