@@ -75,7 +75,7 @@ class PolyspaceChecker(WarningsChecker):
         '''
         if not isinstance(content, TextIOWrapper):
             raise TypeError(
-                f"PolyspaceFamilyChecker can't handle this type; expected {type(TextIOWrapper)}; got {type(content)}"
+                f"{self.__class__.__name__} can't handle this type; expected {type(TextIOWrapper)}; got {type(content)}"
             )
         reader = csv.DictReader(content, dialect='excel-tab')
         # set column names to lowercase
