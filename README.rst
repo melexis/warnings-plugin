@@ -295,7 +295,7 @@ You can find instructions on exporting TSV files in the Polyspace documentation.
 Exporting the TSV File
 ^^^^^^^^^^^^^^^^^^^^^^
 
-The following commands export a TSV file from Polyspace:
+The following commands instruct Polyspace to export the results as a TSV file:
 
 .. code-block:: bash
 
