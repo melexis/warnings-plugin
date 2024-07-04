@@ -10,13 +10,6 @@ from .exceptions import WarningsConfigError
 class PolyspaceChecker(WarningsChecker):
     name = 'polyspace'
     checkers = []
-    code_quality_severity = {
-        "impact: high": "critical",
-        "impact: medium": "major",
-        "impact: low": "minor",
-        "red": "critical",
-        "orange": "major",
-    }
 
     def __init__(self, verbose):
         '''Constructor to set the default code quality description template to "Polyspace: $check"'''
@@ -72,44 +65,6 @@ class PolyspaceChecker(WarningsChecker):
         for checker in self.checkers:
             checker.maximum = maximum
 
-    def add_code_quality_finding(self, row):
-        '''Add code quality finding
-
-        Args:
-            row (dict): The row of the warning with the corresponding colomn names
-        '''
-        finding = {
-            "severity": "major",
-            "location": {
-                "path": self.cq_default_path,
-                "lines": {
-                    "begin": 1,
-                }
-            }
-        }
-
-        try:
-            description = self.cq_description_template.substitute(os.environ, **row)
-        except KeyError as err:
-            raise WarningsConfigError(f"Failed to find environment variable from configuration value "
-                                      f"'cq_description_template': {err}") from err
-
-        # Attention to bug finder: items have color red for impact: high, medium and low.
-        if row["information"].lower() in self.code_quality_severity.keys():
-            finding["severity"] = self.code_quality_severity[row["information"].lower()]
-        elif row["color"].lower() in self.code_quality_severity.keys():
-            finding["severity"] = self.code_quality_severity[row["color"].lower()]
-        else:
-            finding["severity"] = "info"
-
-        if row["file"]:
-            finding["location"]["path"] = row["file"]
-
-        finding["description"] = description
-
-        finding["fingerprint"] = row["id"]
-        self.cq_findings.append(finding)
-
     def check(self, content):
         '''
         Function for counting the number of failures in a TSV/CSV file exported by Polyspace
@@ -128,17 +83,7 @@ class PolyspaceChecker(WarningsChecker):
         for row in reader:
             for checker in self.checkers:
                 if row['family'].lower() == checker.family_value:
-                    if row[checker.column_name].lower() == checker.check_value:
-                        checker.count = checker.count + 1
-                        checker.counted_warnings.append('family: {} -> {}: {}'.format(
-                            checker.family_value,
-                            checker.column_name,
-                            checker.check_value
-                        ))
-                        if self.cq_enabled and row["color"].lower() != "green":
-                            tab_sep_string = "\t".join(row.values())
-                            if not self._is_excluded(tab_sep_string):
-                                self.add_code_quality_finding(row)
+                    checker.check(row)
 
     def return_count(self):
         ''' Getter function for the amount of warnings found
@@ -210,9 +155,20 @@ class PolyspaceChecker(WarningsChecker):
                         "{\n    <column_name>: <value_to_check>,\n    min: <number>,\n    max: <number>\n};"
                         f"got {column_name} as column_name and {check_value} as value_to_check"
                     )
+        for checker in self.checkers:
+            checker.cq_enabled = self.cq_enabled
+            checker.exclude_patterns = self.exclude_patterns
+            checker.cq_description_template = self.cq_description_template
 
 
 class PolyspaceFamilyChecker(WarningsChecker):
+    code_quality_severity = {
+        "impact: high": "critical",
+        "impact: medium": "major",
+        "impact: low": "minor",
+        "red": "critical",
+        "orange": "major",
+    }
 
     def __init__(self, family_value, column_name, check_value, **kwargs):
         """Initialize the PolyspaceFamilyChecker
@@ -229,6 +185,15 @@ class PolyspaceFamilyChecker(WarningsChecker):
         self.column_name = column_name
         self.check_value = check_value
 
+    @property
+    def cq_description_template(self):
+        ''' Template: string.Template instance based on the configured template string '''
+        return self._cq_description_template
+
+    @cq_description_template.setter
+    def cq_description_template(self, template_obj):
+        self._cq_description_template = template_obj
+
     def return_count(self):
         ''' Getter function for the amount of warnings found
 
@@ -237,3 +202,58 @@ class PolyspaceFamilyChecker(WarningsChecker):
         '''
         print("{} warnings found for {!r}: {!r}".format(self.count, self.column_name, self.check_value))
         return self.count
+
+    def add_code_quality_finding(self, row):
+        '''Add code quality finding
+
+        Args:
+            row (dict): The row of the warning with the corresponding colomn names
+        '''
+        finding = {
+            "severity": "major",
+            "location": {
+                "path": self.cq_default_path,
+                "lines": {
+                    "begin": 1,
+                }
+            }
+        }
+
+        try:
+            description = self.cq_description_template.substitute(os.environ, **row)
+        except KeyError as err:
+            raise WarningsConfigError(f"Failed to find environment variable from configuration value "
+                                      f"'cq_description_template': {err}") from err
+
+        # Attention to bug finder: items have color red for impact: high, medium and low.
+        if row["information"].lower() in self.code_quality_severity.keys():
+            finding["severity"] = self.code_quality_severity[row["information"].lower()]
+        elif row["color"].lower() in self.code_quality_severity.keys():
+            finding["severity"] = self.code_quality_severity[row["color"].lower()]
+        else:
+            finding["severity"] = "info"
+
+        if row["file"]:
+            finding["location"]["path"] = row["file"]
+        finding["description"] = description
+        finding["fingerprint"] = row["id"]
+        self.cq_findings.append(finding)
+
+    def check(self, content):
+        '''
+        Function for counting the number of failures in a TSV/CSV file exported by Polyspace
+
+        Args:
+            content (dict): The row of the TSV file
+        '''
+        if content[self.column_name].lower() == self.check_value:
+            self.count = self.count + 1
+            self.counted_warnings.append('family: {} -> {}: {}'.format(
+                self.family_value,
+                self.column_name,
+                self.check_value
+            ))
+            if self.cq_enabled and content["color"].lower() != "green":
+                tab_sep_string = "\t".join(content.values())
+                if not self._is_excluded(tab_sep_string):
+                    self.add_code_quality_finding(content)
