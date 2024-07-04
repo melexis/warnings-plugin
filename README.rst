@@ -292,8 +292,8 @@ Parse for Polyspace Failures
 To use the Polyspace checker, a TSV file must be exported from Polyspace.
 You can find instructions on exporting TSV files in the Polyspace documentation.
 
-Exporting the TSV File
-^^^^^^^^^^^^^^^^^^^^^^
+Exporting Polyspace Results
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following commands instruct Polyspace to export the results as a TSV file:
 
