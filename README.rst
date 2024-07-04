@@ -495,11 +495,16 @@ If a warning doesn't contain a path, ``"cq_default_path"`` from the `configurati
 If not configured, ``.gitlab-ci.yml`` will be used as a fallback path.
 
 You can customize the description with ``"cq_description_template"``, see `configuration file to pass options`_.
-Its value should be a template for Python's |string.Template|_. The template should contain ``$description`` and has
-access to all environment variables, e.g. ``$HOME``.
-This template functionality differs from the Polyspace checker.
-With the Polyspace checker, you can create custom descriptions using $-placeholders,
-which can represent environment variables or column titles from your TSV file.
+Its value should be a template for Python's |string.Template|_. The template has access to all environment variables,
+e.g. ``$HOME``, and other variables that depend on the checker type:
+
+Polyspace
+  Any field of a Polyspace defect can be included by using the corresponding
+  `column title <Exporting Polyspace Results>`_ in lowercase as the variable name.
+  The default template is ``Polyspace: $check``
+  
+Other
+  The template should contain ``$description``, which is the default.
 
 =======================
 Issues and New Features
