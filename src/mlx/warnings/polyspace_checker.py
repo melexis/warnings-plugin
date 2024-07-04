@@ -1,11 +1,11 @@
-import os
 import csv
 import hashlib
-from string import Template
 from io import TextIOWrapper
+import os
+from string import Template
 
-from .warnings_checker import WarningsChecker
 from .exceptions import WarningsConfigError
+from .warnings_checker import WarningsChecker
 
 
 class PolyspaceChecker(WarningsChecker):
