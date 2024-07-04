@@ -298,6 +298,7 @@ Exporting the TSV File
 The following commands export a TSV file from Polyspace:
 
 .. code-block:: bash
+
     polyspace-results-export -format csv -results-dir <resultsFolder> <export_options>
     # or
     polyspace-results-export -format csv -host <hostName> -run-id <runID> <export_options> <polyspace_access_options>
@@ -340,6 +341,7 @@ Running the mlx-warnings plugin
 The following commands demonstrate how to run the mlx-warnings plugin with the TSV file:
 
 .. code-block:: bash
+
     # basic Polyspace checker
     mlx-warnings --config <configuration_file> <tsv_file>
     # Polyspace checker with code quality export
