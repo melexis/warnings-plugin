@@ -237,7 +237,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
         if row["file"]:
             finding["location"]["path"] = row["file"]
         finding["description"] = description
-        finding["fingerprint"] = row["id"]
+        finding["fingerprint"] = row["key"]
         self.cq_findings.append(finding)
 
     def check(self, content):

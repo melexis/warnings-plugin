@@ -8,7 +8,7 @@
             }
         },
         "description": "12345 Defect: Data race",
-        "fingerprint": "17503"
+        "fingerprint": "CD99338805A214EB94A0438AC8A9"
     },
     {
         "severity": "critical",
@@ -19,7 +19,7 @@
             }
         },
         "description": "12345 Defect: Data race",
-        "fingerprint": "17504"
+        "fingerprint": "CD99378805A214EB94A0438AC8A9"
     },
     {
         "severity": "critical",
@@ -30,7 +30,7 @@
             }
         },
         "description": "12345 Defect: Data race",
-        "fingerprint": "17507"
+        "fingerprint": "4E19328805A214EB94A0438AC8A1"
     },
     {
         "severity": "critical",
@@ -41,7 +41,7 @@
             }
         },
         "description": "12345 Defect: Data race",
-        "fingerprint": "17508"
+        "fingerprint": "0E9B328805A214EB94A0438AC8A1"
     },
     {
         "severity": "critical",
@@ -52,7 +52,7 @@
             }
         },
         "description": "12345 Defect: Data race",
-        "fingerprint": "17515"
+        "fingerprint": "CD1A378805A214EB94A0438AC8A9"
     },
     {
         "severity": "critical",
@@ -63,7 +63,7 @@
             }
         },
         "description": "12345 Defect: Data race",
-        "fingerprint": "17517"
+        "fingerprint": "8D9C328805A214EB94A0438AC8A9"
     },
     {
         "severity": "critical",
@@ -74,7 +74,7 @@
             }
         },
         "description": "12345 Defect: Data race",
-        "fingerprint": "17518"
+        "fingerprint": "CD9C378805A214EB94A0438AC8A1"
     },
     {
         "severity": "critical",
@@ -85,7 +85,7 @@
             }
         },
         "description": "12345 Defect: Data race",
-        "fingerprint": "17529"
+        "fingerprint": "CD1A358805A214EB94A0438AC8A9"
     },
     {
         "severity": "critical",
@@ -96,7 +96,7 @@
             }
         },
         "description": "12345 Defect: Data race",
-        "fingerprint": "17530"
+        "fingerprint": "CD1C338805A214EB94A0438AC8A9"
     },
     {
         "severity": "critical",
@@ -107,7 +107,7 @@
             }
         },
         "description": "12345 Defect: Data race",
-        "fingerprint": "17535"
+        "fingerprint": "0E1C398805A214EB94A0438AC8A1"
     },
     {
         "severity": "critical",
@@ -118,7 +118,7 @@
             }
         },
         "description": "12345 Defect: Data race",
-        "fingerprint": "17536"
+        "fingerprint": "4E1A358805A214EB94A0438AC8A1"
     },
     {
         "severity": "critical",
@@ -129,7 +129,7 @@
             }
         },
         "description": "12345 Defect: Data race",
-        "fingerprint": "17538"
+        "fingerprint": "CD9A338805A214EB94A0438AC8A9"
     },
     {
         "severity": "critical",
@@ -140,6 +140,6 @@
             }
         },
         "description": "12345 Defect: Data race",
-        "fingerprint": "17542"
+        "fingerprint": "CD1C348805A214EB94A0438AC8A9"
     }
 ]
