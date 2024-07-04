@@ -289,7 +289,7 @@ input file. When this setting is missing, the default value ``true`` is used.
 Parse for Polyspace Failures
 ----------------------------
 
-To use the Polyspace checker, a TSV file must be exported from Polyspace.
+The Polyspace checker requires as input a TSV file exported by Polyspace.
 You can find instructions on exporting TSV files in the Polyspace documentation.
 
 Exporting Polyspace Results
@@ -502,7 +502,7 @@ Polyspace
   Any field of a Polyspace defect can be included by using the corresponding
   `column title <Exporting Polyspace Results>`_ in lowercase as the variable name.
   The default template is ``Polyspace: $check``
-  
+
 Other
   The template should contain ``$description``, which is the default.
 
