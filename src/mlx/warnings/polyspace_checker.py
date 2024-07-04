@@ -1,5 +1,6 @@
 import os
 import csv
+import hashlib
 from string import Template
 from io import TextIOWrapper
 
@@ -204,7 +205,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
         print("{} warnings found for {!r}: {!r}".format(self.count, self.column_name, self.check_value))
         return self.count
 
-    def add_code_quality_finding(self, row):
+    def add_code_quality_finding(self, row, tab_sep_string):
         '''Add code quality finding
 
         Args:
@@ -244,7 +245,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
         if "col" in row:
             finding["location"]["positions"]["begin"]["column"] = row["line"]
         finding["description"] = description
-        finding["fingerprint"] = row["key"]
+        finding["fingerprint"] = hashlib.md5(str(tab_sep_string).encode('utf8')).hexdigest()
         self.cq_findings.append(finding)
 
     def check(self, content):
@@ -255,13 +256,13 @@ class PolyspaceFamilyChecker(WarningsChecker):
             content (dict): The row of the TSV file
         '''
         if content[self.column_name].lower() == self.check_value:
-            self.count = self.count + 1
-            self.counted_warnings.append('family: {} -> {}: {}'.format(
-                self.family_value,
-                self.column_name,
-                self.check_value
-            ))
-            if self.cq_enabled and content["color"].lower() != "green":
-                tab_sep_string = "\t".join(content.values())
-                if not self._is_excluded(tab_sep_string):
-                    self.add_code_quality_finding(content)
+            tab_sep_string = "\t".join(content.values())
+            if not self._is_excluded(tab_sep_string):
+                self.count = self.count + 1
+                self.counted_warnings.append('family: {} -> {}: {}'.format(
+                    self.family_value,
+                    self.column_name,
+                    self.check_value
+                ))
+                if self.cq_enabled and content["color"].lower() != "green":
+                    self.add_code_quality_finding(content, tab_sep_string)

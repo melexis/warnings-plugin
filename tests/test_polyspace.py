@@ -114,7 +114,7 @@ class TestPolyspaceWarnings(unittest.TestCase):
             '--config', str(TEST_IN_DIR / 'config_example_polyspace_exclude.yml'),
             str(TEST_IN_DIR / 'polyspace.tsv'),
         ])
-        self.assertEqual(66, retval)
+        self.assertEqual(13, retval)
         self.assertTrue(filecmp.cmp(out_file, ref_file))
         del os.environ["PRODUCT"]
 
