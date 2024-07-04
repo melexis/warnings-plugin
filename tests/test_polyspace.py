@@ -118,5 +118,6 @@ class TestPolyspaceWarnings(unittest.TestCase):
         self.assertTrue(filecmp.cmp(out_file, ref_file))
         del os.environ["PRODUCT"]
 
+
 if __name__ == '__main__':
     unittest.main()
