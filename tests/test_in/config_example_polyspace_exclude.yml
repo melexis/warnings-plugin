@@ -1,0 +1,41 @@
+sphinx:
+  enabled: false
+doxygen:
+  enabled: false
+junit:
+  enabled: false
+xmlrunner:
+  enabled: false
+coverity:
+  enabled: false
+robot:
+  enabled: false
+polyspace:
+  enabled: true
+  cq_description_template: '$PRODUCT $family: $check'
+  exclude:
+    - '.+dummy_function\(\)|dummy_file_name\.c'
+  run-time check:
+  - color: red
+    min: 0
+    max: 0
+  - color: orange
+    min: 0
+    max: 10
+  global variable:
+  - color: red
+    min: 0
+    max: 0
+  - color: orange
+    min: 0
+    max: 10
+  defect:
+  - information: 'impact: high'
+    min: 0
+    max: 0
+  - information: 'impact: medium'
+    min: 0
+    max: 10
+  - information: 'impact: low'
+    min: 0
+    max: 30

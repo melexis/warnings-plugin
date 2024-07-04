@@ -1,0 +1,145 @@
+[
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "lines": {
+                "begin": 1
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "17503"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "lines": {
+                "begin": 1
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "17504"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "lines": {
+                "begin": 1
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "17507"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "lines": {
+                "begin": 1
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "17508"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "lines": {
+                "begin": 1
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "17515"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "lines": {
+                "begin": 1
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "17517"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "lines": {
+                "begin": 1
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "17518"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "lines": {
+                "begin": 1
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "17529"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "lines": {
+                "begin": 1
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "17530"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "lines": {
+                "begin": 1
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "17535"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "lines": {
+                "begin": 1
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "17536"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "lines": {
+                "begin": 1
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "17538"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "lines": {
+                "begin": 1
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "17542"
+    }
+]

@@ -1,8 +1,10 @@
+import os
 import csv
 from string import Template
 from io import TextIOWrapper
 
 from .warnings_checker import WarningsChecker
+from .exceptions import WarningsConfigError
 
 
 class PolyspaceChecker(WarningsChecker):
@@ -85,6 +87,13 @@ class PolyspaceChecker(WarningsChecker):
                 }
             }
         }
+
+        try:
+            description = self.cq_description_template.substitute(os.environ, **row)
+        except KeyError as err:
+            raise WarningsConfigError(f"Failed to find environment variable from configuration value "
+                                      f"'cq_description_template': {err}") from err
+
         # Attention to bug finder: items have color red for impact: high, medium and low.
         if row["information"].lower() in self.code_quality_severity.keys():
             finding["severity"] = self.code_quality_severity[row["information"].lower()]
@@ -95,8 +104,8 @@ class PolyspaceChecker(WarningsChecker):
 
         if row["file"]:
             finding["location"]["path"] = row["file"]
-        if self.cq_description_template:
-            finding["description"] = self.cq_description_template.safe_substitute(row)
+
+        finding["description"] = description
 
         finding["fingerprint"] = row["id"]
         self.cq_findings.append(finding)
@@ -127,7 +136,9 @@ class PolyspaceChecker(WarningsChecker):
                             checker.check_value
                         ))
                         if self.cq_enabled and row["color"].lower() != "green":
-                            self.add_code_quality_finding(row)
+                            tab_sep_string = "\t".join(row.values())
+                            if not self._is_excluded(tab_sep_string):
+                                self.add_code_quality_finding(row)
 
     def return_count(self):
         ''' Getter function for the amount of warnings found
@@ -177,6 +188,9 @@ class PolyspaceChecker(WarningsChecker):
                 continue
             if family_value == "cq_default_path":
                 self.cq_default_path = config['cq_default_path']
+                continue
+            if family_value == "exclude":
+                self.add_patterns(config.get("exclude"), self.exclude_patterns)
                 continue
             for check in data:
                 for key, value in check.items():
