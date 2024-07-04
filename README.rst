@@ -495,7 +495,7 @@ e.g. ``$HOME``, and other variables that depend on the checker type:
 
 Polyspace
   Any field of a Polyspace defect can be included by using the corresponding
-  `column title <Exporting Polyspace Results>`_ in lowercase as the variable name.
+  `column title <Exporting Polyspace Results_>`_ in lowercase as the variable name.
   The default template is ``Polyspace: $check``
 
 Other
