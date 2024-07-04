@@ -5,8 +5,8 @@
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": 1,
-                    "column": 1
+                    "line": "15",
+                    "column": "15"
                 }
             }
         },
@@ -19,8 +19,8 @@
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": 1,
-                    "column": 1
+                    "line": "15",
+                    "column": "15"
                 }
             }
         },
@@ -33,8 +33,8 @@
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": 1,
-                    "column": 1
+                    "line": "17",
+                    "column": "17"
                 }
             }
         },
@@ -47,8 +47,8 @@
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": 1,
-                    "column": 1
+                    "line": "17",
+                    "column": "17"
                 }
             }
         },
@@ -61,8 +61,8 @@
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": 1,
-                    "column": 1
+                    "line": "17",
+                    "column": "17"
                 }
             }
         },
@@ -75,8 +75,8 @@
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": 1,
-                    "column": 1
+                    "line": "18",
+                    "column": "18"
                 }
             }
         },
@@ -89,8 +89,8 @@
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": 1,
-                    "column": 1
+                    "line": "18",
+                    "column": "18"
                 }
             }
         },
@@ -103,8 +103,8 @@
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": 1,
-                    "column": 1
+                    "line": "20",
+                    "column": "20"
                 }
             }
         },
@@ -117,8 +117,8 @@
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": 1,
-                    "column": 1
+                    "line": "20",
+                    "column": "20"
                 }
             }
         },
@@ -131,8 +131,8 @@
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": 1,
-                    "column": 1
+                    "line": "21",
+                    "column": "21"
                 }
             }
         },
@@ -145,8 +145,8 @@
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": 1,
-                    "column": 1
+                    "line": "21",
+                    "column": "21"
                 }
             }
         },
@@ -159,8 +159,8 @@
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": 1,
-                    "column": 1
+                    "line": "22",
+                    "column": "22"
                 }
             }
         },
@@ -173,8 +173,8 @@
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": 1,
-                    "column": 1
+                    "line": "22",
+                    "column": "22"
                 }
             }
         },
