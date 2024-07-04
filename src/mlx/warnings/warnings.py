@@ -81,8 +81,7 @@ class WarningsPlugin:
         Args:
             checker (WarningsChecker): checker object
         '''
-        checker.cq_enabled = self.cq_enabled and checker.name in ('doxygen', 'sphinx', 'xmlrunner', 'bug_finder',
-                                                                  'code_prover', 'polyspace')
+        checker.cq_enabled = self.cq_enabled and checker.name in ('doxygen', 'sphinx', 'xmlrunner', 'polyspace')
         self.activated_checkers[checker.name] = checker
 
     def activate_checker_name(self, name):
