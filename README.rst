@@ -381,6 +381,10 @@ The values for 'min' and 'max' can be set with environment variables via a
         },
         "polyspace": {
             "enabled": false,
+            "cq_description_template": "$PRODUCT $family: $check",
+            "exclude": [
+                ".+dummy_function\(\)|dummy_file_name\.c"
+            ]
             "run-time check": [
                 {
                     "color": "red",
@@ -468,6 +472,9 @@ If not configured, ``.gitlab-ci.yml`` will be used as a fallback path.
 You can customize the description with ``"cq_description_template"``, see `configuration file to pass options`_.
 Its value should be a template for Python's |string.Template|_. The template should contain ``$description`` and has
 access to all environment variables, e.g. ``$HOME``.
+This template functionality differs from the Polyspace checker.
+With the Polyspace checker, you can create custom descriptions using $-placeholders,
+which can represent environment variables or column titles from your TSV file.
 
 =======================
 Issues and New Features
