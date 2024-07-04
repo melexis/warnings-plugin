@@ -298,9 +298,9 @@ Exporting the TSV File
 The following commands export a TSV file from Polyspace:
 
 .. code-block:: bash
-    polyspace-results-export -format csv -results-dir <resultsFolder> <export options>
+    polyspace-results-export -format csv -results-dir <resultsFolder> <export_options>
     # or
-    polyspace-results-export -format csv -host <hostName> -run-id <runID> <export options> <polyspace access options>
+    polyspace-results-export -format csv -host <hostName> -run-id <runID> <export_options> <polyspace_access_options>
 
 The csv format outputs tab-separated values (TSV).
 Each result in the TSV format consists of tab-separated information in columns such as ID,
