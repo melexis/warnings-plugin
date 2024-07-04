@@ -336,7 +336,7 @@ Default Description Template
 `Polyspace: $check` is the default value for the `cq_description_template` variable.
 
 Running the mlx-warnings plugin
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The following commands demonstrate how to run the mlx-warnings plugin with the TSV file:
 
