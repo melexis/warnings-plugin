@@ -34,7 +34,6 @@ Class Diagram
     }
     class "PolyspaceChecker" as mlx.warnings.polyspace_checker.PolyspaceChecker {
       checkers : list
-      code_quality_severity : dict
       count : int
       counted_warnings
       cq_default_path
@@ -42,7 +41,6 @@ Class Diagram
       maximum
       minimum
       name : str
-      add_code_quality_finding(row)
       check(content)
       parse_config(config)
       return_check_limits()
@@ -50,9 +48,14 @@ Class Diagram
     }
     class "PolyspaceFamilyChecker" as mlx.warnings.polyspace_checker.PolyspaceFamilyChecker {
       check_value
+      code_quality_severity : dict
       column_name
+      count
+      cq_description_template
       cq_findings : list
       family_value
+      add_code_quality_finding(row)
+      check(content)
       return_count()
     }
     class "RegexChecker" as mlx.warnings.regex_checker.RegexChecker {
@@ -147,6 +150,7 @@ Class Diagram
     mlx.warnings.robot_checker.RobotChecker --|> mlx.warnings.warnings_checker.WarningsChecker
     mlx.warnings.robot_checker.RobotSuiteChecker --|> mlx.warnings.junit_checker.JUnitChecker
     @enduml
+
 
 
 String Handling
