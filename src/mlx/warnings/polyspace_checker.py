@@ -214,8 +214,11 @@ class PolyspaceFamilyChecker(WarningsChecker):
             "severity": "major",
             "location": {
                 "path": self.cq_default_path,
-                "lines": {
-                    "begin": 1,
+                "positions": {
+                    "begin": {
+                        "line": 1,
+                        "column": 1
+                    }
                 }
             }
         }
@@ -236,6 +239,10 @@ class PolyspaceFamilyChecker(WarningsChecker):
 
         if row["file"]:
             finding["location"]["path"] = row["file"]
+        if "line" in row:
+            finding["location"]["positions"]["begin"]["line"] = row["line"]
+        if "col" in row:
+            finding["location"]["positions"]["begin"]["column"] = row["line"]
         finding["description"] = description
         finding["fingerprint"] = row["key"]
         self.cq_findings.append(finding)
