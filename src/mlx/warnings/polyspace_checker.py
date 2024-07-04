@@ -159,6 +159,7 @@ class PolyspaceChecker(WarningsChecker):
             checker.cq_enabled = self.cq_enabled
             checker.exclude_patterns = self.exclude_patterns
             checker.cq_description_template = self.cq_description_template
+            checker.cq_default_path = self.cq_default_path
 
 
 class PolyspaceFamilyChecker(WarningsChecker):
