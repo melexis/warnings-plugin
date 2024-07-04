@@ -320,20 +320,20 @@ When you enable Polyspace checking in the configuration file,
 the checks consist of a key that represents the "family" column of the TSV file.
 For example, "run-time check" is the family of Code Prover and "defect" is the family of Bug Finder.
 The value of that key is a list, which contains the name of the column to check as a key and
-the value of that column to check together with `min` and `max` values.
+the value of that column to check together with ``min`` and ``max`` values.
 
 Example Checks
 ~~~~~~~~~~~~~~
 
-In case of Code Prover, you might want to check the `color` column on `red` or `orange` issues.
-In case of Bug Finder, you might want to check the `information` column on `impact: high`, `impact: medium`, or even `impact: low`.
+In case of Code Prover, you might want to check the ``color`` column on ``red`` or ``orange`` issues.
+In case of Bug Finder, you might want to check the ``information`` column on ``impact: high``, ``impact: medium``, or even ``impact: low``.
 Other issues, such as "Global variable", can also be handled.
 You can specify any column and value you want to check in the configuration file.
 
 Default Description Template
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`Polyspace: $check` is the default value for the `cq_description_template` variable.
+``Polyspace: $check`` is the default value for the ``cq_description_template`` variable.
 
 Running the mlx-warnings plugin
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
