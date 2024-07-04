@@ -289,33 +289,55 @@ input file. When this setting is missing, the default value ``true`` is used.
 Parse for Polyspace Failures
 ----------------------------
 
-In order to use Polyspace checker, a TSV file need to be exported from Polyspace.
-This can be done by one of the following commands:
+To use the Polyspace checker, a TSV file must be exported from Polyspace.
+You can find instructions on exporting TSV files in the Polyspace documentation.
+
+Exporting the TSV File
+~~~~~~~~~~~~~~~~~~~~~~
+
+The following commands export a TSV file from Polyspace:
+
 .. code-block:: bash
     polyspace-results-export -format csv -results-dir <resultsFolder> <export options>
     # or
     polyspace-results-export -format csv -host <hostName> -run-id <runID> <export options> <polyspace access options>
 
-The format `csv` is set to output tab separated values (TSV).
-In the TSV format, each result consists of tab-separated information in columns such as ID,
+The csv format outputs tab-separated values (TSV).
+Each result in the TSV format consists of tab-separated information in columns such as ID,
 Family, Group, Color, Check, and so on.
 
-This file is necessary when you enable `polyspace` in the configuration file.
-Note that the Polyspace checker can only be used with a configuration file,
+This file is necessary when you enable Polyspace in the configuration file.
+
+Configuration
+~~~~~~~~~~~~~
+
+Polyspace checking can only be used with a configuration file,
 and it cannot be used together with other checkers enabled.
-In case there are more checkers enabled, only Polyspace checker will run.
+In this case, only the Polyspace checker will run.
 
-When you enable the Polyspace in the configuration file,
-the checks consist of a key that represents the "Family" column of the TSV file.
+When you enable Polyspace checking in the configuration file,
+the checks consist of a key that represents the "family" column of the TSV file.
 For example, "run-time check" is the family of Code Prover and "defect" is the family of Bug Finder.
-Next, there is a list as value of that key,
-which contains the name of the column name as key and the value of that column to check together with min and max.
+The value of that key is a list, which contains the name of the column to check as a key and
+the value of that column to check together with `min` and `max` values.
 
-In case of Code Prover, you want to check the `color` column on `red` or `orange` issues.
-In case of Bug Finder, you want to check the `information` column on `impact: high`, `impact: medium` or even `impact: low`.
-Other issues can also be handled, for example "Global variable". Even if you want to check another column's value, you can specify it in the configuration file.
+Example Checks
+~~~~~~~~~~~~~~
 
-`Polyspace: $check` is the default of `cq_description_template`.
+In case of Code Prover, you might want to check the `color` column on `red` or `orange` issues.
+In case of Bug Finder, you might want to check the `information` column on `impact: high`, `impact: medium`, or even `impact: low`.
+Other issues, such as "Global variable", can also be handled.
+You can specify any column and value you want to check in the configuration file.
+
+Default Description Template
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+`Polyspace: $check` is the default value for the `cq_description_template` variable.
+
+Running the mlx-warnings plugin
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The following commands demonstrate how to run the mlx-warnings plugin with the TSV file:
 
 .. code-block:: bash
     # basic Polyspace checker
