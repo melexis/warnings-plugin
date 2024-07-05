@@ -473,7 +473,7 @@ Remember, backslashes need escaping in JSON configurations but not in YAML for t
 
     {
         "polyspace": {
-            "enabled": false,
+            "enabled": true,
             "cq_description_template": "$PRODUCT $family: $check",
             "exclude": [
                 ".+\\tdummy_function\\(\\)\\tdummy_file_name\\.c\\t"
