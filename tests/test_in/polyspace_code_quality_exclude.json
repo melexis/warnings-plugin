@@ -1,0 +1,646 @@
+[
+    {
+        "severity": "major",
+        "location": {
+            "path": "dummy_file_name.h",
+            "positions": {
+                "begin": {
+                    "line": "6",
+                    "column": "6"
+                }
+            }
+        },
+        "description": "12345 Run-time Check: Overflow",
+        "fingerprint": "839e418eda6b091c2413aa0722796fb9"
+    },
+    {
+        "severity": "major",
+        "location": {
+            "path": "dummy_file_name.h",
+            "positions": {
+                "begin": {
+                    "line": "6",
+                    "column": "6"
+                }
+            }
+        },
+        "description": "12345 Run-time Check: Overflow",
+        "fingerprint": "cabd96c885bd6d9ed3fe867b227e8128"
+    },
+    {
+        "severity": "major",
+        "location": {
+            "path": "dummy_file_name.h",
+            "positions": {
+                "begin": {
+                    "line": "7",
+                    "column": "7"
+                }
+            }
+        },
+        "description": "12345 Run-time Check: Overflow",
+        "fingerprint": "1961351c7f028d02202f915a6d36c658"
+    },
+    {
+        "severity": "major",
+        "location": {
+            "path": "dummy_file_name.h",
+            "positions": {
+                "begin": {
+                    "line": "7",
+                    "column": "7"
+                }
+            }
+        },
+        "description": "12345 Run-time Check: Overflow",
+        "fingerprint": "fb6455c4794157cb304be4106e115e35"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "positions": {
+                "begin": {
+                    "line": "15",
+                    "column": "15"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "f4386da30a89e4923f3ab11f0300a5b1"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "positions": {
+                "begin": {
+                    "line": "15",
+                    "column": "15"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "d95f456b2787e9043443e73f3fc58aad"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "16",
+                    "column": "16"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "507064b5f812014fa76db4d182f10ef9"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "16",
+                    "column": "16"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "8fbf02530e02a7a59fb7983f5f4b6730"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "positions": {
+                "begin": {
+                    "line": "17",
+                    "column": "17"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "ff3442b2b4d93ba99df38dab2de5fa58"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "positions": {
+                "begin": {
+                    "line": "17",
+                    "column": "17"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "d81f5651853816b9307a1e708c602f45"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "16",
+                    "column": "16"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "aeaa0e8647882ca64437f80574ff6f43"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "16",
+                    "column": "16"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "c97c42c094fb4136830063eec4efba5a"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "17",
+                    "column": "17"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "2b34873a1dec1df49fba7e4efcb8ed44"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "17",
+                    "column": "17"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "c0772453dfe0d42bc001f4364fe81aa5"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "18",
+                    "column": "18"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "46d63703689a4e9affa63d753e731bb4"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "18",
+                    "column": "18"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "8ad2982125a25d4080d9cf1bffbf35f3"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "positions": {
+                "begin": {
+                    "line": "17",
+                    "column": "17"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "24e1d7c73a8a75e4aae91535d3107bdf"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "17",
+                    "column": "17"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "77bba0241d8b0ab1416e5a40019fe569"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "positions": {
+                "begin": {
+                    "line": "18",
+                    "column": "18"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "000c466b7c9f3e654a9451b34d3ca2b9"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "positions": {
+                "begin": {
+                    "line": "18",
+                    "column": "18"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "08bd07ff0d862e7d6838f18ec9770d71"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "19",
+                    "column": "19"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "b4288f0f2c21f3b74ff67ca44c1770f3"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "19",
+                    "column": "19"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "0e80b89973f7ce6ee7e0b7019f560203"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "18",
+                    "column": "18"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "348768724ae6b4582714b7cba122cccf"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "18",
+                    "column": "18"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "88de3b477121b6d96b1b461858bef89a"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "19",
+                    "column": "19"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "1fcccf3c922c431c7fd13e2d543cb93b"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "19",
+                    "column": "19"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "48047596758b4de4642eb6a8d4187636"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "20",
+                    "column": "20"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "beff306f5b48db5b53e825c93bcf99e8"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "20",
+                    "column": "20"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "e704200bcf976066d129699ed18bca5a"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "19",
+                    "column": "19"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "847843859724033ca453baa07514d2ab"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "19",
+                    "column": "19"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "e44901228d9133623c9213cc2de0fa03"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "positions": {
+                "begin": {
+                    "line": "20",
+                    "column": "20"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "e1a9645dbe789ab9067ab4841e00e757"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "positions": {
+                "begin": {
+                    "line": "20",
+                    "column": "20"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "904db74d6533868571599af54a576e6f"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "21",
+                    "column": "21"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "0ae50553c92012904994af8fc028daf6"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "21",
+                    "column": "21"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "a7f1fe9a9eef30de1c690da89cd1df6c"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "20",
+                    "column": "20"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "6dd5de4df76e03f814ffa3737fed8472"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "20",
+                    "column": "20"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "954a867487289986ec5376f2e3153322"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "positions": {
+                "begin": {
+                    "line": "21",
+                    "column": "21"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "b136cd326ac8fc169cdb853dff7629f6"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "positions": {
+                "begin": {
+                    "line": "21",
+                    "column": "21"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "1ec7c2c9d9590d54896c21a422fedc9f"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "22",
+                    "column": "22"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "8daff69c6394864723ef2270e08df5c6"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "positions": {
+                "begin": {
+                    "line": "22",
+                    "column": "22"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "09a0975abac18772472f95038c66c3ac"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "21",
+                    "column": "21"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "7e32a22a66763d665e954d5840a4ce4f"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "21",
+                    "column": "21"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "7f7694b77bfa1f2f31c819ea3bbac911"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "22",
+                    "column": "22"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "7ac65d0792b130472117eb7845b47c78"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.h",
+            "positions": {
+                "begin": {
+                    "line": "22",
+                    "column": "22"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "25f58aa6ae27914be357df591b857c12"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "23",
+                    "column": "23"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "f851f1962ae59883cabeda61613d989a"
+    },
+    {
+        "severity": "critical",
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": "23",
+                    "column": "23"
+                }
+            }
+        },
+        "description": "12345 Defect: Data race",
+        "fingerprint": "f610cc31147b59a271436e925845247d"
+    }
+]

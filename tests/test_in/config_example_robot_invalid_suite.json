@@ -43,5 +43,8 @@
                 "max": 2
             }
         ]
+    },
+    "polyspace": {
+        "enabled": false
     }
 }
