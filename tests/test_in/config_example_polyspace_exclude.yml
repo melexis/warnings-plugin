@@ -14,7 +14,7 @@ polyspace:
   enabled: true
   cq_description_template: '$PRODUCT $family: $check'
   exclude:
-    - '.+dummy_function\(\)|dummy_file_name\.c'
+    - '.+\tdummy_function\(\)\tdummy_file_name\.c\t'
   run-time check:
   - color: red
     min: 0
