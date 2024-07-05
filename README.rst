@@ -309,12 +309,12 @@ Starting from Polyspace version R2024a these columns are available:
 ID, Family, Group, Color, New, Check, Information, Function, File, Status, Severity, Comment, Key, Line and Col.
 In previous versions of Polyspace the Line and Col column are not available yet.
 
-This file is necessary when you enable Polyspace in the configuration file.
+This file is required when you enable Polyspace in the configuration file.
 
 Configuration
 ^^^^^^^^^^^^^
 
-Polyspace checking can only be used with a configuration file,
+Polyspace checking can only be enabled with a configuration file,
 and it cannot be used together with other checkers enabled.
 In this case, only the Polyspace checker will run.
 
