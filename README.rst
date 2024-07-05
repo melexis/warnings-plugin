@@ -507,7 +507,7 @@ Code Quality Report
 -------------------
 
 Use ``-C, --code-quality`` to let the plugin generate `a Code Quality report`_ for GitLab CI. All counted
-Sphinx, Doxygen, XMLRunner and Polyspace warnings/errors/failures will be included. Other checker types are not supported by this feature. The report is
+Sphinx, Doxygen, XMLRunner and Polyspace warnings/errors/failures will be included. Other checker types are not yet supported by this feature. The report is
 a JSON file that implements `a subset of the Code Climate spec`_. Define this file `as a codequality report artifact`_
 of the CI job.
 
