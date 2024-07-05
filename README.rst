@@ -464,6 +464,30 @@ An example configuration for the sphinx checker is given below:
         }
     }
 
+Polyspace checker lets you define patterns (regular expressions) to exclude specific rows of the TSV file.
+These patterns are compared against each tab-separated string that represents a row.
+This way, you can combine cell values with tabs in the regex.
+Remember, backslashes need escaping in JSON configurations but not in YAML for these patterns.
+
+.. code-block:: json
+
+    {
+        "polyspace": {
+            "enabled": false,
+            "cq_description_template": "$PRODUCT $family: $check",
+            "exclude": [
+                ".+\\tdummy_function\\(\\)\\tdummy_file_name\\.c\\t"
+            ],
+            "run-time check": [
+                {
+                    "color": "red",
+                    "min": 0,
+                    "max": 0
+                }
+            ]
+        }
+    }
+
 Exclude Sphinx Deprecation Warnings
 -----------------------------------
 
