@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Command Line Warnings Plugin &#8212; warning-plugin 5.2.0 documentation</title>
+    <title>Command Line Warnings Plugin &#8212; warning-plugin 5.3.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pydoctheme.css" />
     
@@ -33,7 +33,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="index.html">warning-plugin-5.2.0</a> &#187;</li> 
+        <li><a href="index.html">warning-plugin-5.3.0</a> &#187;</li> 
       </ul>
     </div>
     
@@ -252,6 +252,54 @@ python3<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class
 </pre></div>
 </div>
 </section>
+<section id="parse-for-polyspace-failures">
+<h3>Parse for Polyspace Failures<a class="headerlink" href="#parse-for-polyspace-failures" title="Permalink to this heading">¶</a></h3>
+<p>The Polyspace checker requires as input a TSV file exported by Polyspace.
+You can find instructions on exporting TSV files in the Polyspace documentation.</p>
+<section id="exporting-polyspace-results">
+<h4>Exporting Polyspace Results<a class="headerlink" href="#exporting-polyspace-results" title="Permalink to this heading">¶</a></h4>
+<p>The following commands instruct Polyspace to export the results as a TSV file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>polyspace-results-export<span class="w"> </span>-format<span class="w"> </span>csv<span class="w"> </span>-results-dir<span class="w"> </span>&lt;resultsFolder&gt;<span class="w"> </span>&lt;export_options&gt;
+<span class="c1"># or</span>
+polyspace-results-export<span class="w"> </span>-format<span class="w"> </span>csv<span class="w"> </span>-host<span class="w"> </span>&lt;hostName&gt;<span class="w"> </span>-run-id<span class="w"> </span>&lt;runID&gt;<span class="w"> </span>&lt;export_options&gt;<span class="w"> </span>&lt;polyspace_access_options&gt;
+</pre></div>
+</div>
+<p>The csv format outputs tab-separated values (TSV).
+Each result in the TSV format consists of tab-separated information in columns.
+Starting from Polyspace version R2024a these columns are available:
+ID, Family, Group, Color, New, Check, Information, Function, File, Status, Severity, Comment, Key, Line and Col.
+In previous versions of Polyspace the Line and Col column are not available yet.</p>
+<p>This file is required when you enable Polyspace in the configuration file.</p>
+</section>
+<section id="configuration">
+<h4>Configuration<a class="headerlink" href="#configuration" title="Permalink to this heading">¶</a></h4>
+<p>Polyspace checking can only be enabled with a configuration file,
+and it cannot be used together with other checkers enabled.
+In this case, only the Polyspace checker will run.</p>
+<p>When you enable Polyspace checking in the configuration file,
+the checks consist of a key that represents the “family” column of the TSV file.
+For example, “run-time check” is the family of Code Prover and “defect” is the family of Bug Finder.
+The value of that key is a list, which contains the name of the column to check as a key and
+the value of that column to check together with <code class="docutils literal notranslate"><span class="pre">min</span></code> and <code class="docutils literal notranslate"><span class="pre">max</span></code> values.</p>
+</section>
+<section id="example-checks">
+<h4>Example Checks<a class="headerlink" href="#example-checks" title="Permalink to this heading">¶</a></h4>
+<p>In case of Code Prover, you might want to check the <code class="docutils literal notranslate"><span class="pre">color</span></code> column on <code class="docutils literal notranslate"><span class="pre">red</span></code> or <code class="docutils literal notranslate"><span class="pre">orange</span></code> issues.
+In case of Bug Finder, you might want to check the <code class="docutils literal notranslate"><span class="pre">information</span></code> column on <code class="docutils literal notranslate"><span class="pre">impact:</span> <span class="pre">high</span></code>, <code class="docutils literal notranslate"><span class="pre">impact:</span> <span class="pre">medium</span></code>, or even <code class="docutils literal notranslate"><span class="pre">impact:</span> <span class="pre">low</span></code>.
+Other issues, such as “Global variable”, can also be handled.
+You can specify any column and value you want to check in the configuration file.</p>
+</section>
+<section id="running-the-mlx-warnings-plugin">
+<h4>Running the mlx-warnings plugin<a class="headerlink" href="#running-the-mlx-warnings-plugin" title="Permalink to this heading">¶</a></h4>
+<p>The following commands demonstrate how to run the mlx-warnings plugin with the TSV file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># basic Polyspace checker</span>
+mlx-warnings<span class="w"> </span>--config<span class="w"> </span>&lt;configuration_file&gt;<span class="w"> </span>&lt;tsv_file&gt;
+<span class="c1"># Polyspace checker with code quality export</span>
+mlx-warnings<span class="w"> </span>--code-quality<span class="w"> </span>path/to/code_quality.json<span class="w"> </span>--config<span class="w"> </span>&lt;configuration_file&gt;<span class="w"> </span>&lt;tsv_file&gt;
+</pre></div>
+</div>
+</section>
+</section>
 </section>
 <section id="configuration-file-to-pass-options">
 <h2>Configuration File to Pass Options<a class="headerlink" href="#configuration-file-to-pass-options" title="Permalink to this heading">¶</a></h2>
@@ -303,6 +351,20 @@ The values for ‘min’ and ‘max’ can be set with environment variables via
 <span class="w">                </span><span class="nt">&quot;max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">        </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;polyspace&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;cq_description_template&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;$PRODUCT $family: $check&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;exclude&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="s2">&quot;.+\\tdummy_function\\(\\)\\tdummy_file_name\\.c\\t&quot;</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;run-time check&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;red&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
@@ -345,6 +407,28 @@ An example configuration for the sphinx checker is given below:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
+<p>You can define regular expressions to exclude certain Polyspace results, i.e. specific rows of the TSV file,
+when they match against the string that represents the row. This string is a concatenation of the values
+of all cells in the row, separated by a tab character (<cite>t</cite>).
+Note: backslashes need to be escaped in JSON syntax.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;polyspace&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;cq_description_template&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;$PRODUCT $family: $check&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;exclude&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="s2">&quot;.+\\tdummy_function\\(\\)\\tdummy_file_name\\.c\\t&quot;</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;run-time check&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;red&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;min&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;max&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 </section>
 <section id="exclude-sphinx-deprecation-warnings">
 <h3>Exclude Sphinx Deprecation Warnings<a class="headerlink" href="#exclude-sphinx-deprecation-warnings" title="Permalink to this heading">¶</a></h3>
@@ -362,14 +446,25 @@ may exist in the input file (or produced by the given command).</p>
 <section id="code-quality-report">
 <h3>Code Quality Report<a class="headerlink" href="#code-quality-report" title="Permalink to this heading">¶</a></h3>
 <p>Use <code class="docutils literal notranslate"><span class="pre">-C,</span> <span class="pre">--code-quality</span></code> to let the plugin generate <a class="reference external" href="https://docs.gitlab.com/ee/ci/testing/code_quality.html">a Code Quality report</a> for GitLab CI. All counted
-Sphinx, Doxygen and XMLRunner will be included. Other checker types are not supported by this feature. The report is
+Sphinx, Doxygen, XMLRunner and Polyspace warnings/errors/failures will be included. Other checker types are not yet supported by this feature. The report is
 a JSON file that implements <a class="reference external" href="https://docs.gitlab.com/ee/ci/testing/code_quality.html#implement-a-custom-tool">a subset of the Code Climate spec</a>. Define this file <a class="reference external" href="https://docs.gitlab.com/ee/ci/yaml/artifacts_reports.html#artifactsreportscodequality">as a codequality report artifact</a>
 of the CI job.</p>
 <p>If a warning doesn’t contain a path, <code class="docutils literal notranslate"><span class="pre">&quot;cq_default_path&quot;</span></code> from the <a class="reference internal" href="#configuration-file-to-pass-options">configuration file to pass options</a> will be used.
 If not configured, <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code> will be used as a fallback path.</p>
 <p>You can customize the description with <code class="docutils literal notranslate"><span class="pre">&quot;cq_description_template&quot;</span></code>, see <a class="reference internal" href="#configuration-file-to-pass-options">configuration file to pass options</a>.
-Its value should be a template for Python’s <a class="reference external" href="https://docs.python.org/3/library/string.html#string.Template.template"><code class="docutils literal notranslate"><span class="pre">string.Template</span></code></a>. The template should contain <code class="docutils literal notranslate"><span class="pre">$description</span></code> and has
-access to all environment variables, e.g. <code class="docutils literal notranslate"><span class="pre">$HOME</span></code>.</p>
+Its value should be a template for Python’s <a class="reference external" href="https://docs.python.org/3/library/string.html#string.Template.template"><code class="docutils literal notranslate"><span class="pre">string.Template</span></code></a>. The template has access to all environment variables,
+e.g. <code class="docutils literal notranslate"><span class="pre">$HOME</span></code>, and other variables that depend on the checker type:</p>
+<dl class="simple">
+<dt>Polyspace</dt><dd><p>Any field of a Polyspace defect can be included by using the corresponding
+<a class="reference internal" href="#exporting-polyspace-results">column title</a> in lowercase as the variable name.
+The default template is <code class="docutils literal notranslate"><span class="pre">Polyspace:</span> <span class="pre">$check</span></code>.</p>
+</dd>
+<dt>Other</dt><dd><p>The template should contain <code class="docutils literal notranslate"><span class="pre">$description</span></code>, which is the default.</p>
+</dd>
+</dl>
+<p>The Polyspace checker generates the fingerprint (a unique identifier) for each row in the TSV file that is exported as finding.
+Specific columns (<code class="docutils literal notranslate"><span class="pre">new</span></code>, <code class="docutils literal notranslate"><span class="pre">status</span></code>, <code class="docutils literal notranslate"><span class="pre">severity</span></code>, <code class="docutils literal notranslate"><span class="pre">comment</span></code>, and <code class="docutils literal notranslate"><span class="pre">key</span></code>) are excluded as they might contain transient information.
+The remaining values in the row are hashed using a MD5 function to create the fingerprint.</p>
 </section>
 </section>
 </section>
@@ -463,7 +558,7 @@ development of the plugin. We encourage anyone to contribute to our repository.<
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Jan 30, 2024.
+      Last updated on Jul 05, 2024.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>

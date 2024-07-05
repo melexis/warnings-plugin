@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx.warnings.warnings_checker &#8212; warning-plugin 5.2.0 documentation</title>
+    <title>mlx.warnings.warnings_checker &#8212; warning-plugin 5.3.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pydoctheme.css" />
     
@@ -30,7 +30,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="../../../index.html">warning-plugin-5.2.0</a> &#187;</li>
+        <li><a href="../../../index.html">warning-plugin-5.3.0</a> &#187;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -68,8 +68,8 @@
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">warn_min</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">warn_max</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_minimum</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_maximum</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_counted_warnings</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cq_findings</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cq_enabled</span> <span class="o">=</span> <span class="kc">False</span>
@@ -97,6 +97,38 @@
                                       <span class="sa">f</span><span class="s2">&quot;&#39;cq_description_template&#39;: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span> <span class="o">=</span> <span class="n">template_obj</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">maximum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Getter function for the maximum amount of warnings</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Maximum amount of warnings</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maximum</span>
+
+    <span class="nd">@maximum</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">maximum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maximum</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_minimum</span> <span class="o">&gt;</span> <span class="n">maximum</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid argument: maximum limit must be higher than minimum limit (</span><span class="si">{min}</span><span class="s2">); cannot &quot;</span>
+                             <span class="s2">&quot;set </span><span class="si">{max}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">max</span><span class="o">=</span><span class="n">maximum</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_minimum</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_maximum</span> <span class="o">=</span> <span class="n">maximum</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">minimum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Getter function for the minimum amount of warnings</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Minimum amount of warnings</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_minimum</span>
+
+    <span class="nd">@minimum</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">minimum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">minimum</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">minimum</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maximum</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid argument: minimum limit must be lower than maximum limit (</span><span class="si">{max}</span><span class="s2">); cannot &quot;</span>
+                             <span class="s2">&quot;set </span><span class="si">{min}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="n">minimum</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_maximum</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_minimum</span> <span class="o">=</span> <span class="n">minimum</span>
+
 <div class="viewcode-block" id="WarningsChecker.check"><a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsChecker.check">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39; Function for counting the number of warnings in a specific text</span>
@@ -120,50 +152,6 @@
             <span class="k">for</span> <span class="n">regex</span> <span class="ow">in</span> <span class="n">regexes</span><span class="p">:</span>
                 <span class="n">pattern_container</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">regex</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="WarningsChecker.set_maximum"><a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsChecker.set_maximum">[docs]</a>    <span class="k">def</span> <span class="nf">set_maximum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maximum</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Setter function for the maximum amount of warnings</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            maximum (int): maximum amount of warnings allowed</span>
-
-<span class="sd">        Raises:</span>
-<span class="sd">            ValueError: Invalid argument (min limit higher than max limit)</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">warn_min</span> <span class="o">&gt;</span> <span class="n">maximum</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid argument: maximum limit must be higher than minimum limit (</span><span class="si">{min}</span><span class="s2">); cannot &quot;</span>
-                             <span class="s2">&quot;set </span><span class="si">{max}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">max</span><span class="o">=</span><span class="n">maximum</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">warn_min</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">warn_max</span> <span class="o">=</span> <span class="n">maximum</span></div>
-
-<div class="viewcode-block" id="WarningsChecker.get_maximum"><a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsChecker.get_maximum">[docs]</a>    <span class="k">def</span> <span class="nf">get_maximum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Getter function for the maximum amount of warnings</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            int: Maximum amount of warnings</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">warn_max</span></div>
-
-<div class="viewcode-block" id="WarningsChecker.set_minimum"><a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsChecker.set_minimum">[docs]</a>    <span class="k">def</span> <span class="nf">set_minimum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">minimum</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Setter function for the minimum amount of warnings</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            minimum (int): minimum amount of warnings allowed</span>
-
-<span class="sd">        Raises:</span>
-<span class="sd">            ValueError: Invalid argument (min limit higher than max limit)</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">if</span> <span class="n">minimum</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">warn_max</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid argument: minimum limit must be lower than maximum limit (</span><span class="si">{max}</span><span class="s2">); cannot &quot;</span>
-                             <span class="s2">&quot;set </span><span class="si">{min}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="n">minimum</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">warn_max</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">warn_min</span> <span class="o">=</span> <span class="n">minimum</span></div>
-
-<div class="viewcode-block" id="WarningsChecker.get_minimum"><a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsChecker.get_minimum">[docs]</a>    <span class="k">def</span> <span class="nf">get_minimum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Getter function for the minimum amount of warnings</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            int: Minimum amount of warnings</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">warn_min</span></div>
-
 <div class="viewcode-block" id="WarningsChecker.return_count"><a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsChecker.return_count">[docs]</a>    <span class="k">def</span> <span class="nf">return_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39; Getter function for the amount of warnings found</span>
 
@@ -180,13 +168,13 @@
 <span class="sd">            int: 0 if the amount of warnings is within limits, the count of warnings otherwise</span>
 <span class="sd">                (or 1 in case of a count of 0 warnings)</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">warn_max</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">warn_min</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maximum</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_minimum</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_return_error_code</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">warn_min</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">warn_max</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">warn_max</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_minimum</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maximum</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maximum</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of warnings (</span><span class="si">{0.count}</span><span class="s2">) is exactly as expected. Well done.&quot;</span>
                   <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of warnings (</span><span class="si">{0.count}</span><span class="s2">) is between limits </span><span class="si">{0.warn_min}</span><span class="s2"> and </span><span class="si">{0.warn_max}</span><span class="s2">. Well done.&quot;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of warnings (</span><span class="si">{0.count}</span><span class="s2">) is between limits </span><span class="si">{0._minimum}</span><span class="s2"> and </span><span class="si">{0._maximum}</span><span class="s2">. Well done.&quot;</span>
                   <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
         <span class="k">return</span> <span class="mi">0</span></div>
 
@@ -196,10 +184,10 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            int: The count of warnings (or 1 in case of a count of 0 warnings)</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">warn_max</span><span class="p">:</span>
-            <span class="n">error_reason</span> <span class="o">=</span> <span class="s2">&quot;higher than the maximum limit (</span><span class="si">{0.warn_max}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maximum</span><span class="p">:</span>
+            <span class="n">error_reason</span> <span class="o">=</span> <span class="s2">&quot;higher than the maximum limit (</span><span class="si">{0._maximum}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">error_reason</span> <span class="o">=</span> <span class="s2">&quot;lower than the minimum limit (</span><span class="si">{0.warn_min}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">error_reason</span> <span class="o">=</span> <span class="s2">&quot;lower than the minimum limit (</span><span class="si">{0._minimum}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="n">error_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span>
         <span class="k">if</span> <span class="n">error_code</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -218,8 +206,8 @@
             <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WarningsChecker.parse_config"><a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsChecker.parse_config">[docs]</a>    <span class="k">def</span> <span class="nf">parse_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_maximum</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_minimum</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;min&#39;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maximum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minimum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;min&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_patterns</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;exclude&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">exclude_patterns</span><span class="p">)</span>
         <span class="k">if</span> <span class="s1">&#39;cq_default_path&#39;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cq_default_path</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;cq_default_path&#39;</span><span class="p">]</span>
@@ -308,7 +296,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Jan 30, 2024.
+      Last updated on Jul 05, 2024.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
