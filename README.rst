@@ -497,10 +497,14 @@ e.g. ``$HOME``, and other variables that depend on the checker type:
 Polyspace
   Any field of a Polyspace defect can be included by using the corresponding
   `column title <Exporting Polyspace Results_>`_ in lowercase as the variable name.
-  The default template is ``Polyspace: $check``
+  The default template is ``Polyspace: $check``.
 
 Other
   The template should contain ``$description``, which is the default.
+
+The Polyspace checker generates the fingerprint (a unique identifier) for each row in the TSV file that is exported as finding.
+Specific columns (``new``, ``status``, ``severity``, ``comment``, and ``key``) are excluded as they might contain transient information.
+The remaining values in the row are hashed using a MD5 function to create the fingerprint.
 
 =======================
 Issues and New Features
