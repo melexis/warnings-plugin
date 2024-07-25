@@ -326,9 +326,10 @@ the value of that column to check together with ``min`` and ``max`` values.
 
 Note that all defects with one of the following statuses are excluded from the warnings and code quality report:
 - Justified
-- No Action Planned
 - Not a Defect
 These statuses are used when you do not plan to fix your code in response to a result.
+The status "No Action Planned" is not listed because this is a default status if you do not explicitly specfify
+a status in you annotation.
 More info can be found `on this help page`_.
 
 .. _`on this help page`: https://nl.mathworks.com/help/polyspace_access/ug/fix-or-comment-polyspace-results-web-browser.html
