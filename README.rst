@@ -325,8 +325,10 @@ The value of that key is a list, which contains the name of the column to check 
 the value of that column to check together with ``min`` and ``max`` values.
 
 Note that all defects with one of the following statuses are excluded from the warnings and code quality report:
+
 - Justified
 - Not a Defect
+
 These statuses are used when you do not plan to fix your code in response to a result.
 The status "No Action Planned" is not listed because this is a default status if you do not explicitly specfify
 a status in you annotation.
