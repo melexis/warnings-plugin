@@ -125,7 +125,7 @@ class PolyspaceChecker(WarningsChecker):
             substitute_envvar(config, {'min', 'max'})
             print("Config parsing for {name} completed".format(name=name))
         except KeyError as err:
-                print("Incomplete config. Missing: {key}".format(key=err))
+            print("Incomplete config. Missing: {key}".format(key=err))
 
     def parse_config(self, config):
         """Parsing configuration dict extracted by previously opened JSON or yaml/yml file
