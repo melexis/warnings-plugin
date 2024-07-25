@@ -324,6 +324,17 @@ For example, "run-time check" is the family of Code Prover and "defect" is the f
 The value of that key is a list, which contains the name of the column to check as a key and
 the value of that column to check together with ``min`` and ``max`` values.
 
+All results with one of the following statuses are discarded altogether:
+
+- Justified
+- Not a Defect
+
+These statuses indicate that you have given due consideration and justified that result, as described
+in `Polyspace's documentation about results`_.
+The status "No Action Planned" is not treated differently because this is the default status for annotations.
+
+.. _`Polyspace's documentation about results`: https://nl.mathworks.com/help/polyspace_access/ug/fix-or-comment-polyspace-results-web-browser.html
+
 Example Checks
 ^^^^^^^^^^^^^^
 

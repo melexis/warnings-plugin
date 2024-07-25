@@ -154,7 +154,7 @@ class PolyspaceChecker(WarningsChecker):
                         "'Family' column. These dicts need to consist 3 key-value pairs (Note: if 'min' or "
                         "'max' is not defined, it will get the default value of 0):\n"
                         "{\n    <column_name>: <value_to_check>,\n    min: <number>,\n    max: <number>\n};"
-                        f"got {column_name} as column_name and {check_value} as value_to_check"
+                        f"got {column_name!r} as column_name and {check_value!r} as value_to_check"
                     )
         for checker in self.checkers:
             checker.cq_enabled = self.cq_enabled
@@ -179,8 +179,6 @@ class PolyspaceFamilyChecker(WarningsChecker):
             family_value (str): The value to search for in the 'Family' column
             column_name (str): The name of the column
             check_value (str): The value to check in the column
-            minimum (int): The minimum amount the check_value can occur
-            maximum (int): The maximum amount the check_value can occur
         """
         super().__init__(**kwargs)
         self.family_value = family_value
@@ -243,7 +241,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
         if "line" in row:
             finding["location"]["positions"]["begin"]["line"] = row["line"]
         if "col" in row:
-            finding["location"]["positions"]["begin"]["column"] = row["line"]
+            finding["location"]["positions"]["begin"]["column"] = row["col"]
         finding["description"] = description
         exclude = ("new", "status", "severity", "comment", "key")
         row_without_key = [value for key, value in row.items() if key not in exclude]
@@ -258,13 +256,17 @@ class PolyspaceFamilyChecker(WarningsChecker):
             content (dict): The row of the TSV file
         '''
         if content[self.column_name].lower() == self.check_value:
-            tab_sep_string = "\t".join(content.values())
-            if not self._is_excluded(tab_sep_string):
-                self.count = self.count + 1
-                self.counted_warnings.append('family: {} -> {}: {}'.format(
-                    self.family_value,
-                    self.column_name,
-                    self.check_value
-                ))
-                if self.cq_enabled and content["color"].lower() != "green":
-                    self.add_code_quality_finding(content)
+            if content["status"].lower() in ["not a defect", "justified"]:
+                self.print_when_verbose("Excluded row {!r} because the status is 'Not a defect' or 'Justified'"
+                                        .format(content))
+            else:
+                tab_sep_string = "\t".join(content.values())
+                if not self._is_excluded(tab_sep_string):
+                    self.count = self.count + 1
+                    self.counted_warnings.append('family: {} -> {}: {}'.format(
+                        self.family_value,
+                        self.column_name,
+                        self.check_value
+                    ))
+                    if self.cq_enabled and content["color"].lower() != "green":
+                        self.add_code_quality_finding(content)
