@@ -243,7 +243,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
         if "line" in row:
             finding["location"]["positions"]["begin"]["line"] = row["line"]
         if "col" in row:
-            finding["location"]["positions"]["begin"]["column"] = row["column"]
+            finding["location"]["positions"]["begin"]["column"] = row["col"]
         finding["description"] = description
         exclude = ("new", "status", "severity", "comment", "key")
         row_without_key = [value for key, value in row.items() if key not in exclude]
