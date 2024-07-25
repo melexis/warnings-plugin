@@ -330,7 +330,7 @@ Note that all defects with one of the following statuses are excluded from the w
 - Not a Defect
 
 These statuses are used when you do not plan to fix your code in response to a result.
-The status "No Action Planned" is not listed because this is a default status if you do not explicitly specfify
+The status "No Action Planned" is not listed because this is a default status if you do not explicitly specify
 a status in you annotation.
 More info can be found `on this help page`_.
 
