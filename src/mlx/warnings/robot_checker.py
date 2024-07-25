@@ -100,7 +100,7 @@ class RobotChecker(WarningsChecker):
             substitute_envvar(config, {'min', 'max'})
             print("Config parsing for suite {name!r} completed".format(name=name))
         except KeyError as err:
-            print("Incomplete config. Missing: {key}".format(key=err))
+                print("Incomplete config. Missing: {key}".format(key=err))
 
     def parse_config(self, config):
         self.checkers = []
