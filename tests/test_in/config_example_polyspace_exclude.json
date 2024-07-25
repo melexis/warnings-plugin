@@ -36,8 +36,8 @@
         "run-time check": [
             {
                 "color": "red",
-                "min": 0,
-                "max": 0
+                "min": "$MIN_POLY_WARNINGS",
+                "max": "${MAX_POLY_WARNINGS}"
             },
             {
                 "color": "orange",

@@ -88,12 +88,27 @@ class RobotChecker(WarningsChecker):
             count += checker.return_check_limits()
         return count
 
+    def config_parser(self, config, name):
+        ''' Parsing configuration dict extracted by previously opened JSON or YAML file
+
+        Args:
+            config (dict): Content of configuration file
+        '''
+        try:
+            from .warnings import substitute_envvar
+
+            substitute_envvar(config, {'min', 'max'})
+            print("Config parsing for suite {name!r} completed".format(name=name))
+        except KeyError as err:
+                print("Incomplete config. Missing: {key}".format(key=err))
+
     def parse_config(self, config):
         self.checkers = []
         check_suite_name = config.get('check_suite_names', True)
         for suite_config in config['suites']:
             checker = RobotSuiteChecker(suite_config['name'], check_suite_name=check_suite_name,
                                         verbose=self.verbose)
+            self.config_parser(suite_config, suite_config['name'])
             checker.parse_config(suite_config)
             self.checkers.append(checker)
 
