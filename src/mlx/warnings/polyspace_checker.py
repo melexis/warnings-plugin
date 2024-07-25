@@ -258,13 +258,17 @@ class PolyspaceFamilyChecker(WarningsChecker):
             content (dict): The row of the TSV file
         '''
         if content[self.column_name].lower() == self.check_value:
-            tab_sep_string = "\t".join(content.values())
-            if not self._is_excluded(tab_sep_string):
-                self.count = self.count + 1
-                self.counted_warnings.append('family: {} -> {}: {}'.format(
-                    self.family_value,
-                    self.column_name,
-                    self.check_value
-                ))
-                if self.cq_enabled and content["color"].lower() != "green":
-                    self.add_code_quality_finding(content)
+            if content["status"].lower() in ["not a defect", "justified"]:
+                self.print_when_verbose("Excluded row {!r} because the status is 'Not a defect' or 'Justified'"
+                                    .format(content))
+            else:
+                tab_sep_string = "\t".join(content.values())
+                if not self._is_excluded(tab_sep_string):
+                    self.count = self.count + 1
+                    self.counted_warnings.append('family: {} -> {}: {}'.format(
+                        self.family_value,
+                        self.column_name,
+                        self.check_value
+                    ))
+                    if self.cq_enabled and content["color"].lower() != "green":
+                        self.add_code_quality_finding(content)
