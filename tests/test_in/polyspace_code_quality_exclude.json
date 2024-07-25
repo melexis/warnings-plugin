@@ -19,20 +19,6 @@
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": "6",
-                    "column": "6"
-                }
-            }
-        },
-        "description": "12345 Run-time Check: Overflow",
-        "fingerprint": "cabd96c885bd6d9ed3fe867b227e8128"
-    },
-    {
-        "severity": "major",
-        "location": {
-            "path": "dummy_file_name.h",
-            "positions": {
-                "begin": {
                     "line": "7",
                     "column": "7"
                 }
@@ -40,20 +26,6 @@
         },
         "description": "12345 Run-time Check: Overflow",
         "fingerprint": "1961351c7f028d02202f915a6d36c658"
-    },
-    {
-        "severity": "major",
-        "location": {
-            "path": "dummy_file_name.h",
-            "positions": {
-                "begin": {
-                    "line": "7",
-                    "column": "7"
-                }
-            }
-        },
-        "description": "12345 Run-time Check: Overflow",
-        "fingerprint": "fb6455c4794157cb304be4106e115e35"
     },
     {
         "severity": "critical",

@@ -25,20 +25,20 @@ ID	Family	Group	Color	New	Check	Information	Function	File	Status	Severity	Commen
 22036	Run-time Check	Numerical	Green	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		C4992326D32B4698C491	6	4
 22065	Run-time Check	Data flow	Green	no	Non-initialized local variable		dummy_function()	dummy_file_name.c	Unreviewed	Unset		C49953E693A45698C489	5	5
 22035	Run-time Check	Data flow	Green	no	Non-initialized local variable		dummy_function()	dummy_file_name.c	Unreviewed	Unset		C499232693A45698C491	5	6
-21989	Run-time Check	Numerical	Green	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		C4997327D32B4698C881	6	7
+21989	Run-time Check	Numerical	Green	no	Overflow		dummy_function()	dummy_file_name.c	Not a defect	Unset		C4997327D32B4698C881	6	7
 19928	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		62C8B1F4CA9126336A	6	8
-19962	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		62D8A9F4CA91263472	7	9
+19962	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Not a defect	Unset		62D8A9F4CA91263472	7	9
 19526	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66C899F4CA9126316A	7	10
 19424	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.h	Unreviewed	Unset		62E489F4CA91263262	6	11
-19429	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.h	Unreviewed	Unset		62E4A1F4CA91263162	6	2
+19429	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.h	Justified	Unset		62E4A1F4CA91263162	6	2
 19442	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.h	Unreviewed	Unset		62C091F4CA91263170	7	3
-19450	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.h	Unreviewed	Unset		62C091F4CA91263170	7	3
+19450	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.h	Justified	Unset		62C091F4CA91263170	7	3
 19375	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66C089F4CA9126326C	8	4
 19378	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66C091F4CA9126316E	8	5
 19377	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66C091F4CA9126336A	7	6
 19357	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66C8A9F4CA91263368	7	7
 19352	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66C8A9F4CA91263760	8	8
-19351	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66C8A9F4CA91263862	8	9
+19351	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Justified	Unset		66C8A9F4CA91263862	8	9
 19355	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66C8A9F4CA91263962	9	10
 19354	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		CC9153E995234C62C091	9	11
 19358	Run-time Check	Numerical	Orange	no	Overflow	Origin: Path related issue	dummy_function()	dummy_file_name.c	Unreviewed	Unset		CC9153E995234C62C0C1	8	3
@@ -46,7 +46,7 @@ ID	Family	Group	Color	New	Check	Information	Function	File	Status	Severity	Commen
 19349	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66C8C1F4CA91263262	9	5
 19345	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66C8C1F4CA91263470	9	6
 19344	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66C8C1F4CA91263572	10	7
-19339	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66CC91F4CA91263464	10	8
+19339	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Not a defect	Unset		66CC91F4CA91263464	10	8
 19338	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66CC91F4CA91263468	9	9
 19336	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66CC91F4CA91263970	9	10
 19335	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		CC9923E995234C62C0C9	10	11

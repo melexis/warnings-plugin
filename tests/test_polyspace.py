@@ -36,7 +36,7 @@ class TestCodeProverWarnings(unittest.TestCase):
                 stdout_log
             )
         self.assertEqual(count, count_sum)
-        self.assertEqual(count, 24)
+        self.assertEqual(count, 19)
 
 
 class TestBugFinderWarnings(unittest.TestCase):
@@ -79,7 +79,7 @@ class TestPolyspaceWarnings(unittest.TestCase):
             '--config', str(TEST_IN_DIR / 'config_example_polyspace.yml'),
             str(TEST_IN_DIR / 'polyspace.tsv')
         ])
-        self.assertEqual(66, retval)
+        self.assertEqual(61, retval)
 
     def test_code_quality(self):
         filename = 'polyspace_code_quality.json'
@@ -90,7 +90,7 @@ class TestPolyspaceWarnings(unittest.TestCase):
             '--config', str(TEST_IN_DIR / 'config_example_polyspace.yml'),
             str(TEST_IN_DIR / 'polyspace.tsv'),
         ])
-        self.assertEqual(66, retval)
+        self.assertEqual(61, retval)
         self.assertTrue(filecmp.cmp(out_file, ref_file))
 
     def test_code_quality_no_green(self):
@@ -101,7 +101,7 @@ class TestPolyspaceWarnings(unittest.TestCase):
             '--config', str(TEST_IN_DIR / 'config_example_polyspace_green.yml'),
             str(TEST_IN_DIR / 'polyspace.tsv'),
         ])
-        self.assertEqual(66, retval)
+        self.assertEqual(61, retval)
         self.assertTrue(filecmp.cmp(out_file, ref_file))
 
     def test_exclude_yaml_config(self):

@@ -25,20 +25,6 @@
             }
         },
         "description": "Polyspace: Overflow",
-        "fingerprint": "29a5e4588709eb7271a30605d4fd3bd3"
-    },
-    {
-        "severity": "major",
-        "location": {
-            "path": "dummy_file_name.c",
-            "positions": {
-                "begin": {
-                    "line": "7",
-                    "column": "7"
-                }
-            }
-        },
-        "description": "Polyspace: Overflow",
         "fingerprint": "1e18bf5563037b1193f838617b4be1af"
     },
     {
@@ -61,20 +47,6 @@
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": "6",
-                    "column": "6"
-                }
-            }
-        },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "cabd96c885bd6d9ed3fe867b227e8128"
-    },
-    {
-        "severity": "major",
-        "location": {
-            "path": "dummy_file_name.h",
-            "positions": {
-                "begin": {
                     "line": "7",
                     "column": "7"
                 }
@@ -82,20 +54,6 @@
         },
         "description": "Polyspace: Overflow",
         "fingerprint": "1961351c7f028d02202f915a6d36c658"
-    },
-    {
-        "severity": "major",
-        "location": {
-            "path": "dummy_file_name.h",
-            "positions": {
-                "begin": {
-                    "line": "7",
-                    "column": "7"
-                }
-            }
-        },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "fb6455c4794157cb304be4106e115e35"
     },
     {
         "severity": "major",
@@ -166,20 +124,6 @@
         },
         "description": "Polyspace: Overflow",
         "fingerprint": "e790d2d7f4e8fc2fb244ab0f74beca64"
-    },
-    {
-        "severity": "major",
-        "location": {
-            "path": "dummy_file_name.c",
-            "positions": {
-                "begin": {
-                    "line": "8",
-                    "column": "8"
-                }
-            }
-        },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "2848e52a5925a6e7d35aacf6cbf5afed"
     },
     {
         "severity": "major",
@@ -278,20 +222,6 @@
         },
         "description": "Polyspace: Overflow",
         "fingerprint": "591d152475bd60b07e0e7f00ec000229"
-    },
-    {
-        "severity": "major",
-        "location": {
-            "path": "dummy_file_name.c",
-            "positions": {
-                "begin": {
-                    "line": "10",
-                    "column": "10"
-                }
-            }
-        },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "c1886be8c04e07b85f86f2571f0fa03d"
     },
     {
         "severity": "major",
