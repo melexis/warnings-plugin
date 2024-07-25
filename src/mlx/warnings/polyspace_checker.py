@@ -179,8 +179,6 @@ class PolyspaceFamilyChecker(WarningsChecker):
             family_value (str): The value to search for in the 'Family' column
             column_name (str): The name of the column
             check_value (str): The value to check in the column
-            minimum (int): The minimum amount the check_value can occur
-            maximum (int): The maximum amount the check_value can occur
         """
         super().__init__(**kwargs)
         self.family_value = family_value
