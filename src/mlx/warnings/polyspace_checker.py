@@ -113,6 +113,20 @@ class PolyspaceChecker(WarningsChecker):
             count += checker.return_check_limits()
         return count
 
+    def config_parser(self, config, name):
+        ''' Parsing configuration dict extracted by previously opened JSON or YAML file
+
+        Args:
+            config (dict): Content of configuration file
+        '''
+        try:
+            from .warnings import substitute_envvar
+
+            substitute_envvar(config, {'min', 'max'})
+            print("Config parsing for {name} completed".format(name=name))
+        except KeyError as err:
+                print("Incomplete config. Missing: {key}".format(key=err))
+
     def parse_config(self, config):
         """Parsing configuration dict extracted by previously opened JSON or yaml/yml file
 
@@ -145,6 +159,7 @@ class PolyspaceChecker(WarningsChecker):
                     column_name = key.lower()
                     check_value = value.lower()
                     checker = PolyspaceFamilyChecker(family_value, column_name, check_value, verbose=self.verbose)
+                    self.config_parser(check, f"{family_value} ({column_name}:{check_value})")
                     checker.parse_config(check)
                     checker.cq_findings = self.cq_findings  # share object with sub-checkers
                     self.checkers.append(checker)

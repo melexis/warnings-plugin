@@ -189,6 +189,7 @@ class TestIntegration(TestCase):
         self.assertEqual(1, retval)
         self.assertEqual(
             '\n'.join([
+                "Config parsing for suite 'Suite Two' completed",
                 "Suite One &amp; Suite Two.Suite Two.Another test",
                 "Suite 'Suite Two': 1 warnings found",
                 "Counted failures for test suite 'Suite Two'.",
@@ -198,6 +199,8 @@ class TestIntegration(TestCase):
         )
 
     def test_robot_config(self):
+        os.environ['MIN_ROBOT_WARNINGS'] = '0'
+        os.environ['MAX_ROBOT_WARNINGS'] = '0'
         with patch('sys.stdout', new=StringIO()) as fake_out:
             retval = warnings_wrapper([
                 '--config',
@@ -208,6 +211,10 @@ class TestIntegration(TestCase):
 
         self.assertEqual(
             '\n'.join([
+                "Config parsing for suite 'Suite One' completed",
+                "Config parsing for suite '' completed",
+                "Config parsing for suite 'Suite Two' completed",
+                "Config parsing for suite 'b4d su1te name' completed",
                 "Config parsing for robot completed",
                 "Suite 'Suite One': 1 warnings found",
                 "2 warnings found",
@@ -225,6 +232,9 @@ class TestIntegration(TestCase):
             stdout_log
         )
         self.assertEqual(2, retval)
+        for var in ('MIN_ROBOT_WARNINGS', 'MAX_ROBOT_WARNINGS'):
+            if var in os.environ:
+                del os.environ[var]
 
     def test_robot_config_check_names(self):
         self.maxDiff = None
@@ -236,6 +246,9 @@ class TestIntegration(TestCase):
 
         self.assertEqual(
             '\n'.join([
+                "Config parsing for suite 'b4d su1te name' completed",
+                "Config parsing for suite '' completed",
+                "Config parsing for suite 'Suite Two' completed",
                 "Config parsing for robot completed",
                 "ERROR: No suite with name 'b4d su1te name' found. Returning error code -1.",
             ]) + '\n',
@@ -253,6 +266,7 @@ class TestIntegration(TestCase):
 
         self.assertEqual(
             '\n'.join([
+                "Config parsing for suite 'Inv4lid Name' completed",
                 "ERROR: No suite with name 'Inv4lid Name' found. Returning error code -1.",
             ]) + '\n',
             stdout_log
@@ -281,6 +295,8 @@ class TestIntegration(TestCase):
         self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
 
     def test_output_file_robot_config(self):
+        os.environ['MIN_ROBOT_WARNINGS'] = '0'
+        os.environ['MAX_ROBOT_WARNINGS'] = '0'
         filename = 'robot_double_fail_config_summary.txt'
         out_file = str(TEST_OUT_DIR / filename)
         ref_file = str(TEST_IN_DIR / filename)
@@ -291,6 +307,9 @@ class TestIntegration(TestCase):
         ])
         self.assertEqual(2, retval)
         self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
+        for var in ('MIN_ROBOT_WARNINGS', 'MAX_ROBOT_WARNINGS'):
+            if var in os.environ:
+                del os.environ[var]
 
     def test_output_file_junit(self):
         filename = 'junit_double_fail_summary.txt'

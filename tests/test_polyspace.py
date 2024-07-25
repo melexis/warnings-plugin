@@ -66,11 +66,11 @@ class TestBugFinderWarnings(unittest.TestCase):
 
 class TestPolyspaceWarnings(unittest.TestCase):
     def setUp(self):
-        os.environ['MIN_SPHINX_WARNINGS'] = '0'
-        os.environ['MAX_SPHINX_WARNINGS'] = '0'
+        os.environ['MIN_POLY_WARNINGS'] = '0'
+        os.environ['MAX_POLY_WARNINGS'] = '0'
 
     def tearDown(self):
-        for var in ('MIN_SPHINX_WARNINGS', 'MAX_SPHINX_WARNINGS'):
+        for var in ('MIN_POLY_WARNINGS', 'MAX_POLY_WARNINGS'):
             if var in os.environ:
                 del os.environ[var]
 
