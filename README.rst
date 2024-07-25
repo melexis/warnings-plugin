@@ -329,12 +329,11 @@ All results with one of the following statuses are discarded altogether:
 - Justified
 - Not a Defect
 
-These statuses are used when you do not plan to fix your code in response to a result.
-The status "No Action Planned" is not listed because this is a default status if you do not explicitly specify
-a status in you annotation.
-More info can be found `on this help page`_.
+These statuses indicate that you have given due consideration and justified that result, as described
+in `Polyspace's documentation about results`_.
+The status "No Action Planned" is not treated differently because this is the default status for annotations.
 
-.. _`on this help page`: https://nl.mathworks.com/help/polyspace_access/ug/fix-or-comment-polyspace-results-web-browser.html
+.. _`Polyspace's documentation about results`: https://nl.mathworks.com/help/polyspace_access/ug/fix-or-comment-polyspace-results-web-browser.html
 
 Example Checks
 ^^^^^^^^^^^^^^
