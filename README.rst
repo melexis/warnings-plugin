@@ -324,7 +324,7 @@ For example, "run-time check" is the family of Code Prover and "defect" is the f
 The value of that key is a list, which contains the name of the column to check as a key and
 the value of that column to check together with ``min`` and ``max`` values.
 
-Note that all defects with one of the following statuses are excluded from the warnings and code quality report:
+All results with one of the following statuses are discarded altogether:
 
 - Justified
 - Not a Defect
