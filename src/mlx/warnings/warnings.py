@@ -21,7 +21,6 @@ from .polyspace_checker import PolyspaceChecker
 __version__ = distribution('mlx.warnings').version
 
 
-
 class WarningsPlugin:
 
     def __init__(self, verbose=False, config_file=None, cq_enabled=False):
