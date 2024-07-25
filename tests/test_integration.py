@@ -189,7 +189,6 @@ class TestIntegration(TestCase):
         self.assertEqual(1, retval)
         self.assertEqual(
             '\n'.join([
-                "Config parsing for suite 'Suite Two' completed",
                 "Suite One &amp; Suite Two.Suite Two.Another test",
                 "Suite 'Suite Two': 1 warnings found",
                 "Counted failures for test suite 'Suite Two'.",
@@ -211,10 +210,6 @@ class TestIntegration(TestCase):
 
         self.assertEqual(
             '\n'.join([
-                "Config parsing for suite 'Suite One' completed",
-                "Config parsing for suite '' completed",
-                "Config parsing for suite 'Suite Two' completed",
-                "Config parsing for suite 'b4d su1te name' completed",
                 "Config parsing for robot completed",
                 "Suite 'Suite One': 1 warnings found",
                 "2 warnings found",
@@ -246,9 +241,6 @@ class TestIntegration(TestCase):
 
         self.assertEqual(
             '\n'.join([
-                "Config parsing for suite 'b4d su1te name' completed",
-                "Config parsing for suite '' completed",
-                "Config parsing for suite 'Suite Two' completed",
                 "Config parsing for robot completed",
                 "ERROR: No suite with name 'b4d su1te name' found. Returning error code -1.",
             ]) + '\n',
@@ -266,7 +258,6 @@ class TestIntegration(TestCase):
 
         self.assertEqual(
             '\n'.join([
-                "Config parsing for suite 'Inv4lid Name' completed",
                 "ERROR: No suite with name 'Inv4lid Name' found. Returning error code -1.",
             ]) + '\n',
             stdout_log
