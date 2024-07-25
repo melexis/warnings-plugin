@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx.warnings.polyspace_checker &#8212; warning-plugin 5.3.0 documentation</title>
+    <title>mlx.warnings.polyspace_checker &#8212; warning-plugin 5.4.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pydoctheme.css" />
     
@@ -30,7 +30,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="../../../index.html">warning-plugin-5.3.0</a> &#187;</li>
+        <li><a href="../../../index.html">warning-plugin-5.4.0</a> &#187;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -204,7 +204,7 @@
                         <span class="s2">&quot;&#39;Family&#39; column. These dicts need to consist 3 key-value pairs (Note: if &#39;min&#39; or &quot;</span>
                         <span class="s2">&quot;&#39;max&#39; is not defined, it will get the default value of 0):</span><span class="se">\n</span><span class="s2">&quot;</span>
                         <span class="s2">&quot;{</span><span class="se">\n</span><span class="s2">    &lt;column_name&gt;: &lt;value_to_check&gt;,</span><span class="se">\n</span><span class="s2">    min: &lt;number&gt;,</span><span class="se">\n</span><span class="s2">    max: &lt;number&gt;</span><span class="se">\n</span><span class="s2">};&quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="n">column_name</span><span class="si">}</span><span class="s2"> as column_name and </span><span class="si">{</span><span class="n">check_value</span><span class="si">}</span><span class="s2"> as value_to_check&quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="n">column_name</span><span class="si">!r}</span><span class="s2"> as column_name and </span><span class="si">{</span><span class="n">check_value</span><span class="si">!r}</span><span class="s2"> as value_to_check&quot;</span>
                     <span class="p">)</span>
         <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="p">:</span>
             <span class="n">checker</span><span class="o">.</span><span class="n">cq_enabled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_enabled</span>
@@ -229,8 +229,6 @@
 <span class="sd">            family_value (str): The value to search for in the &#39;Family&#39; column</span>
 <span class="sd">            column_name (str): The name of the column</span>
 <span class="sd">            check_value (str): The value to check in the column</span>
-<span class="sd">            minimum (int): The minimum amount the check_value can occur</span>
-<span class="sd">            maximum (int): The maximum amount the check_value can occur</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">family_value</span> <span class="o">=</span> <span class="n">family_value</span>
@@ -293,7 +291,7 @@
         <span class="k">if</span> <span class="s2">&quot;line&quot;</span> <span class="ow">in</span> <span class="n">row</span><span class="p">:</span>
             <span class="n">finding</span><span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">][</span><span class="s2">&quot;positions&quot;</span><span class="p">][</span><span class="s2">&quot;begin&quot;</span><span class="p">][</span><span class="s2">&quot;line&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;line&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="s2">&quot;col&quot;</span> <span class="ow">in</span> <span class="n">row</span><span class="p">:</span>
-            <span class="n">finding</span><span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">][</span><span class="s2">&quot;positions&quot;</span><span class="p">][</span><span class="s2">&quot;begin&quot;</span><span class="p">][</span><span class="s2">&quot;column&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;line&quot;</span><span class="p">]</span>
+            <span class="n">finding</span><span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">][</span><span class="s2">&quot;positions&quot;</span><span class="p">][</span><span class="s2">&quot;begin&quot;</span><span class="p">][</span><span class="s2">&quot;column&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;col&quot;</span><span class="p">]</span>
         <span class="n">finding</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
         <span class="n">exclude</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;new&quot;</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;severity&quot;</span><span class="p">,</span> <span class="s2">&quot;comment&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span><span class="p">)</span>
         <span class="n">row_without_key</span> <span class="o">=</span> <span class="p">[</span><span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span><span class="p">]</span>
@@ -308,16 +306,20 @@
 <span class="sd">            content (dict): The row of the TSV file</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="n">content</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">column_name</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_value</span><span class="p">:</span>
-            <span class="n">tab_sep_string</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_excluded</span><span class="p">(</span><span class="n">tab_sep_string</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">counted_warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;family: </span><span class="si">{}</span><span class="s1"> -&gt; </span><span class="si">{}</span><span class="s1">: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">family_value</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">check_value</span>
-                <span class="p">))</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_enabled</span> <span class="ow">and</span> <span class="n">content</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;green&quot;</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">add_code_quality_finding</span><span class="p">(</span><span class="n">content</span><span class="p">)</span></div></div>
+            <span class="k">if</span> <span class="n">content</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;not a defect&quot;</span><span class="p">,</span> <span class="s2">&quot;justified&quot;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">print_when_verbose</span><span class="p">(</span><span class="s2">&quot;Excluded row </span><span class="si">{!r}</span><span class="s2"> because the status is &#39;Not a defect&#39; or &#39;Justified&#39;&quot;</span>
+                                        <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">content</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tab_sep_string</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_excluded</span><span class="p">(</span><span class="n">tab_sep_string</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">counted_warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;family: </span><span class="si">{}</span><span class="s1"> -&gt; </span><span class="si">{}</span><span class="s1">: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">family_value</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">check_value</span>
+                    <span class="p">))</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_enabled</span> <span class="ow">and</span> <span class="n">content</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;green&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">add_code_quality_finding</span><span class="p">(</span><span class="n">content</span><span class="p">)</span></div></div>
 </pre></div>
 
             <div class="clearer"></div>
@@ -375,7 +377,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Jul 05, 2024.
+      Last updated on Jul 25, 2024.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
