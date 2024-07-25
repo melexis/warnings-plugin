@@ -6,6 +6,26 @@ from string import Template
 from .exceptions import WarningsConfigError
 
 
+def substitute_envvar(checker_config, keys):
+    """Modifies configuration for checker inplace, resolving any environment variables for ``keys``
+
+    Args:
+        checker_config (dict): Configuration for a specific WarningsChecker
+        keys (set): Set of keys to process the value of
+
+    Raises:
+        WarningsConfigError: Failed to find an environment variable
+    """
+    for key in keys:
+        if key in checker_config and isinstance(checker_config[key], str):
+            template_obj = Template(checker_config[key])
+            try:
+                checker_config[key] = template_obj.substitute(os.environ)
+            except KeyError as err:
+                raise WarningsConfigError(f"Failed to find environment variable {err} for configuration value {key!r}")\
+                    from None
+
+
 class WarningsChecker:
     name = 'checker'
 
@@ -156,6 +176,7 @@ class WarningsChecker:
             print(message)
 
     def parse_config(self, config):
+        substitute_envvar(config, {'min', 'max'})
         self.maximum = int(config['max'])
         self.minimum = int(config['min'])
         self.add_patterns(config.get("exclude"), self.exclude_patterns)
