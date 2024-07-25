@@ -154,7 +154,7 @@ class PolyspaceChecker(WarningsChecker):
                         "'Family' column. These dicts need to consist 3 key-value pairs (Note: if 'min' or "
                         "'max' is not defined, it will get the default value of 0):\n"
                         "{\n    <column_name>: <value_to_check>,\n    min: <number>,\n    max: <number>\n};"
-                        f"got {column_name} as column_name and {check_value} as value_to_check"
+                        f"got {column_name!r} as column_name and {check_value!r} as value_to_check"
                     )
         for checker in self.checkers:
             checker.cq_enabled = self.cq_enabled
