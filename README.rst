@@ -324,6 +324,15 @@ For example, "run-time check" is the family of Code Prover and "defect" is the f
 The value of that key is a list, which contains the name of the column to check as a key and
 the value of that column to check together with ``min`` and ``max`` values.
 
+Note that all defects with one of the following statuses are excluded from the warnings and code quality report:
+- Justified
+- No Action Planned
+- Not a Defect
+These statuses are used when you do not plan to fix your code in response to a result.
+More info can be found `on this help page`_.
+
+.. _`on this help page`: https://nl.mathworks.com/help/polyspace_access/ug/fix-or-comment-polyspace-results-web-browser.html
+
 Example Checks
 ^^^^^^^^^^^^^^
 
