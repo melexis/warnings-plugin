@@ -1,14 +1,12 @@
 from decouple import config, Config, RepositoryEnv
 
-from mlx.coverity import CoverityConfigurationService, CoverityDefectService
+from mlx.coverity import CoverityDefectService
 from urllib.error import URLError
 from .regex_checker import CoverityChecker
 
 
 class CoverityServerChecker(CoverityChecker):
     name = 'coverityserver'
-    transport = 'http'
-    port = '8080'
     hostname = ''
     username = ''
     password = ''
@@ -20,8 +18,6 @@ class CoverityServerChecker(CoverityChecker):
         Args:
             configuration (decouple.Config): Config class from python Decouple
         '''
-        self.transport = configuration('COVERITY_TRANSPORT', default=self.transport)
-        self.port = configuration('COVERITY_PORT', default=self.port)
         self.hostname = configuration('COVERITY_HOSTNAME', default=self.hostname)
         self.username = configuration('COVERITY_USERNAME', default=self.username)
         self.password = configuration('COVERITY_PASSWORD', default=self.password)
