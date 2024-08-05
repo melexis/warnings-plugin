@@ -5,12 +5,10 @@ import argparse
 import errno
 import glob
 import json
-import os
 import subprocess
 import sys
 from importlib.metadata import distribution
 from pathlib import Path
-from string import Template
 
 from ruamel.yaml import YAML
 
@@ -18,29 +16,10 @@ from .exceptions import WarningsConfigError
 from .junit_checker import JUnitChecker
 from .regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker
 from .robot_checker import RobotChecker
+from .polyspace_checker import PolyspaceChecker
 from .coverity_checker import CoverityServerChecker
 
 __version__ = distribution('mlx.warnings').version
-
-
-def substitute_envvar(checker_config, keys):
-    """Modifies configuration for checker in-place, resolving any environment variables for ``keys``
-
-    Args:
-        checker_config (dict): Configuration for a specific WarningsChecker
-        keys (set): Set of keys to process the value of
-
-    Raises:
-        WarningsConfigError: Failed to find an environment variable
-    """
-    for key in keys:
-        if key in checker_config and isinstance(checker_config[key], str):
-            template_obj = Template(checker_config[key])
-            try:
-                checker_config[key] = template_obj.substitute(os.environ)
-            except KeyError as err:
-                raise WarningsConfigError(f"Failed to find environment variable {err} for configuration value {key!r}")\
-                    from None
 
 
 class WarningsPlugin:
@@ -59,7 +38,7 @@ class WarningsPlugin:
         self.cq_enabled = cq_enabled
         self.public_checkers = [SphinxChecker(self.verbose), DoxyChecker(self.verbose), JUnitChecker(self.verbose),
                                 XMLRunnerChecker(self.verbose), CoverityChecker(self.verbose),
-                                RobotChecker(self.verbose), CoverityServerChecker(self.verbose)]
+                                RobotChecker(self.verbose), PolyspaceChecker(self.verbose), CoverityServerChecker(self.verbose)]
 
         if config_file:
             with open(config_file, 'r', encoding='utf-8') as open_file:
@@ -69,8 +48,8 @@ class WarningsPlugin:
                     config = json.load(open_file)
             self.config_parser(config)
 
-        self.warn_min = 0
-        self.warn_max = 0
+        self._minimum = 0
+        self._maximum = 0
         self.count = 0
         self.printout = False
 
@@ -81,7 +60,7 @@ class WarningsPlugin:
         Args:
             checker (WarningsChecker): checker object
         '''
-        checker.cq_enabled = self.cq_enabled and checker.name in ('doxygen', 'sphinx', 'xmlrunner')
+        checker.cq_enabled = self.cq_enabled and checker.name in ('doxygen', 'sphinx', 'xmlrunner', 'polyspace')
         self.activated_checkers[checker.name] = checker
 
     def activate_checker_name(self, name):
@@ -113,37 +92,55 @@ class WarningsPlugin:
 
     def check(self, content):
         '''
-        Function for counting the number of warnings in a specific text
+        Count the number of warnings in a specified content
 
         Args:
-            content (str): The text to parse
+            content (str): The content to parse
         '''
         if self.printout:
             print(content)
-
         if not self.activated_checkers:
             print("No checkers activated. Please use activate_checker function")
         else:
             for checker in self.activated_checkers.values():
+                if checker.name == "polyspace":
+                    raise WarningsConfigError("Function check() cannot be used with Polyspace checker.")
+                else:
+                    checker.check(content)
+
+    def check_logfile(self, file):
+        '''
+        Count the number of warnings in a specified content
+
+        Args:
+            content (_io.TextIOWrapper): The open file to parse
+        '''
+        if not self.activated_checkers:
+            print("No checkers activated. Please use activate_checker function")
+        elif "polyspace" in self.activated_checkers:
+            self.activated_checkers["polyspace"].check(file)
+        else:
+            content = file.read()
+            for checker in self.activated_checkers.values():
                 checker.check(content)
 
-    def set_maximum(self, maximum):
-        ''' Setter function for the maximum amount of warnings
+    def configure_maximum(self, maximum):
+        ''' Configure the maximum amount of warnings for each activated checker
 
         Args:
             maximum (int): maximum amount of warnings allowed
         '''
         for checker in self.activated_checkers.values():
-            checker.set_maximum(maximum)
+            checker.maximum = maximum
 
-    def set_minimum(self, minimum):
-        ''' Setter function for the minimum amount of warnings
+    def configure_minimum(self, minimum):
+        ''' Configure the minimum amount of warnings for each activated checker
 
         Args:
             minimum (int): minimum amount of warnings allowed
         '''
         for checker in self.activated_checkers.values():
-            checker.set_minimum(minimum)
+            checker.minimum = minimum
 
     def return_count(self, name=None):
         ''' Getter function for the amount of found warnings
@@ -201,7 +198,7 @@ class WarningsPlugin:
         self.printout = printout
 
     def config_parser(self, config):
-        ''' Parsing configuration dict extracted by previously opened JSON file
+        ''' Parsing configuration dict extracted by previously opened JSON or YAML file
 
         Args:
             config (dict): Content of configuration file
@@ -211,7 +208,6 @@ class WarningsPlugin:
             try:
                 checker_config = config[checker.name]
                 if bool(checker_config['enabled']):
-                    substitute_envvar(checker_config, {'min', 'max'})
                     self.activate_checker(checker)
                     checker.parse_config(checker_config)
                     print("Config parsing for {name} completed".format(name=checker.name))
@@ -262,7 +258,7 @@ def warnings_wrapper(args):
                         help='Exact amount of warnings expected')
     group2 = parser.add_argument_group('Configuration file with options')
     group2.add_argument('--config', dest='configfile', action='store', required=False, type=Path,
-                        help='Config file in JSON format provides toggle of checkers and their limits')
+                        help='Config file in JSON or YAML format provides toggle of checkers and their limits')
     group2.add_argument('--include-sphinx-deprecation', dest='include_sphinx_deprecation', action='store_true',
                         help="Sphinx checker will include warnings matching (RemovedInSphinx\\d+Warning) regex")
     parser.add_argument('-o', '--output',
@@ -281,7 +277,6 @@ def warnings_wrapper(args):
 
     args = parser.parse_args(args)
     code_quality_enabled = bool(args.code_quality)
-
     # Read config file
     if args.configfile is not None:
         checker_flags = args.sphinx or args.doxygen or args.junit or args.coverity or args.xmlrunner or args.robot
@@ -314,16 +309,18 @@ def warnings_wrapper(args):
             if args.maxwarnings | args.minwarnings:
                 print("expected-warnings cannot be provided with maxwarnings or minwarnings")
                 sys.exit(2)
-            warnings.set_maximum(args.exact_warnings)
-            warnings.set_minimum(args.exact_warnings)
+            warnings.configure_maximum(args.exact_warnings)
+            warnings.configure_minimum(args.exact_warnings)
         else:
-            warnings.set_maximum(args.maxwarnings)
-            warnings.set_minimum(args.minwarnings)
+            warnings.configure_maximum(args.maxwarnings)
+            warnings.configure_minimum(args.minwarnings)
 
     if args.include_sphinx_deprecation and 'sphinx' in warnings.activated_checkers.keys():
         warnings.get_checker('sphinx').include_sphinx_deprecation()
 
     if args.command:
+        if "polyspace" in warnings.activated_checkers:
+            raise WarningsConfigError("Input argument command cannot be combined with Polyspace checker enabled")
         cmd = args.logfile
         if args.flags:
             cmd.extend(args.flags)
@@ -410,8 +407,8 @@ def warnings_logfile(warnings, log):
     for file_wildcard in log:
         if glob.glob(file_wildcard):
             for logfile in glob.glob(file_wildcard):
-                with open(logfile, 'r') as loghandle:
-                    warnings.check(loghandle.read())
+                with open(logfile, "r") as file:
+                    warnings.check_logfile(file)
         else:
             print("FILE: %s does not exist" % file_wildcard)
             return 1

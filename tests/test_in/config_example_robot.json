@@ -45,10 +45,13 @@
             },
             {
                 "name": "b4d su1te name",
-                "min": 0,
-                "max": 0
+                "min": "$MIN_ROBOT_WARNINGS",
+                "max": "${MAX_ROBOT_WARNINGS}"
             }
         ]
+    },
+    "polyspace": {
+        "enabled": false
     },
     "coverityserver": {
         "enabled": false

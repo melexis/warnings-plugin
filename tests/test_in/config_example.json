@@ -41,6 +41,9 @@
             }
         ]
     },
+    "polyspace": {
+        "enabled": false
+    },
     "coverityserver": {
         "enabled": false
     }

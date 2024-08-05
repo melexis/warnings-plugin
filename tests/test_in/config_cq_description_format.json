@@ -28,6 +28,9 @@
     "robot": {
         "enabled": false
     },
+    "polyspace": {
+        "enabled": false
+    },
     "coverityserver": {
         "enabled": false
     }

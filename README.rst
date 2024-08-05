@@ -286,6 +286,75 @@ input file. When this setting is missing, the default value ``true`` is used.
 .. |--xunit report.xml| replace:: ``--xunit report.xml``
 .. _`--xunit report.xml`: https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#xunit-compatible-result-file
 
+Parse for Polyspace Failures
+----------------------------
+
+The Polyspace checker requires as input a TSV file exported by Polyspace.
+You can find instructions on exporting TSV files in the Polyspace documentation.
+
+Exporting Polyspace Results
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following commands instruct Polyspace to export the results as a TSV file:
+
+.. code-block:: bash
+
+    polyspace-results-export -format csv -results-dir <resultsFolder> <export_options>
+    # or
+    polyspace-results-export -format csv -host <hostName> -run-id <runID> <export_options> <polyspace_access_options>
+
+The csv format outputs tab-separated values (TSV).
+Each result in the TSV format consists of tab-separated information in columns.
+Starting from Polyspace version R2024a these columns are available:
+ID, Family, Group, Color, New, Check, Information, Function, File, Status, Severity, Comment, Key, Line and Col.
+In previous versions of Polyspace the Line and Col column are not available yet.
+
+This file is required when you enable Polyspace in the configuration file.
+
+Configuration
+^^^^^^^^^^^^^
+
+Polyspace checking can only be enabled with a configuration file,
+and it cannot be used together with other checkers enabled.
+In this case, only the Polyspace checker will run.
+
+When you enable Polyspace checking in the configuration file,
+the checks consist of a key that represents the "family" column of the TSV file.
+For example, "run-time check" is the family of Code Prover and "defect" is the family of Bug Finder.
+The value of that key is a list, which contains the name of the column to check as a key and
+the value of that column to check together with ``min`` and ``max`` values.
+
+All results with one of the following statuses are discarded altogether:
+
+- Justified
+- Not a Defect
+
+These statuses indicate that you have given due consideration and justified that result, as described
+in `Polyspace's documentation about results`_.
+The status "No Action Planned" is not treated differently because this is the default status for annotations.
+
+.. _`Polyspace's documentation about results`: https://nl.mathworks.com/help/polyspace_access/ug/fix-or-comment-polyspace-results-web-browser.html
+
+Example Checks
+^^^^^^^^^^^^^^
+
+In case of Code Prover, you might want to check the ``color`` column on ``red`` or ``orange`` issues.
+In case of Bug Finder, you might want to check the ``information`` column on ``impact: high``, ``impact: medium``, or even ``impact: low``.
+Other issues, such as "Global variable", can also be handled.
+You can specify any column and value you want to check in the configuration file.
+
+Running the mlx-warnings plugin
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following commands demonstrate how to run the mlx-warnings plugin with the TSV file:
+
+.. code-block:: bash
+
+    # basic Polyspace checker
+    mlx-warnings --config <configuration_file> <tsv_file>
+    # Polyspace checker with code quality export
+    mlx-warnings --code-quality path/to/code_quality.json --config <configuration_file> <tsv_file>
+
 Query Coverity server for defects
 ---------------------------------
 
@@ -378,6 +447,20 @@ The values for 'min' and 'max' can be set with environment variables via a
                     "max": 0
                 }
             ]
+        },
+        "polyspace": {
+            "enabled": false,
+            "cq_description_template": "$PRODUCT $family: $check",
+            "exclude": [
+                ".+\\tdummy_function\\(\\)\\tdummy_file_name\\.c\\t"
+            ],
+            "run-time check": [
+                {
+                    "color": "red",
+                    "min": 0,
+                    "max": 0
+                }
+            ]
         }
     }
 
@@ -429,6 +512,30 @@ An example configuration for the sphinx checker is given below:
         }
     }
 
+You can define regular expressions to exclude certain Polyspace results, i.e. specific rows of the TSV file,
+when they match against the string that represents the row. This string is a concatenation of the values
+of all cells in the row, separated by a tab character (`\t`).
+Note: backslashes need to be escaped in JSON syntax.
+
+.. code-block:: json
+
+    {
+        "polyspace": {
+            "enabled": true,
+            "cq_description_template": "$PRODUCT $family: $check",
+            "exclude": [
+                ".+\\tdummy_function\\(\\)\\tdummy_file_name\\.c\\t"
+            ],
+            "run-time check": [
+                {
+                    "color": "red",
+                    "min": 0,
+                    "max": 0
+                }
+            ]
+        }
+    }
+
 Exclude Sphinx Deprecation Warnings
 -----------------------------------
 
@@ -448,7 +555,7 @@ Code Quality Report
 -------------------
 
 Use ``-C, --code-quality`` to let the plugin generate `a Code Quality report`_ for GitLab CI. All counted
-Sphinx, Doxygen and XMLRunner will be included. Other checker types are not supported by this feature. The report is
+Sphinx, Doxygen, XMLRunner and Polyspace warnings/errors/failures will be included. Other checker types are not yet supported by this feature. The report is
 a JSON file that implements `a subset of the Code Climate spec`_. Define this file `as a codequality report artifact`_
 of the CI job.
 
@@ -456,8 +563,20 @@ If a warning doesn't contain a path, ``"cq_default_path"`` from the `configurati
 If not configured, ``.gitlab-ci.yml`` will be used as a fallback path.
 
 You can customize the description with ``"cq_description_template"``, see `configuration file to pass options`_.
-Its value should be a template for Python's |string.Template|_. The template should contain ``$description`` and has
-access to all environment variables, e.g. ``$HOME``.
+Its value should be a template for Python's |string.Template|_. The template has access to all environment variables,
+e.g. ``$HOME``, and other variables that depend on the checker type:
+
+Polyspace
+  Any field of a Polyspace defect can be included by using the corresponding
+  `column title <Exporting Polyspace Results_>`_ in lowercase as the variable name.
+  The default template is ``Polyspace: $check``.
+
+Other
+  The template should contain ``$description``, which is the default.
+
+The Polyspace checker generates the fingerprint (a unique identifier) for each row in the TSV file that is exported as finding.
+Specific columns (``new``, ``status``, ``severity``, ``comment``, and ``key``) are excluded as they might contain transient information.
+The remaining values in the row are hashed using a MD5 function to create the fingerprint.
 
 =======================
 Issues and New Features
