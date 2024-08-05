@@ -1,7 +1,7 @@
 from decouple import config, Config, RepositoryEnv
 
 from mlx.coverity import CoverityDefectService
-from urllib.error import URLError
+from urllib.error import URLError, HTTPError
 from .regex_checker import CoverityChecker
 
 
@@ -65,18 +65,14 @@ class CoverityServerChecker(CoverityChecker):
         Login to Coverity server and retrieve project and stream information. This function
         requires _extract_args to be run before as all class arguments need to be set.
         '''
-        print("Login to Coverity Server: %s://%s:%s" % (self.transport, self.hostname, self.port))
-        coverity_conf_service = CoverityConfigurationService(self.transport, self.hostname, self.port)
-        coverity_conf_service.login(self.username, self.password)
-        if self.verbose:
-            print("Retrieving stream from Coverity Server: %s://%s:%s" % (self.transport, self.hostname, self.port))
-        check_stream = coverity_conf_service.get_stream(self.stream)
-        if check_stream is None:
-            raise ValueError('Coverity checker failed. No such Coverity stream [%s] found on [%s]',
-                             self.stream, coverity_conf_service.get_service_url())
-        self.project_name = coverity_conf_service.get_project_name(check_stream)
-        self.coverity_service = CoverityDefectService(coverity_conf_service)
+        print("Login to Coverity Server: https://%s" % (self.hostname))
+        self.coverity_service = CoverityDefectService(self.hostname)
         self.coverity_service.login(self.username, self.password)
+        if self.verbose:
+            print("Verifying and retrieving stream from Coverity Server: https://%s" % (self.hostname))
+        self.coverity_service.validate_stream(self.stream)
+        self.coverity_service.retrieve_column_keys()
+        self.coverity_service.retrieve_checkers()
 
     def check(self, logfile):
         '''
@@ -88,9 +84,9 @@ class CoverityServerChecker(CoverityChecker):
         self._connect_to_coverity()
         print("Querying Coverity Server for defects on stream %s" % self.stream)
         try:
-            defects = self.coverity_service.get_defects(self.project_name, self.stream, self.filters)
-        except (URLError, AttributeError) as error:
+            defects = self.coverity_service.get_defects(self.stream, self.filters, [])
+        except (URLError, HTTPError) as error:
             print('Coverity checker failed with %s' % error)
             return
         print(defects)
-        self.count = defects.totalNumberOfRecords
+        self.count = defects["totalRows"]
