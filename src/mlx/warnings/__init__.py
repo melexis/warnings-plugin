@@ -15,6 +15,7 @@ __all__ = [
     '__version__',
     'warnings_wrapper',
     'WarningsConfigError',
+    'CoverityServerChecker',
 ]
 
 
@@ -26,3 +27,4 @@ from .robot_checker import RobotChecker, RobotSuiteChecker
 from .polyspace_checker import PolyspaceChecker, PolyspaceFamilyChecker
 from .warnings import WarningsPlugin, warnings_wrapper
 from .warnings_checker import WarningsChecker
+from .coverity_checker import CoverityServerChecker

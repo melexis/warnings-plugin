@@ -17,6 +17,7 @@ from .junit_checker import JUnitChecker
 from .regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker
 from .robot_checker import RobotChecker
 from .polyspace_checker import PolyspaceChecker
+from .coverity_checker import CoverityServerChecker
 
 __version__ = distribution('mlx.warnings').version
 
@@ -37,7 +38,7 @@ class WarningsPlugin:
         self.cq_enabled = cq_enabled
         self.public_checkers = [SphinxChecker(self.verbose), DoxyChecker(self.verbose), JUnitChecker(self.verbose),
                                 XMLRunnerChecker(self.verbose), CoverityChecker(self.verbose),
-                                RobotChecker(self.verbose), PolyspaceChecker(self.verbose)]
+                                RobotChecker(self.verbose), PolyspaceChecker(self.verbose), CoverityServerChecker(self.verbose)]
 
         if config_file:
             with open(config_file, 'r', encoding='utf-8') as open_file:
@@ -241,6 +242,7 @@ def warnings_wrapper(args):
     parser = argparse.ArgumentParser(prog='mlx-warnings')
     group1 = parser.add_argument_group('Configuration command line options')
     group1.add_argument('--coverity', dest='coverity', action='store_true')
+    group1.add_argument('--coverityserver', dest='coverityserver', action='store_true')
     group1.add_argument('-d', '--doxygen', dest='doxygen', action='store_true')
     group1.add_argument('-j', '--junit', dest='junit', action='store_true')
     group1.add_argument('-r', '--robot', dest='robot', action='store_true')
@@ -295,6 +297,8 @@ def warnings_wrapper(args):
             warnings.activate_checker_name('xmlrunner')
         if args.coverity:
             warnings.activate_checker_name('coverity')
+        if args.coverityserver:
+            warnings.activate_checker_name('coverityserver')
         if args.robot:
             robot_checker = warnings.activate_checker_name('robot')
             robot_checker.parse_config({

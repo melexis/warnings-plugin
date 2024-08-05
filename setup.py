@@ -5,6 +5,8 @@ PROJECT_URL = 'https://github.com/melexis/warnings-plugin'
 requires = [
     'junitparser>=1.0.0,<2.0',
     'ruamel.yaml>=0.17.21',
+    'mlx.coverity>=1.0.0,<2.0',
+    'python-decouple',
 ]
 
 setup(
