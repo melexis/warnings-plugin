@@ -46,5 +46,8 @@
     },
     "polyspace": {
         "enabled": false
+    },
+    "gcc": {
+	"enabled": false
     }
 }
