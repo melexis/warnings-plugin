@@ -1,0 +1,64 @@
+[13/27] Compiling C object bla-cpu0.elf.p/App_Source_bla2_bla2.c.o
+../App/Source/bla2/bla2.c: In function 'bla2_MasterSignalEvent_t':
+../App/Source/bla2/bla2.c:66:44: warning: unused parameter 'event' [-Wunused-parameter]
+   66 | void bla2_MasterSignalEvent_t(uint32_t event)
+      |                                   ~~~~~~~~~^~~~~
+../App/Source/bla2/bla2.c: In function 'bla2_CRC':
+../App/Source/bla2/bla2.c:233:35: warning: comparison of integer expressions of different signedness: 'int16_t' {aka 'short int'} and 'unsigned int' [-Wsign-compare]
+  233 |     for (int16_t index = 0; index < bla2_TRANSFER_SIZE - 1; index++)
+      |                                   ^
+[14/27] Compiling C object subprojects/CMock-2.5.3/src/libcmock.a.p/cmock.c.o
+[15/27] Linking static target subprojects/CMock-2.5.3/src/libcmock.a
+[16/27] Compiling C object bla-cpu0-tests.elf.p/App_Test_test_math.c.o
+[17/27] Compiling C object libdrivers.a.p/Driver_bla_Source_example_spi.c.o
+../Driver/bla/Source/example_spi.c:88:1: warning: missing initializer for field 'reserved' of 'ARM_SPI_CAPABILITIES' {aka 'const struct _ARM_SPI_CAPABILITIES'} [-Wmissing-field-initializers]
+   88 | };
+      | ^
+In file included from ../Driver/bla/Include/example_spi.h:25,
+                 from ../Driver/bla/Source/example_spi.c:25:
+../Driver/Include/Driver_SPI.h:201:12: note: 'reserved' declared here
+  201 |   uint32_t reserved         : 28;       ///< Reserved (must be zero)
+      |            ^~~~~~~~
+../Driver/bla/Source/example_spi.c: In function 'SPI_InterruptSend':
+../Driver/bla/Source/example_spi.c:912:46: warning: unused parameter 'data' [-Wunused-parameter]
+  912 | static int32_t SPI_InterruptSend(const void *data, uint32_t num, DEV_SPI_INFO *spi_info_ptr)
+      |                                  ~~~~~~~~~~~~^~~~
+../Driver/bla/Source/example_spi.c:912:61: warning: unused parameter 'num' [-Wunused-parameter]
+  912 | static int32_t SPI_InterruptSend(const void *data, uint32_t num, DEV_SPI_INFO *spi_info_ptr)
+      |                                                    ~~~~~~~~~^~~
+../Driver/bla/Source/example_spi.c:912:80: warning: unused parameter 'spi_info_ptr' [-Wunused-parameter]
+  912 | static int32_t SPI_InterruptSend(const void *data, uint32_t num, DEV_SPI_INFO *spi_info_ptr)
+      |                                                                  ~~~~~~~~~~~~~~^~~~~~~~~~~~
+../Driver/bla/Source/example_spi.c: In function 'SPI_InterruptReceive':
+../Driver/bla/Source/example_spi.c:957:43: warning: unused parameter 'data' [-Wunused-parameter]
+  957 | static int32_t SPI_InterruptReceive(void *data, uint32_t num, DEV_SPI_INFO *spi_info_ptr)
+      |                                     ~~~~~~^~~~
+../Driver/bla/Source/example_spi.c:957:58: warning: unused parameter 'num' [-Wunused-parameter]
+  957 | static int32_t SPI_InterruptReceive(void *data, uint32_t num, DEV_SPI_INFO *spi_info_ptr)
+      |                                                 ~~~~~~~~~^~~
+../Driver/bla/Source/example_spi.c:957:77: warning: unused parameter 'spi_info_ptr' [-Wunused-parameter]
+  957 | static int32_t SPI_InterruptReceive(void *data, uint32_t num, DEV_SPI_INFO *spi_info_ptr)
+      |                                                               ~~~~~~~~~~~~~~^~~~~~~~~~~~
+../Driver/bla/Source/example_spi.c: In function 'SPI_InterruptTransfer':
+../Driver/bla/Source/example_spi.c:1010:13: warning: unused variable 'buffer_in' [-Wunused-variable]
+ 1010 |     int8_t *buffer_in = (int8_t *)data_in;
+      |             ^~~~~~~~~
+../Driver/bla/Source/example_spi.c:1009:13: warning: unused variable 'buffer_out' [-Wunused-variable]
+ 1009 |     int8_t *buffer_out = (int8_t *)data_out;
+      |             ^~~~~~~~~~
+../Driver/bla/Source/example_spi.c: In function 'SPI_InterruptGetStatus':
+../Driver/bla/Source/example_spi.c:1189:60: warning: unused parameter 'spi' [-Wunused-parameter]
+ 1189 | static ARM_SPI_STATUS SPI_InterruptGetStatus(DEV_SPI_INFO *spi)
+      |                                              ~~~~~~~~~~~~~~^~~
+../Driver/bla/Source/example_spi.c: At top level:
+../Driver/bla/Source/example_spi.c:99:13: warning: 'dw_spi_0_isr' declared 'static' but never defined [-Wunused-function]
+   99 | static void dw_spi_0_isr(void *ptr);
+      |             ^~~~~~~~~~~~
+../Driver/bla/Source/example_spi.c: In function 'SPI_MasterCommonControl':
+../Driver/bla/Source/example_spi.c:200:18: warning: statement will never be executed [-Wswitch-unreachable]
+  200 |         uint32_t val32 = SPI_CPOL_0_CPHA_0;
+      |                  ^~~~~
+../Driver/bla/Source/example_spi.c: In function 'SPI_SlaveCommonControl':
+../Driver/bla/Source/example_spi.c:278:18: warning: statement will never be executed [-Wswitch-unreachable]
+  278 |         uint32_t val32 = SPI_CPOL_0_CPHA_0;
+      |                  ^~~~~
