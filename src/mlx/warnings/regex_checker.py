@@ -19,6 +19,7 @@ coverity_pattern = re.compile(COVERITY_WARNING_REGEX)
 GCC_WARNING_REGEX = r"(?:(?P<path1>(?:[/.]|[A-Za-z]).+?):(?P<line1>-?\d+):(?P<col1>-?\d+):\s*(?P<severity1>[Ww]arning|[Ee]rror)|<.+>:(?P<line2>-?\d+)(?::\s*(?P<severity2>[Ww]arning|[Ee]rror))?): (?P<description1>.+)\n?"
 gcc_pattern = re.compile(GCC_WARNING_REGEX)
 
+
 class RegexChecker(WarningsChecker):
     name = 'regex'
     pattern = None

@@ -21,7 +21,7 @@ class TestGccWarnings(TestCase):
         with patch('sys.stdout', new=StringIO()) as fake_out:
             self.warnings.check(dut)
         self.assertEqual(self.warnings.return_count(), 1)
-        #self.assertRegex(fake_out.getvalue(), dut)
+        self.assertRegex(fake_out.getvalue()[:25], dut[:25])
 
     def test_single_warning_mixed(self):
         dut1 = 'This1 should not be treated as warning'
@@ -32,7 +32,7 @@ class TestGccWarnings(TestCase):
             self.warnings.check(dut2)
             self.warnings.check(dut3)
         self.assertEqual(self.warnings.return_count(), 1)
-        #self.assertRegex(fake_out.getvalue(), dut2)
+        self.assertRegex(fake_out.getvalue()[:25], dut2[:25])
 
     def test_multiline(self):
         duterr1 = "../Driver/bla/Source/example_spi.c: In function 'SPI_InterruptReceive':\n../Driver/bla/Source/example_spi.c:957:43: warning: unused parameter 'data' [-Wunused-parameter]\n  957 | static int32_t SPI_InterruptReceive(void *data, uint32_t num, DEV_SPI_INFO *spi_info_ptr)\n      |                                     ~~~~~~^~~~"
@@ -44,8 +44,8 @@ class TestGccWarnings(TestCase):
         with patch('sys.stdout', new=StringIO()) as fake_out:
             self.warnings.check(dut)
         self.assertEqual(self.warnings.return_count(), 2)
-        #self.assertRegex(fake_out.getvalue(), duterr1)
-        #self.assertRegex(fake_out.getvalue(), duterr2)
+        self.assertRegex(fake_out.getvalue()[:25], duterr1[:25])
+        self.assertRegex(fake_out.getvalue()[:25], duterr2[:25])
 
     def test_gcc_warnings_txt(self):
         dut_file = 'tests/test_in/gcc_warnings.txt'
