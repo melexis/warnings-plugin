@@ -200,7 +200,7 @@ the ``--command`` argument and execute the ``cov-run-desktop`` through
 .. code-block:: bash
 
     # command line log file
-    mlx-warnings cov-run-desktop-output.txt --coverity
+    mlx-warnings --coverity cov-run-desktop-output.txt
     # command line command execution
     mlx-warnings --coverity --command <commandforcoverity>
 
