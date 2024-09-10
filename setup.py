@@ -10,9 +10,6 @@ requires = [
 setup(
     name='mlx.warnings',
     url=PROJECT_URL,
-    use_scm_version={
-        'write_to': 'src/mlx/warnings/__version__.py'
-    },
     author='Bavo Van Achte',
     author_email='bavo.van.achte@gmail.com',
     description='Command-line alternative for https://github.com/jenkinsci/warnings-plugin. '
