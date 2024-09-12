@@ -10,9 +10,6 @@ requires = [
 setup(
     name='mlx.warnings',
     url=PROJECT_URL,
-    use_scm_version={
-        'write_to': 'src/mlx/warnings/__version__.py'
-    },
     author='Bavo Van Achte',
     author_email='bavo.van.achte@gmail.com',
     description='Command-line alternative for https://github.com/jenkinsci/warnings-plugin. '
@@ -27,7 +24,7 @@ setup(
     zip_safe=False,
     license='Apache License, Version 2.0',
     platforms='any',
-    packages=find_namespace_packages(where='src', include=['mlx.warnings']),
+    packages=find_namespace_packages(where='src', exclude=("doc.*", "doc", "tests.*", "tests", "build*")),
     package_dir={'': 'src'},
     entry_points={'console_scripts': ['mlx-warnings = mlx.warnings.warnings:main']},
     install_requires=requires,

@@ -1,23 +1,17 @@
-graft docs
 graft src
-graft tests
+exclude src/mlx/warnings/__version__.py
 
 # Include the readme file
 include README.rst
 include LICENSE
-exclude src/mlx/warnings/__version__.py
-recursive-exclude docs _build *
-recursive-exclude tests test_out *
+include NOTICE
+include *.md
+exclude MANIFEST.in
+exclude .gitignore
+recursive-exclude .github *
+recursive-exclude docs *
+recursive-exclude tests *
 
-include tox.ini .travis.yml .codeclimate.yml codecov.yml
+exclude tox.ini .travis.yml .codeclimate.yml codecov.yml
 
 global-exclude *.py[cod] __pycache__ *.so *.dylib
-
-# added by check_manifest.py
-include NOTICE
-
-# added by check_manifest.py
-recursive-include ci *.py
-
-# added by check_manifest.py
-include *.md
