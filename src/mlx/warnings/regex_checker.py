@@ -1,6 +1,7 @@
 import hashlib
 import re
 from pathlib import Path
+from string import Template
 
 from .warnings_checker import WarningsChecker
 
@@ -100,7 +101,32 @@ class RegexChecker(WarningsChecker):
 class CoverityChecker(RegexChecker):
     name = 'coverity'
     pattern = coverity_pattern
-    CLASSIFICATION = "Unclassified"
+    checkers = {}
+
+    def return_count(self):
+        ''' Getter function for the amount of warnings found
+
+        Returns:
+            int: Number of warnings found
+        '''
+        self.count = 0
+        for checker in self.checkers.values():
+            self.count += checker.return_count()
+        return self.count
+
+    def return_check_limits(self):
+        ''' Function for checking whether the warning count is within the configured limits
+
+        Returns:
+            int: 0 if the amount of warnings is within limits, the count of warnings otherwise
+                (or 1 in case of a count of 0 warnings)
+        '''
+        count = 0
+        for checker in self.checkers.values():
+            print(f"Counted failures for classification {checker.classification!r}")
+            count += checker.return_check_limits()
+        print(f"total warnings = {count}")
+        return count
 
     def check(self, content):
         '''
@@ -112,12 +138,85 @@ class CoverityChecker(RegexChecker):
         '''
         matches = re.finditer(self.pattern, content)
         for match in matches:
-            if (match.group('curr') == match.group('max')) and \
-                    (match.group('classification') in self.CLASSIFICATION):
-                self.count += 1
-                match_string = match.group(0).strip()
-                self.counted_warnings.append(match_string)
-                self.print_when_verbose(match_string)
+            if (classification := match.group("classification").lower()) in self.checkers:
+                self.checkers[classification].check(match)
+            else:
+                checker = CoverityClassificationChecker(classification=classification, verbose=self.verbose)
+                self.checkers[classification] = checker
+                checker.cq_enabled = self.cq_enabled
+                checker.exclude_patterns = self.exclude_patterns
+                checker.cq_description_template = self.cq_description_template
+                checker.cq_default_path = self.cq_default_path
+                checker.check(match)
+
+    def parse_config(self, config):
+        """Parsing configuration dict extracted by previously opened JSON or yaml/yml file
+
+        Args:
+            config (dict): Content of configuration file
+        """
+        for key in config:
+            if key == "enabled":
+                continue
+            if key == "cq_description_template":
+                self.cq_description_template = Template(config['cq_description_template'])
+                continue
+            if key == "cq_default_path":
+                self.cq_default_path = config['cq_default_path']
+                continue
+            if key == "exclude":
+                self.add_patterns(config.get("exclude"), self.exclude_patterns)
+                continue
+            if (classification := key) in ["unclassified", "pending", "false_positive", "intentional", "bug"]:
+                classification_lower = classification.lower().replace("_", " ")
+                checker = CoverityClassificationChecker(classification=classification_lower, verbose=self.verbose)
+                if isinstance((maximum := config[classification].get("max", 0)), (int, str)):
+                    checker.maximum = int(maximum)
+                if isinstance((minimum := config[classification].get("min", 0)), (int, str)):
+                    checker.minimum = int(minimum)
+                checker.cq_findings = self.cq_findings  # share object with sub-checkers
+                self.checkers[classification_lower] = checker
+            else:
+                print(f"WARNING: Unrecognized classification {key!r}")
+
+        for checker in self.checkers.values():
+            checker.cq_enabled = self.cq_enabled
+            checker.exclude_patterns = self.exclude_patterns
+            checker.cq_description_template = self.cq_description_template
+            checker.cq_default_path = self.cq_default_path
+
+
+class CoverityClassificationChecker(WarningsChecker):
+    def __init__(self, classification, **kwargs):
+        """Initialize the CoverityClassificationChecker:
+
+        Args:
+            classification (str): The coverity classification
+        """
+        super().__init__(**kwargs)
+        self.classification = classification
+
+    def return_count(self):
+        ''' Getter function for the amount of warnings found
+
+        Returns:
+            int: Number of warnings found
+        '''
+        return self.count
+
+    def check(self, content):
+        '''
+        Function for counting the number of warnings, but adopted for Coverity
+        output
+
+        Args:
+            content (re.Match): The regex match
+        '''
+        match_string = content.group(0).strip()
+        if not self._is_excluded(match_string):
+            self.count += 1
+            self.counted_warnings.append(match_string)
+            self.print_when_verbose(match_string)
 
 
 class DoxyChecker(RegexChecker):
