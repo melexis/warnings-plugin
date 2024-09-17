@@ -49,6 +49,11 @@ class RegexChecker(WarningsChecker):
                 self.add_code_quality_finding(match)
 
     def add_code_quality_finding(self, match):
+        '''Add code quality finding
+
+        Args:
+            match (re.Match): The regex match
+        '''
         finding = {
             "severity": "major",
             "location": {
