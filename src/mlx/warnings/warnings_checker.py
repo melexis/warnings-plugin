@@ -1,4 +1,5 @@
 import abc
+from math import inf
 import os
 import re
 from string import Template
@@ -78,6 +79,8 @@ class WarningsChecker:
 
     @maximum.setter
     def maximum(self, maximum):
+        if maximum == -1:
+            maximum = inf
         if self._minimum > maximum:
             raise ValueError("Invalid argument: maximum limit must be higher than minimum limit ({min}); cannot "
                              "set {max}.".format(max=maximum, min=self._minimum))
