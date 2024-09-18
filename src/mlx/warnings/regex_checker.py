@@ -103,6 +103,14 @@ class CoverityChecker(RegexChecker):
     pattern = coverity_pattern
     checkers = {}
 
+    @property
+    def counted_warnings(self):
+        ''' List: list of counted warnings (str) '''
+        all_counted_warnings = []
+        for checker in self.checkers.values():
+            all_counted_warnings.extend(checker.counted_warnings)
+        return all_counted_warnings
+
     def return_count(self):
         ''' Getter function for the amount of warnings found
 
