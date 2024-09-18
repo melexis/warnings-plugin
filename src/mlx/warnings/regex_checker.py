@@ -1,8 +1,10 @@
 import hashlib
+import os
 import re
 from pathlib import Path
 from string import Template
 
+from .exceptions import WarningsConfigError
 from .warnings_checker import WarningsChecker
 
 DOXYGEN_WARNING_REGEX = r"(?:(?P<path1>(?:[/.]|[A-Za-z]).+?):(?P<line1>-?\d+):\s*(?P<severity1>[Ww]arning|[Ee]rror)|<.+>:(?P<line2>-?\d+)(?::\s*(?P<severity2>[Ww]arning|[Ee]rror))?): (?P<description1>.+(?:(?!\s*([Nn]otice|[Ww]arning|[Ee]rror): )[^/<\n][^:\n][^/\n].+)*)|\s*\b(?P<severity3>[Nn]otice|[Ww]arning|[Ee]rror): (?!notes)(?P<description2>.+)\n?"
@@ -103,6 +105,10 @@ class CoverityChecker(RegexChecker):
     pattern = coverity_pattern
     checkers = {}
 
+    def __init__(self, verbose=False):
+        super().__init__(verbose)
+        self._cq_description_template = Template('Coverity: $checker')
+
     @property
     def counted_warnings(self):
         ''' List: list of counted warnings (str) '''
@@ -110,6 +116,15 @@ class CoverityChecker(RegexChecker):
         for checker in self.checkers.values():
             all_counted_warnings.extend(checker.counted_warnings)
         return all_counted_warnings
+
+    @property
+    def cq_description_template(self):
+        ''' Template: string.Template instance based on the configured template string '''
+        return self._cq_description_template
+
+    @cq_description_template.setter
+    def cq_description_template(self, template_obj):
+        self._cq_description_template = template_obj
 
     def return_count(self):
         ''' Getter function for the amount of warnings found
@@ -195,6 +210,14 @@ class CoverityChecker(RegexChecker):
 
 
 class CoverityClassificationChecker(WarningsChecker):
+    SEVERITY_MAP = {
+        'false positive': 'info',
+        'intentional': 'info',
+        'bug': 'major',
+        'unclassified': 'major',
+        'pending': 'critical',
+    }
+
     def __init__(self, classification, **kwargs):
         """Initialize the CoverityClassificationChecker:
 
@@ -204,6 +227,15 @@ class CoverityClassificationChecker(WarningsChecker):
         super().__init__(**kwargs)
         self.classification = classification
 
+    @property
+    def cq_description_template(self):
+        ''' Template: string.Template instance based on the configured template string '''
+        return self._cq_description_template
+
+    @cq_description_template.setter
+    def cq_description_template(self, template_obj):
+        self._cq_description_template = template_obj
+
     def return_count(self):
         ''' Getter function for the amount of warnings found
 
@@ -211,6 +243,58 @@ class CoverityClassificationChecker(WarningsChecker):
             int: Number of warnings found
         '''
         return self.count
+
+    def add_code_quality_finding(self, match):
+        '''Add code quality finding
+
+        Args:
+            match (re.Match): The regex match
+        '''
+        finding = {
+            "severity": "major",
+            "location": {
+                "path": self.cq_default_path,
+                "positions": {
+                    "begin": {
+                        "line": 1,
+                        "column": 1
+                    }
+                }
+            }
+        }
+        groups = {name: result for name, result in match.groupdict().items() if result}
+        try:
+            description = self.cq_description_template.substitute(os.environ, **groups)
+        except KeyError as err:
+            raise WarningsConfigError(f"Failed to find environment variable from configuration value "
+                                      f"'cq_description_template': {err}") from err
+        if "classification" in groups:
+            finding["severity"] = self.SEVERITY_MAP[groups.get("classification", "unclassified").lower()]
+        if "path" in groups:
+            path = Path(groups["path"])
+            if path.is_absolute():
+                try:
+                    path = path.relative_to(Path.cwd())
+                except ValueError as err:
+                    raise ValueError("Failed to convert abolute path to relative path for Code Quality report: "
+                                     f"{err}") from err
+            finding["location"]["path"] = str(path)
+        if "line" in groups:
+            try:
+                line_number = int(groups["line"], 0)
+            except (TypeError, ValueError):
+                line_number = 1
+            finding["location"]["positions"]["begin"]["line"] = line_number
+        if "col" in groups:
+            try:
+                column_number = int(groups["col"], 0)
+            except (TypeError, ValueError):
+                column_number = 1
+            finding["location"]["positions"]["begin"]["column"] = column_number
+
+        finding["description"] = description
+        finding["fingerprint"] = hashlib.md5(str(match.group(0).strip()).encode('utf8')).hexdigest()
+        self.cq_findings.append(finding)
 
     def check(self, content):
         '''
@@ -225,6 +309,8 @@ class CoverityClassificationChecker(WarningsChecker):
             self.count += 1
             self.counted_warnings.append(match_string)
             self.print_when_verbose(match_string)
+            if self.cq_enabled:
+                self.add_code_quality_finding(content)
 
 
 class DoxyChecker(RegexChecker):
