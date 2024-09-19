@@ -23,8 +23,21 @@
     },
     "coverity": {
         "enabled": true,
-        "min": 0,
-        "max": 0
+        "cq_default_path": "dummy/path",
+        "intentional": {
+            "min": 0,
+            "max": "-1"
+        },
+        "bug": {
+            "max": 0
+        },
+        "pending": {
+            "min": 0,
+            "max": 0
+        },
+        "false_positive": {
+            "max": -1
+        }
     },
     "robot": {
         "enabled": false,
