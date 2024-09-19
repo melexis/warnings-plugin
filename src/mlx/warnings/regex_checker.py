@@ -103,11 +103,11 @@ class RegexChecker(WarningsChecker):
 class CoverityChecker(RegexChecker):
     name = 'coverity'
     pattern = coverity_pattern
-    checkers = {}
 
     def __init__(self, verbose=False):
         super().__init__(verbose)
         self._cq_description_template = Template('Coverity: $checker')
+        self.checkers = {}
 
     @property
     def counted_warnings(self):
