@@ -305,7 +305,7 @@ class CoverityClassificationChecker(WarningsChecker):
             content (re.Match): The regex match
         '''
         match_string = content.group(0).strip()
-        if not self._is_excluded(match_string):
+        if not self._is_excluded(match_string) and (content.group('curr') == content.group('max')):
             self.count += 1
             self.counted_warnings.append(match_string)
             self.print_when_verbose(match_string)
