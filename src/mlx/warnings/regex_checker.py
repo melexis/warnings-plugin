@@ -173,7 +173,7 @@ class CoverityChecker(RegexChecker):
                 checker.check(match)
 
     def parse_config(self, config):
-        """Parsing configuration dict extracted by previously opened JSON or yaml/yml file
+        """Process configuration
 
         Args:
             config (dict): Content of configuration file
