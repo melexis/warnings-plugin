@@ -287,10 +287,9 @@ class CoverityClassificationChecker(WarningsChecker):
             finding["location"]["positions"]["begin"]["line"] = line_number
         if "col" in groups:
             try:
-                column_number = int(groups["col"], 0)
+                finding["location"]["positions"]["begin"]["column"] = int(groups["col"], 0)
             except (TypeError, ValueError):
-                column_number = 1
-            finding["location"]["positions"]["begin"]["column"] = column_number
+                pass
 
         finding["description"] = description
         finding["fingerprint"] = hashlib.md5(str(match.group(0).strip()).encode('utf-8')).hexdigest()
