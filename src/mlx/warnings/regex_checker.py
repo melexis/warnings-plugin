@@ -16,7 +16,7 @@ sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 PYTHON_XMLRUNNER_REGEX = r"(\s*(?P<severity1>ERROR|FAILED) (\[\d+\.\d{3}s\]: \s*(?P<description1>.+)))\n?"
 xmlrunner_pattern = re.compile(PYTHON_XMLRUNNER_REGEX)
 
-COVERITY_WARNING_REGEX = r"(?P<path>[\d\w/\\/-_]+\.\w+)(:(?P<line>\d+)(:(?P<col>\d+))?)?: ?CID \d+ \(#(?P<curr>\d+) of (?P<max>\d+)\): (?P<checker>.+): (?P<classification>[\w ]+),.+"
+COVERITY_WARNING_REGEX = r"(?P<path>[\d\w/\\/-_]+\.\w+)(:(?P<line>\d+)(:(?P<column>\d+))?)?: ?CID \d+ \(#(?P<curr>\d+) of (?P<max>\d+)\): (?P<checker>.+): (?P<classification>[\w ]+),.+"
 coverity_pattern = re.compile(COVERITY_WARNING_REGEX)
 
 
@@ -275,17 +275,12 @@ class CoverityClassificationChecker(WarningsChecker):
                     raise ValueError("Failed to convert abolute path to relative path for Code Quality report: "
                                      f"{err}") from err
             finding["location"]["path"] = str(path)
-        if "line" in groups:
-            try:
-                line_number = int(groups["line"], 0)
-            except (TypeError, ValueError):
-                line_number = 1
-            finding["location"]["positions"]["begin"]["line"] = line_number
-        if "col" in groups:
-            try:
-                finding["location"]["positions"]["begin"]["column"] = int(groups["col"], 0)
-            except (TypeError, ValueError):
-                pass
+        for group_name in ("line", "column"):
+            if group_name in groups:
+                try:
+                    finding["location"]["positions"]["begin"][group_name] = int(groups[group_name], 0)
+                except (TypeError, ValueError):
+                    pass
 
         finding["description"] = description
         finding["fingerprint"] = hashlib.md5(str(match.group(0).strip()).encode('utf-8')).hexdigest()
