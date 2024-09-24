@@ -104,8 +104,8 @@ class CoverityChecker(RegexChecker):
     name = 'coverity'
     pattern = coverity_pattern
 
-    def __init__(self, verbose=False):
-        super().__init__(verbose)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self._cq_description_template = Template('Coverity: $checker')
         self.checkers = {}
 
