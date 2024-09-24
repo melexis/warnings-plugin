@@ -183,7 +183,7 @@ class CoverityChecker(RegexChecker):
             self.cq_description_template = Template(value)
         if value := config.pop("cq_default_path", None):
             self.cq_default_path = value
-        if value:= config.pop("exclude", None):
+        if value := config.pop("exclude", None):
             self.add_patterns(value, self.exclude_patterns)
         for classification in config:
             if classification in ["unclassified", "pending", "false_positive", "intentional", "bug"]:
