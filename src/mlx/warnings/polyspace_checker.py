@@ -245,7 +245,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
         finding["description"] = description
         exclude = ("new", "status", "severity", "comment", "key")
         row_without_key = [value for key, value in row.items() if key not in exclude]
-        finding["fingerprint"] = hashlib.md5(str(row_without_key).encode('utf8')).hexdigest()
+        finding["fingerprint"] = hashlib.md5(str(row_without_key).encode('utf-8')).hexdigest()
         self.cq_findings.append(finding)
 
     def check(self, content):

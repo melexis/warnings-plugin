@@ -96,7 +96,7 @@ class RegexChecker(WarningsChecker):
                     lineno = 1
                 finding["location"]["lines"]["begin"] = lineno
                 break
-        finding["fingerprint"] = hashlib.md5(str(finding).encode('utf8')).hexdigest()
+        finding["fingerprint"] = hashlib.md5(str(finding).encode('utf-8')).hexdigest()
         self.cq_findings.append(finding)
 
 
