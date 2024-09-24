@@ -189,9 +189,9 @@ class CoverityChecker(RegexChecker):
             if classification in ["unclassified", "pending", "false_positive", "intentional", "bug"]:
                 classification_lower = classification.lower().replace("_", " ")
                 checker = CoverityClassificationChecker(classification=classification_lower, verbose=self.verbose)
-                if isinstance((maximum := config[classification].get("max", 0)), (int, str)):
+                if maximum := config[classification].get("max", 0):
                     checker.maximum = int(maximum)
-                if isinstance((minimum := config[classification].get("min", 0)), (int, str)):
+                if minimum := config[classification].get("min", 0):
                     checker.minimum = int(minimum)
                 checker.cq_findings = self.cq_findings  # share object with sub-checkers
                 self.checkers[classification_lower] = checker
