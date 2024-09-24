@@ -293,7 +293,7 @@ class CoverityClassificationChecker(WarningsChecker):
             finding["location"]["positions"]["begin"]["column"] = column_number
 
         finding["description"] = description
-        finding["fingerprint"] = hashlib.md5(str(match.group(0).strip()).encode('utf8')).hexdigest()
+        finding["fingerprint"] = hashlib.md5(str(match.group(0).strip()).encode('utf-8')).hexdigest()
         self.cq_findings.append(finding)
 
     def check(self, content):
