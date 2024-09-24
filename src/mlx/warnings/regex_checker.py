@@ -288,8 +288,8 @@ class CoverityClassificationChecker(WarningsChecker):
 
     def check(self, content):
         '''
-        Function for counting the number of warnings, but adopted for Coverity
-        output
+        Function for counting the number of warnings, but adopted for Coverity output.
+        Multiple warnings for the same CID are counted as one.
 
         Args:
             content (re.Match): The regex match
