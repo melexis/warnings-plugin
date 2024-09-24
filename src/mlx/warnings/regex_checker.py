@@ -268,8 +268,8 @@ class CoverityClassificationChecker(WarningsChecker):
         except KeyError as err:
             raise WarningsConfigError(f"Failed to find environment variable from configuration value "
                                       f"'cq_description_template': {err}") from err
-        if "classification" in groups:
-            finding["severity"] = self.SEVERITY_MAP[groups.get("classification", "unclassified").lower()]
+        if classification_raw := groups.get("classification"):
+            finding["severity"] = self.SEVERITY_MAP[classification_raw.lower()]
         if "path" in groups:
             path = Path(groups["path"])
             if path.is_absolute():
