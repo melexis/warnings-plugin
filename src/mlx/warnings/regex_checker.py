@@ -178,19 +178,15 @@ class CoverityChecker(RegexChecker):
         Args:
             config (dict): Content of configuration file
         """
-        for key in config:
-            if key == "enabled":
-                continue
-            if key == "cq_description_template":
-                self.cq_description_template = Template(config['cq_description_template'])
-                continue
-            if key == "cq_default_path":
-                self.cq_default_path = config['cq_default_path']
-                continue
-            if key == "exclude":
-                self.add_patterns(config.get("exclude"), self.exclude_patterns)
-                continue
-            if (classification := key) in ["unclassified", "pending", "false_positive", "intentional", "bug"]:
+        config.pop("enabled")
+        if value := config.pop("cq_description_template", None):
+            self.cq_description_template = Template(value)
+        if value := config.pop("cq_default_path", None):
+            self.cq_default_path = value
+        if value:= config.pop("exclude", None):
+            self.add_patterns(value, self.exclude_patterns)
+        for classification in config:
+            if classification in ["unclassified", "pending", "false_positive", "intentional", "bug"]:
                 classification_lower = classification.lower().replace("_", " ")
                 checker = CoverityClassificationChecker(classification=classification_lower, verbose=self.verbose)
                 if isinstance((maximum := config[classification].get("max", 0)), (int, str)):
@@ -200,7 +196,7 @@ class CoverityChecker(RegexChecker):
                 checker.cq_findings = self.cq_findings  # share object with sub-checkers
                 self.checkers[classification_lower] = checker
             else:
-                print(f"WARNING: Unrecognized classification {key!r}")
+                print(f"WARNING: Unrecognized classification {classification!r}")
 
         for checker in self.checkers.values():
             checker.cq_enabled = self.cq_enabled
