@@ -586,10 +586,8 @@ Polyspace
   The default template is ``Polyspace: $check``.
 
 Coverity
-  Named groups of the regular expression can also be used, next to environment variables.
-  The capturing groups are: `path`, `line`, `column`, `curr`, `max`, `checker` and `classification`.
-  `curr` and `max` represents respectively the current warning and the maximum amount of warnings with the same CID.
-  These are always the same if you take the note of `Parse for Coverity Defects`_ into account.
+  Named groups of the regular expression can be used as variables.
+  Useful names are: `checker` and `classification`.
   The default template is ``Coverity: $checker``.
 
 Other
