@@ -186,15 +186,15 @@ class CoverityChecker(RegexChecker):
         if value := config.pop("exclude", None):
             self.add_patterns(value, self.exclude_patterns)
         for classification in config:
-            if classification in ["unclassified", "pending", "false_positive", "intentional", "bug"]:
-                classification_lower = classification.lower().replace("_", " ")
-                checker = CoverityClassificationChecker(classification=classification_lower, verbose=self.verbose)
+            classification_key = classification.lower().replace("_", " ")
+            if classification_key in CoverityClassificationChecker.SEVERITY_MAP:
+                checker = CoverityClassificationChecker(classification=classification_key, verbose=self.verbose)
                 if maximum := config[classification].get("max", 0):
                     checker.maximum = int(maximum)
                 if minimum := config[classification].get("min", 0):
                     checker.minimum = int(minimum)
                 checker.cq_findings = self.cq_findings  # share object with sub-checkers
-                self.checkers[classification_lower] = checker
+                self.checkers[classification_key] = checker
             else:
                 print(f"WARNING: Unrecognized classification {classification!r}")
 
