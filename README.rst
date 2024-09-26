@@ -254,6 +254,8 @@ This is an example of the configuration file:
 
 For each classification, a minimum and maximum can be given.
 
+.. note::
+    The warnings-plugin counts only one warning if there are multiple warnings for the same CID.
 
 Parse for JUnit Failures
 ------------------------
@@ -582,6 +584,13 @@ Polyspace
   Any field of a Polyspace defect can be included by using the corresponding
   `column title <Exporting Polyspace Results_>`_ in lowercase as the variable name.
   The default template is ``Polyspace: $check``.
+
+Coverity
+  Named groups of the regular expression can also be used, next to environment variables.
+  The capturing groups are: `path`, `line`, `column`, `curr`, `max`, `checker` and `classification`.
+  `curr` and `max` represents respectively the current warning and the maximum amount of warnings with the same CID.
+  These are always the same if you take the note of `Parse for Coverity Defects`_ into account.
+  The default template is ``Coverity: $checker``.
 
 Other
   The template should contain ``$description``, which is the default.
