@@ -1,8 +1,8 @@
 readme.rst:None: [redirected permanently] http://www.apache.org/licenses/LICENSE-2.0 to https://www.apache.org/licenses/LICENSE-2.0
+readme.rst:None: [redirected with Found] https://badge.fury.io/py/mlx.warnings.svg to https://d25lcipzij17d.cloudfront.net/badge.svg?id=py&r=r&ts=1683906897&type=6e&v=5.4.1&x2=0
 readme.rst:None: [redirected permanently] https://badge.fury.io/py/mlx.warnings to https://pypi.org/project/mlx.warnings/
-readme.rst:None: [redirected with Found] https://badge.fury.io/py/mlx.warnings.svg to https://d25lcipzij17d.cloudfront.net/badge.svg?id=py&r=r&ts=1683906897&type=6e&v=5.4.0&x2=0
-readme.rst:None: [redirected with Found] https://codeclimate.com/github/melexis/warnings-plugin/badges/gpa.svg to https://api.codeclimate.com/v1/badges/c287cf98885a503c8a09/maintainability.svg
 readme.rst:None: [redirected with Found] https://bestpractices.coreinfrastructure.org/projects/4368/badge to https://www.bestpractices.dev/projects/4368/badge
-readme.rst:None: [redirected with Found] https://bestpractices.coreinfrastructure.org/projects/4368 to https://www.bestpractices.dev/en/projects/4368
 readme.rst:None: [redirected permanently] https://codecov.io/gh/melexis/warnings-plugin to https://app.codecov.io/gh/melexis/warnings-plugin
+readme.rst:None: [redirected with Found] https://bestpractices.coreinfrastructure.org/projects/4368 to https://www.bestpractices.dev/en/projects/4368
+readme.rst:None: [redirected with Found] https://codeclimate.com/github/melexis/warnings-plugin/badges/gpa.svg to https://api.codeclimate.com/v1/badges/c287cf98885a503c8a09/maintainability.svg
 contributing.rst:3: [redirected with Found] https://guides.github.com/introduction/flow/ to https://docs.github.com/en/get-started/using-github/github-flow

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx.warnings.warnings_checker &#8212; warning-plugin 5.4.1 documentation</title>
+    <title>mlx.warnings.warnings_checker &#8212; warning-plugin 5.5.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pydoctheme.css" />
     
@@ -30,7 +30,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="../../../index.html">warning-plugin-5.4.1</a> &#187;</li>
+        <li><a href="../../../index.html">warning-plugin-5.5.0</a> &#187;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -49,6 +49,7 @@
             
   <h1>Source code for mlx.warnings.warnings_checker</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">abc</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">inf</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="n">Template</span>
@@ -128,6 +129,8 @@
 
     <span class="nd">@maximum</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">maximum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maximum</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">maximum</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">maximum</span> <span class="o">=</span> <span class="n">inf</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_minimum</span> <span class="o">&gt;</span> <span class="n">maximum</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid argument: maximum limit must be higher than minimum limit (</span><span class="si">{min}</span><span class="s2">); cannot &quot;</span>
                              <span class="s2">&quot;set </span><span class="si">{max}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">max</span><span class="o">=</span><span class="n">maximum</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_minimum</span><span class="p">))</span>
@@ -317,7 +320,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Sep 12, 2024.
+      Last updated on Sep 26, 2024.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
