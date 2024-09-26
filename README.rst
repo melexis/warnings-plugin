@@ -227,7 +227,7 @@ a text file (`warnings_coverity.txt`) and a code quality JSON file (`coverity_co
 
 This is an example of the configuration file:
 
-.. code-block:: yml
+.. code-block:: yaml
 
     sphinx:
         enabled: false
