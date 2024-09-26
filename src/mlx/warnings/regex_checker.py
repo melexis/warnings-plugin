@@ -190,9 +190,9 @@ class CoverityChecker(RegexChecker):
             if classification_key in CoverityClassificationChecker.SEVERITY_MAP:
                 checker = CoverityClassificationChecker(classification=classification_key, verbose=self.verbose)
                 if maximum := checker_config.get("max", 0):
-                    checker.maximum = int(maximum, 0)
+                    checker.maximum = int(maximum)
                 if minimum := checker_config.get("min", 0):
-                    checker.minimum = int(minimum, 0)
+                    checker.minimum = int(minimum)
                 checker.cq_findings = self.cq_findings  # share object with sub-checkers
                 self.checkers[classification_key] = checker
             else:
