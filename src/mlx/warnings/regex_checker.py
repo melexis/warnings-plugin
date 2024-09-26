@@ -185,14 +185,14 @@ class CoverityChecker(RegexChecker):
             self.cq_default_path = value
         if value := config.pop("exclude", None):
             self.add_patterns(value, self.exclude_patterns)
-        for classification in config:
+        for classification, checker_config in config.items():
             classification_key = classification.lower().replace("_", " ")
             if classification_key in CoverityClassificationChecker.SEVERITY_MAP:
                 checker = CoverityClassificationChecker(classification=classification_key, verbose=self.verbose)
-                if maximum := config[classification].get("max", 0):
-                    checker.maximum = int(maximum)
-                if minimum := config[classification].get("min", 0):
-                    checker.minimum = int(minimum)
+                if maximum := checker_config.get("max", 0):
+                    checker.maximum = int(maximum, 0)
+                if minimum := checker_config.get("min", 0):
+                    checker.minimum = int(minimum, 0)
                 checker.cq_findings = self.cq_findings  # share object with sub-checkers
                 self.checkers[classification_key] = checker
             else:
