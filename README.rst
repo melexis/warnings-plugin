@@ -184,7 +184,7 @@ command:
 Parse for Coverity Defects
 --------------------------
 
-Coverity is a static analysis tool which has option to run desktop analysis
+Coverity is a static analysis tool that includes a CLI tool to run desktop analysis
 on your local changes and report the results back directly in the console.
 You only need to list affected files and below example lists changed files
 between your branch and master, which it then forwards to ``cov-run-desktop``:
@@ -193,8 +193,8 @@ between your branch and master, which it then forwards to ``cov-run-desktop``:
 
     cov-run-desktop --text-output-style=oneline `git diff --name-only --ignore-submodules master`
 
-You can pipe the results to logfile, which you pass to warnings-plugin, or you use
-the ``--command`` argument and execute the ``cov-run-desktop`` through
+You can either pipe the results to a log file and pass it to the warnings-plugin, or you can use
+the ``--command`` argument to let the plugin invoke ``cov-run-desktop``.
 
 .. code-block:: bash
 
@@ -211,48 +211,49 @@ the ``--command`` argument and execute the ``cov-run-desktop`` through
     python -m mlx.warnings --coverity --command <commandforcoverity>
 
 
-We utilize `cov-run-desktop` in the following manner, where the output is saved in `coverity.log`:
+The command below demonstrates how we utilize `cov-run-desktop`:
 
 .. code-block:: bash
 
-    cov-run-desktop --text-output-style=oneline --exit1-if-defects false --triage-attribute-regex "classification" ".*" <coverity_files> | tee coverity.log
+    cov-run-desktop --text-output-style=oneline --exit1-if-defects false --triage-attribute-regex "classification" ".*" <coverity_files> | tee raw_defects.log
 
-Subsequently, we process the `coverity.log` file with the mlx-warnings plugin.
-The plugin uses a configuration file (`warnings_coverity.yml`) and produces two outputs:
-a text file (`warnings_coverity.txt`) and a code quality JSON file (`coverity_code_quality.json`).
+Then, the mlx-warnings plugin processes the output log file, `raw_defects.log`, based on the configuration file
+`warnings_coverity.yml` to produces three outputs:
+
+- A text file called `warnings_coverity.txt`, which contains all Coverity defe.
+- A code quality JSON file `coverity_code_quality.json`.
+- A return code equal to the amount of violations, i.e. the amount of Coverity defects that exceeds the configured
+  limit(s). The value is 0 if the amount of Coverity defects is within limits. We use this return code to determine
+  whether our CI job passes or fails.
 
 .. code-block:: bash
 
-    mlx-warnings --config warnings_coverity.yml -o warnings_coverity.txt -C coverity_code_quality.json coverity.log
+    mlx-warnings --config config.yml --output counted_defects.txt --code-quality report.json raw_defects.log
 
-This is an example of the configuration file:
+Below is an example configuration for the Coverity checker:
 
 .. code-block:: yaml
 
-    sphinx:
-        enabled: false
-    doxygen:
-        enabled: false
-    junit:
-        enabled: false
-    xmlrunner:
-        enabled: false
     coverity:
         enabled: true
-        intentional:
-            max: -1
-        bug:
-            max: 0
+        unclassified:
+          max: 0
         pending:
-            max: 0
+          max: 0
         false_positive:
-            max: -1
-    robot:
-        enabled: false
-    polyspace:
-        enabled: false
+          max: -1
+        intentional:
+          max: -1
+        bug:
+          min: 2
+          max: 2
 
-For each classification, a minimum and maximum can be given.
+As you can see, we have configured limits for 5 out of 5 Coverity Classifications. You can configure a minimum and a
+maximum limit for the number of allowed Coverity defects the belong the the Classification.
+The default value for both limits is 0.
+A value of `-1` for `max` corresponds to effectively no limit (an infinite amount).
+If one or more Classifications are not present in your configuration, the corresponding defects will be ignored
+completely.
 
 .. note::
     The warnings-plugin counts only one warning if there are multiple warnings for the same CID.
