@@ -187,11 +187,11 @@ Parse for Coverity Defects
 Coverity is a static analysis tool that includes a CLI tool to run desktop analysis
 on your local changes and report the results back directly in the console.
 You only need to list affected files and below example lists changed files
-between your branch and master, which it then forwards to ``cov-run-desktop``:
+between your source and target branch, e.g. 'main', which it then forwards to ``cov-run-desktop``:
 
 .. code-block:: bash
 
-    cov-run-desktop --text-output-style=oneline `git diff --name-only --ignore-submodules master`
+    cov-run-desktop --text-output-style=oneline `git diff --name-only --ignore-submodules main`
 
 You can either pipe the results to a log file and pass it to the warnings-plugin, or you can use
 the ``--command`` argument to let the plugin invoke ``cov-run-desktop``.
@@ -217,14 +217,13 @@ The command below demonstrates how we utilize `cov-run-desktop`:
 
     cov-run-desktop --text-output-style=oneline --exit1-if-defects false --triage-attribute-regex "classification" ".*" <coverity_files> | tee raw_defects.log
 
-Then, the mlx-warnings plugin processes the output log file, `raw_defects.log`, based on the configuration file
-`warnings_coverity.yml` to produces three outputs:
+Then, the mlx-warnings plugin processes the output log file, `raw_defects.log`, based on the optional configuration file
+`config.yml` to produces three outputs:
 
-- A text file called `warnings_coverity.txt`, which contains all Coverity defe.
-- A code quality JSON file `coverity_code_quality.json`.
-- A return code equal to the amount of violations, i.e. the amount of Coverity defects that exceeds the configured
-  limit(s). The value is 0 if the amount of Coverity defects is within limits. We use this return code to determine
-  whether our CI job passes or fails.
+- A text file that contains all counted Coverity defects.
+- `A Code Quality report`_ `report.json` that contains all counted Coverity defects.
+- A return code equal to the amount of counted Coverity defects. The value is 0 if the amount of Coverity defects is
+  within limits. We use this return code to determine whether our CI job passes or fails.
 
 .. code-block:: bash
 
@@ -240,20 +239,21 @@ Below is an example configuration for the Coverity checker:
           max: 0
         pending:
           max: 0
+        bug:
+          min: 2
+          max: 2
         false_positive:
           max: -1
         intentional:
           max: -1
-        bug:
-          min: 2
-          max: 2
 
 As you can see, we have configured limits for 5 out of 5 Coverity Classifications. You can configure a minimum and a
-maximum limit for the number of allowed Coverity defects the belong the the Classification.
+maximum limit for the number of allowed Coverity defects that belong to the Classification.
 The default value for both limits is 0.
 A value of `-1` for `max` corresponds to effectively no limit (an infinite amount).
-If one or more Classifications are not present in your configuration, the corresponding defects will be ignored
-completely.
+If one or more Classifications are missing from your configuration, the Coverity defects are counted and 0 are
+allowed. To ignore certain classifications, modify the value for
+`cov-run-desktop --triage-attribute-regex "classification"`.
 
 .. note::
     The warnings-plugin counts only one warning if there are multiple warnings for the same CID.
