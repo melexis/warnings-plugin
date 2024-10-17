@@ -10,6 +10,7 @@ from mlx.warnings import WarningsPlugin, warnings_wrapper
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
 TEST_OUT_DIR = Path(__file__).parent / 'test_out'
 
+
 class TestCoverityWarnings(TestCase):
     def setUp(self):
         self.warnings = WarningsPlugin(verbose=True)
