@@ -111,7 +111,7 @@ class CoverityChecker(RegexChecker):
 
     @property
     def counted_warnings(self):
-        ''' List: list of counted warnings (str) '''
+        ''' List[str]: list of counted warnings'''
         all_counted_warnings = []
         for checker in self.checkers.values():
             all_counted_warnings.extend(checker.counted_warnings)

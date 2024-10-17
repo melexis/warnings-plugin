@@ -56,7 +56,7 @@ class WarningsChecker:
 
     @property
     def counted_warnings(self):
-        ''' List: list of counted warnings (str) '''
+        ''' List[str]: list of counted warnings'''
         return self._counted_warnings
 
     @property
