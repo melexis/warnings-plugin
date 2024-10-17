@@ -1,10 +1,14 @@
 from io import StringIO
 from unittest import TestCase
+from pathlib import Path
+import filecmp
 
 from unittest.mock import patch
 
-from mlx.warnings import WarningsPlugin
+from mlx.warnings import WarningsPlugin, warnings_wrapper
 
+TEST_IN_DIR = Path(__file__).parent / 'test_in'
+TEST_OUT_DIR = Path(__file__).parent / 'test_out'
 
 class TestCoverityWarnings(TestCase):
     def setUp(self):
@@ -47,3 +51,27 @@ class TestCoverityWarnings(TestCase):
             self.warnings.check(dut3)
         self.assertEqual(self.warnings.return_count(), 1)
         self.assertIn(dut2, fake_out.getvalue())
+
+    def test_code_quality_without_config(self):
+        filename = 'coverity_cq.json'
+        out_file = str(TEST_OUT_DIR / filename)
+        ref_file = str(TEST_IN_DIR / filename)
+        retval = warnings_wrapper([
+            '--coverity',
+            '--code-quality', out_file,
+            str(TEST_IN_DIR / 'defects.txt'),
+        ])
+        self.assertEqual(8, retval)
+        self.assertTrue(filecmp.cmp(out_file, ref_file))
+
+    def test_code_quality_with_config(self):
+        filename = 'coverity_cq.json'
+        out_file = str(TEST_OUT_DIR / filename)
+        ref_file = str(TEST_IN_DIR / filename)
+        retval = warnings_wrapper([
+            '--code-quality', out_file,
+            '--config', str(TEST_IN_DIR / 'config_example_coverity.yml'),
+            str(TEST_IN_DIR / 'defects.txt'),
+        ])
+        self.assertEqual(3, retval)
+        self.assertTrue(filecmp.cmp(out_file, ref_file))

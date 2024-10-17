@@ -1,0 +1,8 @@
+some/path/dummy_int.h:150:16: CID 417642 (#1 of 1): MISRA C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory): Intentional, Minor, Ignore, owner is Unassigned, defect only exists locally.
+some/path/dummy_int.h:164:16: CID 417639 (#1 of 1): MISRA C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory): Intentional, Minor, Ignore, owner is Unassigned, defect only exists locally.
+some/path/dummy_int.h:34:12: CID 264736 (#1 of 1): MISRA C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory): Intentional, Minor, Ignore, owner is Unassigned, defect only exists locally.
+some/path/dummy_fp.c:367:13: CID 423570 (#1 of 1): Out-of-bounds write (OVERRUN): False Positive, Minor, Ignore, owner is sfo, defect only exists locally.
+some/path/dummy_fp.c:367:13: CID 423568 (#1 of 1): MISRA C-2012 Pointers and Arrays (MISRA C-2012 Rule 18.1, Required): False Positive, Minor, Ignore, owner is sfo, defect only exists locally.
+some/path/dummy_uncl.h:194:14: CID 431350 (#1 of 1): MISRA C-2012 Declarations and Definitions (MISRA C-2012 Rule 8.5, Required): Unclassified, Unspecified, Undecided, owner is Unassigned, defect only exists locally.
+some/path/dummy_uncl.c:1404:14: CID 431349 (#1 of 1): MISRA C-2012 Declarations and Definitions (MISRA C-2012 Rule 8.6, Required): Unclassified, Unspecified, Undecided, owner is Unassigned, defect only exists locally.
+some/path/dummy_uncl.c:923:13: CID 431348 (#1 of 1): MISRA C-2012 Identifiers (MISRA C-2012 Rule 5.8, Required): Unclassified, Unspecified, Undecided, owner is Unassigned, defect only exists locally.

@@ -1,0 +1,24 @@
+coverity:
+  enabled: true
+  intentional:
+    min: 0
+    max: -1
+  bug:
+    max: 0
+  pending:
+    min: 0
+    max: 0
+  false_positive:
+    max: -1
+sphinx:
+  enabled: false
+doxygen:
+  enabled: false
+junit:
+  enabled: false
+xmlrunner:
+  enabled: false
+robot:
+  enabled: false
+polyspace:
+  enabled: false
