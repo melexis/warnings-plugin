@@ -18,6 +18,13 @@ class PolyspaceChecker(WarningsChecker):
         self._cq_description_template = Template('Polyspace: $check')
 
     @property
+    def cq_findings(self):
+        ''' List[dict]: list of code quality findings'''
+        for checker in self.checkers:
+            self._cq_findings.extend(checker.cq_findings)
+        return self._cq_findings
+
+    @property
     def counted_warnings(self):
         ''' List: list of counted warnings (str) '''
         all_counted_warnings = []
@@ -146,7 +153,6 @@ class PolyspaceChecker(WarningsChecker):
                     check_value = value.lower()
                     checker = PolyspaceFamilyChecker(family_value, column_name, check_value, verbose=self.verbose)
                     checker.parse_config(check)
-                    checker.cq_findings = self.cq_findings  # share object with sub-checkers
                     self.checkers.append(checker)
                 if not (column_name and check_value):
                     raise ValueError(
