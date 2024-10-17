@@ -150,14 +150,14 @@ command:
     # command line log file
     mlx-warnings doc_log.txt --sphinx
     # command line command execution
-    mlx-warnings --sphinx --command <commandforsphinx>
+    mlx-warnings --sphinx --command <command-for-sphinx>
 
     # explicitly as python module for log file
     python3 -m mlx.warnings --sphinx doc_log.txt
     python -m mlx.warnings --sphinx doc_log.txt
     # explicitly as python module
-    python3 -m mlx.warnings --sphinx --command <commandforsphinx>
-    python -m mlx.warnings --sphinx --command <commandforsphinx>
+    python3 -m mlx.warnings --sphinx --command <command-for-sphinx>
+    python -m mlx.warnings --sphinx --command <command-for-sphinx>
 
 
 Parse for Doxygen Warnings
@@ -171,14 +171,14 @@ command:
     # command line log file
     mlx-warnings doc_log.txt --doxygen
     # command line command execution
-    mlx-warnings --doxygen --command <commandfordoxygen>
+    mlx-warnings --doxygen --command <command-for-doxygen>
 
     # explicitly as python module for log file
     python3 -m mlx.warnings --doxygen doc_log.txt
     python -m mlx.warnings --doxygen doc_log.txt
     # explicitly as python module
-    python3 -m mlx.warnings --doxygen --command <commandfordoxygen>
-    python -m mlx.warnings --doxygen --command <commandfordoxygen>
+    python3 -m mlx.warnings --doxygen --command <command-for-doxygen>
+    python -m mlx.warnings --doxygen --command <command-for-doxygen>
 
 
 Parse for Coverity Defects
@@ -201,14 +201,14 @@ the ``--command`` argument to let the plugin invoke ``cov-run-desktop``.
     # command line log file
     mlx-warnings --coverity cov-run-desktop-output.txt
     # command line command execution
-    mlx-warnings --coverity --command <commandforcoverity>
+    mlx-warnings --coverity --command <command-for-coverity>
 
     # explicitly as python module for log file
     python3 -m mlx.warnings --coverity cov-run-desktop-output.txt
     python -m mlx.warnings --coverity cov-run-desktop-output.txt
     # explicitly as python module
-    python3 -m mlx.warnings --coverity --command <commandforcoverity>
-    python -m mlx.warnings --coverity --command <commandforcoverity>
+    python3 -m mlx.warnings --coverity --command <command-for-coverity>
+    python -m mlx.warnings --coverity --command <command-for-coverity>
 
 
 The command below demonstrates how we utilize `cov-run-desktop`:
@@ -269,14 +269,14 @@ command:
     # command line log file
     mlx-warnings junit_output.xml --junit
     # command line command execution
-    mlx-warnings --junit --command <commandforjunit>
+    mlx-warnings --junit --command <command-for-junit>
 
     # explicitly as python module for log file
     python3 -m mlx.warnings --junit junit_output.xml
     python -m mlx.warnings --junit junit_output.xml
     # explicitly as python module
-    python3 -m mlx.warnings --junit --command <commandforjunit>
-    python -m mlx.warnings --junit --command <commandforjunit>
+    python3 -m mlx.warnings --junit --command <command-for-junit>
+    python -m mlx.warnings --junit --command <command-for-junit>
 
 
 Parse for XMLRunner Errors
@@ -293,14 +293,14 @@ with command:
     # command line log file
     mlx-warnings xmlrunner_log.txt --xmlrunner
     # command line command execution
-    mlx-warnings --xmlrunner --command <commandforxmlrunner>
+    mlx-warnings --xmlrunner --command <command-for-xmlrunner>
 
     # explicitly as python module for log file
     python3 -m mlx.warnings --xmlrunner xmlrunner_log.txt
     python -m mlx.warnings --xmlrunner xmlrunner_log.txt
     # explicitly as python module
-    python3 -m mlx.warnings --xmlrunner --command <commandforxmlrunner>
-    python -m mlx.warnings --xmlrunner --command <commandforxmlrunner>
+    python3 -m mlx.warnings --xmlrunner --command <command-for-xmlrunner>
+    python -m mlx.warnings --xmlrunner --command <command-for-xmlrunner>
 
 .. _XMLRunner: https://github.com/xmlrunner/unittest-xml-reporting
 
@@ -492,7 +492,7 @@ path to configuration file
     # command line log file
     mlx-warnings --config path/to/config.json junit_output.xml
     # command line command execution
-    mlx-warnings --config path/to/config.json --command <commandforjunit>
+    mlx-warnings --config path/to/config.json --command <command-for-junit>
 
 
 -------------
