@@ -219,6 +219,7 @@ class WarningsPlugin:
         Args:
             out_file (str): Location for the output file
         '''
+        Path(out_file).parent.mkdir(parents=True, exist_ok=True)
         with open(out_file, 'w', encoding='utf-8', newline='\n') as open_file:
             for checker in self.activated_checkers.values():
                 open_file.write("\n".join(checker.counted_warnings) + "\n")
@@ -233,6 +234,8 @@ class WarningsPlugin:
         for checker in self.activated_checkers.values():
             results.extend(checker.cq_findings)
         content = json.dumps(results, indent=4, sort_keys=False)
+
+        Path(out_file).parent.mkdir(parents=True, exist_ok=True)
         with open(out_file, 'w', encoding='utf-8', newline='\n') as open_file:
             open_file.write(f"{content}\n")
 
