@@ -111,11 +111,18 @@ class CoverityChecker(RegexChecker):
 
     @property
     def counted_warnings(self):
-        ''' List: list of counted warnings (str) '''
+        ''' List[str]: list of counted warnings'''
         all_counted_warnings = []
         for checker in self.checkers.values():
             all_counted_warnings.extend(checker.counted_warnings)
         return all_counted_warnings
+
+    @property
+    def cq_findings(self):
+        ''' List[dict]: list of code quality findings'''
+        for checker in self.checkers.values():
+            self._cq_findings.extend(checker.cq_findings)
+        return self._cq_findings
 
     @property
     def cq_description_template(self):
@@ -193,7 +200,6 @@ class CoverityChecker(RegexChecker):
                     checker.maximum = int(maximum)
                 if minimum := checker_config.get("min", 0):
                     checker.minimum = int(minimum)
-                checker.cq_findings = self.cq_findings  # share object with sub-checkers
                 self.checkers[classification_key] = checker
             else:
                 print(f"WARNING: Unrecognized classification {classification!r}")

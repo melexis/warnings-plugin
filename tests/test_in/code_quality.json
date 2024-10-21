@@ -75,5 +75,33 @@
         },
         "description": "test_some_error_test (something.anything.somewhere)'",
         "fingerprint": "cd09ae46ee5361570fd59de78b454e11"
+    },
+    {
+        "severity": "major",
+        "location": {
+            "path": "src/somefile.c",
+            "positions": {
+                "begin": {
+                    "line": 82,
+                    "column": 1
+                }
+            }
+        },
+        "description": "Coverity: Coding standard violation (MISRA C-2012 Rule 10.1)",
+        "fingerprint": "2cfae17932f3385c6c745d75606871c7"
+    },
+    {
+        "severity": "major",
+        "location": {
+            "path": "src/somefile.c",
+            "positions": {
+                "begin": {
+                    "line": 82,
+                    "column": 1
+                }
+            }
+        },
+        "description": "Coverity: Coding standard violation (MISRA C-2012 Rule 10.1)",
+        "fingerprint": "53754fd4b92326dc35bee26e774c9df3"
     }
 ]

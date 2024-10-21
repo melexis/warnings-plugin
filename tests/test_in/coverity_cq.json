@@ -1,0 +1,114 @@
+[
+    {
+        "severity": "info",
+        "location": {
+            "path": "some/path/dummy_int.h",
+            "positions": {
+                "begin": {
+                    "line": 150,
+                    "column": 16
+                }
+            }
+        },
+        "description": "Coverity: MISRA C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory)",
+        "fingerprint": "26ce9a2e6eb1a2186f10995b6261e7ef"
+    },
+    {
+        "severity": "info",
+        "location": {
+            "path": "some/path/dummy_int.h",
+            "positions": {
+                "begin": {
+                    "line": 164,
+                    "column": 16
+                }
+            }
+        },
+        "description": "Coverity: MISRA C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory)",
+        "fingerprint": "a007582ec0592332f1db4626436aef22"
+    },
+    {
+        "severity": "info",
+        "location": {
+            "path": "some/path/dummy_int.h",
+            "positions": {
+                "begin": {
+                    "line": 34,
+                    "column": 12
+                }
+            }
+        },
+        "description": "Coverity: MISRA C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory)",
+        "fingerprint": "483e97b9e911d1091876456f0e05136a"
+    },
+    {
+        "severity": "info",
+        "location": {
+            "path": "some/path/dummy_fp.c",
+            "positions": {
+                "begin": {
+                    "line": 367,
+                    "column": 13
+                }
+            }
+        },
+        "description": "Coverity: Out-of-bounds write (OVERRUN)",
+        "fingerprint": "d95a012dc6fca902fe73142c81846152"
+    },
+    {
+        "severity": "info",
+        "location": {
+            "path": "some/path/dummy_fp.c",
+            "positions": {
+                "begin": {
+                    "line": 367,
+                    "column": 13
+                }
+            }
+        },
+        "description": "Coverity: MISRA C-2012 Pointers and Arrays (MISRA C-2012 Rule 18.1, Required)",
+        "fingerprint": "40317d6bdf17c682f9fbc356209da168"
+    },
+    {
+        "severity": "major",
+        "location": {
+            "path": "some/path/dummy_uncl.h",
+            "positions": {
+                "begin": {
+                    "line": 194,
+                    "column": 14
+                }
+            }
+        },
+        "description": "Coverity: MISRA C-2012 Declarations and Definitions (MISRA C-2012 Rule 8.5, Required)",
+        "fingerprint": "48e27cc7f6eef3c6e4f305a4613491ff"
+    },
+    {
+        "severity": "major",
+        "location": {
+            "path": "some/path/dummy_uncl.c",
+            "positions": {
+                "begin": {
+                    "line": 1404,
+                    "column": 14
+                }
+            }
+        },
+        "description": "Coverity: MISRA C-2012 Declarations and Definitions (MISRA C-2012 Rule 8.6, Required)",
+        "fingerprint": "580c5e4df217d18403c7e53b9b1d21a7"
+    },
+    {
+        "severity": "major",
+        "location": {
+            "path": "some/path/dummy_uncl.c",
+            "positions": {
+                "begin": {
+                    "line": 923,
+                    "column": 13
+                }
+            }
+        },
+        "description": "Coverity: MISRA C-2012 Identifiers (MISRA C-2012 Rule 5.8, Required)",
+        "fingerprint": "199398cb40462913b6da4b7ab00ca19d"
+    }
+]

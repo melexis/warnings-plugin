@@ -42,7 +42,7 @@ class WarningsChecker:
         self._minimum = 0
         self._maximum = 0
         self._counted_warnings = []
-        self.cq_findings = []
+        self._cq_findings = []
         self.cq_enabled = False
         self.cq_default_path = '.gitlab-ci.yml'
         self._cq_description_template = Template('$description')
@@ -50,8 +50,13 @@ class WarningsChecker:
         self.include_patterns = []
 
     @property
+    def cq_findings(self):
+        ''' List[dict]: list of code quality findings'''
+        return self._cq_findings
+
+    @property
     def counted_warnings(self):
-        ''' List: list of counted warnings (str) '''
+        ''' List[str]: list of counted warnings'''
         return self._counted_warnings
 
     @property
