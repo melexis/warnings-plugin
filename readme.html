@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Command Line Warnings Plugin &#8212; warning-plugin 5.5.0 documentation</title>
+    <title>Command Line Warnings Plugin &#8212; warning-plugin 5.5.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pydoctheme.css" />
     
@@ -33,7 +33,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="index.html">warning-plugin-5.5.0</a> &#187;</li> 
+        <li><a href="index.html">warning-plugin-5.5.1</a> &#187;</li> 
       </ul>
     </div>
     
@@ -137,14 +137,14 @@ command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># command line log file</span>
 mlx-warnings<span class="w"> </span>doc_log.txt<span class="w"> </span>--sphinx
 <span class="c1"># command line command execution</span>
-mlx-warnings<span class="w"> </span>--sphinx<span class="w"> </span>--command<span class="w"> </span>&lt;commandforsphinx&gt;
+mlx-warnings<span class="w"> </span>--sphinx<span class="w"> </span>--command<span class="w"> </span>&lt;command-for-sphinx&gt;
 
 <span class="c1"># explicitly as python module for log file</span>
 python3<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--sphinx<span class="w"> </span>doc_log.txt
 python<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--sphinx<span class="w"> </span>doc_log.txt
 <span class="c1"># explicitly as python module</span>
-python3<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--sphinx<span class="w"> </span>--command<span class="w"> </span>&lt;commandforsphinx&gt;
-python<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--sphinx<span class="w"> </span>--command<span class="w"> </span>&lt;commandforsphinx&gt;
+python3<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--sphinx<span class="w"> </span>--command<span class="w"> </span>&lt;command-for-sphinx&gt;
+python<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--sphinx<span class="w"> </span>--command<span class="w"> </span>&lt;command-for-sphinx&gt;
 </pre></div>
 </div>
 </section>
@@ -155,77 +155,79 @@ command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># command line log file</span>
 mlx-warnings<span class="w"> </span>doc_log.txt<span class="w"> </span>--doxygen
 <span class="c1"># command line command execution</span>
-mlx-warnings<span class="w"> </span>--doxygen<span class="w"> </span>--command<span class="w"> </span>&lt;commandfordoxygen&gt;
+mlx-warnings<span class="w"> </span>--doxygen<span class="w"> </span>--command<span class="w"> </span>&lt;command-for-doxygen&gt;
 
 <span class="c1"># explicitly as python module for log file</span>
 python3<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--doxygen<span class="w"> </span>doc_log.txt
 python<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--doxygen<span class="w"> </span>doc_log.txt
 <span class="c1"># explicitly as python module</span>
-python3<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--doxygen<span class="w"> </span>--command<span class="w"> </span>&lt;commandfordoxygen&gt;
-python<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--doxygen<span class="w"> </span>--command<span class="w"> </span>&lt;commandfordoxygen&gt;
+python3<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--doxygen<span class="w"> </span>--command<span class="w"> </span>&lt;command-for-doxygen&gt;
+python<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--doxygen<span class="w"> </span>--command<span class="w"> </span>&lt;command-for-doxygen&gt;
 </pre></div>
 </div>
 </section>
 <section id="parse-for-coverity-defects">
 <h3>Parse for Coverity Defects<a class="headerlink" href="#parse-for-coverity-defects" title="Permalink to this heading">¶</a></h3>
-<p>Coverity is a static analysis tool which has option to run desktop analysis
+<p>Coverity is a static analysis tool that includes a CLI tool to run desktop analysis
 on your local changes and report the results back directly in the console.
 You only need to list affected files and below example lists changed files
-between your branch and master, which it then forwards to <code class="docutils literal notranslate"><span class="pre">cov-run-desktop</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cov-run-desktop<span class="w"> </span>--text-output-style<span class="o">=</span>oneline<span class="w"> </span><span class="sb">`</span>git<span class="w"> </span>diff<span class="w"> </span>--name-only<span class="w"> </span>--ignore-submodules<span class="w"> </span>master<span class="sb">`</span>
+between your source and target branch, e.g. ‘main’, which it then forwards to <code class="docutils literal notranslate"><span class="pre">cov-run-desktop</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cov-run-desktop<span class="w"> </span>--text-output-style<span class="o">=</span>oneline<span class="w"> </span><span class="sb">`</span>git<span class="w"> </span>diff<span class="w"> </span>--name-only<span class="w"> </span>--ignore-submodules<span class="w"> </span>main<span class="sb">`</span>
 </pre></div>
 </div>
-<p>You can pipe the results to logfile, which you pass to warnings-plugin, or you use
-the <code class="docutils literal notranslate"><span class="pre">--command</span></code> argument and execute the <code class="docutils literal notranslate"><span class="pre">cov-run-desktop</span></code> through</p>
+<p>You can either pipe the results to a log file and pass it to the warnings-plugin, or you can use
+the <code class="docutils literal notranslate"><span class="pre">--command</span></code> argument to let the plugin invoke <code class="docutils literal notranslate"><span class="pre">cov-run-desktop</span></code>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># command line log file</span>
 mlx-warnings<span class="w"> </span>--coverity<span class="w"> </span>cov-run-desktop-output.txt
 <span class="c1"># command line command execution</span>
-mlx-warnings<span class="w"> </span>--coverity<span class="w"> </span>--command<span class="w"> </span>&lt;commandforcoverity&gt;
+mlx-warnings<span class="w"> </span>--coverity<span class="w"> </span>--command<span class="w"> </span>&lt;command-for-coverity&gt;
 
 <span class="c1"># explicitly as python module for log file</span>
 python3<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--coverity<span class="w"> </span>cov-run-desktop-output.txt
 python<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--coverity<span class="w"> </span>cov-run-desktop-output.txt
 <span class="c1"># explicitly as python module</span>
-python3<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--coverity<span class="w"> </span>--command<span class="w"> </span>&lt;commandforcoverity&gt;
-python<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--coverity<span class="w"> </span>--command<span class="w"> </span>&lt;commandforcoverity&gt;
+python3<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--coverity<span class="w"> </span>--command<span class="w"> </span>&lt;command-for-coverity&gt;
+python<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--coverity<span class="w"> </span>--command<span class="w"> </span>&lt;command-for-coverity&gt;
 </pre></div>
 </div>
-<p>We utilize <cite>cov-run-desktop</cite> in the following manner, where the output is saved in <cite>coverity.log</cite>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cov-run-desktop<span class="w"> </span>--text-output-style<span class="o">=</span>oneline<span class="w"> </span>--exit1-if-defects<span class="w"> </span><span class="nb">false</span><span class="w"> </span>--triage-attribute-regex<span class="w"> </span><span class="s2">&quot;classification&quot;</span><span class="w"> </span><span class="s2">&quot;.*&quot;</span><span class="w"> </span>&lt;coverity_files&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>coverity.log
+<p>The command below demonstrates how we utilize <cite>cov-run-desktop</cite>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cov-run-desktop<span class="w"> </span>--text-output-style<span class="o">=</span>oneline<span class="w"> </span>--exit1-if-defects<span class="w"> </span><span class="nb">false</span><span class="w"> </span>--triage-attribute-regex<span class="w"> </span><span class="s2">&quot;classification&quot;</span><span class="w"> </span><span class="s2">&quot;.*&quot;</span><span class="w"> </span>&lt;coverity_files&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>raw_defects.log
 </pre></div>
 </div>
-<p>Subsequently, we process the <cite>coverity.log</cite> file with the mlx-warnings plugin.
-The plugin uses a configuration file (<cite>warnings_coverity.yml</cite>) and produces two outputs:
-a text file (<cite>warnings_coverity.txt</cite>) and a code quality JSON file (<cite>coverity_code_quality.json</cite>).</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mlx-warnings<span class="w"> </span>--config<span class="w"> </span>warnings_coverity.yml<span class="w"> </span>-o<span class="w"> </span>warnings_coverity.txt<span class="w"> </span>-C<span class="w"> </span>coverity_code_quality.json<span class="w"> </span>coverity.log
+<p>Then, the mlx-warnings plugin processes the output log file, <cite>raw_defects.log</cite>, based on the optional configuration file
+<cite>config.yml</cite> to produce three outputs:</p>
+<ul class="simple">
+<li><p>A text file that contains all counted Coverity defects.</p></li>
+<li><p><a class="reference external" href="https://docs.gitlab.com/ee/ci/testing/code_quality.html">A Code Quality report</a> <cite>report.json</cite> that contains all counted Coverity defects.</p></li>
+<li><p>A return code equal to the amount of counted Coverity defects. The value is 0 if the amount of Coverity defects is
+within limits. We use this return code to determine whether our CI job passes or fails.</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mlx-warnings<span class="w"> </span>--config<span class="w"> </span>config.yml<span class="w"> </span>--output<span class="w"> </span>counted_defects.txt<span class="w"> </span>--code-quality<span class="w"> </span>report.json<span class="w"> </span>raw_defects.log
 </pre></div>
 </div>
-<p>This is an example of the configuration file:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sphinx</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="nt">doxygen</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="nt">junit</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="nt">xmlrunner</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="nt">coverity</span><span class="p">:</span>
+<p>Below is an example configuration for the Coverity checker:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">coverity</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">    </span><span class="nt">intentional</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span>
-<span class="w">    </span><span class="nt">bug</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">    </span><span class="nt">unclassified</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
 <span class="w">    </span><span class="nt">pending</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">      </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">    </span><span class="nt">bug</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">      </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
 <span class="w">    </span><span class="nt">false_positive</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span>
-<span class="nt">robot</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="nt">polyspace</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">      </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span>
+<span class="w">    </span><span class="nt">intentional</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span>
 </pre></div>
 </div>
-<p>For each classification, a minimum and maximum can be given.</p>
+<p>As you can see, we have configured limits for 5 out of 5 Coverity Classifications. You can configure a minimum and a
+maximum limit for the number of allowed Coverity defects that belong to the Classification.
+The default value for both limits is 0.
+A value of <cite>-1</cite> for <cite>max</cite> corresponds to effectively no limit (an infinite amount).
+If one or more Classifications are missing from your configuration, the Coverity defects are counted and 0 are
+allowed. To ignore certain classifications, modify the value for
+<cite>cov-run-desktop –triage-attribute-regex “classification”</cite>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The warnings-plugin counts only one warning if there are multiple warnings for the same CID.</p>
@@ -238,14 +240,14 @@ command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># command line log file</span>
 mlx-warnings<span class="w"> </span>junit_output.xml<span class="w"> </span>--junit
 <span class="c1"># command line command execution</span>
-mlx-warnings<span class="w"> </span>--junit<span class="w"> </span>--command<span class="w"> </span>&lt;commandforjunit&gt;
+mlx-warnings<span class="w"> </span>--junit<span class="w"> </span>--command<span class="w"> </span>&lt;command-for-junit&gt;
 
 <span class="c1"># explicitly as python module for log file</span>
 python3<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--junit<span class="w"> </span>junit_output.xml
 python<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--junit<span class="w"> </span>junit_output.xml
 <span class="c1"># explicitly as python module</span>
-python3<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--junit<span class="w"> </span>--command<span class="w"> </span>&lt;commandforjunit&gt;
-python<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--junit<span class="w"> </span>--command<span class="w"> </span>&lt;commandforjunit&gt;
+python3<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--junit<span class="w"> </span>--command<span class="w"> </span>&lt;command-for-junit&gt;
+python<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--junit<span class="w"> </span>--command<span class="w"> </span>&lt;command-for-junit&gt;
 </pre></div>
 </div>
 </section>
@@ -259,14 +261,14 @@ with command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># command line log file</span>
 mlx-warnings<span class="w"> </span>xmlrunner_log.txt<span class="w"> </span>--xmlrunner
 <span class="c1"># command line command execution</span>
-mlx-warnings<span class="w"> </span>--xmlrunner<span class="w"> </span>--command<span class="w"> </span>&lt;commandforxmlrunner&gt;
+mlx-warnings<span class="w"> </span>--xmlrunner<span class="w"> </span>--command<span class="w"> </span>&lt;command-for-xmlrunner&gt;
 
 <span class="c1"># explicitly as python module for log file</span>
 python3<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--xmlrunner<span class="w"> </span>xmlrunner_log.txt
 python<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--xmlrunner<span class="w"> </span>xmlrunner_log.txt
 <span class="c1"># explicitly as python module</span>
-python3<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--xmlrunner<span class="w"> </span>--command<span class="w"> </span>&lt;commandforxmlrunner&gt;
-python<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--xmlrunner<span class="w"> </span>--command<span class="w"> </span>&lt;commandforxmlrunner&gt;
+python3<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--xmlrunner<span class="w"> </span>--command<span class="w"> </span>&lt;command-for-xmlrunner&gt;
+python<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class="w"> </span>--xmlrunner<span class="w"> </span>--command<span class="w"> </span>&lt;command-for-xmlrunner&gt;
 </pre></div>
 </div>
 </section>
@@ -431,7 +433,7 @@ path to configuration file</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># command line log file</span>
 mlx-warnings<span class="w"> </span>--config<span class="w"> </span>path/to/config.json<span class="w"> </span>junit_output.xml
 <span class="c1"># command line command execution</span>
-mlx-warnings<span class="w"> </span>--config<span class="w"> </span>path/to/config.json<span class="w"> </span>--command<span class="w"> </span>&lt;commandforjunit&gt;
+mlx-warnings<span class="w"> </span>--config<span class="w"> </span>path/to/config.json<span class="w"> </span>--command<span class="w"> </span>&lt;command-for-junit&gt;
 </pre></div>
 </div>
 </section>
@@ -500,7 +502,7 @@ may exist in the input file (or produced by the given command).</p>
 <section id="code-quality-report">
 <h3>Code Quality Report<a class="headerlink" href="#code-quality-report" title="Permalink to this heading">¶</a></h3>
 <p>Use <code class="docutils literal notranslate"><span class="pre">-C,</span> <span class="pre">--code-quality</span></code> to let the plugin generate <a class="reference external" href="https://docs.gitlab.com/ee/ci/testing/code_quality.html">a Code Quality report</a> for GitLab CI. All counted
-Sphinx, Doxygen, XMLRunner and Polyspace warnings/errors/failures will be included. Other checker types are not yet supported by this feature. The report is
+Sphinx, Doxygen, XMLRunner, Coverity and Polyspace warnings/errors/failures will be included. Other checker types are not yet supported by this feature. The report is
 a JSON file that implements <a class="reference external" href="https://docs.gitlab.com/ee/ci/testing/code_quality.html#implement-a-custom-tool">a subset of the Code Climate spec</a>. Define this file <a class="reference external" href="https://docs.gitlab.com/ee/ci/yaml/artifacts_reports.html#artifactsreportscodequality">as a codequality report artifact</a>
 of the CI job.</p>
 <p>If a warning doesn’t contain a path, <code class="docutils literal notranslate"><span class="pre">&quot;cq_default_path&quot;</span></code> from the <a class="reference internal" href="#configuration-file-to-pass-options">configuration file to pass options</a> will be used.
@@ -616,7 +618,7 @@ development of the plugin. We encourage anyone to contribute to our repository.<
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Sep 26, 2024.
+      Last updated on Oct 21, 2024.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>

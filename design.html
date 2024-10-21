@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Software Design &#8212; warning-plugin 5.5.0 documentation</title>
+    <title>Software Design &#8212; warning-plugin 5.5.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pydoctheme.css" />
     
@@ -33,7 +33,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="index.html">warning-plugin-5.5.0</a> &#187;</li> 
+        <li><a href="index.html">warning-plugin-5.5.1</a> &#187;</li> 
       </ul>
     </div>
     
@@ -238,10 +238,10 @@ output</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.CoverityChecker.counted_warnings">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">counted_warnings</span></span><a class="headerlink" href="#mlx.warnings.CoverityChecker.counted_warnings" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of counted warnings (str)</p>
+<dd><p>list of counted warnings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List</p>
+<dd class="field-odd"><p>List[str]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -253,6 +253,17 @@ output</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Template</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mlx.warnings.CoverityChecker.cq_findings">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cq_findings</span></span><a class="headerlink" href="#mlx.warnings.CoverityChecker.cq_findings" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of code quality findings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[dict]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -382,10 +393,10 @@ output</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.PolyspaceChecker.counted_warnings">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">counted_warnings</span></span><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.counted_warnings" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of counted warnings (str)</p>
+<dd><p>list of counted warnings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List</p>
+<dd class="field-odd"><p>List[str]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -397,6 +408,17 @@ output</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Template</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mlx.warnings.PolyspaceChecker.cq_findings">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cq_findings</span></span><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.cq_findings" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of code quality findings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[dict]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -559,10 +581,10 @@ Framework test suite</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.RobotChecker.counted_warnings">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">counted_warnings</span></span><a class="headerlink" href="#mlx.warnings.RobotChecker.counted_warnings" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of counted warnings (str)</p>
+<dd><p>list of counted warnings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List</p>
+<dd class="field-odd"><p>List[str]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -724,10 +746,10 @@ Framework test suite</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsChecker.counted_warnings">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">counted_warnings</span></span><a class="headerlink" href="#mlx.warnings.WarningsChecker.counted_warnings" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of counted warnings (str)</p>
+<dd><p>list of counted warnings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List</p>
+<dd class="field-odd"><p>List[str]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -739,6 +761,17 @@ Framework test suite</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Template</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mlx.warnings.WarningsChecker.cq_findings">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cq_findings</span></span><a class="headerlink" href="#mlx.warnings.WarningsChecker.cq_findings" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of code quality findings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[dict]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1092,7 +1125,7 @@ of the warnings found by all registered checkers.</p>
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Sep 26, 2024.
+      Last updated on Oct 21, 2024.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
