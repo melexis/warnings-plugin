@@ -218,7 +218,7 @@ The command below demonstrates how we utilize `cov-run-desktop`:
     cov-run-desktop --text-output-style=oneline --exit1-if-defects false --triage-attribute-regex "classification" ".*" <coverity_files> | tee raw_defects.log
 
 Then, the mlx-warnings plugin processes the output log file, `raw_defects.log`, based on the optional configuration file
-`config.yml` to produces three outputs:
+`config.yml` to produce three outputs:
 
 - A text file that contains all counted Coverity defects.
 - `A Code Quality report`_ `report.json` that contains all counted Coverity defects.
