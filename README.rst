@@ -150,14 +150,14 @@ command:
     # command line log file
     mlx-warnings doc_log.txt --sphinx
     # command line command execution
-    mlx-warnings --sphinx --command <commandforsphinx>
+    mlx-warnings --sphinx --command <command-for-sphinx>
 
     # explicitly as python module for log file
     python3 -m mlx.warnings --sphinx doc_log.txt
     python -m mlx.warnings --sphinx doc_log.txt
     # explicitly as python module
-    python3 -m mlx.warnings --sphinx --command <commandforsphinx>
-    python -m mlx.warnings --sphinx --command <commandforsphinx>
+    python3 -m mlx.warnings --sphinx --command <command-for-sphinx>
+    python -m mlx.warnings --sphinx --command <command-for-sphinx>
 
 
 Parse for Doxygen Warnings
@@ -171,88 +171,89 @@ command:
     # command line log file
     mlx-warnings doc_log.txt --doxygen
     # command line command execution
-    mlx-warnings --doxygen --command <commandfordoxygen>
+    mlx-warnings --doxygen --command <command-for-doxygen>
 
     # explicitly as python module for log file
     python3 -m mlx.warnings --doxygen doc_log.txt
     python -m mlx.warnings --doxygen doc_log.txt
     # explicitly as python module
-    python3 -m mlx.warnings --doxygen --command <commandfordoxygen>
-    python -m mlx.warnings --doxygen --command <commandfordoxygen>
+    python3 -m mlx.warnings --doxygen --command <command-for-doxygen>
+    python -m mlx.warnings --doxygen --command <command-for-doxygen>
 
 
 Parse for Coverity Defects
 --------------------------
 
-Coverity is a static analysis tool which has option to run desktop analysis
+Coverity is a static analysis tool that includes a CLI tool to run desktop analysis
 on your local changes and report the results back directly in the console.
 You only need to list affected files and below example lists changed files
-between your branch and master, which it then forwards to ``cov-run-desktop``:
+between your source and target branch, e.g. 'main', which it then forwards to ``cov-run-desktop``:
 
 .. code-block:: bash
 
-    cov-run-desktop --text-output-style=oneline `git diff --name-only --ignore-submodules master`
+    cov-run-desktop --text-output-style=oneline `git diff --name-only --ignore-submodules main`
 
-You can pipe the results to logfile, which you pass to warnings-plugin, or you use
-the ``--command`` argument and execute the ``cov-run-desktop`` through
+You can either pipe the results to a log file and pass it to the warnings-plugin, or you can use
+the ``--command`` argument to let the plugin invoke ``cov-run-desktop``.
 
 .. code-block:: bash
 
     # command line log file
     mlx-warnings --coverity cov-run-desktop-output.txt
     # command line command execution
-    mlx-warnings --coverity --command <commandforcoverity>
+    mlx-warnings --coverity --command <command-for-coverity>
 
     # explicitly as python module for log file
     python3 -m mlx.warnings --coverity cov-run-desktop-output.txt
     python -m mlx.warnings --coverity cov-run-desktop-output.txt
     # explicitly as python module
-    python3 -m mlx.warnings --coverity --command <commandforcoverity>
-    python -m mlx.warnings --coverity --command <commandforcoverity>
+    python3 -m mlx.warnings --coverity --command <command-for-coverity>
+    python -m mlx.warnings --coverity --command <command-for-coverity>
 
 
-We utilize `cov-run-desktop` in the following manner, where the output is saved in `coverity.log`:
-
-.. code-block:: bash
-
-    cov-run-desktop --text-output-style=oneline --exit1-if-defects false --triage-attribute-regex "classification" ".*" <coverity_files> | tee coverity.log
-
-Subsequently, we process the `coverity.log` file with the mlx-warnings plugin.
-The plugin uses a configuration file (`warnings_coverity.yml`) and produces two outputs:
-a text file (`warnings_coverity.txt`) and a code quality JSON file (`coverity_code_quality.json`).
+The command below demonstrates how we utilize `cov-run-desktop`:
 
 .. code-block:: bash
 
-    mlx-warnings --config warnings_coverity.yml -o warnings_coverity.txt -C coverity_code_quality.json coverity.log
+    cov-run-desktop --text-output-style=oneline --exit1-if-defects false --triage-attribute-regex "classification" ".*" <coverity_files> | tee raw_defects.log
 
-This is an example of the configuration file:
+Then, the mlx-warnings plugin processes the output log file, `raw_defects.log`, based on the optional configuration file
+`config.yml` to produce three outputs:
+
+- A text file that contains all counted Coverity defects.
+- `A Code Quality report`_ `report.json` that contains all counted Coverity defects.
+- A return code equal to the amount of counted Coverity defects. The value is 0 if the amount of Coverity defects is
+  within limits. We use this return code to determine whether our CI job passes or fails.
+
+.. code-block:: bash
+
+    mlx-warnings --config config.yml --output counted_defects.txt --code-quality report.json raw_defects.log
+
+Below is an example configuration for the Coverity checker:
 
 .. code-block:: yaml
 
-    sphinx:
-        enabled: false
-    doxygen:
-        enabled: false
-    junit:
-        enabled: false
-    xmlrunner:
-        enabled: false
     coverity:
         enabled: true
-        intentional:
-            max: -1
-        bug:
-            max: 0
+        unclassified:
+          max: 0
         pending:
-            max: 0
+          max: 0
+        bug:
+          min: 2
+          max: 2
         false_positive:
-            max: -1
-    robot:
-        enabled: false
-    polyspace:
-        enabled: false
+          max: -1
+        intentional:
+          max: -1
 
-For each classification, a minimum and maximum can be given.
+As you can see, we have configured limits for 5 out of 5 Coverity Classifications. You can configure a minimum and a
+maximum limit for the number of allowed Coverity defects that belong to the Classification.
+The default value for both limits is 0.
+A value of `-1` for `max` corresponds to effectively no limit (an infinite amount).
+If one or more Classifications are missing from your configuration, the Coverity defects are counted and 0 are
+allowed. To ignore certain classifications, modify the value for
+`cov-run-desktop --triage-attribute-regex "classification"`.
 
 .. note::
     The warnings-plugin counts only one warning if there are multiple warnings for the same CID.
@@ -268,14 +269,14 @@ command:
     # command line log file
     mlx-warnings junit_output.xml --junit
     # command line command execution
-    mlx-warnings --junit --command <commandforjunit>
+    mlx-warnings --junit --command <command-for-junit>
 
     # explicitly as python module for log file
     python3 -m mlx.warnings --junit junit_output.xml
     python -m mlx.warnings --junit junit_output.xml
     # explicitly as python module
-    python3 -m mlx.warnings --junit --command <commandforjunit>
-    python -m mlx.warnings --junit --command <commandforjunit>
+    python3 -m mlx.warnings --junit --command <command-for-junit>
+    python -m mlx.warnings --junit --command <command-for-junit>
 
 
 Parse for XMLRunner Errors
@@ -292,14 +293,14 @@ with command:
     # command line log file
     mlx-warnings xmlrunner_log.txt --xmlrunner
     # command line command execution
-    mlx-warnings --xmlrunner --command <commandforxmlrunner>
+    mlx-warnings --xmlrunner --command <command-for-xmlrunner>
 
     # explicitly as python module for log file
     python3 -m mlx.warnings --xmlrunner xmlrunner_log.txt
     python -m mlx.warnings --xmlrunner xmlrunner_log.txt
     # explicitly as python module
-    python3 -m mlx.warnings --xmlrunner --command <commandforxmlrunner>
-    python -m mlx.warnings --xmlrunner --command <commandforxmlrunner>
+    python3 -m mlx.warnings --xmlrunner --command <command-for-xmlrunner>
+    python -m mlx.warnings --xmlrunner --command <command-for-xmlrunner>
 
 .. _XMLRunner: https://github.com/xmlrunner/unittest-xml-reporting
 
@@ -491,7 +492,7 @@ path to configuration file
     # command line log file
     mlx-warnings --config path/to/config.json junit_output.xml
     # command line command execution
-    mlx-warnings --config path/to/config.json --command <commandforjunit>
+    mlx-warnings --config path/to/config.json --command <command-for-junit>
 
 
 -------------
@@ -569,7 +570,7 @@ Code Quality Report
 -------------------
 
 Use ``-C, --code-quality`` to let the plugin generate `a Code Quality report`_ for GitLab CI. All counted
-Sphinx, Doxygen, XMLRunner and Polyspace warnings/errors/failures will be included. Other checker types are not yet supported by this feature. The report is
+Sphinx, Doxygen, XMLRunner, Coverity and Polyspace warnings/errors/failures will be included. Other checker types are not yet supported by this feature. The report is
 a JSON file that implements `a subset of the Code Climate spec`_. Define this file `as a codequality report artifact`_
 of the CI job.
 
