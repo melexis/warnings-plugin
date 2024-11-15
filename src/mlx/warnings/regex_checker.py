@@ -196,10 +196,7 @@ class CoverityChecker(RegexChecker):
             classification_key = classification.lower().replace("_", " ")
             if classification_key in CoverityClassificationChecker.SEVERITY_MAP:
                 checker = CoverityClassificationChecker(classification=classification_key, verbose=self.verbose)
-                if maximum := checker_config.get("max", 0):
-                    checker.maximum = int(maximum)
-                if minimum := checker_config.get("min", 0):
-                    checker.minimum = int(minimum)
+                checker.parse_config(checker_config)
                 self.checkers[classification_key] = checker
             else:
                 print(f"WARNING: Unrecognized classification {classification!r}")

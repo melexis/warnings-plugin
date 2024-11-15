@@ -4,11 +4,13 @@ coverity:
     min: 0
     max: -1
   bug:
-    max: 0
-  pending:
     min: 0
     max: 0
+  pending:
+    min: $MIN_COV_WARNINGS
+    max: '$MAX_COV_WARNINGS'
   false_positive:
+    min: 0
     max: -1
 sphinx:
   enabled: false

@@ -1,4 +1,5 @@
 from io import StringIO
+import os
 from unittest import TestCase
 from pathlib import Path
 import filecmp
@@ -13,8 +14,15 @@ TEST_OUT_DIR = Path(__file__).parent / 'test_out'
 
 class TestCoverityWarnings(TestCase):
     def setUp(self):
+        os.environ['MIN_COV_WARNINGS'] = '0'
+        os.environ['MAX_COV_WARNINGS'] = '0'
         self.warnings = WarningsPlugin(verbose=True)
         self.warnings.activate_checker_name('coverity')
+
+    def tearDown(self):
+        for var in ('MIN_POLY_WARNINGS', 'MAX_POLY_WARNINGS'):
+            if var in os.environ:
+                del os.environ[var]
 
     def test_no_warning_normal_text(self):
         dut = 'This should not be treated as warning'
