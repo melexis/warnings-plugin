@@ -6,7 +6,45 @@ build-backend = "setuptools.build_meta"
 write_to = "src/mlx/warnings/__version__.py"
 
 [project]
-dependencies = [
-    'junitparser>=1.0.0,<2.0',
-    'ruamel.yaml>=0.17.21',
+name = "mlx.warnings"
+authors = [
+  {name = "Bavo Van Achte", email = "bavo.van.achte@gmail.com"},
+  {name = "Crt Mori", email = "crt@the-mori.com"},
+  {name = "Jasper Craeghs"},
+  {name = "Joke Waumans"},
+  {name = "Stein Heselmans"},
 ]
+license = {text = "Apache License, Version 2.0"}
+description = "Command-line alternative for https://github.com/jenkinsci/warnings-plugin. Useable with plugin-less CI systems."
+readme = {file = "README.rst", content-type = "text/x-rst"}
+dependencies = [
+    "junitparser>=1.0.0,<2.0'",
+    "ruamel.yaml>=0.17.21"
+]
+python_requires= ">=3.8"
+classifiers = [
+    # complete classifier list: http://pypi.python.org/pypi?%3Aaction=list_classifiers
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: Unix",
+    "Operating System :: POSIX",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Utilities",
+]
+keywords = ["Gitlab CI", "warnings", "CI"]
+
+[project.entry-points."console_scripts"]
+mlx-warnings = "mlx.warnings.warnings:main"
+
+[project.urls]
+Documentation = "https://melexis.github.io/warnings-plugin"
+Source = "https://github.com/melexis/warnings-plugin"
+Tracker = "https://github.com/melexis/warnings-plugin/issues"
