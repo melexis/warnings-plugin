@@ -19,6 +19,7 @@ def ordered(obj):
     else:
         return obj
 
+
 @mock.patch.dict(os.environ, {"MIN_COV_WARNINGS": "1", "MAX_COV_WARNINGS": "2"})
 class TestCoverityWarnings(TestCase):
     def setUp(self):
