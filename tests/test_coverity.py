@@ -2,7 +2,7 @@ import json
 import os
 from io import StringIO
 from pathlib import Path
-from unittest import TestCase
+from unittest import TestCase, mock
 from unittest.mock import patch
 
 from mlx.warnings import WarningsPlugin, warnings_wrapper
@@ -19,18 +19,11 @@ def ordered(obj):
     else:
         return obj
 
-
+@mock.patch.dict(os.environ, {"MIN_COV_WARNINGS": "1", "MAX_COV_WARNINGS": "2"})
 class TestCoverityWarnings(TestCase):
     def setUp(self):
-        os.environ["MIN_COV_WARNINGS"] = "1"
-        os.environ["MAX_COV_WARNINGS"] = "2"
         self.warnings = WarningsPlugin(verbose=True)
         self.warnings.activate_checker_name('coverity')
-
-    def tearDown(self):
-        for var in ('MIN_POLY_WARNINGS', 'MAX_POLY_WARNINGS'):
-            if var in os.environ:
-                del os.environ[var]
 
     def test_no_warning_normal_text(self):
         dut = 'This should not be treated as warning'
