@@ -1,9 +1,8 @@
-from io import StringIO
 import json
 import os
-from unittest import TestCase
+from io import StringIO
 from pathlib import Path
-
+from unittest import TestCase
 from unittest.mock import patch
 
 from mlx.warnings import WarningsPlugin, warnings_wrapper
