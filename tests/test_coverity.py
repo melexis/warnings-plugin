@@ -79,9 +79,9 @@ class TestCoverityWarnings(TestCase):
             str(TEST_IN_DIR / 'defects.txt'),
         ])
         self.assertEqual(8, retval)
-        with open(out_file, "r") as file:
+        with open(out_file) as file:
             cq_out = json.load(file)
-        with open(ref_file, "r") as file:
+        with open(ref_file) as file:
             cq_ref = json.load(file)
         self.assertEqual(ordered(cq_out), ordered(cq_ref))
 
@@ -95,8 +95,8 @@ class TestCoverityWarnings(TestCase):
             str(TEST_IN_DIR / 'defects.txt'),
         ])
         self.assertEqual(3, retval)
-        with open(out_file, "r") as file:
+        with open(out_file) as file:
             cq_out = json.load(file)
-        with open(ref_file, "r") as file:
+        with open(ref_file) as file:
             cq_ref = json.load(file)
         self.assertEqual(ordered(cq_out), ordered(cq_ref))
