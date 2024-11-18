@@ -245,9 +245,9 @@ class PolyspaceFamilyChecker(WarningsChecker):
         if row["file"]:
             finding["location"]["path"] = row["file"]
         if "line" in row:
-            finding["location"]["positions"]["begin"]["line"] = row["line"]
+            finding["location"]["positions"]["begin"]["line"] = int(row["line"])
         if "col" in row:
-            finding["location"]["positions"]["begin"]["column"] = row["col"]
+            finding["location"]["positions"]["begin"]["column"] = int(row["col"])
         finding["description"] = description
         exclude = ("new", "status", "severity", "comment", "key")
         row_without_key = [value for key, value in row.items() if key not in exclude]
