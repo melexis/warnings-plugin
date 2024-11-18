@@ -4,3 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
 write_to = "src/mlx/warnings/__version__.py"
+
+[project]
+dependencies = [
+    'junitparser>=1.0.0,<2.0',
+    'ruamel.yaml>=0.17.21',
+]
