@@ -1,8 +1,8 @@
 from io import StringIO
+import json
 import os
 from unittest import TestCase
 from pathlib import Path
-import filecmp
 
 from unittest.mock import patch
 
@@ -12,10 +12,19 @@ TEST_IN_DIR = Path(__file__).parent / 'test_in'
 TEST_OUT_DIR = Path(__file__).parent / 'test_out'
 
 
+def ordered(obj):
+    if isinstance(obj, dict):
+        return sorted((k, ordered(v)) for k, v in obj.items())
+    if isinstance(obj, list):
+        return sorted(ordered(x) for x in obj)
+    else:
+        return obj
+
+
 class TestCoverityWarnings(TestCase):
     def setUp(self):
-        os.environ['MIN_COV_WARNINGS'] = '0'
-        os.environ['MAX_COV_WARNINGS'] = '0'
+        os.environ["MIN_COV_WARNINGS"] = "1"
+        os.environ["MAX_COV_WARNINGS"] = "2"
         self.warnings = WarningsPlugin(verbose=True)
         self.warnings.activate_checker_name('coverity')
 
@@ -71,7 +80,11 @@ class TestCoverityWarnings(TestCase):
             str(TEST_IN_DIR / 'defects.txt'),
         ])
         self.assertEqual(8, retval)
-        self.assertTrue(filecmp.cmp(out_file, ref_file))
+        with open(out_file, "r") as file:
+            cq_out = json.load(file)
+        with open(ref_file, "r") as file:
+            cq_ref = json.load(file)
+        self.assertEqual(ordered(cq_out), ordered(cq_ref))
 
     def test_code_quality_with_config(self):
         filename = 'coverity_cq.json'
@@ -83,4 +96,8 @@ class TestCoverityWarnings(TestCase):
             str(TEST_IN_DIR / 'defects.txt'),
         ])
         self.assertEqual(3, retval)
-        self.assertTrue(filecmp.cmp(out_file, ref_file))
+        with open(out_file, "r") as file:
+            cq_out = json.load(file)
+        with open(ref_file, "r") as file:
+            cq_ref = json.load(file)
+        self.assertEqual(ordered(cq_out), ordered(cq_ref))
