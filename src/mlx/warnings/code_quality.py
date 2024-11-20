@@ -47,6 +47,9 @@ class Finding:
     def severity(self, value):
         if not isinstance(value, str):
             raise TypeError(f"Expected severity of type str; Got {type(value).__name__}")
+        expected_values = ["info", "minor", "major", "critical", "blocker"]
+        if value not in expected_values:
+            raise ValueError(f"Expected severity to be one of {expected_values}; Got {value!r}")
         self._severity = value
 
     @property
