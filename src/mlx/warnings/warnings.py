@@ -12,6 +12,7 @@ from pathlib import Path
 
 from ruamel.yaml import YAML
 
+from .code_quality import Finding
 from .exceptions import WarningsConfigError
 from .junit_checker import JUnitChecker
 from .regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker
@@ -277,6 +278,7 @@ def warnings_wrapper(args):
                         help='Possible not-used flags from above are considered as command flags')
 
     args = parser.parse_args(args)
+    Finding.fingerprints = {}  # Make sure the class variable is an empty dict
     code_quality_enabled = bool(args.code_quality)
     # Read config file
     if args.configfile is not None:
