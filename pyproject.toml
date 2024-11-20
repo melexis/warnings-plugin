@@ -7,6 +7,7 @@ write_to = "src/mlx/warnings/__version__.py"
 
 [project]
 name = "mlx.warnings"
+dynamic = ["version"]
 authors = [
   {name = "Bavo Van Achte", email = "bavo.van.achte@gmail.com"},
   {name = "Crt Mori", email = "crt@the-mori.com"},
@@ -19,9 +20,9 @@ description = "Command-line alternative for https://github.com/jenkinsci/warning
 readme = {file = "README.rst", content-type = "text/x-rst"}
 dependencies = [
     "junitparser>=1.0.0,<2.0",
-    "ruamel.yaml>=0.17.21"
+    "ruamel.yaml>=0.17.21",
 ]
-python_requires= ">=3.8"
+requires-python = ">= 3.8"
 classifiers = [
     # complete classifier list: http://pypi.python.org/pypi?%3Aaction=list_classifiers
     "Development Status :: 5 - Production/Stable",
