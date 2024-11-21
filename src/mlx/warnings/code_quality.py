@@ -45,8 +45,6 @@ class Finding:
 
     @severity.setter
     def severity(self, value):
-        if not isinstance(value, str):
-            raise TypeError(f"Expected severity of type str; Got {type(value).__name__}")
         expected_values = ["info", "minor", "major", "critical", "blocker"]
         if value not in expected_values:
             raise ValueError(f"Expected severity to be one of {expected_values}; Got {value!r}")
@@ -59,8 +57,6 @@ class Finding:
 
     @path.setter
     def path(self, value):
-        if not isinstance(value, (str, Path)):
-            raise TypeError(f"Expected path of type str or Path; Got {type(value).__name__}")
         path = Path(value)
         if path.is_absolute():
             try:
@@ -77,9 +73,6 @@ class Finding:
 
     @line.setter
     def line(self, value):
-        if not isinstance(value, (str, int)):
-            raise TypeError(f"Expected line of type str or int; Got {type(value).__name__}")
-
         try:
             line_number = int(value)
         except (TypeError, ValueError):
@@ -96,8 +89,6 @@ class Finding:
 
     @column.setter
     def column(self, value):
-        if not isinstance(value, (str, int)):
-            raise TypeError(f"Expected column of type str or int; Got {type(value).__name__}")
         column_number = int(value)
         if column_number <= 0:
             raise ValueError(f"Expected column number greater than 0; Got {column_number}")
