@@ -1,5 +1,4 @@
 import csv
-import hashlib
 from io import TextIOWrapper
 import os
 from string import Template
