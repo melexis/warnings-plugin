@@ -34,7 +34,7 @@ class Finding:
         new_hash = hashlib.md5(str(hashable_string).encode('utf-8')).hexdigest()
         while new_hash in self.fingerprints and self.fingerprints[new_hash] != self:
             new_hash = hashlib.md5(f"{hashable_string}{new_hash}".encode('utf-8')).hexdigest()
-        self.fingerprints[new_hash] = self
+        type(self).fingerprints[new_hash] = self
         return new_hash
 
     @property
