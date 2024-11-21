@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 from string import Template
 
+from .code_quality import Finding
 from .exceptions import WarningsConfigError
 from .warnings_checker import WarningsChecker
 
@@ -57,47 +58,26 @@ class RegexChecker(WarningsChecker):
         Args:
             match (re.Match): The regex match
         '''
-        finding = {
-            "severity": "major",
-            "location": {
-                "path": self.cq_default_path,
-                "lines": {
-                    "begin": 1,
-                }
-            }
-        }
         groups = {name: result for name, result in match.groupdict().items() if result}
         for name, result in groups.items():
             if name.startswith("description"):
-                finding["description"] = self.cq_description_template.substitute(description=result)
+                finding = Finding(self.cq_description_template.substitute(description=result))
                 break
         else:
             return  # no description was found, which is the bare minimum
         for name, result in groups.items():
             if name.startswith("severity"):
-                finding["severity"] = self.SEVERITY_MAP[result.lower()]
+                finding.severity = self.SEVERITY_MAP[result.lower()]
                 break
         for name, result in groups.items():
             if name.startswith("path"):
-                path = Path(result)
-                if path.is_absolute():
-                    try:
-                        path = path.relative_to(Path.cwd())
-                    except ValueError as err:
-                        raise ValueError("Failed to convert abolute path to relative path for Code Quality report: "
-                                         f"{err}") from err
-                finding["location"]["path"] = str(path)
+                finding.path = result
                 break
         for name, result in groups.items():
             if name.startswith("line"):
-                try:
-                    lineno = int(result, 0)
-                except (TypeError, ValueError):
-                    lineno = 1
-                finding["location"]["lines"]["begin"] = lineno
+                finding.line = result
                 break
-        finding["fingerprint"] = hashlib.md5(str(finding).encode('utf-8')).hexdigest()
-        self.cq_findings.append(finding)
+        self.cq_findings.append(finding.to_dict())
 
 
 class CoverityChecker(RegexChecker):
@@ -252,45 +232,24 @@ class CoverityClassificationChecker(WarningsChecker):
         Args:
             match (re.Match): The regex match
         '''
-        finding = {
-            "severity": "major",
-            "location": {
-                "path": self.cq_default_path,
-                "positions": {
-                    "begin": {
-                        "line": 1,
-                        "column": 1
-                    }
-                }
-            }
-        }
         groups = {name: result for name, result in match.groupdict().items() if result}
         try:
             description = self.cq_description_template.substitute(os.environ, **groups)
         except KeyError as err:
             raise WarningsConfigError(f"Failed to find environment variable from configuration value "
                                       f"'cq_description_template': {err}") from err
-        if classification_raw := groups.get("classification"):
-            finding["severity"] = self.SEVERITY_MAP[classification_raw.lower()]
-        if "path" in groups:
-            path = Path(groups["path"])
-            if path.is_absolute():
-                try:
-                    path = path.relative_to(Path.cwd())
-                except ValueError as err:
-                    raise ValueError("Failed to convert abolute path to relative path for Code Quality report: "
-                                     f"{err}") from err
-            finding["location"]["path"] = str(path)
-        for group_name in ("line", "column"):
-            if group_name in groups:
-                try:
-                    finding["location"]["positions"]["begin"][group_name] = int(groups[group_name], 0)
-                except (TypeError, ValueError):
-                    pass
+        finding = Finding(description)
 
-        finding["description"] = description
-        finding["fingerprint"] = hashlib.md5(str(match.group(0).strip()).encode('utf-8')).hexdigest()
-        self.cq_findings.append(finding)
+        if classification_raw := groups.get("classification"):
+            finding.severity = self.SEVERITY_MAP[classification_raw.lower()]
+        if path := groups.get("path", self.cq_default_path):
+            finding.path = path
+        if line := groups.get("line", 1):
+            finding.line = line
+        if column := groups.get("column", 1):
+            finding.column = column
+
+        self.cq_findings.append(finding.to_dict())
 
     def check(self, content):
         '''
