@@ -6,7 +6,7 @@ import filecmp
 
 from unittest.mock import patch
 
-from mlx.warnings import PolyspaceFamilyChecker, WarningsPlugin, warnings_wrapper
+from mlx.warnings import PolyspaceFamilyChecker, WarningsPlugin, warnings_wrapper, Finding
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
 TEST_OUT_DIR = Path(__file__).parent / 'test_out'
@@ -66,6 +66,7 @@ class TestBugFinderWarnings(unittest.TestCase):
 
 class TestPolyspaceWarnings(unittest.TestCase):
     def setUp(self):
+        Finding.fingerprints = {}
         os.environ['MIN_POLY_WARNINGS'] = '0'
         os.environ['MAX_POLY_WARNINGS'] = '0'
 
