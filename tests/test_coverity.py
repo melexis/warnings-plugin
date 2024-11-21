@@ -66,7 +66,7 @@ class TestCoverityWarnings(TestCase):
         self.assertTrue(filecmp.cmp(out_file, ref_file))
 
     def test_code_quality_with_config(self):
-        filename = 'coverity_cq.json'
+        filename = 'coverity_cq_with_config.json'
         out_file = str(TEST_OUT_DIR / filename)
         ref_file = str(TEST_IN_DIR / filename)
         retval = warnings_wrapper([
