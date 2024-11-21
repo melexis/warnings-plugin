@@ -230,6 +230,8 @@ class PolyspaceFamilyChecker(WarningsChecker):
 
         if row["file"]:
             finding.path = row["file"]
+        else:
+            finding.path = self.cq_default_path
         if "line" in row:
             finding.line = int(row["line"])
         if "col" in row:

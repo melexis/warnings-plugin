@@ -68,6 +68,7 @@ class RegexChecker(WarningsChecker):
             if name.startswith("severity"):
                 finding.severity = self.SEVERITY_MAP[result.lower()]
                 break
+        finding.path = self.cq_default_path
         for name, result in groups.items():
             if name.startswith("path"):
                 finding.path = result
