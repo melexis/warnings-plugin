@@ -227,8 +227,6 @@ class PolyspaceFamilyChecker(WarningsChecker):
             finding.severity = self.code_quality_severity[row["information"].lower()]
         elif row["color"].lower() in self.code_quality_severity.keys():
             finding.severity = self.code_quality_severity[row["color"].lower()]
-        else:
-            finding.severity = "info"
 
         if row["file"]:
             finding.path = row["file"]
