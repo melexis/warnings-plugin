@@ -11,11 +11,12 @@ class Finding:
 
     _severity = "info"
     _path = ""
-    _description = ""
     _line = 1
     _column = 1
 
     def __init__(self, description):
+        if not description:
+            raise ValueError(f"Expected a non empty description; Got {description!r}")
         self.description = description
 
     @property
@@ -68,19 +69,6 @@ class Finding:
                 raise ValueError("Failed to convert abolute path to relative path for Code Quality report: "
                                  f"{err}") from err
         self._path = str(path)
-
-    @property
-    def description(self):
-        """str: The description of the code quality violation."""
-        return self._description
-
-    @description.setter
-    def description(self, value):
-        if not isinstance(value, str):
-            raise TypeError(f"Expected description of type str; Got {type(value).__name__}")
-        if not value:
-            raise ValueError(f"Expected a non empty description; Got {value!r}")
-        self._description = value
 
     @property
     def line(self):
