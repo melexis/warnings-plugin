@@ -42,8 +42,8 @@ version = release = get_version(root="..")
 pygments_style = 'trac'
 templates_path = ['.']
 extlinks = {
-    'issue': ('https://github.com/melexis/warnings-plugin/issues/%s', '#'),
-    'pr': ('https://github.com/melexis/warnings-plugin/pull/%s', 'PR #'),
+    'issue': ('https://github.com/melexis/warnings-plugin/issues/%s', '#%s'),
+    'pr': ('https://github.com/melexis/warnings-plugin/pull/%s', 'PR #%s'),
 }
 import sphinx_py3doc_enhanced_theme
 html_theme = "sphinx_py3doc_enhanced_theme"
