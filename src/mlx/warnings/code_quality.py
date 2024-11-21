@@ -14,7 +14,6 @@ class Finding:
     _description = ""
     _line = 1
     _column = 1
-    _hashable_string = ""
 
     def __init__(self, description):
         self.description = description
