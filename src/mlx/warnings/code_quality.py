@@ -9,7 +9,7 @@ class Finding:
     """A dictionary mapping fingerprints (unique hashes) to instances of Finding"""
     fingerprints = {}
 
-    _severity = ""
+    _severity = "info"
     _path = ""
     _description = ""
     _line = 1
