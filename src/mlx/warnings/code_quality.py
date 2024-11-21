@@ -79,7 +79,12 @@ class Finding:
     def line(self, value):
         if not isinstance(value, (str, int)):
             raise TypeError(f"Expected line of type str or int; Got {type(value).__name__}")
-        line_number = int(value)
+
+        try:
+            line_number = int(value)
+        except (TypeError, ValueError):
+            line_number = 1
+
         if line_number <= 0:
             raise ValueError(f"Expected line number greater than 0; Got {line_number}")
         self._line = line_number
