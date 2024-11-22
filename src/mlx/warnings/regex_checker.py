@@ -1,6 +1,5 @@
 import os
 import re
-from pathlib import Path
 from string import Template
 
 from .code_quality import Finding
