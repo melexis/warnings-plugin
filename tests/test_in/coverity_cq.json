@@ -1,6 +1,7 @@
 [
     {
         "severity": "info",
+        "description": "Coverity: MISRA C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory)",
         "location": {
             "path": "some/path/dummy_int.h",
             "positions": {
@@ -10,11 +11,11 @@
                 }
             }
         },
-        "description": "Coverity: MISRA C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory)",
-        "fingerprint": "26ce9a2e6eb1a2186f10995b6261e7ef"
+        "fingerprint": "85d0bf611abf8c051e2c55a8fce1fbfb"
     },
     {
         "severity": "info",
+        "description": "Coverity: MISRA C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory)",
         "location": {
             "path": "some/path/dummy_int.h",
             "positions": {
@@ -24,11 +25,11 @@
                 }
             }
         },
-        "description": "Coverity: MISRA C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory)",
-        "fingerprint": "a007582ec0592332f1db4626436aef22"
+        "fingerprint": "b84425516a0cbd5bec06779248a726a5"
     },
     {
         "severity": "info",
+        "description": "Coverity: MISRA C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory)",
         "location": {
             "path": "some/path/dummy_int.h",
             "positions": {
@@ -38,25 +39,11 @@
                 }
             }
         },
-        "description": "Coverity: MISRA C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory)",
-        "fingerprint": "483e97b9e911d1091876456f0e05136a"
+        "fingerprint": "9055ea84f4a2ec57238bcc9e5bf02714"
     },
     {
         "severity": "info",
-        "location": {
-            "path": "some/path/dummy_fp.c",
-            "positions": {
-                "begin": {
-                    "line": 367,
-                    "column": 13
-                }
-            }
-        },
         "description": "Coverity: Out-of-bounds write (OVERRUN)",
-        "fingerprint": "d95a012dc6fca902fe73142c81846152"
-    },
-    {
-        "severity": "info",
         "location": {
             "path": "some/path/dummy_fp.c",
             "positions": {
@@ -66,11 +53,25 @@
                 }
             }
         },
+        "fingerprint": "409c39b23baaf916ac0d0c97c3917680"
+    },
+    {
+        "severity": "info",
         "description": "Coverity: MISRA C-2012 Pointers and Arrays (MISRA C-2012 Rule 18.1, Required)",
-        "fingerprint": "40317d6bdf17c682f9fbc356209da168"
+        "location": {
+            "path": "some/path/dummy_fp.c",
+            "positions": {
+                "begin": {
+                    "line": 367,
+                    "column": 13
+                }
+            }
+        },
+        "fingerprint": "5dbd93275d026e6b77330c48eda8d964"
     },
     {
         "severity": "major",
+        "description": "Coverity: MISRA C-2012 Declarations and Definitions (MISRA C-2012 Rule 8.5, Required)",
         "location": {
             "path": "some/path/dummy_uncl.h",
             "positions": {
@@ -80,11 +81,11 @@
                 }
             }
         },
-        "description": "Coverity: MISRA C-2012 Declarations and Definitions (MISRA C-2012 Rule 8.5, Required)",
-        "fingerprint": "48e27cc7f6eef3c6e4f305a4613491ff"
+        "fingerprint": "990f3714acdb07ca108f645285bacdf8"
     },
     {
         "severity": "major",
+        "description": "Coverity: MISRA C-2012 Declarations and Definitions (MISRA C-2012 Rule 8.6, Required)",
         "location": {
             "path": "some/path/dummy_uncl.c",
             "positions": {
@@ -94,11 +95,11 @@
                 }
             }
         },
-        "description": "Coverity: MISRA C-2012 Declarations and Definitions (MISRA C-2012 Rule 8.6, Required)",
-        "fingerprint": "580c5e4df217d18403c7e53b9b1d21a7"
+        "fingerprint": "c24f5c885dd07424839f347e7fb0cfd9"
     },
     {
         "severity": "major",
+        "description": "Coverity: MISRA C-2012 Identifiers (MISRA C-2012 Rule 5.8, Required)",
         "location": {
             "path": "some/path/dummy_uncl.c",
             "positions": {
@@ -108,7 +109,6 @@
                 }
             }
         },
-        "description": "Coverity: MISRA C-2012 Identifiers (MISRA C-2012 Rule 5.8, Required)",
-        "fingerprint": "199398cb40462913b6da4b7ab00ca19d"
+        "fingerprint": "1f2f1b28535924cd9ab0dc2635aa70c7"
     }
 ]
