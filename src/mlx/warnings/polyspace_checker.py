@@ -225,19 +225,13 @@ class PolyspaceFamilyChecker(WarningsChecker):
 
         finding = Finding(description)
         # Attention to bug finder: items have color red for impact: high, medium and low.
-        if row["information"].lower() in self.code_quality_severity.keys():
-            finding.severity = self.code_quality_severity[row["information"].lower()]
-        elif row["color"].lower() in self.code_quality_severity.keys():
-            finding.severity = self.code_quality_severity[row["color"].lower()]
-
-        if row["file"]:
-            finding.path = row["file"]
-        else:
-            finding.path = self.cq_default_path
-        if "line" in row:
-            finding.line = int(row["line"])
-        if "col" in row:
-            finding.column = int(row["col"])
+        if (severity := self.code_quality_severity.get(row["information"].lower())) is not None:
+            finding.severity = severity
+        elif (severity := self.code_quality_severity.get(row["color"].lower())) is not None:
+            finding.severity = severity
+        finding.path = row.get("file", self.cq_default_path)
+        finding.line = row.get("line", 1)
+        finding.column = row.get("col", 1)
 
         self.cq_findings.append(finding.to_dict())
 
