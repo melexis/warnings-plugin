@@ -57,25 +57,17 @@ class RegexChecker(WarningsChecker):
             match (re.Match): The regex match
         '''
         groups = {name: result for name, result in match.groupdict().items() if result}
-        for name, result in groups.items():
-            if name.startswith("description"):
-                finding = Finding(self.cq_description_template.substitute(description=result))
-                break
-        else:
-            return  # no description was found, which is the bare minimum
-        for name, result in groups.items():
-            if name.startswith("severity"):
-                finding.severity = self.SEVERITY_MAP[result.lower()]
-                break
-        finding.path = self.cq_default_path
-        for name, result in groups.items():
-            if name.startswith("path"):
-                finding.path = result
-                break
-        for name, result in groups.items():
-            if name.startswith("line"):
-                finding.line = result
-                break
+
+        description = next((result for name, result in groups.items() if name.startswith("description")), None)
+        if not description:
+            return  # No description was found, which is the bare minimum
+
+        finding = Finding(self.cq_description_template.substitute(description=description))
+        finding.severity = next((self.SEVERITY_MAP[result.lower()] for name, result in groups.items()
+                                 if name.startswith("severity")), "info")
+        finding.path = next((result for name, result in groups.items()
+                             if name.startswith("path")), self.cq_default_path)
+        finding.line = next((result for name, result in groups.items() if name.startswith("line")), 1)
         self.cq_findings.append(finding.to_dict())
 
 
