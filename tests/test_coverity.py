@@ -5,7 +5,7 @@ import filecmp
 
 from unittest.mock import patch
 
-from mlx.warnings import WarningsPlugin, warnings_wrapper
+from mlx.warnings import WarningsPlugin, warnings_wrapper, Finding
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
 TEST_OUT_DIR = Path(__file__).parent / 'test_out'
@@ -13,6 +13,7 @@ TEST_OUT_DIR = Path(__file__).parent / 'test_out'
 
 class TestCoverityWarnings(TestCase):
     def setUp(self):
+        Finding.fingerprints = {}
         self.warnings = WarningsPlugin(verbose=True)
         self.warnings.activate_checker_name('coverity')
 
