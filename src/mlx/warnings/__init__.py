@@ -3,6 +3,7 @@
 __all__ = [
     'CoverityChecker',
     'DoxyChecker',
+    'Finding',
     'JUnitChecker',
     'PolyspaceChecker',
     'PolyspaceFamilyChecker',
@@ -19,6 +20,7 @@ __all__ = [
 
 
 from .__version__ import __version__
+from .code_quality import Finding
 from .exceptions import WarningsConfigError
 from .junit_checker import JUnitChecker
 from .regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker
