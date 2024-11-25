@@ -118,6 +118,8 @@ class WarningsPlugin:
         if not self.activated_checkers:
             print("No checkers activated. Please use activate_checker function")
         elif "polyspace" in self.activated_checkers:
+            if len(self.activated_checkers) > 1:
+                raise WarningsConfigError("Polyspace checker cannot be combined with other warnings checkers")
             self.activated_checkers["polyspace"].check(file)
         else:
             content = file.read()
