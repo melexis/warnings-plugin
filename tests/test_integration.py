@@ -6,7 +6,7 @@ from unittest import TestCase
 
 from unittest.mock import patch
 
-from mlx.warnings import warnings_wrapper, WarningsConfigError, Finding
+from mlx.warnings import exceptions, warnings_wrapper, WarningsConfigError, Finding
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
 TEST_OUT_DIR = Path(__file__).parent / 'test_out'
@@ -380,3 +380,16 @@ class TestIntegration(TestCase):
         self.assertIn("WARNING: Unrecognized classification 'min'", output)
         self.assertEqual(2, retval)
         self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
+
+    @patch('pathlib.Path.cwd')
+    def test_polyspace_error(self, path_cwd_mock):
+        config_file = str(TEST_IN_DIR / 'config_example_polyspace_error.yml')
+        cq_file = str(TEST_IN_DIR / 'test.json')
+        with self.assertRaises(exceptions.WarningsConfigError) as context:
+            warnings_wrapper([
+                '--code-quality', cq_file,
+                '--config', config_file,
+                'tests/test_in/mixed_warnings.txt',
+            ])
+        self.assertEqual(str(context.exception), 'Polyspace checker cannot be combined with other warnings checkers')
+
