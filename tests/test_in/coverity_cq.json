@@ -1,6 +1,34 @@
 [
     {
         "severity": "info",
+        "description": "Coverity: Out-of-bounds write (OVERRUN)",
+        "location": {
+            "path": "some/path/dummy_fp.c",
+            "positions": {
+                "begin": {
+                    "line": 367,
+                    "column": 13
+                }
+            }
+        },
+        "fingerprint": "409c39b23baaf916ac0d0c97c3917680"
+    },
+    {
+        "severity": "info",
+        "description": "Coverity: MISRA C-2012 Pointers and Arrays (MISRA C-2012 Rule 18.1, Required)",
+        "location": {
+            "path": "some/path/dummy_fp.c",
+            "positions": {
+                "begin": {
+                    "line": 367,
+                    "column": 13
+                }
+            }
+        },
+        "fingerprint": "5dbd93275d026e6b77330c48eda8d964"
+    },
+    {
+        "severity": "info",
         "description": "Coverity: MISRA C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory)",
         "location": {
             "path": "some/path/dummy_int.h",
@@ -40,34 +68,6 @@
             }
         },
         "fingerprint": "9055ea84f4a2ec57238bcc9e5bf02714"
-    },
-    {
-        "severity": "info",
-        "description": "Coverity: Out-of-bounds write (OVERRUN)",
-        "location": {
-            "path": "some/path/dummy_fp.c",
-            "positions": {
-                "begin": {
-                    "line": 367,
-                    "column": 13
-                }
-            }
-        },
-        "fingerprint": "409c39b23baaf916ac0d0c97c3917680"
-    },
-    {
-        "severity": "info",
-        "description": "Coverity: MISRA C-2012 Pointers and Arrays (MISRA C-2012 Rule 18.1, Required)",
-        "location": {
-            "path": "some/path/dummy_fp.c",
-            "positions": {
-                "begin": {
-                    "line": 367,
-                    "column": 13
-                }
-            }
-        },
-        "fingerprint": "5dbd93275d026e6b77330c48eda8d964"
     },
     {
         "severity": "major",

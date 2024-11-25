@@ -1,4 +1,4 @@
-import json
+import filecmp
 import os
 from io import StringIO
 from pathlib import Path
@@ -74,11 +74,7 @@ class TestCoverityWarnings(TestCase):
             str(TEST_IN_DIR / 'defects.txt'),
         ])
         self.assertEqual(8, retval)
-        with open(out_file) as file:
-            cq_out = json.load(file)
-        with open(ref_file) as file:
-            cq_ref = json.load(file)
-        self.assertEqual(ordered(cq_out), ordered(cq_ref))
+        self.assertTrue(filecmp.cmp(out_file, ref_file))
 
     def test_code_quality_with_config(self):
         filename = 'coverity_cq.json'
@@ -90,8 +86,4 @@ class TestCoverityWarnings(TestCase):
             str(TEST_IN_DIR / 'defects.txt'),
         ])
         self.assertEqual(3, retval)
-        with open(out_file) as file:
-            cq_out = json.load(file)
-        with open(ref_file) as file:
-            cq_ref = json.load(file)
-        self.assertEqual(ordered(cq_out), ordered(cq_ref))
+        self.assertTrue(filecmp.cmp(out_file, ref_file))
