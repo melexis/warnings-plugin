@@ -39,7 +39,7 @@
                 }
             }
         },
-        "fingerprint": "8c59fc98f57e808819b5f04054aa5de3"
+        "fingerprint": "39030b49f58180c8172732f84d9d5fff"
     },
     {
         "severity": "critical",
@@ -53,7 +53,7 @@
                 }
             }
         },
-        "fingerprint": "77c88c2e8519e4416776e8b96284e144"
+        "fingerprint": "e24313e32a3969502b2bc7c9ad9b1527"
     },
     {
         "severity": "major",
@@ -67,7 +67,7 @@
                 }
             }
         },
-        "fingerprint": "a48d5550fd854f154597077dc51d1f8a"
+        "fingerprint": "bf26b89fc5898e957279a23a9540640f"
     },
     {
         "severity": "critical",
@@ -81,7 +81,7 @@
                 }
             }
         },
-        "fingerprint": "22d31cc45bf8d96df2f1174df53d1adc"
+        "fingerprint": "6ca9fab3cdb5050ad01b2b02ec348180"
     },
     {
         "severity": "critical",
@@ -95,7 +95,7 @@
                 }
             }
         },
-        "fingerprint": "041265549f9d63651d00019265a3ad90"
+        "fingerprint": "322c085b4098450c371da8c99046476b"
     },
     {
         "severity": "major",
@@ -109,7 +109,7 @@
                 }
             }
         },
-        "fingerprint": "75e6473e0ee239e0f0b7094b12404afc"
+        "fingerprint": "bec264a0725556cfe0514b3aa168715c"
     },
     {
         "severity": "major",
@@ -123,6 +123,6 @@
                 }
             }
         },
-        "fingerprint": "3c02f687278c969c497d8974994e8f76"
+        "fingerprint": "37dd4fe77518650ac6d416ea8e2e617f"
     }
 ]
