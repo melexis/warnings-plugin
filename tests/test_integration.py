@@ -369,10 +369,14 @@ class TestIntegration(TestCase):
         filename = 'code_quality_format.json'
         out_file = str(TEST_OUT_DIR / filename)
         ref_file = str(TEST_IN_DIR / filename)
-        retval = warnings_wrapper([
-            '--code-quality', out_file,
-            '--config', 'tests/test_in/config_cq_description_format.json',
-            'tests/test_in/mixed_warnings.txt',
-        ])
+        with patch('sys.stdout', new=StringIO()) as fake_output:
+            retval = warnings_wrapper([
+                '--code-quality', out_file,
+                '--config', 'tests/test_in/config_cq_description_format.json',
+                'tests/test_in/mixed_warnings.txt',
+            ])
+        output = fake_output.getvalue().splitlines(keepends=False)
+        self.assertIn("WARNING: Unrecognized classification 'max'", output)
+        self.assertIn("WARNING: Unrecognized classification 'min'", output)
         self.assertEqual(2, retval)
         self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
