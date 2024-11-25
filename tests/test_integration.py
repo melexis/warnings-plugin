@@ -6,7 +6,7 @@ from unittest import TestCase
 
 from unittest.mock import patch
 
-from mlx.warnings import warnings_wrapper, WarningsConfigError
+from mlx.warnings import warnings_wrapper, WarningsConfigError, Finding
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
 TEST_OUT_DIR = Path(__file__).parent / 'test_out'
@@ -14,6 +14,7 @@ TEST_OUT_DIR = Path(__file__).parent / 'test_out'
 
 class TestIntegration(TestCase):
     def setUp(self):
+        Finding.fingerprints = {}
         if not TEST_OUT_DIR.exists():
             TEST_OUT_DIR.mkdir()
 

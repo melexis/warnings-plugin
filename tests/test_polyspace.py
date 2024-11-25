@@ -14,6 +14,7 @@ TEST_OUT_DIR = Path(__file__).parent / 'test_out'
 
 class TestCodeProverWarnings(unittest.TestCase):
     def setUp(self):
+        Finding.fingerprints = {}
         self.warnings = WarningsPlugin(verbose=True)
         self.dut = self.warnings.activate_checker_name('polyspace')
         self.dut.checkers = [
