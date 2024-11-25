@@ -21,9 +21,7 @@
         "max": 0
     },
     "coverity": {
-        "enabled": true,
-        "min": 0,
-        "max": 0
+        "enabled": true
     },
     "robot": {
         "enabled": false
