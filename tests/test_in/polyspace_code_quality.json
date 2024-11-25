@@ -1,1038 +1,1038 @@
 [
     {
         "severity": "major",
+        "description": "Polyspace: Overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "6",
-                    "column": "8"
+                    "line": 6,
+                    "column": 8
                 }
             }
         },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "07bf7b7981eea1d6f5a95d69c9b0d05d"
+        "fingerprint": "5b0d2bef143e340c629b1704b3322538"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "7",
-                    "column": "10"
+                    "line": 7,
+                    "column": 10
                 }
             }
         },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "1e18bf5563037b1193f838617b4be1af"
+        "fingerprint": "0d49ff422c3685a0891eda36d4ea7d9b"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Overflow",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": "6",
-                    "column": "11"
+                    "line": 6,
+                    "column": 11
                 }
             }
         },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "839e418eda6b091c2413aa0722796fb9"
+        "fingerprint": "74e171f2f92bd5acc546421ee7c27636"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Overflow",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": "7",
-                    "column": "3"
+                    "line": 7,
+                    "column": 3
                 }
             }
         },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "1961351c7f028d02202f915a6d36c658"
+        "fingerprint": "27b1ad917684a8f217ad44e30793fc70"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "8",
-                    "column": "4"
+                    "line": 8,
+                    "column": 4
                 }
             }
         },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "187908fe3b88f8c6e304bd5aebd2fa7b"
+        "fingerprint": "e749f0ee41d56a130d4bf696b8bf85e9"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "8",
-                    "column": "5"
+                    "line": 8,
+                    "column": 5
                 }
             }
         },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "872e350adf6f6de0e3d530eef532876a"
+        "fingerprint": "665c4b7b049eec5c2953bb9be2cc2731"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "7",
-                    "column": "6"
+                    "line": 7,
+                    "column": 6
                 }
             }
         },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "0c01c54227a1a7529293c8d814d55bce"
+        "fingerprint": "e8f4c1c74aab1c90d3a04f2363dcb31a"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "7",
-                    "column": "7"
+                    "line": 7,
+                    "column": 7
                 }
             }
         },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "ed5eb28ed0310f70d012bb13cf95f794"
+        "fingerprint": "032ad18cc7ee1a26a119121f41a24ece"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "8",
-                    "column": "8"
+                    "line": 8,
+                    "column": 8
                 }
             }
         },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "e790d2d7f4e8fc2fb244ab0f74beca64"
+        "fingerprint": "0121792fc8a0ab5136efafa5b3ff22eb"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "9",
-                    "column": "10"
+                    "line": 9,
+                    "column": 10
                 }
             }
         },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "71afd01823400c4504d8d0fb125fba4b"
+        "fingerprint": "fc80aadbe343e7e894682b361ee3c388"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "9",
-                    "column": "11"
+                    "line": 9,
+                    "column": 11
                 }
             }
         },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "c94b3a08f0577dd14445bb53bb8f810f"
+        "fingerprint": "7bb064028e42cbcebb0fd583aa1dc5c7"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "8",
-                    "column": "3"
+                    "line": 8,
+                    "column": 3
                 }
             }
         },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "863424d52785aa5300b20cf60b9ada57"
+        "fingerprint": "d775f0821051899a776b16ea6c27e6a0"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "8",
-                    "column": "4"
+                    "line": 8,
+                    "column": 4
                 }
             }
         },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "4073ecbcb0efc2c87ae28c56e40672a9"
+        "fingerprint": "a4c66925580d178c6e6897767f040714"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "9",
-                    "column": "5"
+                    "line": 9,
+                    "column": 5
                 }
             }
         },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "9cf71035380a184965966250b7cc78c7"
+        "fingerprint": "f4263c02bd5b9e172c9221d2e6bad767"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "9",
-                    "column": "6"
+                    "line": 9,
+                    "column": 6
                 }
             }
         },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "b277b928287c7dd51390ae8079db12f9"
+        "fingerprint": "0e0b585a9464084130ec205e724bf6cb"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "10",
-                    "column": "7"
+                    "line": 10,
+                    "column": 7
                 }
             }
         },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "591d152475bd60b07e0e7f00ec000229"
+        "fingerprint": "75b3f63a9680afdda576d594ef679c77"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "9",
-                    "column": "9"
+                    "line": 9,
+                    "column": 9
                 }
             }
         },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "df6c0d8aa86f4d937c674635753a5f46"
+        "fingerprint": "5e78269181e578d81898273663d11154"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "9",
-                    "column": "10"
+                    "line": 9,
+                    "column": 10
                 }
             }
         },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "4a7e2e12cae10b03859b3b0e0a592b38"
+        "fingerprint": "9f0db83026a8d35faf547e01a4e4cf38"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "10",
-                    "column": "11"
+                    "line": 10,
+                    "column": 11
                 }
             }
         },
-        "description": "Polyspace: Overflow",
-        "fingerprint": "ac3cbdf7ee478c09ddf35b1eec469211"
+        "fingerprint": "9a3697faef437ec3bcdaf1c34912aad5"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": "15",
-                    "column": "5"
+                    "line": 15,
+                    "column": 5
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "f4386da30a89e4923f3ab11f0300a5b1"
+        "fingerprint": "382a120a7f45cdcbeec5117361965a68"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": "15",
-                    "column": "6"
+                    "line": 15,
+                    "column": 6
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "d95f456b2787e9043443e73f3fc58aad"
+        "fingerprint": "ee2e167f2edbcf98b180304c0e5cde5f"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "16",
-                    "column": "7"
+                    "line": 16,
+                    "column": 7
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "507064b5f812014fa76db4d182f10ef9"
+        "fingerprint": "cffef099a70ee703d85318b58aaee3ae"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "16",
-                    "column": "8"
+                    "line": 16,
+                    "column": 8
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "8fbf02530e02a7a59fb7983f5f4b6730"
+        "fingerprint": "21c436bad7047cfb5605797b4dd2e57f"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": "17",
-                    "column": "9"
+                    "line": 17,
+                    "column": 9
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "ff3442b2b4d93ba99df38dab2de5fa58"
+        "fingerprint": "ca87b7b1c876c09261b84d7a46331890"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": "17",
-                    "column": "10"
+                    "line": 17,
+                    "column": 10
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "d81f5651853816b9307a1e708c602f45"
+        "fingerprint": "ce96768fc2d1ec79a1187ed7a7240d46"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "16",
-                    "column": "11"
+                    "line": 16,
+                    "column": 11
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "aeaa0e8647882ca64437f80574ff6f43"
+        "fingerprint": "12b0f09fa6a3a951688a1da7df58f5f6"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "16",
-                    "column": "12"
+                    "line": 16,
+                    "column": 12
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "c97c42c094fb4136830063eec4efba5a"
+        "fingerprint": "44840dd6509374e45d3e4e9f6d1a791b"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "17",
-                    "column": "13"
+                    "line": 17,
+                    "column": 13
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "2b34873a1dec1df49fba7e4efcb8ed44"
+        "fingerprint": "9b97b406a7decd5738144269e0708692"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "17",
-                    "column": "14"
+                    "line": 17,
+                    "column": 14
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "c0772453dfe0d42bc001f4364fe81aa5"
+        "fingerprint": "638b9256aca9f3517e67e90c11063616"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "18",
-                    "column": "5"
+                    "line": 18,
+                    "column": 5
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "46d63703689a4e9affa63d753e731bb4"
+        "fingerprint": "98068371b4c1f2efc59bd12de75a83d9"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "18",
-                    "column": "6"
+                    "line": 18,
+                    "column": 6
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "8ad2982125a25d4080d9cf1bffbf35f3"
+        "fingerprint": "229bd0263d410b0af1cf419502e6a507"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": "17",
-                    "column": "6"
+                    "line": 17,
+                    "column": 6
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "24e1d7c73a8a75e4aae91535d3107bdf"
+        "fingerprint": "f9abbc4816c1f64329b71fe23c8d7940"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "17",
-                    "column": "7"
+                    "line": 17,
+                    "column": 7
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "77bba0241d8b0ab1416e5a40019fe569"
+        "fingerprint": "ca86994653cbd6e2bd0a21a315684e25"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": "18",
-                    "column": "8"
+                    "line": 18,
+                    "column": 8
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "000c466b7c9f3e654a9451b34d3ca2b9"
+        "fingerprint": "18ee6acc431c871dfe31aa8c5348316c"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": "18",
-                    "column": "9"
+                    "line": 18,
+                    "column": 9
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "08bd07ff0d862e7d6838f18ec9770d71"
+        "fingerprint": "4d62c97a5a6ed9a41b9af832ec0d4be3"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "19",
-                    "column": "10"
+                    "line": 19,
+                    "column": 10
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "b4288f0f2c21f3b74ff67ca44c1770f3"
+        "fingerprint": "506fa8b19ce9918b2dcee7bfcda2ac82"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "19",
-                    "column": "11"
+                    "line": 19,
+                    "column": 11
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "0e80b89973f7ce6ee7e0b7019f560203"
+        "fingerprint": "7fa6a9325e456eb1058718476beae0b2"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "18",
-                    "column": "12"
+                    "line": 18,
+                    "column": 12
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "348768724ae6b4582714b7cba122cccf"
+        "fingerprint": "59cfffe68c18dbcd136a6a16ee2bbbb5"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "18",
-                    "column": "13"
+                    "line": 18,
+                    "column": 13
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "88de3b477121b6d96b1b461858bef89a"
+        "fingerprint": "d0bfe2255eff847bae72a167313fd2a5"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "19",
-                    "column": "14"
+                    "line": 19,
+                    "column": 14
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "1fcccf3c922c431c7fd13e2d543cb93b"
+        "fingerprint": "8585e6d19f4be1e8d61c97492306077a"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "19",
-                    "column": "6"
+                    "line": 19,
+                    "column": 6
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "48047596758b4de4642eb6a8d4187636"
+        "fingerprint": "28be3be6683be483250b4d59ef3cc16d"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "20",
-                    "column": "7"
+                    "line": 20,
+                    "column": 7
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "beff306f5b48db5b53e825c93bcf99e8"
+        "fingerprint": "8be85b513aba167a92c30b337451742c"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "20",
-                    "column": "8"
+                    "line": 20,
+                    "column": 8
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "e704200bcf976066d129699ed18bca5a"
+        "fingerprint": "591dad475acb333461a76cc67ae00f51"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "19",
-                    "column": "9"
+                    "line": 19,
+                    "column": 9
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "847843859724033ca453baa07514d2ab"
+        "fingerprint": "bb70a1151afad3baa3f91b11f97d8fa3"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "19",
-                    "column": "10"
+                    "line": 19,
+                    "column": 10
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "e44901228d9133623c9213cc2de0fa03"
+        "fingerprint": "e6a1a28fcb8acb2f3365f60adac9e3e7"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": "20",
-                    "column": "11"
+                    "line": 20,
+                    "column": 11
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "e1a9645dbe789ab9067ab4841e00e757"
+        "fingerprint": "a51217d802fc9e5de843c63141db4f44"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": "20",
-                    "column": "12"
+                    "line": 20,
+                    "column": 12
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "904db74d6533868571599af54a576e6f"
+        "fingerprint": "0d8ac421ed864cc9d7ddd83f00bf3f52"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "21",
-                    "column": "13"
+                    "line": 21,
+                    "column": 13
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "0ae50553c92012904994af8fc028daf6"
+        "fingerprint": "ecfecca0bea5d7910d370cb8f0189b42"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "21",
-                    "column": "14"
+                    "line": 21,
+                    "column": 14
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "a7f1fe9a9eef30de1c690da89cd1df6c"
+        "fingerprint": "361b72a0f44c09132dfe74b4e1686562"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "20",
-                    "column": "15"
+                    "line": 20,
+                    "column": 15
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "6dd5de4df76e03f814ffa3737fed8472"
+        "fingerprint": "33b0de8008338b1425ffc60287deffcb"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "20",
-                    "column": "6"
+                    "line": 20,
+                    "column": 6
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "954a867487289986ec5376f2e3153322"
+        "fingerprint": "93e43e05f593bea4d4d51a2c40366de4"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": "21",
-                    "column": "7"
+                    "line": 21,
+                    "column": 7
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "b136cd326ac8fc169cdb853dff7629f6"
+        "fingerprint": "9f1d8d3cb0970aba4bc8014c6b03dad2"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": "21",
-                    "column": "7"
+                    "line": 21,
+                    "column": 7
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "1ec7c2c9d9590d54896c21a422fedc9f"
+        "fingerprint": "e0320f565a04d8a76a9149937dd88a51"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "22",
-                    "column": "8"
+                    "line": 22,
+                    "column": 8
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "8daff69c6394864723ef2270e08df5c6"
+        "fingerprint": "bd6fd417f4b5fbe497e103eb5e0640ce"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": "22",
-                    "column": "9"
+                    "line": 22,
+                    "column": 9
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "09a0975abac18772472f95038c66c3ac"
+        "fingerprint": "6926e5801c6fbcf2c5097df2e058fe3d"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "21",
-                    "column": "10"
+                    "line": 21,
+                    "column": 10
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "7e32a22a66763d665e954d5840a4ce4f"
+        "fingerprint": "344fc7a680122a63080f122b9365910c"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "21",
-                    "column": "11"
+                    "line": 21,
+                    "column": 11
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "7f7694b77bfa1f2f31c819ea3bbac911"
+        "fingerprint": "19b12728d5681c134c1e89fd5ccf6d0e"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "22",
-                    "column": "12"
+                    "line": 22,
+                    "column": 12
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "7ac65d0792b130472117eb7845b47c78"
+        "fingerprint": "fdf4cbad36c706a8007795370a78ee6e"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
                 "begin": {
-                    "line": "22",
-                    "column": "13"
+                    "line": 22,
+                    "column": 13
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "25f58aa6ae27914be357df591b857c12"
+        "fingerprint": "01d00ab7be7bd88cbed8efdc869ad2bb"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "23",
-                    "column": "14"
+                    "line": 23,
+                    "column": 14
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "f851f1962ae59883cabeda61613d989a"
+        "fingerprint": "d12420f28bc3b5dff820fc7d28753136"
     },
     {
         "severity": "critical",
+        "description": "Polyspace: Data race",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "23",
-                    "column": "15"
+                    "line": 23,
+                    "column": 15
                 }
             }
         },
-        "description": "Polyspace: Data race",
-        "fingerprint": "f610cc31147b59a271436e925845247d"
+        "fingerprint": "48a92e97833e72b5eec5be985a4b6423"
     },
     {
         "severity": "major",
-        "location": {
-            "path": "dummy_file_name.c",
-            "positions": {
-                "begin": {
-                    "line": "22",
-                    "column": "7"
-                }
-            }
-        },
         "description": "Polyspace: Sign change integer conversion overflow",
-        "fingerprint": "33e52e2708064ec03c02f4d5fea9177d"
-    },
-    {
-        "severity": "major",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "22",
-                    "column": "8"
+                    "line": 22,
+                    "column": 7
                 }
             }
         },
-        "description": "Polyspace: Sign change integer conversion overflow",
-        "fingerprint": "96c5ccd9570a83ad30a80aec37354a25"
+        "fingerprint": "eefa825d3c16acc3ad71f32d19576012"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Sign change integer conversion overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "23",
-                    "column": "9"
+                    "line": 22,
+                    "column": 8
                 }
             }
         },
-        "description": "Polyspace: Sign change integer conversion overflow",
-        "fingerprint": "761c46473d2baba43807c2436af41516"
+        "fingerprint": "5bb1f0dca3fa13ef4165d0a4b784eec3"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Sign change integer conversion overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "23",
-                    "column": "10"
+                    "line": 23,
+                    "column": 9
                 }
             }
         },
-        "description": "Polyspace: Sign change integer conversion overflow",
-        "fingerprint": "aed8d3bdc16ae565024bf537e3fb309e"
+        "fingerprint": "859cb9236282bb6ef524cb5539ec5e31"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Sign change integer conversion overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "24",
-                    "column": "11"
+                    "line": 23,
+                    "column": 10
                 }
             }
         },
-        "description": "Polyspace: Sign change integer conversion overflow",
-        "fingerprint": "971b4e1ccd3512a0fc36cdcda90b6b72"
+        "fingerprint": "22c0e8ab9c611b8823cf5d21ba36edd6"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Sign change integer conversion overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "24",
-                    "column": "12"
+                    "line": 24,
+                    "column": 11
                 }
             }
         },
-        "description": "Polyspace: Sign change integer conversion overflow",
-        "fingerprint": "ec35a2ca1a81a27f7954f417129c0d08"
+        "fingerprint": "f766c4f9940d1efef8a238e5c79906dd"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Sign change integer conversion overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "23",
-                    "column": "13"
+                    "line": 24,
+                    "column": 12
                 }
             }
         },
-        "description": "Polyspace: Sign change integer conversion overflow",
-        "fingerprint": "ed87e9679203350ce4b74e5872bbb6a3"
+        "fingerprint": "ecfeb007c472ddfd15ed7f3f0148b92c"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Sign change integer conversion overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "23",
-                    "column": "14"
+                    "line": 23,
+                    "column": 13
                 }
             }
         },
-        "description": "Polyspace: Sign change integer conversion overflow",
-        "fingerprint": "515eddb9bc378eed8762559d6608a181"
+        "fingerprint": "0dba0185c7ee7d9e179045298b39cca2"
     },
     {
         "severity": "major",
+        "description": "Polyspace: Sign change integer conversion overflow",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "24",
-                    "column": "15"
+                    "line": 23,
+                    "column": 14
                 }
             }
         },
+        "fingerprint": "ea51d0f24965712bef29f7e8ebead82d"
+    },
+    {
+        "severity": "major",
         "description": "Polyspace: Sign change integer conversion overflow",
-        "fingerprint": "d02eea0a48ec32debb50e4fe0a1038f4"
+        "location": {
+            "path": "dummy_file_name.c",
+            "positions": {
+                "begin": {
+                    "line": 24,
+                    "column": 15
+                }
+            }
+        },
+        "fingerprint": "55113c9f4327039bd2d36d66b2526021"
     },
     {
         "severity": "minor",
+        "description": "Polyspace: Dead code",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "24",
-                    "column": "16"
+                    "line": 24,
+                    "column": 16
                 }
             }
         },
-        "description": "Polyspace: Dead code",
-        "fingerprint": "4fc4aa18191faedbcd3158961ab32e29"
+        "fingerprint": "42e7906fee2d6fb1da1fa7204dffb985"
     },
     {
         "severity": "minor",
+        "description": "Polyspace: Dead code",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "25",
-                    "column": "7"
+                    "line": 25,
+                    "column": 7
                 }
             }
         },
-        "description": "Polyspace: Dead code",
-        "fingerprint": "b602a67f00eaee672407241d386c2cda"
+        "fingerprint": "bb5dab56fea1e09c1c4b3f3dbfb94f73"
     },
     {
         "severity": "minor",
+        "description": "Polyspace: Dead code",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "25",
-                    "column": "8"
+                    "line": 25,
+                    "column": 8
                 }
             }
         },
-        "description": "Polyspace: Dead code",
-        "fingerprint": "25b08a6b66361fa8f0c988d4831339ca"
+        "fingerprint": "0b6e94d73c02c57d8365d2ae17aeb84d"
     },
     {
         "severity": "minor",
+        "description": "Polyspace: Dead code",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": "24",
-                    "column": "8"
+                    "line": 24,
+                    "column": 8
                 }
             }
         },
-        "description": "Polyspace: Dead code",
-        "fingerprint": "de0523fb6c1ad76ccdcb524c7185648b"
+        "fingerprint": "10cda2122bafa56e9bbebf6fb3a49a2d"
     }
 ]

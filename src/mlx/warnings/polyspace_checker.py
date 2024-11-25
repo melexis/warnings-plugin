@@ -1,9 +1,11 @@
+# SPDX-License-Identifier: Apache-2.0
+
 import csv
-import hashlib
 from io import TextIOWrapper
 import os
 from string import Template
 
+from .code_quality import Finding
 from .exceptions import WarningsConfigError
 from .warnings_checker import WarningsChecker
 
@@ -215,44 +217,23 @@ class PolyspaceFamilyChecker(WarningsChecker):
         Args:
             row (dict): The row of the warning with the corresponding colomn names
         '''
-        finding = {
-            "severity": "major",
-            "location": {
-                "path": self.cq_default_path,
-                "positions": {
-                    "begin": {
-                        "line": 1,
-                        "column": 1
-                    }
-                }
-            }
-        }
-
         try:
             description = self.cq_description_template.substitute(os.environ, **row)
         except KeyError as err:
             raise WarningsConfigError(f"Failed to find environment variable from configuration value "
                                       f"'cq_description_template': {err}") from err
 
+        finding = Finding(description)
         # Attention to bug finder: items have color red for impact: high, medium and low.
-        if row["information"].lower() in self.code_quality_severity.keys():
-            finding["severity"] = self.code_quality_severity[row["information"].lower()]
-        elif row["color"].lower() in self.code_quality_severity.keys():
-            finding["severity"] = self.code_quality_severity[row["color"].lower()]
-        else:
-            finding["severity"] = "info"
+        if (severity := self.code_quality_severity.get(row["information"].lower())) is not None:
+            finding.severity = severity
+        elif (severity := self.code_quality_severity.get(row["color"].lower())) is not None:
+            finding.severity = severity
+        finding.path = row.get("file", self.cq_default_path)
+        finding.line = row.get("line", 1)
+        finding.column = row.get("col", 1)
 
-        if row["file"]:
-            finding["location"]["path"] = row["file"]
-        if "line" in row:
-            finding["location"]["positions"]["begin"]["line"] = row["line"]
-        if "col" in row:
-            finding["location"]["positions"]["begin"]["column"] = row["col"]
-        finding["description"] = description
-        exclude = ("new", "status", "severity", "comment", "key")
-        row_without_key = [value for key, value in row.items() if key not in exclude]
-        finding["fingerprint"] = hashlib.md5(str(row_without_key).encode('utf-8')).hexdigest()
-        self.cq_findings.append(finding)
+        self.cq_findings.append(finding.to_dict())
 
     def check(self, content):
         '''

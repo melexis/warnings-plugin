@@ -9,6 +9,7 @@ Contents
    installation
    design
    contributing
+   security
    authors
 
 Indices and Tables

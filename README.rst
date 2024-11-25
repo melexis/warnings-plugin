@@ -617,6 +617,6 @@ development of the plugin. We encourage anyone to contribute to our repository.
 .. |string.Template| replace:: ``string.Template``
 .. _YAML: https://yaml.org/spec/1.2.2/
 .. _a Code Quality report: https://docs.gitlab.com/ee/ci/testing/code_quality.html
-.. _a subset of the Code Climate spec: https://docs.gitlab.com/ee/ci/testing/code_quality.html#implement-a-custom-tool
+.. _a subset of the Code Climate spec: https://docs.gitlab.com/ee/ci/testing/code_quality.html#code-quality-report-format
 .. _as a codequality report artifact: https://docs.gitlab.com/ee/ci/yaml/artifacts_reports.html#artifactsreportscodequality
 .. _string.Template: https://docs.python.org/3/library/string.html#string.Template.template
