@@ -79,11 +79,11 @@ class CoverityChecker(RegexChecker):
         super().__init__(verbose)
         self._cq_description_template = Template('Coverity: $checker')
         self.checkers = {
-            "false positive": CoverityClassificationChecker("false positive", verbose=self.verbose),
-            "intentional": CoverityClassificationChecker("intentional", verbose=self.verbose),
-            "bug": CoverityClassificationChecker("bug", verbose=self.verbose),
             "unclassified": CoverityClassificationChecker("unclassified", verbose=self.verbose),
             "pending": CoverityClassificationChecker("pending", verbose=self.verbose),
+            "bug": CoverityClassificationChecker("bug", verbose=self.verbose),
+            "intentional": CoverityClassificationChecker("intentional", verbose=self.verbose),
+            "false positive": CoverityClassificationChecker("false positive", verbose=self.verbose),
         }
 
     @property
