@@ -1,14 +1,19 @@
 coverity:
   enabled: true
+  unclassified:
+    min: $MIN_COV_WARNINGS
+    max: '$MAX_COV_WARNINGS'
   intentional:
     min: 0
     max: -1
   bug:
+    min: 0
     max: 0
   pending:
     min: 0
     max: 0
   false_positive:
+    min: 0
     max: -1
 sphinx:
   enabled: false

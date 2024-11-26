@@ -6,7 +6,7 @@ from unittest import TestCase
 
 from unittest.mock import patch
 
-from mlx.warnings import warnings_wrapper, WarningsConfigError
+from mlx.warnings import exceptions, warnings_wrapper, WarningsConfigError, Finding
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
 TEST_OUT_DIR = Path(__file__).parent / 'test_out'
@@ -14,6 +14,7 @@ TEST_OUT_DIR = Path(__file__).parent / 'test_out'
 
 class TestIntegration(TestCase):
     def setUp(self):
+        Finding.fingerprints = {}
         if not TEST_OUT_DIR.exists():
             TEST_OUT_DIR.mkdir()
 
@@ -368,10 +369,25 @@ class TestIntegration(TestCase):
         filename = 'code_quality_format.json'
         out_file = str(TEST_OUT_DIR / filename)
         ref_file = str(TEST_IN_DIR / filename)
-        retval = warnings_wrapper([
-            '--code-quality', out_file,
-            '--config', 'tests/test_in/config_cq_description_format.json',
-            'tests/test_in/mixed_warnings.txt',
-        ])
+        with patch('sys.stdout', new=StringIO()) as fake_output:
+            retval = warnings_wrapper([
+                '--code-quality', out_file,
+                '--config', 'tests/test_in/config_cq_description_format.json',
+                'tests/test_in/mixed_warnings.txt',
+            ])
+        output = fake_output.getvalue().splitlines(keepends=False)
+        self.assertIn("WARNING: Unrecognized classification 'max'", output)
+        self.assertIn("WARNING: Unrecognized classification 'min'", output)
         self.assertEqual(2, retval)
         self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
+
+    @patch('pathlib.Path.cwd')
+    def test_polyspace_error(self, path_cwd_mock):
+        config_file = str(TEST_IN_DIR / 'config_example_polyspace_error.yml')
+        with self.assertRaises(exceptions.WarningsConfigError) as context:
+            warnings_wrapper([
+                '--config', config_file,
+                'tests/test_in/mixed_warnings.txt',
+            ])
+        self.assertEqual(str(context.exception), 'Polyspace checker cannot be combined with other warnings checkers')
+

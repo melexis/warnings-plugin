@@ -78,7 +78,13 @@ class CoverityChecker(RegexChecker):
     def __init__(self, verbose=False):
         super().__init__(verbose)
         self._cq_description_template = Template('Coverity: $checker')
-        self.checkers = {}
+        self.checkers = {
+            "unclassified": CoverityClassificationChecker("unclassified", verbose=self.verbose),
+            "pending": CoverityClassificationChecker("pending", verbose=self.verbose),
+            "bug": CoverityClassificationChecker("bug", verbose=self.verbose),
+            "intentional": CoverityClassificationChecker("intentional", verbose=self.verbose),
+            "false positive": CoverityClassificationChecker("false positive", verbose=self.verbose),
+        }
 
     @property
     def counted_warnings(self):
@@ -140,15 +146,14 @@ class CoverityChecker(RegexChecker):
         matches = re.finditer(self.pattern, content)
         for match in matches:
             if (classification := match.group("classification").lower()) in self.checkers:
-                self.checkers[classification].check(match)
-            else:
-                checker = CoverityClassificationChecker(classification=classification, verbose=self.verbose)
-                self.checkers[classification] = checker
+                checker = self.checkers[classification]
                 checker.cq_enabled = self.cq_enabled
                 checker.exclude_patterns = self.exclude_patterns
                 checker.cq_description_template = self.cq_description_template
                 checker.cq_default_path = self.cq_default_path
                 checker.check(match)
+            else:
+                print(f"WARNING: Unrecognized classification {match.group('classification')!r}")
 
     def parse_config(self, config):
         """Process configuration
@@ -165,21 +170,10 @@ class CoverityChecker(RegexChecker):
             self.add_patterns(value, self.exclude_patterns)
         for classification, checker_config in config.items():
             classification_key = classification.lower().replace("_", " ")
-            if classification_key in CoverityClassificationChecker.SEVERITY_MAP:
-                checker = CoverityClassificationChecker(classification=classification_key, verbose=self.verbose)
-                if maximum := checker_config.get("max", 0):
-                    checker.maximum = int(maximum)
-                if minimum := checker_config.get("min", 0):
-                    checker.minimum = int(minimum)
-                self.checkers[classification_key] = checker
+            if classification_key in self.checkers:
+                self.checkers[classification_key].parse_config(checker_config)
             else:
                 print(f"WARNING: Unrecognized classification {classification!r}")
-
-        for checker in self.checkers.values():
-            checker.cq_enabled = self.cq_enabled
-            checker.exclude_patterns = self.exclude_patterns
-            checker.cq_description_template = self.cq_description_template
-            checker.cq_default_path = self.cq_default_path
 
 
 class CoverityClassificationChecker(WarningsChecker):

@@ -1,8 +1,8 @@
-from io import StringIO
-from unittest import TestCase
-from pathlib import Path
 import filecmp
-
+import os
+from io import StringIO
+from pathlib import Path
+from unittest import TestCase, mock
 from unittest.mock import patch
 
 from mlx.warnings import WarningsPlugin, warnings_wrapper, Finding
@@ -11,6 +11,16 @@ TEST_IN_DIR = Path(__file__).parent / 'test_in'
 TEST_OUT_DIR = Path(__file__).parent / 'test_out'
 
 
+def ordered(obj):
+    if isinstance(obj, dict):
+        return sorted((k, ordered(v)) for k, v in obj.items())
+    if isinstance(obj, list):
+        return sorted(ordered(x) for x in obj)
+    else:
+        return obj
+
+
+@mock.patch.dict(os.environ, {"MIN_COV_WARNINGS": "1", "MAX_COV_WARNINGS": "2"})
 class TestCoverityWarnings(TestCase):
     def setUp(self):
         Finding.fingerprints = {}
