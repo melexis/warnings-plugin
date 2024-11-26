@@ -384,10 +384,8 @@ class TestIntegration(TestCase):
     @patch('pathlib.Path.cwd')
     def test_polyspace_error(self, path_cwd_mock):
         config_file = str(TEST_IN_DIR / 'config_example_polyspace_error.yml')
-        cq_file = str(TEST_IN_DIR / 'test.json')
         with self.assertRaises(exceptions.WarningsConfigError) as context:
             warnings_wrapper([
-                '--code-quality', cq_file,
                 '--config', config_file,
                 'tests/test_in/mixed_warnings.txt',
             ])
