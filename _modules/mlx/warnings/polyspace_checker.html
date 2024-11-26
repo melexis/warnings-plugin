@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx.warnings.polyspace_checker &#8212; warning-plugin 5.5.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/pydoctheme.css" />
+    <title>mlx.warnings.polyspace_checker &#8212; warning-plugin 5.6.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d10597a4" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pydoctheme.css?v=8635fa60" />
     
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/documentation_options.js?v=31fa7d35"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <script src="../../../_static/sidebar.js"></script>
     
@@ -30,7 +27,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="../../../index.html">warning-plugin-5.5.1</a> &#187;</li>
+        <li><a href="../../../index.html">warning-plugin-5.6.0</a> &#187;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -48,17 +45,21 @@
           <div class="body" role="main">
             
   <h1>Source code for mlx.warnings.polyspace_checker</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">csv</span>
-<span class="kn">import</span> <span class="nn">hashlib</span>
+<span></span><span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
+
+<span class="kn">import</span> <span class="nn">csv</span>
 <span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">TextIOWrapper</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="n">Template</span>
 
+<span class="kn">from</span> <span class="nn">.code_quality</span> <span class="kn">import</span> <span class="n">Finding</span>
 <span class="kn">from</span> <span class="nn">.exceptions</span> <span class="kn">import</span> <span class="n">WarningsConfigError</span>
 <span class="kn">from</span> <span class="nn">.warnings_checker</span> <span class="kn">import</span> <span class="n">WarningsChecker</span>
 
 
-<div class="viewcode-block" id="PolyspaceChecker"><a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceChecker">[docs]</a><span class="k">class</span> <span class="nc">PolyspaceChecker</span><span class="p">(</span><span class="n">WarningsChecker</span><span class="p">):</span>
+<div class="viewcode-block" id="PolyspaceChecker">
+<a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceChecker">[docs]</a>
+<span class="k">class</span> <span class="nc">PolyspaceChecker</span><span class="p">(</span><span class="n">WarningsChecker</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;polyspace&#39;</span>
     <span class="n">checkers</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -123,7 +124,9 @@
         <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="p">:</span>
             <span class="n">checker</span><span class="o">.</span><span class="n">maximum</span> <span class="o">=</span> <span class="n">maximum</span>
 
-<div class="viewcode-block" id="PolyspaceChecker.check"><a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceChecker.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+<div class="viewcode-block" id="PolyspaceChecker.check">
+<a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceChecker.check">[docs]</a>
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Function for counting the number of failures in a TSV file exported by Polyspace</span>
 
@@ -143,7 +146,10 @@
                 <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;family&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">checker</span><span class="o">.</span><span class="n">family_value</span><span class="p">:</span>
                     <span class="n">checker</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">row</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="PolyspaceChecker.return_count"><a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceChecker.return_count">[docs]</a>    <span class="k">def</span> <span class="nf">return_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PolyspaceChecker.return_count">
+<a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceChecker.return_count">[docs]</a>
+    <span class="k">def</span> <span class="nf">return_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39; Getter function for the amount of warnings found</span>
 
 <span class="sd">        Returns:</span>
@@ -154,7 +160,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="n">checker</span><span class="o">.</span><span class="n">return_count</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span></div>
 
-<div class="viewcode-block" id="PolyspaceChecker.return_check_limits"><a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceChecker.return_check_limits">[docs]</a>    <span class="k">def</span> <span class="nf">return_check_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PolyspaceChecker.return_check_limits">
+<a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceChecker.return_check_limits">[docs]</a>
+    <span class="k">def</span> <span class="nf">return_check_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39; Function for checking whether the warning count is within the configured limits</span>
 
 <span class="sd">        Returns:</span>
@@ -170,7 +179,10 @@
             <span class="n">count</span> <span class="o">+=</span> <span class="n">checker</span><span class="o">.</span><span class="n">return_check_limits</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">count</span></div>
 
-<div class="viewcode-block" id="PolyspaceChecker.parse_config"><a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceChecker.parse_config">[docs]</a>    <span class="k">def</span> <span class="nf">parse_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PolyspaceChecker.parse_config">
+<a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceChecker.parse_config">[docs]</a>
+    <span class="k">def</span> <span class="nf">parse_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parsing configuration dict extracted by previously opened JSON or yaml/yml file</span>
 
 <span class="sd">        Args:</span>
@@ -216,10 +228,14 @@
             <span class="n">checker</span><span class="o">.</span><span class="n">cq_enabled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_enabled</span>
             <span class="n">checker</span><span class="o">.</span><span class="n">exclude_patterns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exclude_patterns</span>
             <span class="n">checker</span><span class="o">.</span><span class="n">cq_description_template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_description_template</span>
-            <span class="n">checker</span><span class="o">.</span><span class="n">cq_default_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_default_path</span></div></div>
+            <span class="n">checker</span><span class="o">.</span><span class="n">cq_default_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_default_path</span></div>
+</div>
 
 
-<div class="viewcode-block" id="PolyspaceFamilyChecker"><a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceFamilyChecker">[docs]</a><span class="k">class</span> <span class="nc">PolyspaceFamilyChecker</span><span class="p">(</span><span class="n">WarningsChecker</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PolyspaceFamilyChecker">
+<a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceFamilyChecker">[docs]</a>
+<span class="k">class</span> <span class="nc">PolyspaceFamilyChecker</span><span class="p">(</span><span class="n">WarningsChecker</span><span class="p">):</span>
     <span class="n">code_quality_severity</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;impact: high&quot;</span><span class="p">:</span> <span class="s2">&quot;critical&quot;</span><span class="p">,</span>
         <span class="s2">&quot;impact: medium&quot;</span><span class="p">:</span> <span class="s2">&quot;major&quot;</span><span class="p">,</span>
@@ -250,7 +266,9 @@
     <span class="k">def</span> <span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_obj</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span> <span class="o">=</span> <span class="n">template_obj</span>
 
-<div class="viewcode-block" id="PolyspaceFamilyChecker.return_count"><a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceFamilyChecker.return_count">[docs]</a>    <span class="k">def</span> <span class="nf">return_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PolyspaceFamilyChecker.return_count">
+<a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceFamilyChecker.return_count">[docs]</a>
+    <span class="k">def</span> <span class="nf">return_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39; Getter function for the amount of warnings found</span>
 
 <span class="sd">        Returns:</span>
@@ -259,52 +277,37 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> warnings found for </span><span class="si">{!r}</span><span class="s2">: </span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_value</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span></div>
 
-<div class="viewcode-block" id="PolyspaceFamilyChecker.add_code_quality_finding"><a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceFamilyChecker.add_code_quality_finding">[docs]</a>    <span class="k">def</span> <span class="nf">add_code_quality_finding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PolyspaceFamilyChecker.add_code_quality_finding">
+<a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceFamilyChecker.add_code_quality_finding">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_code_quality_finding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;Add code quality finding</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            row (dict): The row of the warning with the corresponding colomn names</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">finding</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;severity&quot;</span><span class="p">:</span> <span class="s2">&quot;major&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_default_path</span><span class="p">,</span>
-                <span class="s2">&quot;positions&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;begin&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;line&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-                        <span class="s2">&quot;column&quot;</span><span class="p">:</span> <span class="mi">1</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-
         <span class="k">try</span><span class="p">:</span>
             <span class="n">description</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_description_template</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="o">**</span><span class="n">row</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">WarningsConfigError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to find environment variable from configuration value &quot;</span>
                                       <span class="sa">f</span><span class="s2">&quot;&#39;cq_description_template&#39;: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
 
+        <span class="n">finding</span> <span class="o">=</span> <span class="n">Finding</span><span class="p">(</span><span class="n">description</span><span class="p">)</span>
         <span class="c1"># Attention to bug finder: items have color red for impact: high, medium and low.</span>
-        <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;information&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">code_quality_severity</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">finding</span><span class="p">[</span><span class="s2">&quot;severity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">code_quality_severity</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;information&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
-        <span class="k">elif</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">code_quality_severity</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">finding</span><span class="p">[</span><span class="s2">&quot;severity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">code_quality_severity</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">finding</span><span class="p">[</span><span class="s2">&quot;severity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">severity</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">code_quality_severity</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;information&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">finding</span><span class="o">.</span><span class="n">severity</span> <span class="o">=</span> <span class="n">severity</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">severity</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">code_quality_severity</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">finding</span><span class="o">.</span><span class="n">severity</span> <span class="o">=</span> <span class="n">severity</span>
+        <span class="n">finding</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_default_path</span><span class="p">)</span>
+        <span class="n">finding</span><span class="o">.</span><span class="n">line</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;line&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">finding</span><span class="o">.</span><span class="n">column</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;col&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">]:</span>
-            <span class="n">finding</span><span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">][</span><span class="s2">&quot;path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s2">&quot;line&quot;</span> <span class="ow">in</span> <span class="n">row</span><span class="p">:</span>
-            <span class="n">finding</span><span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">][</span><span class="s2">&quot;positions&quot;</span><span class="p">][</span><span class="s2">&quot;begin&quot;</span><span class="p">][</span><span class="s2">&quot;line&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;line&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s2">&quot;col&quot;</span> <span class="ow">in</span> <span class="n">row</span><span class="p">:</span>
-            <span class="n">finding</span><span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">][</span><span class="s2">&quot;positions&quot;</span><span class="p">][</span><span class="s2">&quot;begin&quot;</span><span class="p">][</span><span class="s2">&quot;column&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;col&quot;</span><span class="p">]</span>
-        <span class="n">finding</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
-        <span class="n">exclude</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;new&quot;</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;severity&quot;</span><span class="p">,</span> <span class="s2">&quot;comment&quot;</span><span class="p">,</span> <span class="s2">&quot;key&quot;</span><span class="p">)</span>
-        <span class="n">row_without_key</span> <span class="o">=</span> <span class="p">[</span><span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span><span class="p">]</span>
-        <span class="n">finding</span><span class="p">[</span><span class="s2">&quot;fingerprint&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">row_without_key</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cq_findings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">finding</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cq_findings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">finding</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="PolyspaceFamilyChecker.check"><a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceFamilyChecker.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PolyspaceFamilyChecker.check">
+<a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceFamilyChecker.check">[docs]</a>
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Function for counting the number of failures in a TSV/CSV file exported by Polyspace</span>
 
@@ -325,19 +328,21 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">check_value</span>
                     <span class="p">))</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_enabled</span> <span class="ow">and</span> <span class="n">content</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;green&quot;</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">add_code_quality_finding</span><span class="p">(</span><span class="n">content</span><span class="p">)</span></div></div>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">add_code_quality_finding</span><span class="p">(</span><span class="n">content</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
             <div class="clearer"></div>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="sidebar-anchor"></a>
     
 
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
@@ -345,7 +350,7 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3><a href="../../../index.html">Table Of Contents</a></h3>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Command Line Warnings Plugin</a></li>
@@ -358,6 +363,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contribution Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html#getting-started">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html#reporting-issues-or-requesting-a-new-feature">Reporting Issues or Requesting a New Feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../security.html">Security Policy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
 </ul>
 
@@ -382,9 +388,9 @@
     </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Oct 21, 2024.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    &#169; Copyright 2017-2019, Bavo Van Achte.
+      Last updated on Nov 26, 2024.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>

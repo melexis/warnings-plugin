@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Software Design &#8212; warning-plugin 5.5.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/pydoctheme.css" />
+    <title>Software Design &#8212; warning-plugin 5.6.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d10597a4" />
+    <link rel="stylesheet" type="text/css" href="_static/pydoctheme.css?v=8635fa60" />
     
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/documentation_options.js?v=31fa7d35"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <script src="_static/sidebar.js"></script>
     
@@ -33,7 +30,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="index.html">warning-plugin-5.5.1</a> &#187;</li> 
+        <li><a href="index.html">warning-plugin-5.6.0</a> &#187;</li> 
       </ul>
     </div>
     
@@ -50,9 +47,9 @@
           <div class="body" role="main">
             
   <section id="software-design">
-<span id="id1"></span><h1>Software Design<a class="headerlink" href="#software-design" title="Permalink to this heading">¶</a></h1>
+<span id="id1"></span><h1>Software Design<a class="headerlink" href="#software-design" title="Link to this heading">¶</a></h1>
 <section id="class-diagram">
-<span id="id2"></span><h2>Class Diagram<a class="headerlink" href="#class-diagram" title="Permalink to this heading">¶</a></h2>
+<span id="id2"></span><h2>Class Diagram<a class="headerlink" href="#class-diagram" title="Link to this heading">¶</a></h2>
 <p class="plantuml">
 <img src="_images/plantuml-51290d8778b96120d32f043a3907c639bb99b52d.png" alt="&#64;startuml classes
 set namespaceSeparator none
@@ -212,20 +209,20 @@ mlx.warnings.robot_checker.RobotSuiteChecker --|&gt; mlx.warnings.junit_checker.
 </p>
 </section>
 <section id="string-handling">
-<h2>String Handling<a class="headerlink" href="#string-handling" title="Permalink to this heading">¶</a></h2>
+<h2>String Handling<a class="headerlink" href="#string-handling" title="Link to this heading">¶</a></h2>
 <p>Convention is to use plain python strings everywhere. Where needed the strings can be converted to anything else.</p>
 <p>Example: junitparser expects byte array objects, so we encode our string right before passing it to junitparser.</p>
 </section>
 <section id="module-mlx.warnings">
-<span id="instrument-module"></span><h2>Instrument Module<a class="headerlink" href="#module-mlx.warnings" title="Permalink to this heading">¶</a></h2>
+<span id="instrument-module"></span><h2>Instrument Module<a class="headerlink" href="#module-mlx.warnings" title="Link to this heading">¶</a></h2>
 <p>Melexis fork of warnings plugin</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlx.warnings.CoverityChecker">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">CoverityChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/regex_checker.html#CoverityChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.CoverityChecker" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">CoverityChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/regex_checker.html#CoverityChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.CoverityChecker" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">RegexChecker</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.CoverityChecker.check">
-<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/regex_checker.html#CoverityChecker.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.CoverityChecker.check" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/regex_checker.html#CoverityChecker.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.CoverityChecker.check" title="Link to this definition">¶</a></dt>
 <dd><p>Function for counting the number of warnings, but adopted for Coverity
 output</p>
 <dl class="field-list simple">
@@ -237,7 +234,7 @@ output</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.CoverityChecker.counted_warnings">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">counted_warnings</span></span><a class="headerlink" href="#mlx.warnings.CoverityChecker.counted_warnings" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">counted_warnings</span></span><a class="headerlink" href="#mlx.warnings.CoverityChecker.counted_warnings" title="Link to this definition">¶</a></dt>
 <dd><p>list of counted warnings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -248,7 +245,7 @@ output</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.CoverityChecker.cq_description_template">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cq_description_template</span></span><a class="headerlink" href="#mlx.warnings.CoverityChecker.cq_description_template" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cq_description_template</span></span><a class="headerlink" href="#mlx.warnings.CoverityChecker.cq_description_template" title="Link to this definition">¶</a></dt>
 <dd><p>string.Template instance based on the configured template string</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -259,7 +256,7 @@ output</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.CoverityChecker.cq_findings">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cq_findings</span></span><a class="headerlink" href="#mlx.warnings.CoverityChecker.cq_findings" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cq_findings</span></span><a class="headerlink" href="#mlx.warnings.CoverityChecker.cq_findings" title="Link to this definition">¶</a></dt>
 <dd><p>list of code quality findings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -270,12 +267,12 @@ output</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mlx.warnings.CoverityChecker.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'coverity'</span></em><a class="headerlink" href="#mlx.warnings.CoverityChecker.name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'coverity'</span></em><a class="headerlink" href="#mlx.warnings.CoverityChecker.name" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.CoverityChecker.parse_config">
-<span class="sig-name descname"><span class="pre">parse_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/regex_checker.html#CoverityChecker.parse_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.CoverityChecker.parse_config" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">parse_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/regex_checker.html#CoverityChecker.parse_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.CoverityChecker.parse_config" title="Link to this definition">¶</a></dt>
 <dd><p>Process configuration</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -286,12 +283,12 @@ output</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mlx.warnings.CoverityChecker.pattern">
-<span class="sig-name descname"><span class="pre">pattern</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">re.compile('(?P&lt;path&gt;[\\d\\w/\\\\/-_]+\\.\\w+)(:(?P&lt;line&gt;\\d+)(:(?P&lt;column&gt;\\d+))?)?:</span> <span class="pre">?CID</span> <span class="pre">\\d+</span> <span class="pre">\\(#(?P&lt;curr&gt;\\d+)</span> <span class="pre">of</span> <span class="pre">(?P&lt;max&gt;\\d+)\\):</span> <span class="pre">(?P&lt;checker&gt;.+):</span> <span class="pre">(?P&lt;classification&gt;[\\w</span> <span class="pre">]+),.+')</span></em><a class="headerlink" href="#mlx.warnings.CoverityChecker.pattern" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pattern</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">re.compile('(?P&lt;path&gt;[\\d\\w/\\\\/-_]+\\.\\w+)(:(?P&lt;line&gt;\\d+)(:(?P&lt;column&gt;\\d+))?)?:</span> <span class="pre">?CID</span> <span class="pre">\\d+</span> <span class="pre">\\(#(?P&lt;curr&gt;\\d+)</span> <span class="pre">of</span> <span class="pre">(?P&lt;max&gt;\\d+)\\):</span> <span class="pre">(?P&lt;checker&gt;.+):</span> <span class="pre">(?P&lt;classification&gt;[\\w</span> <span class="pre">]+),.+')</span></em><a class="headerlink" href="#mlx.warnings.CoverityChecker.pattern" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.CoverityChecker.return_check_limits">
-<span class="sig-name descname"><span class="pre">return_check_limits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/regex_checker.html#CoverityChecker.return_check_limits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.CoverityChecker.return_check_limits" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">return_check_limits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/regex_checker.html#CoverityChecker.return_check_limits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.CoverityChecker.return_check_limits" title="Link to this definition">¶</a></dt>
 <dd><p>Function for checking whether the warning count is within the configured limits</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -307,7 +304,7 @@ output</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.CoverityChecker.return_count">
-<span class="sig-name descname"><span class="pre">return_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/regex_checker.html#CoverityChecker.return_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.CoverityChecker.return_count" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">return_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/regex_checker.html#CoverityChecker.return_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.CoverityChecker.return_count" title="Link to this definition">¶</a></dt>
 <dd><p>Getter function for the amount of warnings found</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -320,27 +317,113 @@ output</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mlx.warnings.DoxyChecker">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">DoxyChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/regex_checker.html#DoxyChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.DoxyChecker" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">DoxyChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/regex_checker.html#DoxyChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.DoxyChecker" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">RegexChecker</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mlx.warnings.DoxyChecker.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'doxygen'</span></em><a class="headerlink" href="#mlx.warnings.DoxyChecker.name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'doxygen'</span></em><a class="headerlink" href="#mlx.warnings.DoxyChecker.name" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mlx.warnings.DoxyChecker.pattern">
-<span class="sig-name descname"><span class="pre">pattern</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">re.compile('(?:(?P&lt;path1&gt;(?:[/.]|[A-Za-z]).+?):(?P&lt;line1&gt;-?\\d+):\\s*(?P&lt;severity1&gt;[Ww]arning|[Ee]rror)|&lt;.+&gt;:(?P&lt;line2&gt;-?\\d+)(?::\\s*(?P&lt;severity2&gt;[Ww]arning|[Ee]rror))?):</span> <span class="pre">(?P&lt;description1&gt;.+(?:(?!\\s*([Nn]otic)</span></em><a class="headerlink" href="#mlx.warnings.DoxyChecker.pattern" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pattern</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">re.compile('(?:(?P&lt;path1&gt;(?:[/.]|[A-Za-z]).+?):(?P&lt;line1&gt;-?\\d+):\\s*(?P&lt;severity1&gt;[Ww]arning|[Ee]rror)|&lt;.+&gt;:(?P&lt;line2&gt;-?\\d+)(?::\\s*(?P&lt;severity2&gt;[Ww]arning|[Ee]rror))?):</span> <span class="pre">(?P&lt;description1&gt;.+(?:(?!\\s*([Nn]otic)</span></em><a class="headerlink" href="#mlx.warnings.DoxyChecker.pattern" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="mlx.warnings.Finding">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">Finding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">description</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/code_quality.html#Finding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.Finding" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Code quality violation</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="mlx.warnings.Finding.column">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">column</span></span><a class="headerlink" href="#mlx.warnings.Finding.column" title="Link to this definition">¶</a></dt>
+<dd><p>The column on which the code quality violation occurred. Defaults to 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mlx.warnings.Finding.fingerprint">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fingerprint</span></span><a class="headerlink" href="#mlx.warnings.Finding.fingerprint" title="Link to this definition">¶</a></dt>
+<dd><p>The unique fingerprint to identify this specific code quality violation.</p>
+<p>The fingerprint is generated as follows:</p>
+<ol class="arabic simple">
+<li><p>A base string is created by concatenating the severity, path, and description of the finding.</p></li>
+<li><p>The base string is hashed to produce an initial hash.</p></li>
+<li><p>If the hash already exists (hash collision), a new hash is generated by concatenating the base string
+with the current hash and hashing the result.</p></li>
+<li><p>Step 3 is repeated until a unique hash is obtained.</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mlx.warnings.Finding.fingerprints">
+<span class="sig-name descname"><span class="pre">fingerprints</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#mlx.warnings.Finding.fingerprints" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mlx.warnings.Finding.line">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">line</span></span><a class="headerlink" href="#mlx.warnings.Finding.line" title="Link to this definition">¶</a></dt>
+<dd><p>The line on which the code quality violation occurred. Defaults to 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mlx.warnings.Finding.path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#mlx.warnings.Finding.path" title="Link to this definition">¶</a></dt>
+<dd><p>The file containing the code quality violation, expressed as a relative path in the repository.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mlx.warnings.Finding.severity">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">severity</span></span><a class="headerlink" href="#mlx.warnings.Finding.severity" title="Link to this definition">¶</a></dt>
+<dd><p>The severity of the violation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlx.warnings.Finding.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/code_quality.html#Finding.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.Finding.to_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the code quality finding as dictionary with a unique fingerprint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>dict</em> – The code quality finding</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="mlx.warnings.JUnitChecker">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">JUnitChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/junit_checker.html#JUnitChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.JUnitChecker" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">JUnitChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/junit_checker.html#JUnitChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.JUnitChecker" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#mlx.warnings.WarningsChecker" title="mlx.warnings.warnings_checker.WarningsChecker"><code class="xref py py-class docutils literal notranslate"><span class="pre">WarningsChecker</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.JUnitChecker.check">
-<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/junit_checker.html#JUnitChecker.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.JUnitChecker.check" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/junit_checker.html#JUnitChecker.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.JUnitChecker.check" title="Link to this definition">¶</a></dt>
 <dd><p>Function for counting the number of JUnit failures in a specific text</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -351,12 +434,12 @@ output</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mlx.warnings.JUnitChecker.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'junit'</span></em><a class="headerlink" href="#mlx.warnings.JUnitChecker.name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'junit'</span></em><a class="headerlink" href="#mlx.warnings.JUnitChecker.name" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.JUnitChecker.prepare_tree">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prepare_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_input</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/junit_checker.html#JUnitChecker.prepare_tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.JUnitChecker.prepare_tree" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prepare_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_input</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/junit_checker.html#JUnitChecker.prepare_tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.JUnitChecker.prepare_tree" title="Link to this definition">¶</a></dt>
 <dd><p>Prepares the tree element by adding a testsuites element as root when missing (to please JUnitXml)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -372,11 +455,11 @@ output</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mlx.warnings.PolyspaceChecker">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">PolyspaceChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/polyspace_checker.html#PolyspaceChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.PolyspaceChecker" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">PolyspaceChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/polyspace_checker.html#PolyspaceChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.PolyspaceChecker" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#mlx.warnings.WarningsChecker" title="mlx.warnings.warnings_checker.WarningsChecker"><code class="xref py py-class docutils literal notranslate"><span class="pre">WarningsChecker</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.PolyspaceChecker.check">
-<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/polyspace_checker.html#PolyspaceChecker.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.check" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/polyspace_checker.html#PolyspaceChecker.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.check" title="Link to this definition">¶</a></dt>
 <dd><p>Function for counting the number of failures in a TSV file exported by Polyspace</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -387,12 +470,12 @@ output</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mlx.warnings.PolyspaceChecker.checkers">
-<span class="sig-name descname"><span class="pre">checkers</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.checkers" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">checkers</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.checkers" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.PolyspaceChecker.counted_warnings">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">counted_warnings</span></span><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.counted_warnings" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">counted_warnings</span></span><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.counted_warnings" title="Link to this definition">¶</a></dt>
 <dd><p>list of counted warnings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -403,7 +486,7 @@ output</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.PolyspaceChecker.cq_description_template">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cq_description_template</span></span><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.cq_description_template" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cq_description_template</span></span><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.cq_description_template" title="Link to this definition">¶</a></dt>
 <dd><p>string.Template instance based on the configured template string</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -414,7 +497,7 @@ output</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.PolyspaceChecker.cq_findings">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cq_findings</span></span><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.cq_findings" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cq_findings</span></span><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.cq_findings" title="Link to this definition">¶</a></dt>
 <dd><p>list of code quality findings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -425,7 +508,7 @@ output</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.PolyspaceChecker.maximum">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maximum</span></span><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.maximum" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maximum</span></span><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.maximum" title="Link to this definition">¶</a></dt>
 <dd><p>Gets the highest minimum amount of warnings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -436,7 +519,7 @@ output</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.PolyspaceChecker.minimum">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">minimum</span></span><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.minimum" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">minimum</span></span><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.minimum" title="Link to this definition">¶</a></dt>
 <dd><p>Gets the lowest minimum amount of warnings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -447,12 +530,12 @@ output</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mlx.warnings.PolyspaceChecker.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'polyspace'</span></em><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'polyspace'</span></em><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.name" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.PolyspaceChecker.parse_config">
-<span class="sig-name descname"><span class="pre">parse_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/polyspace_checker.html#PolyspaceChecker.parse_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.parse_config" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">parse_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/polyspace_checker.html#PolyspaceChecker.parse_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.parse_config" title="Link to this definition">¶</a></dt>
 <dd><p>Parsing configuration dict extracted by previously opened JSON or yaml/yml file</p>
 <blockquote>
 <div><blockquote>
@@ -475,7 +558,7 @@ max: &lt;number&gt;</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.PolyspaceChecker.return_check_limits">
-<span class="sig-name descname"><span class="pre">return_check_limits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/polyspace_checker.html#PolyspaceChecker.return_check_limits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.return_check_limits" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">return_check_limits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/polyspace_checker.html#PolyspaceChecker.return_check_limits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.return_check_limits" title="Link to this definition">¶</a></dt>
 <dd><p>Function for checking whether the warning count is within the configured limits</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -491,7 +574,7 @@ max: &lt;number&gt;</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.PolyspaceChecker.return_count">
-<span class="sig-name descname"><span class="pre">return_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/polyspace_checker.html#PolyspaceChecker.return_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.return_count" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">return_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/polyspace_checker.html#PolyspaceChecker.return_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.PolyspaceChecker.return_count" title="Link to this definition">¶</a></dt>
 <dd><p>Getter function for the amount of warnings found</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -504,11 +587,11 @@ max: &lt;number&gt;</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mlx.warnings.PolyspaceFamilyChecker">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">PolyspaceFamilyChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">family_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_value</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/polyspace_checker.html#PolyspaceFamilyChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.PolyspaceFamilyChecker" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">PolyspaceFamilyChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">family_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_value</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/polyspace_checker.html#PolyspaceFamilyChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.PolyspaceFamilyChecker" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#mlx.warnings.WarningsChecker" title="mlx.warnings.warnings_checker.WarningsChecker"><code class="xref py py-class docutils literal notranslate"><span class="pre">WarningsChecker</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.PolyspaceFamilyChecker.add_code_quality_finding">
-<span class="sig-name descname"><span class="pre">add_code_quality_finding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/polyspace_checker.html#PolyspaceFamilyChecker.add_code_quality_finding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.PolyspaceFamilyChecker.add_code_quality_finding" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_code_quality_finding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/polyspace_checker.html#PolyspaceFamilyChecker.add_code_quality_finding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.PolyspaceFamilyChecker.add_code_quality_finding" title="Link to this definition">¶</a></dt>
 <dd><p>Add code quality finding</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -519,7 +602,7 @@ max: &lt;number&gt;</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.PolyspaceFamilyChecker.check">
-<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/polyspace_checker.html#PolyspaceFamilyChecker.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.PolyspaceFamilyChecker.check" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/polyspace_checker.html#PolyspaceFamilyChecker.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.PolyspaceFamilyChecker.check" title="Link to this definition">¶</a></dt>
 <dd><p>Function for counting the number of failures in a TSV/CSV file exported by Polyspace</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -530,12 +613,12 @@ max: &lt;number&gt;</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mlx.warnings.PolyspaceFamilyChecker.code_quality_severity">
-<span class="sig-name descname"><span class="pre">code_quality_severity</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'impact:</span> <span class="pre">high':</span> <span class="pre">'critical',</span> <span class="pre">'impact:</span> <span class="pre">low':</span> <span class="pre">'minor',</span> <span class="pre">'impact:</span> <span class="pre">medium':</span> <span class="pre">'major',</span> <span class="pre">'orange':</span> <span class="pre">'major',</span> <span class="pre">'red':</span> <span class="pre">'critical'}</span></em><a class="headerlink" href="#mlx.warnings.PolyspaceFamilyChecker.code_quality_severity" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">code_quality_severity</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'impact:</span> <span class="pre">high':</span> <span class="pre">'critical',</span> <span class="pre">'impact:</span> <span class="pre">low':</span> <span class="pre">'minor',</span> <span class="pre">'impact:</span> <span class="pre">medium':</span> <span class="pre">'major',</span> <span class="pre">'orange':</span> <span class="pre">'major',</span> <span class="pre">'red':</span> <span class="pre">'critical'}</span></em><a class="headerlink" href="#mlx.warnings.PolyspaceFamilyChecker.code_quality_severity" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.PolyspaceFamilyChecker.cq_description_template">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cq_description_template</span></span><a class="headerlink" href="#mlx.warnings.PolyspaceFamilyChecker.cq_description_template" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cq_description_template</span></span><a class="headerlink" href="#mlx.warnings.PolyspaceFamilyChecker.cq_description_template" title="Link to this definition">¶</a></dt>
 <dd><p>string.Template instance based on the configured template string</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -546,7 +629,7 @@ max: &lt;number&gt;</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.PolyspaceFamilyChecker.return_count">
-<span class="sig-name descname"><span class="pre">return_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/polyspace_checker.html#PolyspaceFamilyChecker.return_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.PolyspaceFamilyChecker.return_count" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">return_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/polyspace_checker.html#PolyspaceFamilyChecker.return_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.PolyspaceFamilyChecker.return_count" title="Link to this definition">¶</a></dt>
 <dd><p>Getter function for the amount of warnings found</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -559,11 +642,11 @@ max: &lt;number&gt;</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mlx.warnings.RobotChecker">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">RobotChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/robot_checker.html#RobotChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.RobotChecker" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">RobotChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/robot_checker.html#RobotChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.RobotChecker" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#mlx.warnings.WarningsChecker" title="mlx.warnings.warnings_checker.WarningsChecker"><code class="xref py py-class docutils literal notranslate"><span class="pre">WarningsChecker</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.RobotChecker.check">
-<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/robot_checker.html#RobotChecker.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.RobotChecker.check" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/robot_checker.html#RobotChecker.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.RobotChecker.check" title="Link to this definition">¶</a></dt>
 <dd><p>Function for counting the number of failures in a specific Robot
 Framework test suite</p>
 <dl class="field-list simple">
@@ -575,12 +658,12 @@ Framework test suite</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mlx.warnings.RobotChecker.checkers">
-<span class="sig-name descname"><span class="pre">checkers</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#mlx.warnings.RobotChecker.checkers" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">checkers</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#mlx.warnings.RobotChecker.checkers" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.RobotChecker.counted_warnings">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">counted_warnings</span></span><a class="headerlink" href="#mlx.warnings.RobotChecker.counted_warnings" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">counted_warnings</span></span><a class="headerlink" href="#mlx.warnings.RobotChecker.counted_warnings" title="Link to this definition">¶</a></dt>
 <dd><p>list of counted warnings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -591,7 +674,7 @@ Framework test suite</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.RobotChecker.maximum">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maximum</span></span><a class="headerlink" href="#mlx.warnings.RobotChecker.maximum" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maximum</span></span><a class="headerlink" href="#mlx.warnings.RobotChecker.maximum" title="Link to this definition">¶</a></dt>
 <dd><p>Gets the highest minimum amount of warnings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -602,7 +685,7 @@ Framework test suite</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.RobotChecker.minimum">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">minimum</span></span><a class="headerlink" href="#mlx.warnings.RobotChecker.minimum" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">minimum</span></span><a class="headerlink" href="#mlx.warnings.RobotChecker.minimum" title="Link to this definition">¶</a></dt>
 <dd><p>Gets the lowest minimum amount of warnings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -613,17 +696,17 @@ Framework test suite</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mlx.warnings.RobotChecker.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'robot'</span></em><a class="headerlink" href="#mlx.warnings.RobotChecker.name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'robot'</span></em><a class="headerlink" href="#mlx.warnings.RobotChecker.name" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.RobotChecker.parse_config">
-<span class="sig-name descname"><span class="pre">parse_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/robot_checker.html#RobotChecker.parse_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.RobotChecker.parse_config" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">parse_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/robot_checker.html#RobotChecker.parse_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.RobotChecker.parse_config" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.RobotChecker.return_check_limits">
-<span class="sig-name descname"><span class="pre">return_check_limits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/robot_checker.html#RobotChecker.return_check_limits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.RobotChecker.return_check_limits" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">return_check_limits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/robot_checker.html#RobotChecker.return_check_limits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.RobotChecker.return_check_limits" title="Link to this definition">¶</a></dt>
 <dd><p>Function for checking whether the warning count is within the configured limits</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -639,7 +722,7 @@ Framework test suite</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.RobotChecker.return_count">
-<span class="sig-name descname"><span class="pre">return_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/robot_checker.html#RobotChecker.return_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.RobotChecker.return_count" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">return_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/robot_checker.html#RobotChecker.return_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.RobotChecker.return_count" title="Link to this definition">¶</a></dt>
 <dd><p>Getter function for the amount of warnings found</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -652,11 +735,11 @@ Framework test suite</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mlx.warnings.RobotSuiteChecker">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">RobotSuiteChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_suite_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/robot_checker.html#RobotSuiteChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.RobotSuiteChecker" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">RobotSuiteChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_suite_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/robot_checker.html#RobotSuiteChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.RobotSuiteChecker" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#mlx.warnings.JUnitChecker" title="mlx.warnings.junit_checker.JUnitChecker"><code class="xref py py-class docutils literal notranslate"><span class="pre">JUnitChecker</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.RobotSuiteChecker.check">
-<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/robot_checker.html#RobotSuiteChecker.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.RobotSuiteChecker.check" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/robot_checker.html#RobotSuiteChecker.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.RobotSuiteChecker.check" title="Link to this definition">¶</a></dt>
 <dd><p>Function for counting the number of JUnit failures in a specific text</p>
 <p>The test cases with a <code class="docutils literal notranslate"><span class="pre">classname</span></code> that does not end with the <code class="docutils literal notranslate"><span class="pre">name</span></code> class attribute are ignored.</p>
 <dl class="field-list simple">
@@ -671,7 +754,7 @@ Framework test suite</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.RobotSuiteChecker.return_count">
-<span class="sig-name descname"><span class="pre">return_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/robot_checker.html#RobotSuiteChecker.return_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.RobotSuiteChecker.return_count" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">return_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/robot_checker.html#RobotSuiteChecker.return_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.RobotSuiteChecker.return_count" title="Link to this definition">¶</a></dt>
 <dd><p>Getter function for the amount of warnings found</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -684,43 +767,43 @@ Framework test suite</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mlx.warnings.SphinxChecker">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">SphinxChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/regex_checker.html#SphinxChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.SphinxChecker" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">SphinxChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/regex_checker.html#SphinxChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.SphinxChecker" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">RegexChecker</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.SphinxChecker.include_sphinx_deprecation">
-<span class="sig-name descname"><span class="pre">include_sphinx_deprecation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/regex_checker.html#SphinxChecker.include_sphinx_deprecation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.SphinxChecker.include_sphinx_deprecation" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">include_sphinx_deprecation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/regex_checker.html#SphinxChecker.include_sphinx_deprecation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.SphinxChecker.include_sphinx_deprecation" title="Link to this definition">¶</a></dt>
 <dd><p>Adds the pattern for sphinx_deprecation_regex to the list patterns to include and alters the main pattern</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mlx.warnings.SphinxChecker.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'sphinx'</span></em><a class="headerlink" href="#mlx.warnings.SphinxChecker.name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'sphinx'</span></em><a class="headerlink" href="#mlx.warnings.SphinxChecker.name" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mlx.warnings.SphinxChecker.pattern">
-<span class="sig-name descname"><span class="pre">pattern</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">re.compile('(?m)^(?:((?P&lt;path1&gt;.+?):(?P&lt;line1&gt;\\d+|None)?):?\\s*)?(?P&lt;severity1&gt;DEBUG|INFO|WARNING|ERROR|SEVERE|CRITICAL):\\s*(?P&lt;description1&gt;.+)$',</span> <span class="pre">re.MULTILINE)</span></em><a class="headerlink" href="#mlx.warnings.SphinxChecker.pattern" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pattern</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">re.compile('(?m)^(?:((?P&lt;path1&gt;.+?):(?P&lt;line1&gt;\\d+|None)?):?\\s*)?(?P&lt;severity1&gt;DEBUG|INFO|WARNING|ERROR|SEVERE|CRITICAL):\\s*(?P&lt;description1&gt;.+)$',</span> <span class="pre">re.MULTILINE)</span></em><a class="headerlink" href="#mlx.warnings.SphinxChecker.pattern" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mlx.warnings.SphinxChecker.sphinx_deprecation_regex">
-<span class="sig-name descname"><span class="pre">sphinx_deprecation_regex</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'(?m)^(?:(.+?:(?:\\d+|None)?):?\\s*)?(DEBUG|INFO|WARNING|ERROR|SEVERE|(?:\\w+Sphinx\\d+Warning)):\\s*(.+)$'</span></em><a class="headerlink" href="#mlx.warnings.SphinxChecker.sphinx_deprecation_regex" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">sphinx_deprecation_regex</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'(?m)^(?:(.+?:(?:\\d+|None)?):?\\s*)?(DEBUG|INFO|WARNING|ERROR|SEVERE|(?:\\w+Sphinx\\d+Warning)):\\s*(.+)$'</span></em><a class="headerlink" href="#mlx.warnings.SphinxChecker.sphinx_deprecation_regex" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mlx.warnings.SphinxChecker.sphinx_deprecation_regex_in_match">
-<span class="sig-name descname"><span class="pre">sphinx_deprecation_regex_in_match</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'RemovedInSphinx\\d+Warning'</span></em><a class="headerlink" href="#mlx.warnings.SphinxChecker.sphinx_deprecation_regex_in_match" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">sphinx_deprecation_regex_in_match</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'RemovedInSphinx\\d+Warning'</span></em><a class="headerlink" href="#mlx.warnings.SphinxChecker.sphinx_deprecation_regex_in_match" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsChecker">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">WarningsChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings_checker.html#WarningsChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsChecker" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">WarningsChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings_checker.html#WarningsChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsChecker" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsChecker.add_patterns">
-<span class="sig-name descname"><span class="pre">add_patterns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">regexes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_container</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings_checker.html#WarningsChecker.add_patterns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsChecker.add_patterns" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_patterns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">regexes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_container</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings_checker.html#WarningsChecker.add_patterns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsChecker.add_patterns" title="Link to this definition">¶</a></dt>
 <dd><p>Adds regexes as patterns to the specified container</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -734,7 +817,7 @@ Framework test suite</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsChecker.check">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings_checker.html#WarningsChecker.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsChecker.check" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings_checker.html#WarningsChecker.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsChecker.check" title="Link to this definition">¶</a></dt>
 <dd><p>Function for counting the number of warnings in a specific text</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -745,7 +828,7 @@ Framework test suite</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsChecker.counted_warnings">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">counted_warnings</span></span><a class="headerlink" href="#mlx.warnings.WarningsChecker.counted_warnings" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">counted_warnings</span></span><a class="headerlink" href="#mlx.warnings.WarningsChecker.counted_warnings" title="Link to this definition">¶</a></dt>
 <dd><p>list of counted warnings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -756,7 +839,7 @@ Framework test suite</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsChecker.cq_description_template">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cq_description_template</span></span><a class="headerlink" href="#mlx.warnings.WarningsChecker.cq_description_template" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cq_description_template</span></span><a class="headerlink" href="#mlx.warnings.WarningsChecker.cq_description_template" title="Link to this definition">¶</a></dt>
 <dd><p>string.Template instance based on the configured template string</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -767,7 +850,7 @@ Framework test suite</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsChecker.cq_findings">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cq_findings</span></span><a class="headerlink" href="#mlx.warnings.WarningsChecker.cq_findings" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cq_findings</span></span><a class="headerlink" href="#mlx.warnings.WarningsChecker.cq_findings" title="Link to this definition">¶</a></dt>
 <dd><p>list of code quality findings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -778,7 +861,7 @@ Framework test suite</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsChecker.maximum">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maximum</span></span><a class="headerlink" href="#mlx.warnings.WarningsChecker.maximum" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maximum</span></span><a class="headerlink" href="#mlx.warnings.WarningsChecker.maximum" title="Link to this definition">¶</a></dt>
 <dd><p>Getter function for the maximum amount of warnings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -789,7 +872,7 @@ Framework test suite</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsChecker.minimum">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">minimum</span></span><a class="headerlink" href="#mlx.warnings.WarningsChecker.minimum" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">minimum</span></span><a class="headerlink" href="#mlx.warnings.WarningsChecker.minimum" title="Link to this definition">¶</a></dt>
 <dd><p>Getter function for the minimum amount of warnings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -800,17 +883,17 @@ Framework test suite</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsChecker.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'checker'</span></em><a class="headerlink" href="#mlx.warnings.WarningsChecker.name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'checker'</span></em><a class="headerlink" href="#mlx.warnings.WarningsChecker.name" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsChecker.parse_config">
-<span class="sig-name descname"><span class="pre">parse_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings_checker.html#WarningsChecker.parse_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsChecker.parse_config" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">parse_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings_checker.html#WarningsChecker.parse_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsChecker.parse_config" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsChecker.print_when_verbose">
-<span class="sig-name descname"><span class="pre">print_when_verbose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings_checker.html#WarningsChecker.print_when_verbose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsChecker.print_when_verbose" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">print_when_verbose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings_checker.html#WarningsChecker.print_when_verbose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsChecker.print_when_verbose" title="Link to this definition">¶</a></dt>
 <dd><p>Prints message only when verbose mode is enabled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -821,7 +904,7 @@ Framework test suite</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsChecker.return_check_limits">
-<span class="sig-name descname"><span class="pre">return_check_limits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings_checker.html#WarningsChecker.return_check_limits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsChecker.return_check_limits" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">return_check_limits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings_checker.html#WarningsChecker.return_check_limits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsChecker.return_check_limits" title="Link to this definition">¶</a></dt>
 <dd><p>Function for checking whether the warning count is within the configured limits</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -837,7 +920,7 @@ Framework test suite</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsChecker.return_count">
-<span class="sig-name descname"><span class="pre">return_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings_checker.html#WarningsChecker.return_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsChecker.return_count" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">return_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings_checker.html#WarningsChecker.return_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsChecker.return_count" title="Link to this definition">¶</a></dt>
 <dd><p>Getter function for the amount of warnings found</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -850,17 +933,17 @@ Framework test suite</p>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsConfigError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">WarningsConfigError</span></span><a class="reference internal" href="_modules/mlx/warnings/exceptions.html#WarningsConfigError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsConfigError" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">WarningsConfigError</span></span><a class="reference internal" href="_modules/mlx/warnings/exceptions.html#WarningsConfigError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsConfigError" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsPlugin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">WarningsPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cq_enabled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">WarningsPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cq_enabled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsPlugin.activate_checker">
-<span class="sig-name descname"><span class="pre">activate_checker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">checker</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.activate_checker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.activate_checker" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">activate_checker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">checker</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.activate_checker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.activate_checker" title="Link to this definition">¶</a></dt>
 <dd><p>Activate additional checkers after initialization</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -871,7 +954,7 @@ Framework test suite</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsPlugin.activate_checker_name">
-<span class="sig-name descname"><span class="pre">activate_checker_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.activate_checker_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.activate_checker_name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">activate_checker_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.activate_checker_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.activate_checker_name" title="Link to this definition">¶</a></dt>
 <dd><p>Activates checker by name</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -885,7 +968,7 @@ Framework test suite</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsPlugin.check">
-<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.check" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.check" title="Link to this definition">¶</a></dt>
 <dd><p>Count the number of warnings in a specified content</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -896,7 +979,7 @@ Framework test suite</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsPlugin.check_logfile">
-<span class="sig-name descname"><span class="pre">check_logfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.check_logfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.check_logfile" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">check_logfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.check_logfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.check_logfile" title="Link to this definition">¶</a></dt>
 <dd><p>Count the number of warnings in a specified content</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -907,7 +990,7 @@ Framework test suite</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsPlugin.config_parser">
-<span class="sig-name descname"><span class="pre">config_parser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.config_parser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.config_parser" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">config_parser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.config_parser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.config_parser" title="Link to this definition">¶</a></dt>
 <dd><p>Parsing configuration dict extracted by previously opened JSON or YAML file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -918,7 +1001,7 @@ Framework test suite</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsPlugin.configure_maximum">
-<span class="sig-name descname"><span class="pre">configure_maximum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.configure_maximum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.configure_maximum" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">configure_maximum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.configure_maximum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.configure_maximum" title="Link to this definition">¶</a></dt>
 <dd><p>Configure the maximum amount of warnings for each activated checker</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -929,7 +1012,7 @@ Framework test suite</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsPlugin.configure_minimum">
-<span class="sig-name descname"><span class="pre">configure_minimum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minimum</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.configure_minimum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.configure_minimum" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">configure_minimum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minimum</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.configure_minimum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.configure_minimum" title="Link to this definition">¶</a></dt>
 <dd><p>Configure the minimum amount of warnings for each activated checker</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -940,7 +1023,7 @@ Framework test suite</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsPlugin.get_checker">
-<span class="sig-name descname"><span class="pre">get_checker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.get_checker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.get_checker" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_checker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.get_checker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.get_checker" title="Link to this definition">¶</a></dt>
 <dd><p>Get checker by name</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -954,7 +1037,7 @@ Framework test suite</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsPlugin.return_check_limits">
-<span class="sig-name descname"><span class="pre">return_check_limits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.return_check_limits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.return_check_limits" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">return_check_limits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.return_check_limits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.return_check_limits" title="Link to this definition">¶</a></dt>
 <dd><p>Function for determining the return value of the script</p>
 <p>If the name parameter is set, this function will check (and return) the
 return value of that checker. If not, this function checks whether the
@@ -976,7 +1059,7 @@ warnings for each registered checker are within the configured limits.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsPlugin.return_count">
-<span class="sig-name descname"><span class="pre">return_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.return_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.return_count" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">return_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.return_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.return_count" title="Link to this definition">¶</a></dt>
 <dd><p>Getter function for the amount of found warnings</p>
 <p>If the name parameter is set, this function will return the amount of
 warnings found by that checker. If not, the function will return the sum
@@ -993,7 +1076,7 @@ of the warnings found by all registered checkers.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsPlugin.toggle_printout">
-<span class="sig-name descname"><span class="pre">toggle_printout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">printout</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.toggle_printout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.toggle_printout" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">toggle_printout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">printout</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.toggle_printout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.toggle_printout" title="Link to this definition">¶</a></dt>
 <dd><p>Toggle printout of all the parsed content</p>
 <p>Useful for command input where we want to print content as well</p>
 <dl class="field-list simple">
@@ -1005,7 +1088,7 @@ of the warnings found by all registered checkers.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsPlugin.write_code_quality_report">
-<span class="sig-name descname"><span class="pre">write_code_quality_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.write_code_quality_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.write_code_quality_report" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">write_code_quality_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.write_code_quality_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.write_code_quality_report" title="Link to this definition">¶</a></dt>
 <dd><p>Generates the Code Quality report artifact as a JSON file that implements a subset of the Code Climate spec</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1016,7 +1099,7 @@ of the warnings found by all registered checkers.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx.warnings.WarningsPlugin.write_counted_warnings">
-<span class="sig-name descname"><span class="pre">write_counted_warnings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.write_counted_warnings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.write_counted_warnings" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">write_counted_warnings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#WarningsPlugin.write_counted_warnings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.WarningsPlugin.write_counted_warnings" title="Link to this definition">¶</a></dt>
 <dd><p>Writes counted warnings to the given file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1029,23 +1112,23 @@ of the warnings found by all registered checkers.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mlx.warnings.XMLRunnerChecker">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">XMLRunnerChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/regex_checker.html#XMLRunnerChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.XMLRunnerChecker" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">XMLRunnerChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/regex_checker.html#XMLRunnerChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.XMLRunnerChecker" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">RegexChecker</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mlx.warnings.XMLRunnerChecker.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'xmlrunner'</span></em><a class="headerlink" href="#mlx.warnings.XMLRunnerChecker.name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'xmlrunner'</span></em><a class="headerlink" href="#mlx.warnings.XMLRunnerChecker.name" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mlx.warnings.XMLRunnerChecker.pattern">
-<span class="sig-name descname"><span class="pre">pattern</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">re.compile('(\\s*(?P&lt;severity1&gt;ERROR|FAILED)</span> <span class="pre">(\\[\\d+\\.\\d{3}s\\]:</span> <span class="pre">\\s*(?P&lt;description1&gt;.+)))\\n?')</span></em><a class="headerlink" href="#mlx.warnings.XMLRunnerChecker.pattern" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pattern</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">re.compile('(\\s*(?P&lt;severity1&gt;ERROR|FAILED)</span> <span class="pre">(\\[\\d+\\.\\d{3}s\\]:</span> <span class="pre">\\s*(?P&lt;description1&gt;.+)))\\n?')</span></em><a class="headerlink" href="#mlx.warnings.XMLRunnerChecker.pattern" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mlx.warnings.warnings_wrapper">
-<span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">warnings_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#warnings_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.warnings_wrapper" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">mlx.warnings.</span></span><span class="sig-name descname"><span class="pre">warnings_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlx/warnings/warnings.html#warnings_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx.warnings.warnings_wrapper" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </section>
@@ -1056,12 +1139,12 @@ of the warnings found by all registered checkers.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="sidebar-anchor"></a>
     
 
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -1069,7 +1152,7 @@ of the warnings found by all registered checkers.</p>
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3><a href="index.html">Table Of Contents</a></h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme.html">Command Line Warnings Plugin</a></li>
@@ -1087,6 +1170,7 @@ of the warnings found by all registered checkers.</p>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contribution Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html#getting-started">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html#reporting-issues-or-requesting-a-new-feature">Reporting Issues or Requesting a New Feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security Policy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
 </ul>
 
@@ -1124,9 +1208,9 @@ of the warnings found by all registered checkers.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Oct 21, 2024.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    &#169; Copyright 2017-2019, Bavo Van Achte.
+      Last updated on Nov 26, 2024.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>

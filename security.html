@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Installation Guide &#8212; warning-plugin 5.6.0 documentation</title>
+    <title>Security Policy &#8212; warning-plugin 5.6.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d10597a4" />
     <link rel="stylesheet" type="text/css" href="_static/pydoctheme.css?v=8635fa60" />
     
@@ -17,8 +17,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Software Design" href="design.html" />
-    <link rel="prev" title="Command Line Warnings Plugin" href="readme.html" />
+    <link rel="next" title="Authors" href="authors.html" />
+    <link rel="prev" title="Contribution Guide" href="contributing.html" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <link rel="shortcut icon" type="image/png" href="_static/favicon.png" />
     <meta name="viewport" content="width=device-width,initial-scale=0.8">
@@ -46,21 +46,25 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="installation-guide">
-<h1>Installation Guide<a class="headerlink" href="#installation-guide" title="Link to this heading">¶</a></h1>
-<p>Melexis Warnings plugin is available as a package on <a class="reference external" href="https://pypi.org/project/mlx.warnings/">PyPI</a>. Once installed, it
-offers direct command line invocation (no need to run python infront).
-Installation is as simple as:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># released version from PyPI</span>
-pip3<span class="w"> </span>install<span class="w"> </span>mlx.warnings
-
-<span class="c1"># editable package based on master branch</span>
-git<span class="w"> </span>clone<span class="w"> </span>https://github.com/melexis/warnings-plugin.git
-pip3<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>warnings-plugin
-</pre></div>
-</div>
-<p>So far we are not aware of any problems with installation of the plugin, but in
-case you have any please open an Issue.</p>
+  <section id="security-policy">
+<h1>Security Policy<a class="headerlink" href="#security-policy" title="Link to this heading">¶</a></h1>
+<p>Since warnings plugin only parses the input data and outputs some json files, it
+does not have a major security impact on your system. It could however with its
+execute-in-place option (command) hide a potential security breach. If that is
+the case, please report a vulnerability.</p>
+<section id="supported-versions">
+<h2>Supported Versions<a class="headerlink" href="#supported-versions" title="Link to this heading">¶</a></h2>
+<p>We currently support the latest version, but if requested we can backport a fix
+to older major versions on request. In practice there is no major effort in
+always updating the plugin to use the latest version.</p>
+</section>
+<section id="reporting-a-vulnerability">
+<h2>Reporting a Vulnerability<a class="headerlink" href="#reporting-a-vulnerability" title="Link to this heading">¶</a></h2>
+<p>Please report all vulnerabilities through the
+[GitHub Issue Tracker](<a class="reference external" href="https://github.com/melexis/warnings-plugin/issues">https://github.com/melexis/warnings-plugin/issues</a>).
+Make sure you include ways to replicate it and, if possible, propose a Pull
+Request with a potential fix.</p>
+</section>
 </section>
 
 
@@ -89,19 +93,23 @@ case you have any please open an Issue.</p>
 <li class="toctree-l1"><a class="reference internal" href="readme.html#usage">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="readme.html#issues-and-new-features">Issues and New Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="readme.html#contribute">Contribute</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="design.html">Software Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contribution Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html#getting-started">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html#reporting-issues-or-requesting-a-new-feature">Reporting Issues or Requesting a New Feature</a></li>
-<li class="toctree-l1"><a class="reference internal" href="security.html">Security Policy</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Security Policy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#supported-versions">Supported Versions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reporting-a-vulnerability">Reporting a Vulnerability</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
 </ul>
 
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/installation.rst.txt"
+      <li><a href="_sources/security.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -123,10 +131,10 @@ case you have any please open an Issue.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="design.html" title="Software Design"
+          <a href="authors.html" title="Authors"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="readme.html" title="Command Line Warnings Plugin"
+          <a href="contributing.html" title="Contribution Guide"
              accesskey="P">previous</a> |</li>
       </ul>
     </div>

@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Command Line Warnings Plugin &#8212; warning-plugin 5.5.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/pydoctheme.css" />
+    <title>Command Line Warnings Plugin &#8212; warning-plugin 5.6.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d10597a4" />
+    <link rel="stylesheet" type="text/css" href="_static/pydoctheme.css?v=8635fa60" />
     
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/documentation_options.js?v=31fa7d35"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <script src="_static/sidebar.js"></script>
     
@@ -33,7 +30,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="index.html">warning-plugin-5.5.1</a> &#187;</li> 
+        <li><a href="index.html">warning-plugin-5.6.0</a> &#187;</li> 
       </ul>
     </div>
     
@@ -49,25 +46,35 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <a class="reference external image-reference" href="http://www.apache.org/licenses/LICENSE-2.0"><img alt="Apache2 License" src="https://img.shields.io/hexpm/l/plug.svg" /></a>
-<a class="reference external image-reference" href="https://github.com/melexis/warnings-plugin/actions/workflows/python-package.yml"><img alt="Build status" src="https://github.com/melexis/warnings-plugin/actions/workflows/python-package.yml/badge.svg?branch=master" /></a>
-<a class="reference external image-reference" href="https://badge.fury.io/py/mlx.warnings"><img alt="Pypi packaged release" src="https://badge.fury.io/py/mlx.warnings.svg" /></a>
-<a class="reference external image-reference" href="https://melexis.github.io/warnings-plugin/"><img alt="Documentation" src="https://img.shields.io/badge/Documentation-published-brightgreen.svg" /></a>
-<a class="reference external image-reference" href="https://scan.coverity.com/projects/melexis-warnings-plugin"><img alt="Coverity Scan Build Status" src="https://scan.coverity.com/projects/15266/badge.svg" /></a>
-<a class="reference external image-reference" href="https://codecov.io/gh/melexis/warnings-plugin"><img alt="Code Coverage" src="https://codecov.io/gh/melexis/warnings-plugin/branch/master/graph/badge.svg" /></a>
-<a class="reference external image-reference" href="https://codeclimate.com/github/melexis/warnings-plugin"><img alt="Code Climate Status" src="https://codeclimate.com/github/melexis/warnings-plugin/badges/gpa.svg" /></a>
-<a class="reference external image-reference" href="https://codeclimate.com/github/melexis/warnings-plugin"><img alt="Issue Count" src="https://codeclimate.com/github/melexis/warnings-plugin/badges/issue_count.svg" /></a>
-<a class="reference external image-reference" href="https://github.com/melexis/warnings-plugin/issues"><img alt="Contributions welcome" src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat" /></a>
-<a class="reference external image-reference" href="https://bestpractices.coreinfrastructure.org/projects/4368"><img alt="CII Best Practices" src="https://bestpractices.coreinfrastructure.org/projects/4368/badge" /></a>
+  <a class="reference external image-reference" href="http://www.apache.org/licenses/LICENSE-2.0"><img alt="Apache2 License" src="https://img.shields.io/hexpm/l/plug.svg" />
+</a>
+<a class="reference external image-reference" href="https://github.com/melexis/warnings-plugin/actions/workflows/python-package.yml"><img alt="Build status" src="https://github.com/melexis/warnings-plugin/actions/workflows/python-package.yml/badge.svg?branch=master" />
+</a>
+<a class="reference external image-reference" href="https://badge.fury.io/py/mlx.warnings"><img alt="Pypi packaged release" src="https://badge.fury.io/py/mlx.warnings.svg" />
+</a>
+<a class="reference external image-reference" href="https://melexis.github.io/warnings-plugin/"><img alt="Documentation" src="https://img.shields.io/badge/Documentation-published-brightgreen.svg" />
+</a>
+<a class="reference external image-reference" href="https://scan.coverity.com/projects/melexis-warnings-plugin"><img alt="Coverity Scan Build Status" src="https://scan.coverity.com/projects/15266/badge.svg" />
+</a>
+<a class="reference external image-reference" href="https://codecov.io/gh/melexis/warnings-plugin"><img alt="Code Coverage" src="https://codecov.io/gh/melexis/warnings-plugin/branch/master/graph/badge.svg" />
+</a>
+<a class="reference external image-reference" href="https://codeclimate.com/github/melexis/warnings-plugin"><img alt="Code Climate Status" src="https://codeclimate.com/github/melexis/warnings-plugin/badges/gpa.svg" />
+</a>
+<a class="reference external image-reference" href="https://codeclimate.com/github/melexis/warnings-plugin"><img alt="Issue Count" src="https://codeclimate.com/github/melexis/warnings-plugin/badges/issue_count.svg" />
+</a>
+<a class="reference external image-reference" href="https://github.com/melexis/warnings-plugin/issues"><img alt="Contributions welcome" src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat" />
+</a>
+<a class="reference external image-reference" href="https://bestpractices.coreinfrastructure.org/projects/4368"><img alt="CII Best Practices" src="https://bestpractices.coreinfrastructure.org/projects/4368/badge" />
+</a>
 <section id="command-line-warnings-plugin">
-<h1>Command Line Warnings Plugin<a class="headerlink" href="#command-line-warnings-plugin" title="Permalink to this heading">¶</a></h1>
+<h1>Command Line Warnings Plugin<a class="headerlink" href="#command-line-warnings-plugin" title="Link to this heading">¶</a></h1>
 <p>Command-line alternative for <a class="reference external" href="https://github.com/jenkinsci/warnings-plugin">https://github.com/jenkinsci/warnings-plugin</a>.
 Useable with plugin-less CI systems. It can be used with GitLab-CI to enable
 warning threshold setting for failing the job and for parsing warnings from
 various tools and report them as errors.</p>
 </section>
 <section id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h1>
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h1>
 <p>Every release is uploaded to pip so it can be installed simply by using pip.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python3</span>
 pip3<span class="w"> </span>install<span class="w"> </span>mlx.warnings
@@ -76,7 +83,7 @@ pip3<span class="w"> </span>install<span class="w"> </span>mlx.warnings
 <p>You can find more details in the <a class="reference external" href="https://melexis.github.io/warnings-plugin/installation.html">Installation guide</a>.</p>
 </section>
 <section id="usage">
-<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">¶</a></h1>
+<h1>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h1>
 <p>Warnings plugin parses log messages as well as direct command stream. In case you
 want to create log file, you will need to redirect your stderr to some text file.
 You can do that with shell pipes or with
@@ -86,7 +93,7 @@ instead of stderr). Be aware that some commands print warnings on stdout.</p>
 arguments after that are discarded, because they are considered as command
 arguments (with or without command flag).</p>
 <section id="pipe-example">
-<h2>Pipe Example<a class="headerlink" href="#pipe-example" title="Permalink to this heading">¶</a></h2>
+<h2>Pipe Example<a class="headerlink" href="#pipe-example" title="Link to this heading">¶</a></h2>
 <p>Below is one of the ways to redirect your stderr to stdout and save it inside a
 file.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yourcommand<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>doc_log.txt
@@ -94,7 +101,7 @@ file.</p>
 </div>
 </section>
 <section id="command-example">
-<h2>Command Example<a class="headerlink" href="#command-example" title="Permalink to this heading">¶</a></h2>
+<h2>Command Example<a class="headerlink" href="#command-example" title="Link to this heading">¶</a></h2>
 <p>Below is the command example for the plugin (keep in mind that parse commands are
 required).</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mlx-warnings<span class="w"> </span>--command<span class="w"> </span>&lt;yourcommand&gt;
@@ -102,7 +109,7 @@ required).</p>
 </div>
 </section>
 <section id="running-command">
-<h2>Running Command<a class="headerlink" href="#running-command" title="Permalink to this heading">¶</a></h2>
+<h2>Running Command<a class="headerlink" href="#running-command" title="Link to this heading">¶</a></h2>
 <p>There are few ways to run warnings plugin. If you are playing with Python on
 your computer you want to use <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code>. This will separate your packages
 per project and there is less chance of some dependency hell. You can
@@ -124,14 +131,14 @@ that case command will look like:</p>
 </ul>
 </section>
 <section id="simple-command-line-options">
-<h2>Simple Command Line Options<a class="headerlink" href="#simple-command-line-options" title="Permalink to this heading">¶</a></h2>
+<h2>Simple Command Line Options<a class="headerlink" href="#simple-command-line-options" title="Link to this heading">¶</a></h2>
 <p>Plugin has two forms of passing the arguments to checkers. The command line
 option which enables checkers and sets minimum and maximum to each checker
 individually, or the configuration file option which provides more flexibility
 and also traceability as it resides inside repository and provides option to
 adjust minimum and maximum per individual checker.</p>
 <section id="parse-for-sphinx-warnings">
-<h3>Parse for Sphinx Warnings<a class="headerlink" href="#parse-for-sphinx-warnings" title="Permalink to this heading">¶</a></h3>
+<h3>Parse for Sphinx Warnings<a class="headerlink" href="#parse-for-sphinx-warnings" title="Link to this heading">¶</a></h3>
 <p>After you saved your Sphinx warnings to the file, you can parse it with
 command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># command line log file</span>
@@ -149,7 +156,7 @@ python<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class=
 </div>
 </section>
 <section id="parse-for-doxygen-warnings">
-<h3>Parse for Doxygen Warnings<a class="headerlink" href="#parse-for-doxygen-warnings" title="Permalink to this heading">¶</a></h3>
+<h3>Parse for Doxygen Warnings<a class="headerlink" href="#parse-for-doxygen-warnings" title="Link to this heading">¶</a></h3>
 <p>After you saved your Doxygen warnings to the file, you can parse it with
 command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># command line log file</span>
@@ -167,7 +174,7 @@ python<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class=
 </div>
 </section>
 <section id="parse-for-coverity-defects">
-<h3>Parse for Coverity Defects<a class="headerlink" href="#parse-for-coverity-defects" title="Permalink to this heading">¶</a></h3>
+<h3>Parse for Coverity Defects<a class="headerlink" href="#parse-for-coverity-defects" title="Link to this heading">¶</a></h3>
 <p>Coverity is a static analysis tool that includes a CLI tool to run desktop analysis
 on your local changes and report the results back directly in the console.
 You only need to list affected files and below example lists changed files
@@ -234,7 +241,7 @@ allowed. To ignore certain classifications, modify the value for
 </div>
 </section>
 <section id="parse-for-junit-failures">
-<h3>Parse for JUnit Failures<a class="headerlink" href="#parse-for-junit-failures" title="Permalink to this heading">¶</a></h3>
+<h3>Parse for JUnit Failures<a class="headerlink" href="#parse-for-junit-failures" title="Link to this heading">¶</a></h3>
 <p>After you saved your JUnit XML output to the file, you can parse it with
 command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># command line log file</span>
@@ -252,7 +259,7 @@ python<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class=
 </div>
 </section>
 <section id="parse-for-xmlrunner-errors">
-<h3>Parse for XMLRunner Errors<a class="headerlink" href="#parse-for-xmlrunner-errors" title="Permalink to this heading">¶</a></h3>
+<h3>Parse for XMLRunner Errors<a class="headerlink" href="#parse-for-xmlrunner-errors" title="Link to this heading">¶</a></h3>
 <p>When you run <a class="reference external" href="https://github.com/xmlrunner/unittest-xml-reporting">XMLRunner</a>,
 the errors are reported on the output, but they are not marked as failures in
 the test reports xml files. Since command exits as 1, we could not detect tests
@@ -273,7 +280,7 @@ python<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class=
 </div>
 </section>
 <section id="parse-for-robot-framework-test-failures">
-<h3>Parse for Robot Framework Test Failures<a class="headerlink" href="#parse-for-robot-framework-test-failures" title="Permalink to this heading">¶</a></h3>
+<h3>Parse for Robot Framework Test Failures<a class="headerlink" href="#parse-for-robot-framework-test-failures" title="Link to this heading">¶</a></h3>
 <p>When running <a class="reference external" href="https://robotframework.org/">Robot Framework</a> tests with <a class="reference external" href="https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#xunit-compatible-result-file"><code class="docutils literal notranslate"><span class="pre">--xunit</span> <span class="pre">report.xml</span></code></a> as an input
 argument, an xUnit compatible result file is generated. The warnings-plugin can
 parse this file and check the amount of failures. By default, the test results
@@ -295,11 +302,11 @@ python3<span class="w"> </span>-m<span class="w"> </span>mlx.warnings<span class
 </div>
 </section>
 <section id="parse-for-polyspace-failures">
-<h3>Parse for Polyspace Failures<a class="headerlink" href="#parse-for-polyspace-failures" title="Permalink to this heading">¶</a></h3>
+<h3>Parse for Polyspace Failures<a class="headerlink" href="#parse-for-polyspace-failures" title="Link to this heading">¶</a></h3>
 <p>The Polyspace checker requires as input a TSV file exported by Polyspace.
 You can find instructions on exporting TSV files in the Polyspace documentation.</p>
 <section id="exporting-polyspace-results">
-<h4>Exporting Polyspace Results<a class="headerlink" href="#exporting-polyspace-results" title="Permalink to this heading">¶</a></h4>
+<h4>Exporting Polyspace Results<a class="headerlink" href="#exporting-polyspace-results" title="Link to this heading">¶</a></h4>
 <p>The following commands instruct Polyspace to export the results as a TSV file:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>polyspace-results-export<span class="w"> </span>-format<span class="w"> </span>csv<span class="w"> </span>-results-dir<span class="w"> </span>&lt;resultsFolder&gt;<span class="w"> </span>&lt;export_options&gt;
 <span class="c1"># or</span>
@@ -314,7 +321,7 @@ In previous versions of Polyspace the Line and Col column are not available yet.
 <p>This file is required when you enable Polyspace in the configuration file.</p>
 </section>
 <section id="configuration">
-<h4>Configuration<a class="headerlink" href="#configuration" title="Permalink to this heading">¶</a></h4>
+<h4>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h4>
 <p>Polyspace checking can only be enabled with a configuration file,
 and it cannot be used together with other checkers enabled.
 In this case, only the Polyspace checker will run.</p>
@@ -333,14 +340,14 @@ in <a class="reference external" href="https://nl.mathworks.com/help/polyspace_a
 The status “No Action Planned” is not treated differently because this is the default status for annotations.</p>
 </section>
 <section id="example-checks">
-<h4>Example Checks<a class="headerlink" href="#example-checks" title="Permalink to this heading">¶</a></h4>
+<h4>Example Checks<a class="headerlink" href="#example-checks" title="Link to this heading">¶</a></h4>
 <p>In case of Code Prover, you might want to check the <code class="docutils literal notranslate"><span class="pre">color</span></code> column on <code class="docutils literal notranslate"><span class="pre">red</span></code> or <code class="docutils literal notranslate"><span class="pre">orange</span></code> issues.
 In case of Bug Finder, you might want to check the <code class="docutils literal notranslate"><span class="pre">information</span></code> column on <code class="docutils literal notranslate"><span class="pre">impact:</span> <span class="pre">high</span></code>, <code class="docutils literal notranslate"><span class="pre">impact:</span> <span class="pre">medium</span></code>, or even <code class="docutils literal notranslate"><span class="pre">impact:</span> <span class="pre">low</span></code>.
 Other issues, such as “Global variable”, can also be handled.
 You can specify any column and value you want to check in the configuration file.</p>
 </section>
 <section id="running-the-mlx-warnings-plugin">
-<h4>Running the mlx-warnings plugin<a class="headerlink" href="#running-the-mlx-warnings-plugin" title="Permalink to this heading">¶</a></h4>
+<h4>Running the mlx-warnings plugin<a class="headerlink" href="#running-the-mlx-warnings-plugin" title="Link to this heading">¶</a></h4>
 <p>The following commands demonstrate how to run the mlx-warnings plugin with the TSV file:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># basic Polyspace checker</span>
 mlx-warnings<span class="w"> </span>--config<span class="w"> </span>&lt;configuration_file&gt;<span class="w"> </span>&lt;tsv_file&gt;
@@ -352,7 +359,7 @@ mlx-warnings<span class="w"> </span>--code-quality<span class="w"> </span>path/t
 </section>
 </section>
 <section id="configuration-file-to-pass-options">
-<h2>Configuration File to Pass Options<a class="headerlink" href="#configuration-file-to-pass-options" title="Permalink to this heading">¶</a></h2>
+<h2>Configuration File to Pass Options<a class="headerlink" href="#configuration-file-to-pass-options" title="Link to this heading">¶</a></h2>
 <p>Beside command line, you can pass options through the configuration file.
 Configuration file is in JSON or <a class="reference external" href="https://yaml.org/spec/1.2.2/">YAML</a> format with a simple structure.
 The values for ‘min’ and ‘max’ can be set with environment variables via a
@@ -438,13 +445,13 @@ mlx-warnings<span class="w"> </span>--config<span class="w"> </span>path/to/conf
 </div>
 </section>
 <section id="other-options">
-<h2>Other Options<a class="headerlink" href="#other-options" title="Permalink to this heading">¶</a></h2>
+<h2>Other Options<a class="headerlink" href="#other-options" title="Link to this heading">¶</a></h2>
 <p>Since the plugin is under active development there are new Features added fast.
 Important options currently include setting a minimum and a maximum number of warnings
 that are still acceptable to return 0 (success). Requiring an exact amount of warnings
 using a single option is also possible. Look at scripts help for more details about the options.</p>
 <section id="exclude-matches-with-regexes">
-<h3>Exclude Matches With Regexes<a class="headerlink" href="#exclude-matches-with-regexes" title="Permalink to this heading">¶</a></h3>
+<h3>Exclude Matches With Regexes<a class="headerlink" href="#exclude-matches-with-regexes" title="Link to this heading">¶</a></h3>
 <p>In case you want a checker to exclude certain matches, you can configure
 one or more regular expressions in the configuration file on a per-checker basis.
 If a pattern of a regex to exclude is found in a match of the checker’s regex, the checker
@@ -487,23 +494,23 @@ Note: backslashes need to be escaped in JSON syntax.</p>
 </div>
 </section>
 <section id="exclude-sphinx-deprecation-warnings">
-<h3>Exclude Sphinx Deprecation Warnings<a class="headerlink" href="#exclude-sphinx-deprecation-warnings" title="Permalink to this heading">¶</a></h3>
+<h3>Exclude Sphinx Deprecation Warnings<a class="headerlink" href="#exclude-sphinx-deprecation-warnings" title="Link to this heading">¶</a></h3>
 <p>There is a special flag <code class="docutils literal notranslate"><span class="pre">--exclude-sphinx-deprecation</span></code> that lets the sphinx checker exclude
 Sphinx deprecation warnings. These warnings match the following regular expression:
 <code class="docutils literal notranslate"><span class="pre">RemovedInSphinx\\d+Warning</span></code>. Using this flag results in the same behavior as adding this
 regex to the configuration file as value for the <code class="docutils literal notranslate"><span class="pre">exclude</span></code> key for the sphinx checker.</p>
 </section>
 <section id="store-all-counted-warnings">
-<h3>Store All Counted Warnings<a class="headerlink" href="#store-all-counted-warnings" title="Permalink to this heading">¶</a></h3>
+<h3>Store All Counted Warnings<a class="headerlink" href="#store-all-counted-warnings" title="Link to this heading">¶</a></h3>
 <p>Use <cite>-o, –output &lt;file_path&gt;</cite> to let the plugin write all counted warnings/failures as strings to a text file.
 This can help you separate the warnings/failures that matter from those that are excluded or from irrelevant text that
 may exist in the input file (or produced by the given command).</p>
 </section>
 <section id="code-quality-report">
-<h3>Code Quality Report<a class="headerlink" href="#code-quality-report" title="Permalink to this heading">¶</a></h3>
+<h3>Code Quality Report<a class="headerlink" href="#code-quality-report" title="Link to this heading">¶</a></h3>
 <p>Use <code class="docutils literal notranslate"><span class="pre">-C,</span> <span class="pre">--code-quality</span></code> to let the plugin generate <a class="reference external" href="https://docs.gitlab.com/ee/ci/testing/code_quality.html">a Code Quality report</a> for GitLab CI. All counted
 Sphinx, Doxygen, XMLRunner, Coverity and Polyspace warnings/errors/failures will be included. Other checker types are not yet supported by this feature. The report is
-a JSON file that implements <a class="reference external" href="https://docs.gitlab.com/ee/ci/testing/code_quality.html#implement-a-custom-tool">a subset of the Code Climate spec</a>. Define this file <a class="reference external" href="https://docs.gitlab.com/ee/ci/yaml/artifacts_reports.html#artifactsreportscodequality">as a codequality report artifact</a>
+a JSON file that implements <a class="reference external" href="https://docs.gitlab.com/ee/ci/testing/code_quality.html#code-quality-report-format">a subset of the Code Climate spec</a>. Define this file <a class="reference external" href="https://docs.gitlab.com/ee/ci/yaml/artifacts_reports.html#artifactsreportscodequality">as a codequality report artifact</a>
 of the CI job.</p>
 <p>If a warning doesn’t contain a path, <code class="docutils literal notranslate"><span class="pre">&quot;cq_default_path&quot;</span></code> from the <a class="reference internal" href="#configuration-file-to-pass-options">configuration file to pass options</a> will be used.
 If not configured, <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code> will be used as a fallback path.</p>
@@ -529,14 +536,14 @@ The remaining values in the row are hashed using a MD5 function to create the fi
 </section>
 </section>
 <section id="issues-and-new-features">
-<h1>Issues and New Features<a class="headerlink" href="#issues-and-new-features" title="Permalink to this heading">¶</a></h1>
+<h1>Issues and New Features<a class="headerlink" href="#issues-and-new-features" title="Link to this heading">¶</a></h1>
 <p>In case you have any problems with usage of the plugin, please open an issue
 on GitHub. Provide as many valid information as possible, as this will help us
 to resolve Issues faster. We would also like to hear your suggestions about new
 features which would help your Continuous Integration run better.</p>
 </section>
 <section id="contribute">
-<h1>Contribute<a class="headerlink" href="#contribute" title="Permalink to this heading">¶</a></h1>
+<h1>Contribute<a class="headerlink" href="#contribute" title="Link to this heading">¶</a></h1>
 <p>There is a Contribution guide available if you would like to get involved in
 development of the plugin. We encourage anyone to contribute to our repository.</p>
 </section>
@@ -546,12 +553,12 @@ development of the plugin. We encourage anyone to contribute to our repository.<
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="sidebar-anchor"></a>
     
 
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -559,7 +566,7 @@ development of the plugin. We encourage anyone to contribute to our repository.<
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3><a href="index.html">Table Of Contents</a></h3>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Command Line Warnings Plugin</a></li>
@@ -580,6 +587,7 @@ development of the plugin. We encourage anyone to contribute to our repository.<
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contribution Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html#getting-started">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html#reporting-issues-or-requesting-a-new-feature">Reporting Issues or Requesting a New Feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security Policy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
 </ul>
 
@@ -617,9 +625,9 @@ development of the plugin. We encourage anyone to contribute to our repository.<
     </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Oct 21, 2024.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    &#169; Copyright 2017-2019, Bavo Van Achte.
+      Last updated on Nov 26, 2024.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
 </html>
