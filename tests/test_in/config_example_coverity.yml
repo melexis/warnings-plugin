@@ -1,11 +1,11 @@
 coverity:
   enabled: true
   unclassified:
-    min: $MIN_COV_WARNINGS
-    max: '$MAX_COV_WARNINGS'
+    min: $MIN_UNCLASSIFIED
+    max: '$MAX_UNCLASSIFIED'
   intentional:
-    min: 0
-    max: -1
+    min: $MIN_INTENTIONAL
+    max: $MAX_INTENTIONAL
   bug:
     min: 0
     max: 0
@@ -13,8 +13,8 @@ coverity:
     min: 0
     max: 0
   false_positive:
-    min: 0
-    max: -1
+    min: $MIN_FALSE_POSITIVE
+    max: $MAX_FALSE_POSITIVE
 sphinx:
   enabled: false
 doxygen:
