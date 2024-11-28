@@ -43,3 +43,8 @@ Please open a new Issue if you have any problems with the plugin. We will be hap
 to fix them as soon as possible. If you want some feature to be included but do not know
 where to start, you should also open an Issue with label `enhancement` and we
 can implement it when we have time and it fits in our view.
+
+Code of Conduct
+===============
+We strive to present a welcoming and inclusive environment, so we request everyone to behave
+at their best. We adhere to https://policies.python.org/python.org/code-of-conduct/
