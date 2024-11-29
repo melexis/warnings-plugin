@@ -15,7 +15,7 @@ sphinx_pattern = re.compile(SPHINX_WARNING_REGEX)
 PYTHON_XMLRUNNER_REGEX = r"(\s*(?P<severity1>ERROR|FAILED) (\[\d+\.\d{3}s\]: \s*(?P<description1>.+)))\n?"
 xmlrunner_pattern = re.compile(PYTHON_XMLRUNNER_REGEX)
 
-COVERITY_WARNING_REGEX = r"(?P<path>[\d\w/\\/-_]+\.\w+)(:(?P<line>\d+)(:(?P<column>\d+))?)?: ?CID (?P<cid>\d+) \(#(?P<curr>\d+) of (?P<max>\d+)\): (?P<checker>.+): (?P<classification>[\w ]+),.+"
+COVERITY_WARNING_REGEX = r"(?P<path>[\w\.\\/\- ]+)(:(?P<line>\d+)(:(?P<column>\d+))?)?: ?CID (?P<cid>\d+) \(#(?P<curr>\d+) of (?P<max>\d+)\): (?P<checker>.+): (?P<classification>[\w ]+),.+"
 coverity_pattern = re.compile(COVERITY_WARNING_REGEX)
 
 
