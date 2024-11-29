@@ -207,14 +207,15 @@ class WarningsPlugin:
         '''
         # activate checker
         for checker in self.public_checkers:
-            try:
+            if checker.name in config:
                 checker_config = config[checker.name]
-                if bool(checker_config['enabled']):
-                    self.activate_checker(checker)
-                    checker.parse_config(checker_config)
-                    print("Config parsing for {name} completed".format(name=checker.name))
-            except KeyError as err:
-                print("Incomplete config. Missing: {key}".format(key=err))
+                try:
+                    if bool(checker_config['enabled']):
+                        self.activate_checker(checker)
+                        checker.parse_config(checker_config)
+                        print("Config parsing for {name} completed".format(name=checker.name))
+                except KeyError as err:
+                    raise WarningsConfigError(f"Incomplete config. Missing: {err}") from err
 
     def write_counted_warnings(self, out_file):
         ''' Writes counted warnings to the given file
