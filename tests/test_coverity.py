@@ -74,9 +74,9 @@ class TestCoverityWarnings(TestCase):
         retval = warnings_wrapper([
             '--coverity',
             '--code-quality', out_file,
-            str(TEST_IN_DIR / 'defects.txt'),
+            str(TEST_IN_DIR / 'coverity_full.txt'),
         ])
-        self.assertEqual(8, retval)
+        self.assertEqual(11, retval)
         self.assertTrue(filecmp.cmp(out_file, ref_file))
 
     def test_code_quality_with_config_pass(self):
