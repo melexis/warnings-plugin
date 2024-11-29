@@ -1,0 +1,61 @@
+Coverity Desktop Analysis version 2024.6.1 on Linux 6.1.100+ x86_64
+[STATUS] Getting snapshot for code version date 2024-11-28T16:19:58+00:00...
+[STATUS] Downloading analysis summaries index for snapshot 234246...
+[STATUS] Attempting to capture files not known to the emit...
+[NOTE] Unable to capture some input files. Ignoring because of setting.
+Selected 3 translation units for analysis:
+* some/path/boot.c
+* src/common/component/src/component.c
+* src/common/used_component/src/used_component.c
+
+[STATUS] Parsing source files...
+[STATUS] Downloading analysis summaries for snapshot 234246...
+|0----------25-----------50----------75---------100|
+****************************************************
+[STATUS] Analyzing...
+[STATUS] Retrieving defect triage data...
+
+Detected 7 defect occurrences that pass the filter criteria.
+There are 8 suppressed defects due to filters.
+
+some/path/boot.c:32:5: CID 446411 (#1 of 1): Infinite loop (INFINITE_LOOP): Unclassified, Unspecified, Undecided, owner is Unassigned, defect only exists locally.
+some/path/boot.c:32:5: infeasible_escape: No conditions allow control to exit the loop.
+some/path/boot.c:32:5: loop_top: Top of the loop.
+some/path/boot.c:43:5: loop_bottom: Bottom of the loop.
+some/path/boot.c:34:9: assignment: Assigning: "taskTimeCounter" = "1".
+some/path/boot.c:36:13: constant_loop_condition: Condition "taskTimeCounter == 0U" is always false so that the loop cannot exit.
+
+some/path/boot.c:55:12: CID 446410 (#1 of 1): MISRA C-2012 The Essential Type Model (MISRA C-2012 Rule 10.3, Required): Unclassified, Unspecified, Undecided, owner is Unassigned, defect only exists locally.
+some/path/boot.c:55:12: 1. misra_c_2012_rule_10_3_violation: Implicit conversion of "retVal" from essential type "unsigned 32-bit int" to different or narrower essential type "signed 16-bit int".
+
+some/path/boot.c:37:13: CID 446409 (#1 of 1): MISRA C-2012 Control Flow Expressions (MISRA C-2012 Rule 14.3, Required): Unclassified, Unspecified, Undecided, owner is Unassigned, defect only exists locally.
+some/path/boot.c:34:9: assignment: Assigning: "taskTimeCounter" = "1".
+some/path/boot.c:36:13: const: At condition "taskTimeCounter == 0U", the value of "taskTimeCounter" must be equal to 1.
+some/path/boot.c:36:9: dead_error_condition: The condition "taskTimeCounter == 0U" cannot be true.
+some/path/boot.c:37:13: misra_c_2012_rule_14_3_violation: Execution cannot reach this statement: "taskTimeCounter = 2;".
+
+some/path/boot.c:37:13: CID 446408 (#1 of 1): Logically dead code (DEADCODE): Unclassified, Unspecified, Undecided, owner is Unassigned, defect only exists locally.
+some/path/boot.c:34:9: assignment: Assigning: "taskTimeCounter" = "1".
+some/path/boot.c:36:13: const: At condition "taskTimeCounter == 0U", the value of "taskTimeCounter" must be equal to 1.
+some/path/boot.c:36:9: dead_error_condition: The condition "taskTimeCounter == 0U" cannot be true.
+some/path/boot.c:37:13: dead_error_begin: Execution cannot reach this statement: "taskTimeCounter = 2;".
+
+some/path/boot.c:36:13: CID 446407 (#1 of 1): MISRA C-2012 The Essential Type Model (MISRA C-2012 Rule 10.4, Required): Unclassified, Unspecified, Undecided, owner is Unassigned, defect only exists locally.
+some/path/boot.c:36:13: 1. misra_c_2012_rule_10_4_violation: Essential type of the left hand operand "taskTimeCounter" (unsigned) is not the same as that of the right operand "0"(signed).
+
+some/path/boot.c:32:5: CID 446406 (#1 of 1): MISRA C-2012 Control Flow Expressions (MISRA C-2012 Rule 14.3, Required): Unclassified, Unspecified, Undecided, owner is Unassigned, defect only exists locally.
+some/path/boot.c:32:5: misra_c_2012_rule_14_3_violation: No conditions allow control to exit the loop.
+some/path/boot.c:32:5: loop_top: Top of the loop.
+some/path/boot.c:43:5: loop_bottom: Bottom of the loop.
+some/path/boot.c:34:9: assignment: Assigning: "taskTimeCounter" = "1".
+some/path/boot.c:36:13: constant_loop_condition: Condition "taskTimeCounter == 0U" is always false so that the loop cannot exit.
+
+some/path/boot.c:37:31: CID 446405 (#1 of 1): MISRA C-2012 Unused Code (MISRA C-2012 Rule 2.2, Required): Unclassified, Unspecified, Undecided, owner is Unassigned, defect only exists locally.
+some/path/boot.c:37:31: misra_c_2012_rule_2_2_violation: Assigning value "2" to "taskTimeCounter" here, but that stored value is not used.
+
+some/path/dummy_int.h:34:12: CID 264736 (#1 of 1): MISRA C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory): Intentional, Minor, Ignore, owner is Unassigned, defect only exists locally.
+some/path/dummy_fp.c:367:13: CID 423570 (#1 of 1): Out-of-bounds write (OVERRUN): False Positive, Minor, Ignore, owner is sfo, defect only exists locally.
+some/path/dummy_fp.c:367:13: CID 423568 (#1 of 1): MISRA C-2012 Pointers and Arrays (MISRA C-2012 Rule 18.1, Required): False Positive, Minor, Ignore, owner is sfo, defect only exists locally.
+some/path/dummy_uncl.h:194:14: CID 431350 (#1 of 1): MISRA C-2012 Declarations and Definitions (MISRA C-2012 Rule 8.5, Required): Unclassified, Unspecified, Undecided, owner is Unassigned, defect only exists locally.
+
+cov-run-desktop took 7.8 seconds.
