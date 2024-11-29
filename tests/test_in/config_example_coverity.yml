@@ -6,9 +6,6 @@ coverity:
   intentional:
     min: $MIN_INTENTIONAL
     max: $MAX_INTENTIONAL
-  bug:
-    min: 0
-    max: 0
   pending:
     min: 0
     max: 0
