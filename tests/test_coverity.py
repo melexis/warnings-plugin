@@ -19,6 +19,7 @@ def ordered(obj):
     else:
         return obj
 
+
 @mock.patch.dict(os.environ, {
     "MIN_UNCLASSIFIED": "8", "MAX_UNCLASSIFIED": "8",
     "MIN_INTENTIONAL": "1", "MAX_INTENTIONAL": "1",
