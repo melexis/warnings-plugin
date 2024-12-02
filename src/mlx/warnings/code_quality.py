@@ -113,6 +113,3 @@ class Finding:
             },
             "fingerprint": self.fingerprint
         }
-
-
-
