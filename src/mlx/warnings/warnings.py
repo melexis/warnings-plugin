@@ -275,7 +275,7 @@ def warnings_wrapper(args):
                         help='Treat program arguments as command to execute to obtain data')
     parser.add_argument('--ignore-retval', dest='ignore', action='store_true',
                         help='Ignore return value of the executed command')
-    parser.add_argument('--version', action='version', version='%(prog)s {version}'.format(version=__version__))
+    parser.add_argument('--version', action='version', version=f'%(prog)s {__version__}')
     parser.add_argument('logfile', nargs='+', help='Logfile (or command) that might contain warnings')
     parser.add_argument('flags', nargs=argparse.REMAINDER,
                         help='Possible not-used flags from above are considered as command flags')
