@@ -1,6 +1,7 @@
 import os
 import re
 from string import Template
+import logging
 
 from .code_quality import Finding
 from .exceptions import WarningsConfigError
@@ -46,7 +47,7 @@ class RegexChecker(WarningsChecker):
                 continue
             self.count += 1
             self.counted_warnings.append(match_string)
-            self.print_when_verbose(match_string)
+            logging.info(match_string)
             if self.cq_enabled:
                 self.add_code_quality_finding(match)
 
@@ -153,7 +154,7 @@ class CoverityChecker(RegexChecker):
                 checker.cq_default_path = self.cq_default_path
                 checker.check(match)
             else:
-                print(f"WARNING: Unrecognized classification {match.group('classification')!r}")
+                logging.warning(f"Unrecognized classification {match.group('classification')!r}")
 
     def parse_config(self, config):
         """Process configuration
@@ -173,7 +174,7 @@ class CoverityChecker(RegexChecker):
             if classification_key in self.checkers:
                 self.checkers[classification_key].parse_config(checker_config)
             else:
-                print(f"WARNING: Unrecognized classification {classification!r}")
+                logging.warning(f"Unrecognized classification {classification!r}")
 
 
 class CoverityClassificationChecker(WarningsChecker):
@@ -248,7 +249,7 @@ class CoverityClassificationChecker(WarningsChecker):
         if not self._is_excluded(match_string) and (content.group('curr') == content.group('max')):
             self.count += 1
             self.counted_warnings.append(match_string)
-            self.print_when_verbose(match_string)
+            logging.info(match_string)
             if self.cq_enabled:
                 self.add_code_quality_finding(content)
 

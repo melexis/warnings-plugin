@@ -5,6 +5,7 @@ from math import inf
 import os
 import re
 from string import Template
+import logging
 
 from .exceptions import WarningsConfigError
 
@@ -176,15 +177,6 @@ class WarningsChecker:
               .format(self, error_reason, error_code))
         return error_code
 
-    def print_when_verbose(self, message):
-        ''' Prints message only when verbose mode is enabled.
-
-        Args:
-            message (str): Message to conditionally print
-        '''
-        if self.verbose:
-            print(message)
-
     def parse_config(self, config):
         substitute_envvar(config, {'min', 'max'})
         self.maximum = int(config['max'])
@@ -208,8 +200,7 @@ class WarningsChecker:
         '''
         matching_exclude_pattern = self._search_patterns(content, self.exclude_patterns)
         if not self._search_patterns(content, self.include_patterns) and matching_exclude_pattern:
-            self.print_when_verbose("Excluded {!r} because of configured regex {!r}"
-                                    .format(content, matching_exclude_pattern))
+            logging.info("Excluded {!r} because of configured regex {!r}".format(content, matching_exclude_pattern))
             return True
         return False
 

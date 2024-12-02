@@ -3,6 +3,7 @@
 import sys
 
 from junitparser import Error, Failure
+import logging
 
 from .junit_checker import JUnitChecker
 from .warnings_checker import WarningsChecker
@@ -155,5 +156,5 @@ class RobotSuiteChecker(JUnitChecker):
         """
         super().check(content)
         if not self.is_valid_suite_name and self.check_suite_name:
-            print('ERROR: No suite with name {!r} found. Returning error code -1.'.format(self.name))
+            logging.error('No suite with name {!r} found. Returning error code -1.'.format(self.name))
             sys.exit(-1)

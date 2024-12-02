@@ -4,6 +4,7 @@ import csv
 from io import TextIOWrapper
 import os
 from string import Template
+import logging
 
 from .code_quality import Finding
 from .exceptions import WarningsConfigError
@@ -244,8 +245,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
         '''
         if content[self.column_name].lower() == self.check_value:
             if content["status"].lower() in ["not a defect", "justified"]:
-                self.print_when_verbose("Excluded row {!r} because the status is 'Not a defect' or 'Justified'"
-                                        .format(content))
+                logging.info("Excluded row {!r} because the status is 'Not a defect' or 'Justified'".format(content))
             else:
                 tab_sep_string = "\t".join(content.values())
                 if not self._is_excluded(tab_sep_string):

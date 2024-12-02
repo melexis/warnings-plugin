@@ -6,6 +6,7 @@ except ImportError:
     from xml.etree import ElementTree as etree
 
 from junitparser import Error, Failure, JUnitXml
+import logging
 
 from .warnings_checker import WarningsChecker
 
@@ -30,7 +31,7 @@ class JUnitChecker(WarningsChecker):
             suites.update_statistics()
             self.count += suites.failures + suites.errors - amount_to_exclude
         except etree.ParseError as err:
-            print(err)
+            logging.error(err)
 
     @staticmethod
     def prepare_tree(root_input):
@@ -66,5 +67,5 @@ class JUnitChecker(WarningsChecker):
                 return 1
             string = '{classname}.{testname}'.format(classname=testcase.classname, testname=testcase.name)
             self.counted_warnings.append('{}: {}'.format(string, testcase.result.message))
-            self.print_when_verbose(string)
+            logging.info(string)
         return 0
