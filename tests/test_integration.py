@@ -201,18 +201,11 @@ class TestIntegration(TestCase):
         stdout_log = fake_out.getvalue()
         self.assertEqual(
             '\n'.join([
-                "Suite 'Suite One': 1 warnings found",
-                "2 warnings found",
-                "Suite 'Suite Two': 1 warnings found",
-                "Suite 'b4d su1te name': 0 warnings found",
-                "Counted failures for test suite 'Suite One'.",
-                "Number of warnings (1) is between limits 0 and 1. Well done.",
-                "Counted failures for all test suites.",
-                "Number of warnings (2) is higher than the maximum limit (1). Returning error code 2.",
-                "Counted failures for test suite 'Suite Two'.",
-                "Number of warnings (1) is between limits 1 and 2. Well done.",
-                "Counted failures for test suite 'b4d su1te name'.",
-                "Number of warnings (0) is exactly as expected. Well done.",
+                "robot:     test suite 'Suite One'        number of warnings (1) is between limits 0 and 1. Well done.",
+                "robot:     all test suites               number of warnings (2) is higher than the maximum limit (1).",
+                "robot:     test suite 'Suite Two'        number of warnings (1) is between limits 1 and 2. Well done.",
+                "robot:     test suite 'b4d su1te name'   number of warnings (0) is exactly as expected. Well done.",
+                "Returning error code 4."
             ]) + '\n',
             stdout_log
         )
