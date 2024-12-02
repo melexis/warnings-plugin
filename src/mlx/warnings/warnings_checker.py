@@ -166,9 +166,9 @@ class WarningsChecker:
             int: The count of warnings (or 1 in case of a count of 0 warnings)
         '''
         if self.count > self._maximum:
-            error_reason = "higher than the maximum limit ({0._maximum})".format(self)
+            error_reason = f"higher than the maximum limit ({self._maximum})"
         else:
-            error_reason = "lower than the minimum limit ({0._minimum})".format(self)
+            error_reason = f"lower than the minimum limit ({self._minimum})"
 
         error_code = self.count
         if error_code == 0:
@@ -200,7 +200,7 @@ class WarningsChecker:
         '''
         matching_exclude_pattern = self._search_patterns(content, self.exclude_patterns)
         if not self._search_patterns(content, self.include_patterns) and matching_exclude_pattern:
-            logging.info("Excluded {!r} because of configured regex {!r}".format(content, matching_exclude_pattern))
+            logging.info(f"Excluded {content!r} because of configured regex {matching_exclude_pattern!r}")
             return True
         return False
 

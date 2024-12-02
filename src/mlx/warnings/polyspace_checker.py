@@ -209,7 +209,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
         Returns:
             int: Number of warnings found
         '''
-        print("{} warnings found for {!r}: {!r}".format(self.count, self.column_name, self.check_value))
+        print(f"{self.count} warnings found for {self.column_name!r}: {self.check_value!r}")
         return self.count
 
     def add_code_quality_finding(self, row):
@@ -245,7 +245,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
         '''
         if content[self.column_name].lower() == self.check_value:
             if content["status"].lower() in ["not a defect", "justified"]:
-                logging.info("Excluded row {!r} because the status is 'Not a defect' or 'Justified'".format(content))
+                logging.info(f"Excluded row {content!r} because the status is 'Not a defect' or 'Justified'")
             else:
                 tab_sep_string = "\t".join(content.values())
                 if not self._is_excluded(tab_sep_string):

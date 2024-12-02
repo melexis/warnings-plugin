@@ -213,7 +213,7 @@ class WarningsPlugin:
                     if bool(checker_config['enabled']):
                         self.activate_checker(checker)
                         checker.parse_config(checker_config)
-                        logging.info("Config parsing for {name} completed".format(name=checker.name))
+                        logging.info(f"Config parsing for {checker.name} completed")
                 except KeyError as err:
                     raise WarningsConfigError(f"Incomplete config. Missing: {err}") from err
 

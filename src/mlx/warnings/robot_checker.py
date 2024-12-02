@@ -85,7 +85,7 @@ class RobotChecker(WarningsChecker):
         count = 0
         for checker in self.checkers:
             if checker.name:
-                print('Counted failures for test suite {!r}.'.format(checker.name))
+                print(f'Counted failures for test suite {checker.name!r}.')
             else:
                 print('Counted failures for all test suites.')
             count += checker.return_check_limits()
@@ -120,9 +120,9 @@ class RobotSuiteChecker(JUnitChecker):
         Returns:
             int: Number of warnings found
         '''
-        msg = "{} warnings found".format(self.count)
+        msg = f"{self.count} warnings found"
         if self.name:
-            msg = "Suite {!r}: {}".format(self.name, msg)
+            msg = f"Suite {self.name!r}: {msg}"
         print(msg)
         return self.count
 
@@ -156,5 +156,5 @@ class RobotSuiteChecker(JUnitChecker):
         """
         super().check(content)
         if not self.is_valid_suite_name and self.check_suite_name:
-            logging.error('No suite with name {!r} found. Returning error code -1.'.format(self.name))
+            logging.error(f'No suite with name {self.name!r} found. Returning error code -1.')
             sys.exit(-1)
