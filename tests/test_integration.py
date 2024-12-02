@@ -3,10 +3,9 @@ import os
 from io import StringIO
 from pathlib import Path
 from unittest import TestCase
-
 from unittest.mock import patch
 
-from mlx.warnings import exceptions, warnings_wrapper, WarningsConfigError, Finding
+from mlx.warnings import Finding, WarningsConfigError, exceptions, warnings_wrapper
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
 TEST_OUT_DIR = Path(__file__).parent / 'test_out'

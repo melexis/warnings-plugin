@@ -1,10 +1,16 @@
 import os
-from io import StringIO
 from pathlib import Path
 from unittest import TestCase
 
-from mlx.warnings import (JUnitChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker, RobotChecker, WarningsPlugin,
-                          WarningsConfigError)
+from mlx.warnings import (
+    DoxyChecker,
+    JUnitChecker,
+    RobotChecker,
+    SphinxChecker,
+    WarningsConfigError,
+    WarningsPlugin,
+    XMLRunnerChecker,
+)
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
 

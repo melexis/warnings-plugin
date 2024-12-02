@@ -1,12 +1,16 @@
-import os
-from io import StringIO
-import unittest
-from pathlib import Path
 import filecmp
-
+import os
+import unittest
+from io import StringIO
+from pathlib import Path
 from unittest.mock import patch
 
-from mlx.warnings import PolyspaceFamilyChecker, WarningsPlugin, warnings_wrapper, Finding
+from mlx.warnings import (
+    Finding,
+    PolyspaceFamilyChecker,
+    WarningsPlugin,
+    warnings_wrapper,
+)
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
 TEST_OUT_DIR = Path(__file__).parent / 'test_out'
