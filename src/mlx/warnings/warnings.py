@@ -415,7 +415,7 @@ def warnings_logfile(warnings, log):
     for file_wildcard in log:
         if glob.glob(file_wildcard):
             for logfile in glob.glob(file_wildcard):
-                with open(logfile, "r") as file:
+                with open(logfile) as file:
                     warnings.check_logfile(file)
         else:
             logging.error("FILE: %s does not exist" % file_wildcard)
