@@ -15,12 +15,12 @@ class TestRobotWarnings(unittest.TestCase):
         ]
 
     def test_no_warning(self):
-        with open('tests/test_in/junit_no_fail.xml', 'r') as xmlfile:
+        with open('tests/test_in/junit_no_fail.xml') as xmlfile:
             self.warnings.check(xmlfile.read())
         self.assertEqual(self.warnings.return_count(), 0)
 
     def test_single_warning(self):
-        with open('tests/test_in/robot_single_fail.xml', 'r') as xmlfile:
+        with open('tests/test_in/robot_single_fail.xml') as xmlfile:
             with self.assertLogs(level="INFO") as fake_out:
                 self.warnings.check(xmlfile.read())
                 count = self.warnings.return_count()
@@ -30,7 +30,7 @@ class TestRobotWarnings(unittest.TestCase):
         self.assertIn("INFO:root:Suite One &amp; Suite Two.Suite One.First Test", stdout_log)
 
     def test_double_warning_and_verbosity(self):
-        with open('tests/test_in/robot_double_fail.xml', 'r') as xmlfile:
+        with open('tests/test_in/robot_double_fail.xml') as xmlfile:
             with self.assertLogs(level="INFO") as fake_out:
                 self.warnings.check(xmlfile.read())
                 count = self.warnings.return_count()
@@ -54,7 +54,7 @@ class TestRobotWarnings(unittest.TestCase):
             RobotSuiteChecker('test_warn_plugin_double_fail'),
             RobotSuiteChecker('test_warn_plugin_no_double_fail'),
         ]
-        with open('tests/test_in/junit_double_fail.xml', 'r') as xmlfile:
+        with open('tests/test_in/junit_double_fail.xml') as xmlfile:
             self.warnings.check(xmlfile.read())
             count = self.warnings.return_count()
         self.assertEqual(count, 2)
@@ -63,7 +63,7 @@ class TestRobotWarnings(unittest.TestCase):
         self.dut.checkers = [
             RobotSuiteChecker('nonexistent_suite_name', check_suite_name=True),
         ]
-        with open('tests/test_in/robot_double_fail.xml', 'r') as xmlfile:
+        with open('tests/test_in/robot_double_fail.xml') as xmlfile:
             with self.assertRaises(SystemExit) as c_m:
                 self.warnings.check(xmlfile.read())
         self.assertEqual(c_m.exception.code, -1)
@@ -72,7 +72,7 @@ class TestRobotWarnings(unittest.TestCase):
         self.dut.checkers = [
             RobotSuiteChecker('Empty Flash Product Id', check_suite_name=True),
         ]
-        with open('tests/test_in/robot_version_5.xml', 'r') as xmlfile:
+        with open('tests/test_in/robot_version_5.xml') as xmlfile:
             self.warnings.check(xmlfile.read())
             count = self.warnings.return_count()
         self.assertEqual(count, 6)
