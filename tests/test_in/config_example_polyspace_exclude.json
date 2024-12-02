@@ -74,6 +74,8 @@
                 "max": 30
             }
         ]
-
+    },
+    "gcc": {
+	"enabled": false
     }
 }

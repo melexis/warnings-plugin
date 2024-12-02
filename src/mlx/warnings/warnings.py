@@ -15,7 +15,7 @@ from ruamel.yaml import YAML
 
 from .exceptions import WarningsConfigError
 from .junit_checker import JUnitChecker
-from .regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker
+from .regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker, GccChecker
 from .robot_checker import RobotChecker
 from .polyspace_checker import PolyspaceChecker
 
@@ -37,7 +37,7 @@ class WarningsPlugin:
         self.verbose = verbose
         self.cq_enabled = cq_enabled
         self.public_checkers = [SphinxChecker(self.verbose), DoxyChecker(self.verbose), JUnitChecker(self.verbose),
-                                XMLRunnerChecker(self.verbose), CoverityChecker(self.verbose),
+                                XMLRunnerChecker(self.verbose), GccChecker(self.verbose), CoverityChecker(self.verbose),
                                 RobotChecker(self.verbose), PolyspaceChecker(self.verbose)]
 
         if config_file:
@@ -252,6 +252,7 @@ def warnings_wrapper(args):
     group1.add_argument('-r', '--robot', dest='robot', action='store_true')
     group1.add_argument('-s', '--sphinx', dest='sphinx', action='store_true')
     group1.add_argument('-x', '--xmlrunner', dest='xmlrunner', action='store_true')
+    group1.add_argument('-g', '--gcc', dest='gcc', action='store_true')
     group1.add_argument('--name', default='',
                         help='Name of the Robot Framework test suite to check results of')
     group1.add_argument('-m', '--maxwarnings', '--max-warnings', type=int, default=0,
@@ -283,7 +284,7 @@ def warnings_wrapper(args):
     code_quality_enabled = bool(args.code_quality)
     # Read config file
     if args.configfile is not None:
-        checker_flags = args.sphinx or args.doxygen or args.junit or args.coverity or args.xmlrunner or args.robot
+        checker_flags = args.sphinx or args.doxygen or args.junit or args.coverity or args.xmlrunner or args.robot or args.gcc
         warning_args = args.maxwarnings or args.minwarnings or args.exact_warnings
         if checker_flags or warning_args:
             print("Configfile cannot be provided with other arguments")
@@ -299,6 +300,8 @@ def warnings_wrapper(args):
             warnings.activate_checker_name('junit')
         if args.xmlrunner:
             warnings.activate_checker_name('xmlrunner')
+        if args.gcc:
+            warnings.activate_checker_name('gcc')
         if args.coverity:
             warnings.activate_checker_name('coverity')
         if args.robot:
