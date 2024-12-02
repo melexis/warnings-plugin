@@ -368,4 +368,3 @@ class TestIntegration(TestCase):
                 'tests/test_in/mixed_warnings.txt',
             ])
         self.assertEqual(str(context.exception), 'Polyspace checker cannot be combined with other warnings checkers')
-
