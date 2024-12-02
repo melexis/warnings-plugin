@@ -20,7 +20,11 @@ def ordered(obj):
         return obj
 
 
-@mock.patch.dict(os.environ, {"MIN_COV_WARNINGS": "1", "MAX_COV_WARNINGS": "2"})
+@mock.patch.dict(os.environ, {
+    "MIN_UNCLASSIFIED": "8", "MAX_UNCLASSIFIED": "8",
+    "MIN_INTENTIONAL": "1", "MAX_INTENTIONAL": "1",
+    "MIN_FALSE_POSITIVE": "2", "MAX_FALSE_POSITIVE": "2",
+})
 class TestCoverityWarnings(TestCase):
     def setUp(self):
         Finding.fingerprints = {}
@@ -71,19 +75,35 @@ class TestCoverityWarnings(TestCase):
         retval = warnings_wrapper([
             '--coverity',
             '--code-quality', out_file,
-            str(TEST_IN_DIR / 'defects.txt'),
+            str(TEST_IN_DIR / 'coverity_full.txt'),
         ])
-        self.assertEqual(8, retval)
+        self.assertEqual(11, retval)
         self.assertTrue(filecmp.cmp(out_file, ref_file))
 
-    def test_code_quality_with_config(self):
+    def test_code_quality_with_config_pass(self):
         filename = 'coverity_cq.json'
         out_file = str(TEST_OUT_DIR / filename)
         ref_file = str(TEST_IN_DIR / filename)
         retval = warnings_wrapper([
             '--code-quality', out_file,
             '--config', str(TEST_IN_DIR / 'config_example_coverity.yml'),
-            str(TEST_IN_DIR / 'defects.txt'),
+            str(TEST_IN_DIR / 'coverity_full.txt'),
         ])
-        self.assertEqual(3, retval)
+        self.assertEqual(0, retval)
+        self.assertTrue(filecmp.cmp(out_file, ref_file))
+
+    @mock.patch.dict(os.environ, {
+        "MIN_UNCLASSIFIED": "11", "MAX_UNCLASSIFIED": "-1",
+        "MIN_FALSE_POSITIVE": "0", "MAX_FALSE_POSITIVE": "1",
+    })
+    def test_code_quality_with_config_fail(self):
+        filename = 'coverity_cq.json'
+        out_file = str(TEST_OUT_DIR / filename)
+        ref_file = str(TEST_IN_DIR / filename)
+        retval = warnings_wrapper([
+            '--code-quality', out_file,
+            '--config', str(TEST_IN_DIR / 'config_example_coverity.yml'),
+            str(TEST_IN_DIR / 'coverity_full.txt'),
+        ])
+        self.assertEqual(10, retval)  # 8 + 2 not within range 6 and 7
         self.assertTrue(filecmp.cmp(out_file, ref_file))
