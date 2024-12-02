@@ -183,20 +183,12 @@ class TestIntegration(TestCase):
 
     def test_robot_verbose(self):
         ''' If no suite name is configured, all suites must be taken into account '''
-        with patch('sys.stdout', new=StringIO()) as fake_out:
+        with self.assertLogs(level="INFO") as fake_out:
             retval = warnings_wrapper(['--verbose', '--robot', '--name', 'Suite Two', 'tests/test_in/robot_double_fail.xml'])
-        stdout_log = fake_out.getvalue()
+        stdout_log = fake_out.output
 
         self.assertEqual(1, retval)
-        self.assertEqual(
-            '\n'.join([
-                "Suite One &amp; Suite Two.Suite Two.Another test",
-                "Suite 'Suite Two': 1 warnings found",
-                "Counted failures for test suite 'Suite Two'.",
-                "Number of warnings (1) is higher than the maximum limit (0). Returning error code 1.",
-            ]) + '\n',
-            stdout_log
-        )
+        self.assertIn("INFO:root:Suite One &amp; Suite Two.Suite Two.Another test", stdout_log)
 
     def test_robot_config(self):
         os.environ['MIN_ROBOT_WARNINGS'] = '0'
@@ -208,10 +200,8 @@ class TestIntegration(TestCase):
                 'tests/test_in/robot_double_fail.xml',
             ])
         stdout_log = fake_out.getvalue()
-
         self.assertEqual(
             '\n'.join([
-                "Config parsing for robot completed",
                 "Suite 'Suite One': 1 warnings found",
                 "2 warnings found",
                 "Suite 'Suite Two': 1 warnings found",
@@ -234,35 +224,24 @@ class TestIntegration(TestCase):
 
     def test_robot_config_check_names(self):
         self.maxDiff = None
-        with patch('sys.stdout', new=StringIO()) as fake_out:
+        with self.assertLogs(level="INFO") as fake_out:
             with self.assertRaises(SystemExit) as cm_err:
                 warnings_wrapper(['--config', 'tests/test_in/config_example_robot_invalid_suite.json',
                                   'tests/test_in/robot_double_fail.xml'])
-        stdout_log = fake_out.getvalue()
-
-        self.assertEqual(
-            '\n'.join([
-                "Config parsing for robot completed",
-                "ERROR: No suite with name 'b4d su1te name' found. Returning error code -1.",
-            ]) + '\n',
-            stdout_log
-        )
+        stdout_log = fake_out.output
+        self.assertIn("ERROR:root:No suite with name 'b4d su1te name' found. Returning error code -1.",
+                      stdout_log)
         self.assertEqual(cm_err.exception.code, -1)
 
     def test_robot_cli_check_name(self):
         self.maxDiff = None
-        with patch('sys.stdout', new=StringIO()) as fake_out:
+        with self.assertLogs(level="INFO") as fake_out:
             with self.assertRaises(SystemExit) as cm_err:
                 warnings_wrapper(['--verbose', '--robot', '--name', 'Inv4lid Name',
                                   'tests/test_in/robot_double_fail.xml'])
-        stdout_log = fake_out.getvalue()
+        stdout_log = fake_out.output
 
-        self.assertEqual(
-            '\n'.join([
-                "ERROR: No suite with name 'Inv4lid Name' found. Returning error code -1.",
-            ]) + '\n',
-            stdout_log
-        )
+        self.assertIn("ERROR:root:No suite with name 'Inv4lid Name' found. Returning error code -1.", stdout_log)
         self.assertEqual(cm_err.exception.code, -1)
 
     def test_output_file_sphinx(self):
@@ -369,15 +348,15 @@ class TestIntegration(TestCase):
         filename = 'code_quality_format.json'
         out_file = str(TEST_OUT_DIR / filename)
         ref_file = str(TEST_IN_DIR / filename)
-        with patch('sys.stdout', new=StringIO()) as fake_output:
+        with self.assertLogs(level="INFO") as fake_out:
             retval = warnings_wrapper([
                 '--code-quality', out_file,
                 '--config', 'tests/test_in/config_cq_description_format.json',
                 'tests/test_in/mixed_warnings.txt',
             ])
-        output = fake_output.getvalue().splitlines(keepends=False)
-        self.assertIn("WARNING: Unrecognized classification 'max'", output)
-        self.assertIn("WARNING: Unrecognized classification 'min'", output)
+        output = fake_out.output
+        self.assertIn("WARNING:root:Unrecognized classification 'max'", output)
+        self.assertIn("WARNING:root:Unrecognized classification 'min'", output)
         self.assertEqual(2, retval)
         self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
 

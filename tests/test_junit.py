@@ -1,7 +1,4 @@
-from io import StringIO
 from unittest import TestCase
-
-from unittest.mock import patch
 
 from mlx.warnings import WarningsPlugin
 
@@ -18,18 +15,18 @@ class TestJUnitFailures(TestCase):
 
     def test_single_warning(self):
         with open('tests/test_in/junit_single_fail.xml', 'r') as xmlfile:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
+            with self.assertLogs(level="INFO") as fake_out:
                 self.warnings.check(xmlfile.read())
         self.assertEqual(self.warnings.return_count(), 1)
-        self.assertRegex(fake_out.getvalue(), 'myfirstfai1ure')
+        self.assertIn("INFO:root:test_warn_plugin_single_fail.myfirstfai1ure", fake_out.output)
 
     def test_dual_warning(self):
         with open('tests/test_in/junit_double_fail.xml', 'r') as xmlfile:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
+            with self.assertLogs(level="INFO") as fake_out:
                 self.warnings.check(xmlfile.read())
         self.assertEqual(self.warnings.return_count(), 2)
-        self.assertRegex(fake_out.getvalue(), 'myfirstfai1ure')
-        self.assertRegex(fake_out.getvalue(), 'mysecondfai1ure')
+        self.assertIn("INFO:root:test_warn_plugin_double_fail.myfirstfai1ure", fake_out.output)
+        self.assertIn("INFO:root:test_warn_plugin_no_double_fail.mysecondfai1ure", fake_out.output)
 
     def test_invalid_xml(self):
         self.warnings.check('this is not xml')

@@ -1,7 +1,4 @@
-from io import StringIO
 from unittest import TestCase
-
-from unittest.mock import patch
 
 from mlx.warnings import WarningsPlugin
 
@@ -125,6 +122,6 @@ class TestWarningsPlugin(TestCase):
     def test_non_existent_checker_name(self):
         warnings = WarningsPlugin()
         invalid_checker_name = 'non-existent'
-        with patch('sys.stdout', new=StringIO()) as fake_out:
+        with self.assertLogs(level="INFO") as fake_out:
             warnings.activate_checker_name(invalid_checker_name)
-        self.assertIn("Checker {} does not exist".format(invalid_checker_name), fake_out.getvalue())
+        self.assertIn("ERROR:root:Checker {} does not exist".format(invalid_checker_name), fake_out.output)

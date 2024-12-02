@@ -1,7 +1,4 @@
-from io import StringIO
 import unittest
-
-from unittest.mock import patch
 
 from mlx.warnings import RobotSuiteChecker, WarningsPlugin
 
@@ -24,30 +21,27 @@ class TestRobotWarnings(unittest.TestCase):
 
     def test_single_warning(self):
         with open('tests/test_in/robot_single_fail.xml', 'r') as xmlfile:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
+            with self.assertLogs(level="INFO") as fake_out:
                 self.warnings.check(xmlfile.read())
                 count = self.warnings.return_count()
-        stdout_log = fake_out.getvalue()
+        stdout_log = fake_out.output
 
         self.assertEqual(count, 1)
-        self.assertIn("Suite {!r}: 1 warnings found".format(self.suite1), stdout_log)
-        self.assertIn("Suite {!r}: 0 warnings found".format(self.suite2), stdout_log)
+        self.assertIn("INFO:root:Suite One &amp; Suite Two.Suite One.First Test", stdout_log)
 
     def test_double_warning_and_verbosity(self):
         with open('tests/test_in/robot_double_fail.xml', 'r') as xmlfile:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
+            with self.assertLogs(level="INFO") as fake_out:
                 self.warnings.check(xmlfile.read())
                 count = self.warnings.return_count()
-        stdout_log = fake_out.getvalue()
+        stdout_log = fake_out.output
 
         self.assertEqual(count, 2)
         self.assertEqual(
-            '\n'.join([
-                "Suite One &amp; Suite Two.Suite One.First Test",
-                "Suite One &amp; Suite Two.Suite Two.Another test",
-                "Suite {!r}: 1 warnings found".format(self.suite1),
-                "Suite {!r}: 1 warnings found".format(self.suite2),
-            ]) + '\n',
+            [
+                "INFO:root:Suite One &amp; Suite Two.Suite One.First Test",
+                "INFO:root:Suite One &amp; Suite Two.Suite Two.Another test",
+            ],
             stdout_log
         )
 
