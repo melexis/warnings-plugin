@@ -262,7 +262,7 @@ class TestIntegration(TestCase):
             'tests/test_in/robot_double_fail.xml',
         ])
         self.assertEqual(2, retval)
-        self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
+        self.assertTrue(filecmp.cmp(out_file, ref_file), f'{out_file} differs from {ref_file}')
 
     def test_output_file_robot_config(self):
         os.environ['MIN_ROBOT_WARNINGS'] = '0'
@@ -276,7 +276,7 @@ class TestIntegration(TestCase):
             'tests/test_in/robot_double_fail.xml',
         ])
         self.assertEqual(2, retval)
-        self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
+        self.assertTrue(filecmp.cmp(out_file, ref_file), f'{out_file} differs from {ref_file}')
         for var in ('MIN_ROBOT_WARNINGS', 'MAX_ROBOT_WARNINGS'):
             if var in os.environ:
                 del os.environ[var]
@@ -291,7 +291,7 @@ class TestIntegration(TestCase):
             'tests/test_in/junit_double_fail.xml',
         ])
         self.assertEqual(2, retval)
-        self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
+        self.assertTrue(filecmp.cmp(out_file, ref_file), f'{out_file} differs from {ref_file}')
 
     @patch('pathlib.Path.cwd')
     def test_code_quality(self, path_cwd_mock):
@@ -307,7 +307,7 @@ class TestIntegration(TestCase):
             'tests/test_in/mixed_warnings.txt',
         ])
         self.assertEqual(2, retval)
-        self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
+        self.assertTrue(filecmp.cmp(out_file, ref_file), f'{out_file} differs from {ref_file}')
 
     def test_code_quality_abspath_failure(self):
         os.environ['MIN_SPHINX_WARNINGS'] = '0'
@@ -357,7 +357,7 @@ class TestIntegration(TestCase):
         self.assertIn("WARNING:root:Unrecognized classification 'max'", output)
         self.assertIn("WARNING:root:Unrecognized classification 'min'", output)
         self.assertEqual(2, retval)
-        self.assertTrue(filecmp.cmp(out_file, ref_file), '{} differs from {}'.format(out_file, ref_file))
+        self.assertTrue(filecmp.cmp(out_file, ref_file), f'{out_file} differs from {ref_file}')
 
     @patch('pathlib.Path.cwd')
     def test_polyspace_error(self, path_cwd_mock):
