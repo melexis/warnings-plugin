@@ -139,28 +139,32 @@ class WarningsChecker:
         Returns:
             int: Number of warnings found
         '''
-        print("{0.count} {0.name} warnings found".format(self))
         return self.count
 
-    def return_check_limits(self):
+    def return_check_limits(self, extra=""):
         ''' Function for checking whether the warning count is within the configured limits
+
+        Args:
+            extra (str): The extra string that is placed after the checker name. For example, the classification.
 
         Returns:
             int: 0 if the amount of warnings is within limits, the count of warnings otherwise
                 (or 1 in case of a count of 0 warnings)
         '''
         if self.count > self._maximum or self.count < self._minimum:
-            return self._return_error_code()
+            return self._return_error_code(extra)
         elif self._minimum == self._maximum and self.count == self._maximum:
-            print("Number of warnings ({0.count}) is exactly as expected. Well done."
-                  .format(self))
+            print(f"{self.name + ':':<10} {extra}number of warnings ({self.count}) is exactly as expected. Well done.")
         else:
-            print("Number of warnings ({0.count}) is between limits {0._minimum} and {0._maximum}. Well done."
-                  .format(self))
+            print(f"{self.name + ':':<10} {extra}number of warnings ({self.count}) is between limits {self._minimum} "
+                  f"and {self._maximum}. Well done.")
         return 0
 
-    def _return_error_code(self):
+    def _return_error_code(self, extra=""):
         ''' Function for determining the return code and message on failure
+
+        Args:
+            extra (str): The extra string that is placed after the checker name. For example, the classification.
 
         Returns:
             int: The count of warnings (or 1 in case of a count of 0 warnings)
@@ -173,8 +177,10 @@ class WarningsChecker:
         error_code = self.count
         if error_code == 0:
             error_code = 1
-        print("Number of warnings ({0.count}) is {1}. Returning error code {2}."
-              .format(self, error_reason, error_code))
+        string_to_print = f"{self.name + ':':<10} {extra}number of warnings ({self.count}) is {error_reason}."
+        if self.name not in ["polyspace", "coverity", "robot"]:
+            string_to_print += f" Returning error code {error_code}."
+        print(string_to_print)
         return error_code
 
     def parse_config(self, config):

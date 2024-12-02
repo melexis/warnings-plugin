@@ -116,11 +116,10 @@ class PolyspaceChecker(WarningsChecker):
         '''
         count = 0
         for checker in self.checkers:
-            print(
-                'Counted failures for family {!r} \'{}\': \'{}\''
-                .format(checker.family_value, checker.column_name, checker.check_value)
-            )
-            count += checker.return_check_limits()
+            padded_string = [f"{string:<30}" for string in [f"family {checker.family_value!r} ",
+                                                            f"{checker.column_name}: {checker.check_value} "]]
+            count += checker.return_check_limits("".join(padded_string))
+        print(f"Returning error code {count}.")
         return count
 
     def parse_config(self, config):
@@ -173,6 +172,7 @@ class PolyspaceChecker(WarningsChecker):
 
 
 class PolyspaceFamilyChecker(WarningsChecker):
+    name = 'polyspace'
     code_quality_severity = {
         "impact: high": "critical",
         "impact: medium": "major",
@@ -202,15 +202,6 @@ class PolyspaceFamilyChecker(WarningsChecker):
     @cq_description_template.setter
     def cq_description_template(self, template_obj):
         self._cq_description_template = template_obj
-
-    def return_count(self):
-        ''' Getter function for the amount of warnings found
-
-        Returns:
-            int: Number of warnings found
-        '''
-        print(f"{self.count} warnings found for {self.column_name!r}: {self.check_value!r}")
-        return self.count
 
     def add_code_quality_finding(self, row):
         '''Add code quality finding
