@@ -5,8 +5,9 @@ try:
 except ImportError:
     from xml.etree import ElementTree as etree
 
-from junitparser import Error, Failure, JUnitXml
 import logging
+
+from junitparser import Error, Failure, JUnitXml
 
 from .warnings_checker import WarningsChecker
 

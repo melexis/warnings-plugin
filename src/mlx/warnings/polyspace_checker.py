@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import csv
-from io import TextIOWrapper
-import os
-from string import Template
 import logging
+import os
+from io import TextIOWrapper
+from string import Template
 
 from .code_quality import Finding
 from .exceptions import WarningsConfigError

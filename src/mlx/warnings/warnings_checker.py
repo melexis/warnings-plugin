@@ -1,11 +1,11 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import abc
-from math import inf
+import logging
 import os
 import re
+from math import inf
 from string import Template
-import logging
 
 from .exceptions import WarningsConfigError
 

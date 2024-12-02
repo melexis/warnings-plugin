@@ -1,9 +1,9 @@
 # SPDX-License-Identifier: Apache-2.0
 
+import logging
 import sys
 
 from junitparser import Error, Failure
-import logging
 
 from .junit_checker import JUnitChecker
 from .warnings_checker import WarningsChecker

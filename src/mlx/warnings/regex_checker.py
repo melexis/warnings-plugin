@@ -1,7 +1,7 @@
+import logging
 import os
 import re
 from string import Template
-import logging
 
 from .code_quality import Finding
 from .exceptions import WarningsConfigError
