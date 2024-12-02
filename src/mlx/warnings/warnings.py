@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 # SPDX-License-Identifier: Apache-2.0
 
 import argparse
@@ -42,7 +41,7 @@ class WarningsPlugin:
                                 RobotChecker(self.verbose), PolyspaceChecker(self.verbose)]
 
         if config_file:
-            with open(config_file, 'r', encoding='utf-8') as open_file:
+            with open(config_file, encoding='utf-8') as open_file:
                 if config_file.suffix.lower().startswith('.y'):
                     config = YAML().load(open_file)
                 else:
