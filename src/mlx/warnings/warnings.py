@@ -78,7 +78,7 @@ class WarningsPlugin:
                 self.activate_checker(checker)
                 return checker
         else:
-            logging.error("Checker %s does not exist" % name)
+            logging.error(f"Checker {name} does not exist")
 
     def get_checker(self, name):
         ''' Get checker by name
@@ -418,7 +418,7 @@ def warnings_logfile(warnings, log):
                 with open(logfile) as file:
                     warnings.check_logfile(file)
         else:
-            logging.error("FILE: %s does not exist" % file_wildcard)
+            logging.error(f"FILE: {file_wildcard} does not exist")
             return 1
 
     return 0
