@@ -34,9 +34,9 @@ class TestCodeProverWarnings(unittest.TestCase):
         stdout_log = fake_out.getvalue()
         self.assertEqual(
             '\n'.join([
-            "polyspace: family 'run-time check'       color: red                    number of warnings (0) is exactly as expected. Well done.",
-            "polyspace: family 'run-time check'       color: orange                 number of warnings (19) is higher than the maximum limit (0).",
-            "Returning error code 19."
+                "polyspace: family 'run-time check'       color: red                    number of warnings (0) is exactly as expected. Well done.",
+                "polyspace: family 'run-time check'       color: orange                 number of warnings (19) is higher than the maximum limit (0).",
+                "Returning error code 19."
             ]) + '\n',
             stdout_log
         )
@@ -61,10 +61,10 @@ class TestBugFinderWarnings(unittest.TestCase):
         stdout_log = fake_out.getvalue()
         self.assertEqual(
             '\n'.join([
-            "polyspace: family 'defect'               information: impact: high     number of warnings (42) is higher than the maximum limit (0).",
-            "polyspace: family 'defect'               information: impact: medium   number of warnings (9) is higher than the maximum limit (0).",
-            "polyspace: family 'defect'               information: impact: low      number of warnings (4) is higher than the maximum limit (0).",
-            "Returning error code 55."
+                "polyspace: family 'defect'               information: impact: high     number of warnings (42) is higher than the maximum limit (0).",
+                "polyspace: family 'defect'               information: impact: medium   number of warnings (9) is higher than the maximum limit (0).",
+                "polyspace: family 'defect'               information: impact: low      number of warnings (4) is higher than the maximum limit (0).",
+                "Returning error code 55."
             ]) + '\n',
             stdout_log
         )

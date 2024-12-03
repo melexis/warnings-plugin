@@ -234,7 +234,8 @@ class TestConfig(TestCase):
                 count = warnings.return_count()
         self.assertEqual(count, 1)
         self.assertEqual(warnings.return_check_limits(), 0)
-        self.assertEqual([
+        self.assertEqual(
+            [
                 r"INFO:root:Excluded 'Directory &#x27;C:\\nonexistent&#x27; does not exist.' because of configured regex 'does not exist'",
                 "INFO:root:Suite One &amp; Suite Two.Suite Two.Another test",
             ],
