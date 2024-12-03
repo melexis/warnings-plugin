@@ -284,9 +284,7 @@ def warnings_wrapper(args):
     code_quality_enabled = bool(args.code_quality)
     logging.basicConfig(format="%(levelname)s: %(message)s")
     if args.verbose:
-        logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
-    else:
-        logging.basicConfig(format="%(levelname)s: %(message)s")
+        logging.getLogger().setLevel(logging.INFO)
     # Read config file
     if args.configfile is not None:
         checker_flags = args.sphinx or args.doxygen or args.junit or args.coverity or args.xmlrunner or args.robot
