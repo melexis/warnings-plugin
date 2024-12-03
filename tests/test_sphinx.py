@@ -67,8 +67,10 @@ class TestSphinxWarnings(TestCase):
             "app.info() is now deprecated. Use sphinx.util.logging instead. RemovedInSphinx20Warning\n"
         dut = "This should not be treated as warning2\n"
         dut += duterr1
-        with self.assertNoLogs(level="INFO"):
-            self.warnings.check(dut)
+        with self.assertRaises(AssertionError) as err:
+            with self.assertLogs(level="INFO"):
+                self.warnings.check(dut)
+        self.assertEqual(str(err.exception), "no logs of level INFO or higher triggered on root")
         self.assertEqual(self.warnings.return_count(), 0)
 
     def test_deprecation_warning_included(self):
