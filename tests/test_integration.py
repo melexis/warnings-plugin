@@ -210,23 +210,21 @@ class TestIntegration(TestCase):
 
     def test_robot_verbose(self):
         ''' If no suite name is configured, all suites must be taken into account '''
-        with self.assertLogs(level="INFO") as fake_out:
-            retval = warnings_wrapper(['--verbose', '--robot', '--name', 'Suite Two', 'tests/test_in/robot_double_fail.xml'])
-        stdout_log = fake_out.output
-
+        stdout_log, retval = run_test_with_logging(['--verbose',
+                                                    '--robot',
+                                                    '--name', 'Suite Two',
+                                                    'tests/test_in/robot_double_fail.xml'])
         self.assertEqual(1, retval)
-        self.assertIn("INFO:root:Suite One &amp; Suite Two.Suite Two.Another test", stdout_log)
+        self.assertIn("Suite One &amp; Suite Two.Suite Two.Another test\n"
+                      "robot:     test suite 'Suite Two'        number of warnings (1) is higher than the maximum limit (0).\n"
+                      "Returning error code 1.\n", stdout_log)
 
     def test_robot_config(self):
         os.environ['MIN_ROBOT_WARNINGS'] = '0'
         os.environ['MAX_ROBOT_WARNINGS'] = '0'
-        with patch('sys.stdout', new=StringIO()) as fake_out:
-            retval = warnings_wrapper([
-                '--config',
-                'tests/test_in/config_example_robot.json',
-                'tests/test_in/robot_double_fail.xml',
-            ])
-        stdout_log = fake_out.getvalue()
+        stdout_log, retval = run_test_with_logging(['--config',
+                                                    'tests/test_in/config_example_robot.json',
+                                                    'tests/test_in/robot_double_fail.xml'])
         self.assertEqual(
             '\n'.join([
                 "robot:     test suite 'Suite One'        number of warnings (1) is between limits 0 and 1. Well done.",
