@@ -589,7 +589,7 @@ Polyspace
 Coverity
   Named groups of the regular expression can be used as variables.
   Useful names are: `checker` and `classification`.
-  The default template is ``Coverity: $checker``.
+  The default template is ``Coverity: CID $cid: $checker``.
 
 Other
   The template should contain ``$description``, which is the default.

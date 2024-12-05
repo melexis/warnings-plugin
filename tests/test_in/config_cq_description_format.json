@@ -22,6 +22,8 @@
     },
     "coverity": {
         "enabled": true,
+        "cq_default_path": "src/main.c",
+        "cq_description_template": "Coverity: $checker",
         "min": 0,
         "max": 0
     },

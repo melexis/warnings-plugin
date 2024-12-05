@@ -1,7 +1,105 @@
 [
     {
         "severity": "major",
-        "description": "Coverity: MISRA C-2012 Declarations and Definitions (MISRA C-2012 Rule 8.5, Required)",
+        "description": "Coverity: CID 446411: Infinite loop (INFINITE_LOOP)",
+        "location": {
+            "path": "some/path/boot.c",
+            "positions": {
+                "begin": {
+                    "line": 32,
+                    "column": 5
+                }
+            }
+        },
+        "fingerprint": "61cc73ec6e5801eabd5b14dee4eddc09"
+    },
+    {
+        "severity": "major",
+        "description": "Coverity: CID 446410: MISRA C-2012 The Essential Type Model (MISRA C-2012 Rule 10.3, Required)",
+        "location": {
+            "path": "some/path/boot.c",
+            "positions": {
+                "begin": {
+                    "line": 55,
+                    "column": 12
+                }
+            }
+        },
+        "fingerprint": "ee2a9b741d33d5085807562a66c7ef21"
+    },
+    {
+        "severity": "major",
+        "description": "Coverity: CID 446409: MISRA C-2012 Control Flow Expressions (MISRA C-2012 Rule 14.3, Required)",
+        "location": {
+            "path": "some/path/boot.c",
+            "positions": {
+                "begin": {
+                    "line": 37,
+                    "column": 13
+                }
+            }
+        },
+        "fingerprint": "0a8e4e7431af33984280c95a3289f307"
+    },
+    {
+        "severity": "major",
+        "description": "Coverity: CID 446408: Logically dead code (DEADCODE)",
+        "location": {
+            "path": "some/path/boot.c",
+            "positions": {
+                "begin": {
+                    "line": 37,
+                    "column": 13
+                }
+            }
+        },
+        "fingerprint": "2817d729a41e3c9af04ea9711305dd6c"
+    },
+    {
+        "severity": "major",
+        "description": "Coverity: CID 446407: MISRA C-2012 The Essential Type Model (MISRA C-2012 Rule 10.4, Required)",
+        "location": {
+            "path": "some/path/boot.c",
+            "positions": {
+                "begin": {
+                    "line": 36,
+                    "column": 13
+                }
+            }
+        },
+        "fingerprint": "8c2bcaf164d9104351c066775b8ce7d1"
+    },
+    {
+        "severity": "major",
+        "description": "Coverity: CID 446406: MISRA C-2012 Control Flow Expressions (MISRA C-2012 Rule 14.3, Required)",
+        "location": {
+            "path": "some/path/boot.c",
+            "positions": {
+                "begin": {
+                    "line": 32,
+                    "column": 5
+                }
+            }
+        },
+        "fingerprint": "98fda4d0677b7c979affa2769fc21c9f"
+    },
+    {
+        "severity": "major",
+        "description": "Coverity: CID 446405: MISRA C-2012 Unused Code (MISRA C-2012 Rule 2.2, Required)",
+        "location": {
+            "path": "some/path/boot.c",
+            "positions": {
+                "begin": {
+                    "line": 37,
+                    "column": 31
+                }
+            }
+        },
+        "fingerprint": "1cbe936313d71154034d7728387409bf"
+    },
+    {
+        "severity": "major",
+        "description": "Coverity: CID 431350: MISRA C-2012 Declarations and Definitions (MISRA C-2012 Rule 8.5, Required)",
         "location": {
             "path": "some/path/dummy_uncl.h",
             "positions": {
@@ -11,67 +109,11 @@
                 }
             }
         },
-        "fingerprint": "990f3714acdb07ca108f645285bacdf8"
-    },
-    {
-        "severity": "major",
-        "description": "Coverity: MISRA C-2012 Declarations and Definitions (MISRA C-2012 Rule 8.6, Required)",
-        "location": {
-            "path": "some/path/dummy_uncl.c",
-            "positions": {
-                "begin": {
-                    "line": 1404,
-                    "column": 14
-                }
-            }
-        },
-        "fingerprint": "c24f5c885dd07424839f347e7fb0cfd9"
-    },
-    {
-        "severity": "major",
-        "description": "Coverity: MISRA C-2012 Identifiers (MISRA C-2012 Rule 5.8, Required)",
-        "location": {
-            "path": "some/path/dummy_uncl.c",
-            "positions": {
-                "begin": {
-                    "line": 923,
-                    "column": 13
-                }
-            }
-        },
-        "fingerprint": "1f2f1b28535924cd9ab0dc2635aa70c7"
+        "fingerprint": "0feb782a7b77d9d45307dc0e1d37cabc"
     },
     {
         "severity": "info",
-        "description": "Coverity: MISRA C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory)",
-        "location": {
-            "path": "some/path/dummy_int.h",
-            "positions": {
-                "begin": {
-                    "line": 150,
-                    "column": 16
-                }
-            }
-        },
-        "fingerprint": "85d0bf611abf8c051e2c55a8fce1fbfb"
-    },
-    {
-        "severity": "info",
-        "description": "Coverity: MISRA C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory)",
-        "location": {
-            "path": "some/path/dummy_int.h",
-            "positions": {
-                "begin": {
-                    "line": 164,
-                    "column": 16
-                }
-            }
-        },
-        "fingerprint": "b84425516a0cbd5bec06779248a726a5"
-    },
-    {
-        "severity": "info",
-        "description": "Coverity: MISRA C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory)",
+        "description": "Coverity: CID 264736: MISRA C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory)",
         "location": {
             "path": "some/path/dummy_int.h",
             "positions": {
@@ -81,11 +123,11 @@
                 }
             }
         },
-        "fingerprint": "9055ea84f4a2ec57238bcc9e5bf02714"
+        "fingerprint": "717cea1e452ff1905746c1e4650f7df2"
     },
     {
         "severity": "info",
-        "description": "Coverity: Out-of-bounds write (OVERRUN)",
+        "description": "Coverity: CID 423570: Out-of-bounds write (OVERRUN)",
         "location": {
             "path": "some/path/dummy_fp.c",
             "positions": {
@@ -95,11 +137,11 @@
                 }
             }
         },
-        "fingerprint": "409c39b23baaf916ac0d0c97c3917680"
+        "fingerprint": "f4526f91c0e782d1a755afc243d8deef"
     },
     {
         "severity": "info",
-        "description": "Coverity: MISRA C-2012 Pointers and Arrays (MISRA C-2012 Rule 18.1, Required)",
+        "description": "Coverity: CID 423568: MISRA C-2012 Pointers and Arrays (MISRA C-2012 Rule 18.1, Required)",
         "location": {
             "path": "some/path/dummy_fp.c",
             "positions": {
@@ -109,6 +151,6 @@
                 }
             }
         },
-        "fingerprint": "5dbd93275d026e6b77330c48eda8d964"
+        "fingerprint": "ccf2213097d60061eb0f9b61888923f9"
     }
 ]

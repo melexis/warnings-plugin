@@ -110,19 +110,5 @@
             }
         },
         "fingerprint": "bec264a0725556cfe0514b3aa168715c"
-    },
-    {
-        "severity": "major",
-        "description": "Coverity: Coding standard violation (MISRA C-2012 Rule 10.1)",
-        "location": {
-            "path": "src/somefile.c",
-            "positions": {
-                "begin": {
-                    "line": 82,
-                    "column": 1
-                }
-            }
-        },
-        "fingerprint": "37dd4fe77518650ac6d416ea8e2e617f"
     }
 ]
