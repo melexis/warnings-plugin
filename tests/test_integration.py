@@ -1,4 +1,5 @@
 import filecmp
+import logging
 import os
 from io import StringIO
 from pathlib import Path
@@ -9,6 +10,18 @@ from mlx.warnings import Finding, WarningsConfigError, exceptions, warnings_wrap
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
 TEST_OUT_DIR = Path(__file__).parent / 'test_out'
+
+def run_test_with_logging(args):
+        buffer = StringIO()
+        with patch('sys.stdout', new=buffer):
+            logger = logging.getLogger()
+            stream_handler = logging.StreamHandler(buffer)
+            logger.addHandler(stream_handler)
+            try:
+                retval = warnings_wrapper(args)
+            finally:
+                logger.removeHandler(stream_handler)
+        return buffer.getvalue(), retval
 
 
 class TestIntegration(TestCase):
@@ -36,6 +49,21 @@ class TestIntegration(TestCase):
         with self.assertRaises(SystemExit) as ex:
             warnings_wrapper([])
         self.assertEqual(2, ex.exception.code)
+
+    def test_verbose(self):
+        stdout_log, retval = run_test_with_logging(['--verbose', '--junit', 'tests/test_in/junit_single_fail.xml'])
+        self.assertEqual("test_warn_plugin_single_fail.myfirstfai1ure\n"
+                         "junit:     number of warnings (1) is higher than the maximum limit (0). "
+                         "Returning error code 1.\n",
+                         stdout_log)
+        self.assertEqual(1, retval)
+
+    def test_no_verbose(self):
+        stdout_log, retval = run_test_with_logging(['--junit', 'tests/test_in/junit_single_fail.xml'])
+        self.assertEqual("junit:     number of warnings (1) is higher than the maximum limit (0). "
+                         "Returning error code 1.\n",
+                         stdout_log)
+        self.assertEqual(1, retval)
 
     min_ret_val_on_failure = 1
     junit_warning_cnt = 3
