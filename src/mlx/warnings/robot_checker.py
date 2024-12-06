@@ -91,7 +91,8 @@ class RobotChecker(WarningsChecker):
             else:
                 string = "all test suites"
                 count += checker.return_check_limits(f"{string:<30}")
-        print(f"Returning error code {self.count}.")
+        if count:
+            print(f"Returning error code {count}.")
         return count
 
     def parse_config(self, config):
