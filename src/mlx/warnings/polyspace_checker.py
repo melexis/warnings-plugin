@@ -119,7 +119,8 @@ class PolyspaceChecker(WarningsChecker):
             padded_string = [f"{string:<30}" for string in [f"family {checker.family_value!r} ",
                                                             f"{checker.column_name}: {checker.check_value} "]]
             count += checker.return_check_limits("".join(padded_string))
-        print(f"Returning error code {count}.")
+        if count:
+            print(f"Returning error code {count}.")
         return count
 
     def parse_config(self, config):
