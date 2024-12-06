@@ -133,7 +133,8 @@ class CoverityChecker(RegexChecker):
         for checker in self.checkers.values():
             padded_string = [f"{string:<20}" for string in [f"{checker.classification}: "]]
             count += checker.return_check_limits("".join(padded_string))
-        print(f"Returning error code {count}.")
+        if count:
+            print(f"Returning error code {count}.")
         return count
 
     def check(self, content):
