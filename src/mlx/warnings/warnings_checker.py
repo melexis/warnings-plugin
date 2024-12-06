@@ -145,7 +145,7 @@ class WarningsChecker:
         ''' Function for checking whether the warning count is within the configured limits
 
         Args:
-            extra (str): The extra string that is placed after the checker name. For example, the classification.
+            extra (str): Extra information, to insert between the checker name and the message.
 
         Returns:
             int: 0 if the amount of warnings is within limits, the count of warnings otherwise
