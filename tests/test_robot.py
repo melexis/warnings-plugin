@@ -1,6 +1,7 @@
 import unittest
 
 from mlx.warnings import RobotSuiteChecker, WarningsPlugin
+from test_integration import run_test_with_logging
 
 
 class TestRobotWarnings(unittest.TestCase):
@@ -30,18 +31,15 @@ class TestRobotWarnings(unittest.TestCase):
         self.assertIn("INFO:root:Suite One &amp; Suite Two.Suite One.First Test", stdout_log)
 
     def test_double_warning_and_verbosity(self):
-        with open('tests/test_in/robot_double_fail.xml') as xmlfile:
-            with self.assertLogs(level="INFO") as fake_out:
-                self.warnings.check(xmlfile.read())
-                count = self.warnings.return_count()
-        stdout_log = fake_out.output
-
-        self.assertEqual(count, 2)
+        stdout_log, retval = run_test_with_logging(['--verbose',
+                                                    '--robot',
+                                                    'tests/test_in/robot_double_fail.xml'])
+        self.assertEqual(retval, 2)
         self.assertEqual(
-            [
-                "INFO:root:Suite One &amp; Suite Two.Suite One.First Test",
-                "INFO:root:Suite One &amp; Suite Two.Suite Two.Another test",
-            ],
+            "Suite One &amp; Suite Two.Suite One.First Test\n"
+            "Suite One &amp; Suite Two.Suite Two.Another test\n"
+            "robot:     all test suites               number of warnings (2) is higher than the maximum limit (0).\n"
+            "Returning error code 2.\n",
             stdout_log
         )
 
