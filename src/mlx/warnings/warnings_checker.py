@@ -1,9 +1,10 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import abc
-from math import inf
+import logging
 import os
 import re
+from math import inf
 from string import Template
 
 from .exceptions import WarningsConfigError
@@ -138,52 +139,52 @@ class WarningsChecker:
         Returns:
             int: Number of warnings found
         '''
-        print("{0.count} {0.name} warnings found".format(self))
         return self.count
 
-    def return_check_limits(self):
+    def return_check_limits(self, extra=""):
         ''' Function for checking whether the warning count is within the configured limits
+
+        Args:
+            extra (str): Extra information, to insert between the checker name and the message.
 
         Returns:
             int: 0 if the amount of warnings is within limits, the count of warnings otherwise
                 (or 1 in case of a count of 0 warnings)
         '''
+        name = self.name.capitalize() if self.name != "junit" else "JUnit"
         if self.count > self._maximum or self.count < self._minimum:
-            return self._return_error_code()
+            return self._return_error_code(name, extra)
         elif self._minimum == self._maximum and self.count == self._maximum:
-            print("Number of warnings ({0.count}) is exactly as expected. Well done."
-                  .format(self))
+            print(f"{name + ':':<10} {extra}number of warnings ({self.count}) is exactly as "
+                  "expected. Well done.")
         else:
-            print("Number of warnings ({0.count}) is between limits {0._minimum} and {0._maximum}. Well done."
-                  .format(self))
+            print(f"{name + ':':<10} {extra}number of warnings ({self.count}) is between limits "
+                  f"{self._minimum} and {self._maximum}. Well done.")
         return 0
 
-    def _return_error_code(self):
+    def _return_error_code(self, name, extra=""):
         ''' Function for determining the return code and message on failure
+
+        Args:
+            name (str): The capitalized name of the checker
+            extra (str): Extra information, to insert between the checker name and the message.
 
         Returns:
             int: The count of warnings (or 1 in case of a count of 0 warnings)
         '''
         if self.count > self._maximum:
-            error_reason = "higher than the maximum limit ({0._maximum})".format(self)
+            error_reason = f"higher than the maximum limit ({self._maximum})"
         else:
-            error_reason = "lower than the minimum limit ({0._minimum})".format(self)
+            error_reason = f"lower than the minimum limit ({self._minimum})"
 
         error_code = self.count
         if error_code == 0:
             error_code = 1
-        print("Number of warnings ({0.count}) is {1}. Returning error code {2}."
-              .format(self, error_reason, error_code))
+        string_to_print = f"{name + ':':<10} {extra}number of warnings ({self.count}) is {error_reason}."
+        if self.name not in ["polyspace", "coverity", "robot"]:
+            string_to_print += f" Returning error code {error_code}."
+        print(string_to_print)
         return error_code
-
-    def print_when_verbose(self, message):
-        ''' Prints message only when verbose mode is enabled.
-
-        Args:
-            message (str): Message to conditionally print
-        '''
-        if self.verbose:
-            print(message)
 
     def parse_config(self, config):
         substitute_envvar(config, {'min', 'max'})
@@ -208,8 +209,7 @@ class WarningsChecker:
         '''
         matching_exclude_pattern = self._search_patterns(content, self.exclude_patterns)
         if not self._search_patterns(content, self.include_patterns) and matching_exclude_pattern:
-            self.print_when_verbose("Excluded {!r} because of configured regex {!r}"
-                                    .format(content, matching_exclude_pattern))
+            logging.info(f"Excluded {content!r} because of configured regex {matching_exclude_pattern!r}")
             return True
         return False
 

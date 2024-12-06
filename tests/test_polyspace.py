@@ -1,12 +1,16 @@
-import os
-from io import StringIO
-import unittest
-from pathlib import Path
 import filecmp
-
+import os
+import unittest
+from io import StringIO
+from pathlib import Path
 from unittest.mock import patch
 
-from mlx.warnings import PolyspaceFamilyChecker, WarningsPlugin, warnings_wrapper, Finding
+from mlx.warnings import (
+    Finding,
+    PolyspaceFamilyChecker,
+    WarningsPlugin,
+    warnings_wrapper,
+)
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
 TEST_OUT_DIR = Path(__file__).parent / 'test_out'
@@ -26,17 +30,16 @@ class TestCodeProverWarnings(unittest.TestCase):
         with open(TEST_IN_DIR / 'polyspace.tsv', newline="") as file:
             with patch('sys.stdout', new=StringIO()) as fake_out:
                 self.warnings.check_logfile(file)
-                count = self.warnings.return_count()
+                count = self.warnings.return_check_limits()
         stdout_log = fake_out.getvalue()
-
-        count_sum = 0
-        for checker in self.dut.checkers:
-            count_sum += checker.count
-            self.assertIn(
-                f"{checker.count} warnings found for '{checker.column_name}': '{checker.check_value}'",
-                stdout_log
-            )
-        self.assertEqual(count, count_sum)
+        self.assertEqual(
+            '\n'.join([
+                "polyspace: family 'run-time check'       color: red                    number of warnings (0) is exactly as expected. Well done.",
+                "polyspace: family 'run-time check'       color: orange                 number of warnings (19) is higher than the maximum limit (0).",
+                "Returning error code 19."
+            ]) + '\n',
+            stdout_log
+        )
         self.assertEqual(count, 19)
 
 
@@ -54,14 +57,17 @@ class TestBugFinderWarnings(unittest.TestCase):
         with open(TEST_IN_DIR / 'polyspace.tsv', newline="") as file:
             with patch('sys.stdout', new=StringIO()) as fake_out:
                 self.warnings.check_logfile(file)
-                count = self.warnings.return_count()
+                count = self.warnings.return_check_limits()
         stdout_log = fake_out.getvalue()
-
-        for checker in self.dut.checkers:
-            self.assertIn(
-                f"{checker.count} warnings found for '{checker.column_name}': '{checker.check_value}'",
-                stdout_log
-            )
+        self.assertEqual(
+            '\n'.join([
+                "polyspace: family 'defect'               information: impact: high     number of warnings (42) is higher than the maximum limit (0).",
+                "polyspace: family 'defect'               information: impact: medium   number of warnings (9) is higher than the maximum limit (0).",
+                "polyspace: family 'defect'               information: impact: low      number of warnings (4) is higher than the maximum limit (0).",
+                "Returning error code 55."
+            ]) + '\n',
+            stdout_log
+        )
         self.assertEqual(count, 55)
 
 

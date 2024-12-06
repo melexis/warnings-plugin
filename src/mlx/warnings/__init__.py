@@ -23,8 +23,8 @@ from .__version__ import __version__
 from .code_quality import Finding
 from .exceptions import WarningsConfigError
 from .junit_checker import JUnitChecker
+from .polyspace_checker import PolyspaceChecker, PolyspaceFamilyChecker
 from .regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker
 from .robot_checker import RobotChecker, RobotSuiteChecker
-from .polyspace_checker import PolyspaceChecker, PolyspaceFamilyChecker
 from .warnings import WarningsPlugin, warnings_wrapper
 from .warnings_checker import WarningsChecker

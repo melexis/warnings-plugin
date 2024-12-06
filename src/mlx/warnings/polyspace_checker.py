@@ -1,8 +1,9 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import csv
-from io import TextIOWrapper
+import logging
 import os
+from io import TextIOWrapper
 from string import Template
 
 from .code_quality import Finding
@@ -115,11 +116,11 @@ class PolyspaceChecker(WarningsChecker):
         '''
         count = 0
         for checker in self.checkers:
-            print(
-                'Counted failures for family {!r} \'{}\': \'{}\''
-                .format(checker.family_value, checker.column_name, checker.check_value)
-            )
-            count += checker.return_check_limits()
+            padded_string = [f"{string:<30}" for string in [f"family {checker.family_value!r} ",
+                                                            f"{checker.column_name}: {checker.check_value} "]]
+            count += checker.return_check_limits("".join(padded_string))
+        if count:
+            print(f"Returning error code {count}.")
         return count
 
     def parse_config(self, config):
@@ -172,6 +173,7 @@ class PolyspaceChecker(WarningsChecker):
 
 
 class PolyspaceFamilyChecker(WarningsChecker):
+    name = 'polyspace'
     code_quality_severity = {
         "impact: high": "critical",
         "impact: medium": "major",
@@ -201,15 +203,6 @@ class PolyspaceFamilyChecker(WarningsChecker):
     @cq_description_template.setter
     def cq_description_template(self, template_obj):
         self._cq_description_template = template_obj
-
-    def return_count(self):
-        ''' Getter function for the amount of warnings found
-
-        Returns:
-            int: Number of warnings found
-        '''
-        print("{} warnings found for {!r}: {!r}".format(self.count, self.column_name, self.check_value))
-        return self.count
 
     def add_code_quality_finding(self, row):
         '''Add code quality finding
@@ -244,8 +237,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
         '''
         if content[self.column_name].lower() == self.check_value:
             if content["status"].lower() in ["not a defect", "justified"]:
-                self.print_when_verbose("Excluded row {!r} because the status is 'Not a defect' or 'Justified'"
-                                        .format(content))
+                logging.info(f"Excluded row {content!r} because the status is 'Not a defect' or 'Justified'")
             else:
                 tab_sep_string = "\t".join(content.values())
                 if not self._is_excluded(tab_sep_string):

@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 from string import Template
@@ -46,7 +47,7 @@ class RegexChecker(WarningsChecker):
                 continue
             self.count += 1
             self.counted_warnings.append(match_string)
-            self.print_when_verbose(match_string)
+            logging.info(match_string)
             if self.cq_enabled:
                 self.add_code_quality_finding(match)
 
@@ -130,9 +131,10 @@ class CoverityChecker(RegexChecker):
         '''
         count = 0
         for checker in self.checkers.values():
-            print(f"Counted failures for classification {checker.classification!r}")
-            count += checker.return_check_limits()
-        print(f"total warnings = {count}")
+            padded_string = [f"{string:<20}" for string in [f"{checker.classification}: "]]
+            count += checker.return_check_limits("".join(padded_string))
+        if count:
+            print(f"Returning error code {count}.")
         return count
 
     def check(self, content):
@@ -153,7 +155,7 @@ class CoverityChecker(RegexChecker):
                 checker.cq_default_path = self.cq_default_path
                 checker.check(match)
             else:
-                print(f"WARNING: Unrecognized classification {match.group('classification')!r}")
+                logging.warning(f"Unrecognized classification {match.group('classification')!r}")
 
     def parse_config(self, config):
         """Process configuration
@@ -173,10 +175,11 @@ class CoverityChecker(RegexChecker):
             if classification_key in self.checkers:
                 self.checkers[classification_key].parse_config(checker_config)
             else:
-                print(f"WARNING: Unrecognized classification {classification!r}")
+                logging.warning(f"Unrecognized classification {classification!r}")
 
 
 class CoverityClassificationChecker(WarningsChecker):
+    name = 'coverity'
     SEVERITY_MAP = {
         'false positive': 'info',
         'intentional': 'info',
@@ -202,14 +205,6 @@ class CoverityClassificationChecker(WarningsChecker):
     @cq_description_template.setter
     def cq_description_template(self, template_obj):
         self._cq_description_template = template_obj
-
-    def return_count(self):
-        ''' Getter function for the amount of warnings found
-
-        Returns:
-            int: Number of warnings found
-        '''
-        return self.count
 
     def add_code_quality_finding(self, match):
         '''Add code quality finding
@@ -248,7 +243,7 @@ class CoverityClassificationChecker(WarningsChecker):
         if not self._is_excluded(match_string) and (content.group('curr') == content.group('max')):
             self.count += 1
             self.counted_warnings.append(match_string)
-            self.print_when_verbose(match_string)
+            logging.info(match_string)
             if self.cq_enabled:
                 self.add_code_quality_finding(content)
 
