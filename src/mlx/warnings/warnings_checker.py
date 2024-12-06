@@ -167,7 +167,7 @@ class WarningsChecker:
 
         Args:
             name (str): The capitalized name of the checker
-            extra (str): The extra string that is placed after the checker name. For example, the classification.
+            extra (str): Extra information, to insert between the checker name and the message.
 
         Returns:
             int: The count of warnings (or 1 in case of a count of 0 warnings)
