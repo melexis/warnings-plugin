@@ -151,19 +151,22 @@ class WarningsChecker:
             int: 0 if the amount of warnings is within limits, the count of warnings otherwise
                 (or 1 in case of a count of 0 warnings)
         '''
+        name = self.name.capitalize() if self.name != "junit" else self.name[0].upper() + self.name[1:].capitalize()
         if self.count > self._maximum or self.count < self._minimum:
-            return self._return_error_code(extra)
+            return self._return_error_code(name, extra)
         elif self._minimum == self._maximum and self.count == self._maximum:
-            print(f"{self.name + ':':<10} {extra}number of warnings ({self.count}) is exactly as expected. Well done.")
+            print(f"{name + ':':<10} {extra}number of warnings ({self.count}) is exactly as "
+                  "expected. Well done.")
         else:
-            print(f"{self.name + ':':<10} {extra}number of warnings ({self.count}) is between limits {self._minimum} "
-                  f"and {self._maximum}. Well done.")
+            print(f"{name + ':':<10} {extra}number of warnings ({self.count}) is between limits "
+                  f"{self._minimum} and {self._maximum}. Well done.")
         return 0
 
-    def _return_error_code(self, extra=""):
+    def _return_error_code(self, name, extra=""):
         ''' Function for determining the return code and message on failure
 
         Args:
+            name (str): The capitalized name of the checker
             extra (str): The extra string that is placed after the checker name. For example, the classification.
 
         Returns:
@@ -177,7 +180,7 @@ class WarningsChecker:
         error_code = self.count
         if error_code == 0:
             error_code = 1
-        string_to_print = f"{self.name + ':':<10} {extra}number of warnings ({self.count}) is {error_reason}."
+        string_to_print = f"{name + ':':<10} {extra}number of warnings ({self.count}) is {error_reason}."
         if self.name not in ["polyspace", "coverity", "robot"]:
             string_to_print += f" Returning error code {error_code}."
         print(string_to_print)
