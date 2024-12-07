@@ -27,6 +27,7 @@
     "robot": {
         "enabled": true,
         "check_suite_names": false,
+        "allow_unconfigured": false,
         "suites": [
             {
                 "name": "Suite One",
