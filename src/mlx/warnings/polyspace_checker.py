@@ -19,6 +19,10 @@ class PolyspaceChecker(WarningsChecker):
         '''Constructor to set the default code quality description template to "Polyspace: $check"'''
         super().__init__(verbose)
         self._cq_description_template = Template('Polyspace: $check')
+        formatter = logging.Formatter(fmt="{checker_name}: {family}: {column_name}: {check_value:<20} | {message:>60}",
+                                      style="{")
+        for handler in self.logger.handlers:
+            handler.setFormatter(formatter)
 
     @property
     def cq_findings(self):
@@ -116,9 +120,12 @@ class PolyspaceChecker(WarningsChecker):
         '''
         count = 0
         for checker in self.checkers:
-            padded_string = [f"{string:<30}" for string in [f"family {checker.family_value!r} ",
-                                                            f"{checker.column_name}: {checker.check_value} "]]
-            count += checker.return_check_limits("".join(padded_string))
+            extra = {
+                'family': checker.family_value,
+                'column_name': checker.column_name,
+                'check_value': checker.check_value
+            }
+            count += checker.return_check_limits(extra)
         if count:
             print(f"Returning error code {count}.")
         return count

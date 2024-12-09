@@ -51,6 +51,11 @@ class WarningsChecker:
         self._cq_description_template = Template('$description')
         self.exclude_patterns = []
         self.include_patterns = []
+        self.logger = logging.getLogger()
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter(fmt="{checker_name}: {message}", style="{")
+        handler.setFormatter(formatter)
+        self.logger.addHandler(handler)
 
     @property
     def cq_findings(self):
@@ -141,33 +146,31 @@ class WarningsChecker:
         '''
         return self.count
 
-    def return_check_limits(self, extra=""):
+    def return_check_limits(self, extra={}):
         ''' Function for checking whether the warning count is within the configured limits
 
         Args:
-            extra (str): Extra information, to insert between the checker name and the message.
+            extra (dict): Extra arguments for the logger.
 
         Returns:
             int: 0 if the amount of warnings is within limits, the count of warnings otherwise
                 (or 1 in case of a count of 0 warnings)
         '''
-        name = self.name.capitalize() if self.name != "junit" else "JUnit"
+        extra["checker_name"] = self.name.capitalize() if self.name != "junit" else "JUnit"
         if self.count > self._maximum or self.count < self._minimum:
-            return self._return_error_code(name, extra)
+            return self._return_error_code(extra)
         elif self._minimum == self._maximum and self.count == self._maximum:
-            print(f"{name + ':':<10} {extra}number of warnings ({self.count}) is exactly as "
-                  "expected. Well done.")
+            self.logger.warning(f"number of warnings ({self.count}) is exactly as expected. Well done.", extra=extra)
         else:
-            print(f"{name + ':':<10} {extra}number of warnings ({self.count}) is between limits "
-                  f"{self._minimum} and {self._maximum}. Well done.")
+            self.logger.warning(f"number of warnings ({self.count}) is between limits {self._minimum} and {self._maximum}. "
+                  "Well done.", extra=extra)
         return 0
 
-    def _return_error_code(self, name, extra=""):
+    def _return_error_code(self, extra={}):
         ''' Function for determining the return code and message on failure
 
         Args:
-            name (str): The capitalized name of the checker
-            extra (str): Extra information, to insert between the checker name and the message.
+            extra (dict): Extra arguments for the logger.
 
         Returns:
             int: The count of warnings (or 1 in case of a count of 0 warnings)
@@ -180,10 +183,10 @@ class WarningsChecker:
         error_code = self.count
         if error_code == 0:
             error_code = 1
-        string_to_print = f"{name + ':':<10} {extra}number of warnings ({self.count}) is {error_reason}."
+        string_to_print = f"number of warnings ({self.count}) is {error_reason}."
         if self.name not in ["polyspace", "coverity", "robot"]:
             string_to_print += f" Returning error code {error_code}."
-        print(string_to_print)
+        self.logger.warning(string_to_print, extra=extra)
         return error_code
 
     def parse_config(self, config):
