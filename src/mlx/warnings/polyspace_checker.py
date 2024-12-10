@@ -14,15 +14,12 @@ from .warnings_checker import WarningsChecker
 class PolyspaceChecker(WarningsChecker):
     name = 'polyspace'
     checkers = []
+    logging_fmt = "{checker_name}: {family}: {column_name}: {check_value:<20} | {message:>60}"
 
-    def __init__(self, verbose):
+    def __init__(self, verbose, output):
         '''Constructor to set the default code quality description template to "Polyspace: $check"'''
-        super().__init__(verbose)
+        super().__init__(verbose, output)
         self._cq_description_template = Template('Polyspace: $check')
-        formatter = logging.Formatter(fmt="{checker_name}: {family}: {column_name}: {check_value:<20} | {message:>60}",
-                                      style="{")
-        for handler in self.logger.handlers:
-            handler.setFormatter(formatter)
 
     @property
     def cq_findings(self):
@@ -30,14 +27,6 @@ class PolyspaceChecker(WarningsChecker):
         for checker in self.checkers:
             self._cq_findings.extend(checker.cq_findings)
         return self._cq_findings
-
-    @property
-    def counted_warnings(self):
-        '''List[str]: list of counted warnings'''
-        all_counted_warnings = []
-        for checker in self.checkers:
-            all_counted_warnings.extend(checker.counted_warnings)
-        return all_counted_warnings
 
     @property
     def cq_description_template(self):
@@ -121,9 +110,9 @@ class PolyspaceChecker(WarningsChecker):
         count = 0
         for checker in self.checkers:
             extra = {
-                'family': checker.family_value,
-                'column_name': checker.column_name,
-                'check_value': checker.check_value
+                "family": checker.family_value,
+                "column_name": checker.column_name,
+                "check_value": checker.check_value
             }
             count += checker.return_check_limits(extra)
         if count:
@@ -201,6 +190,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
         self.family_value = family_value
         self.column_name = column_name
         self.check_value = check_value
+        self.logger = logging.getLogger(self.name)
 
     @property
     def cq_description_template(self):
@@ -244,15 +234,13 @@ class PolyspaceFamilyChecker(WarningsChecker):
         '''
         if content[self.column_name].lower() == self.check_value:
             if content["status"].lower() in ["not a defect", "justified"]:
-                logging.info(f"Excluded row {content!r} because the status is 'Not a defect' or 'Justified'")
+                self.logger.info(f"Excluded row {content!r} because the status is 'Not a defect' or 'Justified'",
+                                 extra={"checker_name": "Polyspace"})
             else:
                 tab_sep_string = "\t".join(content.values())
                 if not self._is_excluded(tab_sep_string):
                     self.count = self.count + 1
-                    self.counted_warnings.append('family: {} -> {}: {}'.format(
-                        self.family_value,
-                        self.column_name,
-                        self.check_value
-                    ))
+                    self.output_logger.debug(f'{self.family_value}: {self.column_name}: {self.check_value}',
+                                             extra={"checker_name": "Polyspace"})
                     if self.cq_enabled and content["color"].lower() != "green":
                         self.add_code_quality_finding(content)

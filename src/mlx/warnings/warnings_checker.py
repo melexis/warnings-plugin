@@ -32,8 +32,9 @@ def substitute_envvar(checker_config, keys):
 
 class WarningsChecker:
     name = 'checker'
+    logging_fmt = "{checker_name}: {message}"
 
-    def __init__(self, verbose=False):
+    def __init__(self, verbose, output):
         ''' Constructor
 
         Args:
@@ -41,31 +42,21 @@ class WarningsChecker:
             verbose (bool): Enable/disable verbose logging
         '''
         self.verbose = verbose
+        self.output = output
         self.count = 0
         self._minimum = 0
         self._maximum = 0
-        self._counted_warnings = []
         self._cq_findings = []
         self.cq_enabled = False
         self.cq_default_path = '.gitlab-ci.yml'
         self._cq_description_template = Template('$description')
         self.exclude_patterns = []
         self.include_patterns = []
-        self.logger = logging.getLogger()
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter(fmt="{checker_name}: {message}", style="{")
-        handler.setFormatter(formatter)
-        self.logger.addHandler(handler)
 
     @property
     def cq_findings(self):
         ''' List[dict]: list of code quality findings'''
         return self._cq_findings
-
-    @property
-    def counted_warnings(self):
-        ''' List[str]: list of counted warnings'''
-        return self._counted_warnings
 
     @property
     def cq_description_template(self):
@@ -123,6 +114,24 @@ class WarningsChecker:
             content (str): The content to parse
         '''
         return
+
+    def initiate_logger(self):
+        self.logger = logging.getLogger(self.name)
+        self.logger.propagate = False  # Do not propagate to parent loggers
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter(fmt=self.logging_fmt, style="{")
+        handler.setFormatter(formatter)
+        self.logger.addHandler(handler)
+        if self.verbose:
+            self.logger.setLevel(logging.INFO)
+
+        self.output_logger = logging.getLogger(f"{self.name}.output")
+        self.output_logger.propagate = False  # Do not propagate to parent loggers
+        if self.output is not None:
+            self.output_logger.setLevel(logging.DEBUG)
+            handler = logging.FileHandler(self.output, "a")
+            handler.setFormatter(formatter)
+            self.output_logger.addHandler(handler)
 
     def add_patterns(self, regexes, pattern_container):
         ''' Adds regexes as patterns to the specified container
@@ -212,7 +221,7 @@ class WarningsChecker:
         '''
         matching_exclude_pattern = self._search_patterns(content, self.exclude_patterns)
         if not self._search_patterns(content, self.include_patterns) and matching_exclude_pattern:
-            logging.info(f"Excluded {content!r} because of configured regex {matching_exclude_pattern!r}")
+            self.logger.info(f"Excluded {content!r} because of configured regex {matching_exclude_pattern!r}")
             return True
         return False
 

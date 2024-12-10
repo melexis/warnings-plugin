@@ -6,6 +6,7 @@ import errno
 import glob
 import json
 import logging
+import os
 import subprocess
 import sys
 from importlib.metadata import distribution
@@ -24,7 +25,7 @@ __version__ = distribution('mlx.warnings').version
 
 class WarningsPlugin:
 
-    def __init__(self, verbose=False, config_file=None, cq_enabled=False):
+    def __init__(self, verbose=False, config_file=None, cq_enabled=False, output=""):
         '''
         Function for initializing the parsers
 
@@ -36,9 +37,10 @@ class WarningsPlugin:
         self.activated_checkers = {}
         self.verbose = verbose
         self.cq_enabled = cq_enabled
-        self.public_checkers = [SphinxChecker(self.verbose), DoxyChecker(self.verbose), JUnitChecker(self.verbose),
-                                XMLRunnerChecker(self.verbose), CoverityChecker(self.verbose),
-                                RobotChecker(self.verbose), PolyspaceChecker(self.verbose)]
+        self.public_checkers = [SphinxChecker(self.verbose, output), DoxyChecker(self.verbose, output),
+                                JUnitChecker(self.verbose, output), XMLRunnerChecker(self.verbose, output),
+                                CoverityChecker(self.verbose, output), RobotChecker(self.verbose, output),
+                                PolyspaceChecker(self.verbose, output)]
 
         if config_file:
             with open(config_file, encoding='utf-8') as open_file:
@@ -62,6 +64,7 @@ class WarningsPlugin:
         '''
         checker.cq_enabled = self.cq_enabled and checker.name in ('doxygen', 'sphinx', 'xmlrunner', 'polyspace', 'coverity')
         self.activated_checkers[checker.name] = checker
+        checker.initiate_logger()
 
     def activate_checker_name(self, name):
         '''
@@ -217,17 +220,6 @@ class WarningsPlugin:
                 except KeyError as err:
                     raise WarningsConfigError(f"Incomplete config. Missing: {err}") from err
 
-    def write_counted_warnings(self, out_file):
-        ''' Writes counted warnings to the given file
-
-        Args:
-            out_file (str): Location for the output file
-        '''
-        Path(out_file).parent.mkdir(parents=True, exist_ok=True)
-        with open(out_file, 'w', encoding='utf-8', newline='\n') as open_file:
-            for checker in self.activated_checkers.values():
-                open_file.write("\n".join(checker.counted_warnings) + "\n")
-
     def write_code_quality_report(self, out_file):
         ''' Generates the Code Quality report artifact as a JSON file that implements a subset of the Code Climate spec
 
@@ -266,7 +258,7 @@ def warnings_wrapper(args):
                         help='Config file in JSON or YAML format provides toggle of checkers and their limits')
     group2.add_argument('--include-sphinx-deprecation', dest='include_sphinx_deprecation', action='store_true',
                         help="Sphinx checker will include warnings matching (RemovedInSphinx\\d+Warning) regex")
-    parser.add_argument('-o', '--output',
+    parser.add_argument('-o', '--output', type=Path,
                         help='Output file that contains all counted warnings')
     parser.add_argument('-C', '--code-quality',
                         help='Output Code Quality report artifact for GitLab CI')
@@ -282,9 +274,10 @@ def warnings_wrapper(args):
 
     args = parser.parse_args(args)
     code_quality_enabled = bool(args.code_quality)
-    logging.basicConfig(format="%(levelname)s: %(message)s")
-    if args.verbose:
-        logging.getLogger().setLevel(logging.INFO)
+    if args.output and args.output.exists():
+            os.remove(args.output)
+    output = args.output if args.output else ""
+
     # Read config file
     if args.configfile is not None:
         checker_flags = args.sphinx or args.doxygen or args.junit or args.coverity or args.xmlrunner or args.robot
@@ -292,9 +285,10 @@ def warnings_wrapper(args):
         if checker_flags or warning_args:
             logging.error("Configfile cannot be provided with other arguments")
             sys.exit(2)
-        warnings = WarningsPlugin(verbose=args.verbose, config_file=args.configfile, cq_enabled=code_quality_enabled)
+        warnings = WarningsPlugin(verbose=args.verbose, config_file=args.configfile, cq_enabled=code_quality_enabled,
+                                  output=output)
     else:
-        warnings = WarningsPlugin(verbose=args.verbose, cq_enabled=code_quality_enabled)
+        warnings = WarningsPlugin(verbose=args.verbose, cq_enabled=code_quality_enabled, output=output)
         if args.sphinx:
             warnings.activate_checker_name('sphinx')
         if args.doxygen:
@@ -344,8 +338,6 @@ def warnings_wrapper(args):
             return retval
 
     warnings.return_count()
-    if args.output:
-        warnings.write_counted_warnings(args.output)
     if args.code_quality:
         warnings.write_code_quality_report(args.code_quality)
     return warnings.return_check_limits()

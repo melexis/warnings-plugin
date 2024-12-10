@@ -12,14 +12,7 @@ from .warnings_checker import WarningsChecker
 class RobotChecker(WarningsChecker):
     name = 'robot'
     checkers = []
-
-    @property
-    def counted_warnings(self):
-        '''List[str]: list of counted warnings'''
-        all_counted_warnings = []
-        for checker in self.checkers:
-            all_counted_warnings.extend(checker.counted_warnings)
-        return all_counted_warnings
+    logging_fmt = "{checker_name}: {suite_name:<20} {message:>60}"
 
     @property
     def minimum(self):
@@ -85,12 +78,15 @@ class RobotChecker(WarningsChecker):
         count = 0
         for checker in self.checkers:
             if checker.suite_name:
-                string = f"test suite {checker.suite_name!r}"
-                padded_string = f"{string:<30}"
-                count += checker.return_check_limits(padded_string)
+                extra = {
+                    "suite_name": f"test suite {checker.suite_name!r}",
+                }
+                count += checker.return_check_limits(extra)
             else:
-                string = "all test suites"
-                count += checker.return_check_limits(f"{string:<30}")
+                extra = {
+                    "suite_name": "all test suites",
+                }
+                count += checker.return_check_limits(extra)
         if count:
             print(f"Returning error code {count}.")
         return count
@@ -119,6 +115,7 @@ class RobotSuiteChecker(JUnitChecker):
         self.suite_name = suite_name
         self.check_suite_name = check_suite_name
         self.is_valid_suite_name = False
+        self.logger = logging.getLogger(self.name)
 
     def _check_testcase(self, testcase):
         """ Handles the check of a test case element by checking if the result is a failure/error.

@@ -67,6 +67,7 @@ class JUnitChecker(WarningsChecker):
             if self._is_excluded(testcase.result.message):
                 return 1
             string = f'{testcase.classname}.{testcase.name}'
-            self.counted_warnings.append(f'{string}: {testcase.result.message}')
-            logging.info(string)
+            extra = {"checker_name": self.name.capitalize() if self.name != "junit" else "JUnit"}
+            self.output_logger.debug(f'{string}: {testcase.result.message}', extra=extra)
+            self.logger.info(string, extra=extra)
         return 0

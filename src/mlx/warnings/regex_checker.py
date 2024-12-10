@@ -46,8 +46,9 @@ class RegexChecker(WarningsChecker):
             if self._is_excluded(match_string):
                 continue
             self.count += 1
-            self.counted_warnings.append(match_string)
-            logging.info(match_string)
+            extra = {"checker_name": self.name.capitalize() if self.name != "junit" else "JUnit"}
+            self.output_logger.debug(match_string, extra=extra)
+            self.logger.info(match_string, extra=extra)
             if self.cq_enabled:
                 self.add_code_quality_finding(match)
 
@@ -75,25 +76,18 @@ class RegexChecker(WarningsChecker):
 class CoverityChecker(RegexChecker):
     name = 'coverity'
     pattern = coverity_pattern
+    logging_fmt = "{checker_name}: {classification:<15} | {message:>60}"
 
-    def __init__(self, verbose=False):
-        super().__init__(verbose)
+    def __init__(self, verbose, output):
+        super().__init__(verbose, output)
         self._cq_description_template = Template('Coverity: CID $cid: $checker')
         self.checkers = {
-            "unclassified": CoverityClassificationChecker("unclassified", verbose=self.verbose),
-            "pending": CoverityClassificationChecker("pending", verbose=self.verbose),
-            "bug": CoverityClassificationChecker("bug", verbose=self.verbose),
-            "intentional": CoverityClassificationChecker("intentional", verbose=self.verbose),
-            "false positive": CoverityClassificationChecker("false positive", verbose=self.verbose),
+            "unclassified": CoverityClassificationChecker("unclassified", verbose=self.verbose, output=output),
+            "pending": CoverityClassificationChecker("pending", verbose=self.verbose, output=output),
+            "bug": CoverityClassificationChecker("bug", verbose=self.verbose, output=output),
+            "intentional": CoverityClassificationChecker("intentional", verbose=self.verbose, output=output),
+            "false positive": CoverityClassificationChecker("false positive", verbose=self.verbose, output=output),
         }
-
-    @property
-    def counted_warnings(self):
-        ''' List[str]: list of counted warnings'''
-        all_counted_warnings = []
-        for checker in self.checkers.values():
-            all_counted_warnings.extend(checker.counted_warnings)
-        return all_counted_warnings
 
     @property
     def cq_findings(self):
@@ -131,8 +125,10 @@ class CoverityChecker(RegexChecker):
         '''
         count = 0
         for checker in self.checkers.values():
-            padded_string = [f"{string:<20}" for string in [f"{checker.classification}: "]]
-            count += checker.return_check_limits("".join(padded_string))
+            extra = {
+                "classification": checker.classification,
+            }
+            count += checker.return_check_limits(extra)
         if count:
             print(f"Returning error code {count}.")
         return count
@@ -196,6 +192,7 @@ class CoverityClassificationChecker(WarningsChecker):
         """
         super().__init__(**kwargs)
         self.classification = classification
+        self.logger = logging.getLogger(self.name)
 
     @property
     def cq_description_template(self):
@@ -242,8 +239,9 @@ class CoverityClassificationChecker(WarningsChecker):
         match_string = content.group(0).strip()
         if not self._is_excluded(match_string) and (content.group('curr') == content.group('max')):
             self.count += 1
-            self.counted_warnings.append(match_string)
-            logging.info(match_string)
+            self.output_logger.debug(match_string,
+                          extra={"checker_name": "Coverity"})
+            self.logger.info(match_string, extra={"checker_name": "Coverity"})
             if self.cq_enabled:
                 self.add_code_quality_finding(content)
 
