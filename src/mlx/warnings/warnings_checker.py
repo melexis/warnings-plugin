@@ -45,6 +45,9 @@ class WarningsChecker:
         self.exclude_patterns = []
         self.include_patterns = []
 
+    def __repr__(self):
+        return self.name.capitalize()
+
     @property
     def cq_findings(self):
         ''' List[dict]: list of code quality findings'''
@@ -163,7 +166,7 @@ class WarningsChecker:
             int: 0 if the amount of warnings is within limits, the count of warnings otherwise
                 (or 1 in case of a count of 0 warnings)
         '''
-        extra["checker_name"] = self.name.capitalize() if self.name != "junit" else "JUnit"
+        extra["checker_name"] = repr(self)
         if self.count > self._maximum or self.count < self._minimum:
             return self._return_error_code(extra)
         elif self._minimum == self._maximum and self.count == self._maximum:

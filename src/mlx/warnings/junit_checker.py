@@ -15,6 +15,9 @@ from .warnings_checker import WarningsChecker
 class JUnitChecker(WarningsChecker):
     name = 'junit'
 
+    def __repr__(self):
+        return "JUnit"
+
     def check(self, content):
         ''' Function for counting the number of JUnit failures in a specific text
 
