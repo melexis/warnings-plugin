@@ -112,7 +112,7 @@ class PolyspaceChecker(WarningsChecker):
             extra = {"column_info": f"{checker.family_value}: {checker.column_name}: {checker.check_value}"}
             count += checker.return_check_limits(extra)
         if count:
-            print(f"Returning error code {count}.")
+            print(f"Polyspace: Returning error code {count}.")
         return count
 
     def parse_config(self, config):

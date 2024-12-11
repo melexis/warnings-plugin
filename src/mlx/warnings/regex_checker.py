@@ -130,7 +130,7 @@ class CoverityChecker(RegexChecker):
             }
             count += checker.return_check_limits(extra)
         if count:
-            print(f"Returning error code {count}.")
+            print(f"Coverity: Returning error code {count}.")
         return count
 
     def check(self, content):

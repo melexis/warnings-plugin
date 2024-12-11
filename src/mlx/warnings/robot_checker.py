@@ -88,7 +88,7 @@ class RobotChecker(WarningsChecker):
                 }
                 count += checker.return_check_limits(extra)
         if count:
-            print(f"Returning error code {count}.")
+            print(f"Robot: Returning error code {count}.")
         return count
 
     def parse_config(self, config):
