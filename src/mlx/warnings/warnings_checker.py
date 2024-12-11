@@ -159,12 +159,14 @@ class WarningsChecker:
 
     def return_check_limits(self, extra={}):
         ''' Function for checking whether the warning count is within the configured limits
+        A checker instance with sub-checkers is responsible for printing 'Returning error code X.'
+        when the exit code is not 0.
 
         Args:
             extra (dict): Extra arguments for the logger.
 
         Returns:
-            int: 0 if the amount of warnings is within limits, the count of warnings otherwise
+            int: 0 if the amount of warnings is within limits, the count of (the sum of sub-checker) warnings otherwise
                 (or 1 in case of a count of 0 warnings)
         '''
         extra["checker_name"] = repr(self)
