@@ -195,6 +195,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
         self.column_name = column_name
         self.check_value = check_value
         self.logger = logging.getLogger(self.name)
+        self.output_logger = logging.getLogger(f"{self.name}.output")
 
     @property
     def cq_description_template(self):

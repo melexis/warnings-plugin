@@ -116,6 +116,7 @@ class RobotSuiteChecker(JUnitChecker):
         self.check_suite_name = check_suite_name
         self.is_valid_suite_name = False
         self.logger = logging.getLogger(self.name)
+        self.output_logger = logging.getLogger(f"{self.name}.output")
 
     def _check_testcase(self, testcase):
         """ Handles the check of a test case element by checking if the result is a failure/error.

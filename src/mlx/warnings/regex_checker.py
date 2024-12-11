@@ -193,6 +193,7 @@ class CoverityClassificationChecker(WarningsChecker):
         super().__init__(**kwargs)
         self.classification = classification
         self.logger = logging.getLogger(self.name)
+        self.output_logger = logging.getLogger(f"{self.name}.output")
 
     @property
     def cq_description_template(self):
