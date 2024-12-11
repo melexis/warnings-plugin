@@ -169,6 +169,8 @@ class PolyspaceChecker(WarningsChecker):
         new_format = logging.Formatter(fmt=self.logging_fmt, style="{")
         for handler in self.logger.handlers:
             handler.setFormatter(new_format)
+        for handler in self.output_logger.handlers:
+            handler.setFormatter(new_format)
 
 
 class PolyspaceFamilyChecker(WarningsChecker):
@@ -246,7 +248,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
                 tab_sep_string = "\t".join(content.values())
                 if not self._is_excluded(tab_sep_string):
                     self.count = self.count + 1
-                    self.output_logger.debug(f'{self.family_value}: {self.column_name}: {self.check_value}',
+                    self.output_logger.debug(f"ID {content.get('id', None)!r}",
                                              extra={"checker_name": "Polyspace",
                                                     "column_info":
                                                         f"{self.family_value}: {self.column_name}: {self.check_value}",
