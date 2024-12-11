@@ -193,7 +193,7 @@ class WarningsChecker:
         if error_code == 0:
             error_code = 1
         string_to_print = f"number of warnings ({self.count}) is {error_reason}."
-        if self.name not in ["polyspace", "coverity", "robot"]:
+        if getattr(self, "checkers", None):
             string_to_print += f" Returning error code {error_code}."
         self.logger.warning(string_to_print, extra=extra)
         return error_code
