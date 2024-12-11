@@ -76,7 +76,7 @@ class RegexChecker(WarningsChecker):
 class CoverityChecker(RegexChecker):
     name = 'coverity'
     pattern = coverity_pattern
-    logging_fmt = "{checker_name}: {classification:<15} | {message:>60}"
+    logging_fmt = "{checker_name}: {classification:<14} | {message}"
 
     def __init__(self, verbose, output):
         super().__init__(verbose, output)
