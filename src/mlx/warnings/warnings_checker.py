@@ -32,6 +32,7 @@ def substitute_envvar(checker_config, keys):
 
 class WarningsChecker:
     name = 'checker'
+    subchecker = False
     logging_fmt = "{checker_name}: {message}"
 
     def __init__(self):
@@ -194,7 +195,7 @@ class WarningsChecker:
         if error_code == 0:
             error_code = 1
         string_to_print = f"number of warnings ({self.count}) is {error_reason}."
-        if getattr(self, "checkers", None):
+        if not self.subchecker:
             string_to_print += f" Returning error code {error_code}."
         self.logger.warning(string_to_print, extra=extra)
         return error_code

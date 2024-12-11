@@ -102,6 +102,7 @@ class RobotChecker(WarningsChecker):
 
 class RobotSuiteChecker(JUnitChecker):
     name = 'robot'
+    subchecker = True
 
     def __init__(self, suite_name, check_suite_name=False):
         ''' Constructor

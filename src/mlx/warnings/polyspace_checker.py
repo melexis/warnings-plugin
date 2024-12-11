@@ -175,6 +175,7 @@ class PolyspaceChecker(WarningsChecker):
 
 class PolyspaceFamilyChecker(WarningsChecker):
     name = 'polyspace'
+    subchecker = True
     code_quality_severity = {
         "impact: high": "critical",
         "impact: medium": "major",

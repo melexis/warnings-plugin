@@ -176,6 +176,7 @@ class CoverityChecker(RegexChecker):
 
 class CoverityClassificationChecker(WarningsChecker):
     name = 'coverity'
+    subchecker = True
     SEVERITY_MAP = {
         'false positive': 'info',
         'intentional': 'info',
