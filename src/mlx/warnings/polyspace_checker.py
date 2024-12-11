@@ -14,7 +14,7 @@ from .warnings_checker import WarningsChecker
 class PolyspaceChecker(WarningsChecker):
     name = 'polyspace'
     checkers = []
-    logging_fmt = "{checker_name}: {family}: {column_name}: {check_value:<20} | {message:>60}"
+    logging_fmt = "{checker_name}: {column_info:<40} | {message}"
 
     def __init__(self, verbose, output):
         '''Constructor to set the default code quality description template to "Polyspace: $check"'''
@@ -109,11 +109,7 @@ class PolyspaceChecker(WarningsChecker):
         '''
         count = 0
         for checker in self.checkers:
-            extra = {
-                "family": checker.family_value,
-                "column_name": checker.column_name,
-                "check_value": checker.check_value
-            }
+            extra = {"column_info": f"{checker.family_value}: {checker.column_name}: {checker.check_value}"}
             count += checker.return_check_limits(extra)
         if count:
             print(f"Returning error code {count}.")
@@ -132,6 +128,7 @@ class PolyspaceChecker(WarningsChecker):
             {\n    <column-name>: <value_to_check>,\n    min: <number>,\n    max: <number>\n}
         """
         self.checkers = []
+        padding = 0
         for family_value, data in config.items():
             if family_value == "enabled":
                 continue
@@ -150,7 +147,9 @@ class PolyspaceChecker(WarningsChecker):
                         continue
                     column_name = key.lower()
                     check_value = value.lower()
-                    checker = PolyspaceFamilyChecker(family_value, column_name, check_value, verbose=self.verbose)
+                    padding = max(padding, len(f"{family_value}: {column_name}: {check_value}"))
+                    checker = PolyspaceFamilyChecker(family_value, column_name, check_value, verbose=self.verbose,
+                                                     output=self.output)
                     checker.parse_config(check)
                     self.checkers.append(checker)
                 if not (column_name and check_value):
@@ -166,6 +165,11 @@ class PolyspaceChecker(WarningsChecker):
             checker.exclude_patterns = self.exclude_patterns
             checker.cq_description_template = self.cq_description_template
             checker.cq_default_path = self.cq_default_path
+
+        self.logging_fmt = self.logging_fmt.replace("40", f"{padding}")
+        new_format = logging.Formatter(fmt=self.logging_fmt, style="{")
+        for handler in self.logger.handlers:
+            handler.setFormatter(new_format)
 
 
 class PolyspaceFamilyChecker(WarningsChecker):
@@ -234,13 +238,16 @@ class PolyspaceFamilyChecker(WarningsChecker):
         '''
         if content[self.column_name].lower() == self.check_value:
             if content["status"].lower() in ["not a defect", "justified"]:
-                self.logger.info(f"Excluded row {content!r} because the status is 'Not a defect' or 'Justified'",
-                                 extra={"checker_name": "Polyspace"})
+                                 extra={"checker_name": "Polyspace",
+                                        "column_info": f"{self.family_value}: {self.column_name}: {self.check_value}",})
             else:
                 tab_sep_string = "\t".join(content.values())
                 if not self._is_excluded(tab_sep_string):
                     self.count = self.count + 1
                     self.output_logger.debug(f'{self.family_value}: {self.column_name}: {self.check_value}',
-                                             extra={"checker_name": "Polyspace"})
+                                             extra={"checker_name": "Polyspace",
+                                                    "column_info":
+                                                        f"{self.family_value}: {self.column_name}: {self.check_value}",
+                                                    })
                     if self.cq_enabled and content["color"].lower() != "green":
                         self.add_code_quality_finding(content)
