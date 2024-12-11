@@ -64,7 +64,7 @@ class WarningsPlugin:
         '''
         checker.cq_enabled = self.cq_enabled and checker.name in ('doxygen', 'sphinx', 'xmlrunner', 'polyspace', 'coverity')
         self.activated_checkers[checker.name] = checker
-        checker.initiate_logger()
+        checker.initialize_loggers()
 
     def activate_checker_name(self, name):
         '''

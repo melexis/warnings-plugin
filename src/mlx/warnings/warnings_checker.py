@@ -115,7 +115,7 @@ class WarningsChecker:
         '''
         return
 
-    def initiate_logger(self):
+    def initialize_loggers(self):
         self.logger = logging.getLogger(self.name)
         self.logger.propagate = False  # Do not propagate to parent loggers
         handler = logging.StreamHandler()
