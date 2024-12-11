@@ -34,15 +34,7 @@ class WarningsChecker:
     name = 'checker'
     logging_fmt = "{checker_name}: {message}"
 
-    def __init__(self, verbose, output):
-        ''' Constructor
-
-        Args:
-            name (str): Name of the checker
-            verbose (bool): Enable/disable verbose logging
-        '''
-        self.verbose = verbose
-        self.output = output
+    def __init__(self):
         self.count = 0
         self._minimum = 0
         self._maximum = 0
@@ -115,21 +107,27 @@ class WarningsChecker:
         '''
         return
 
-    def initialize_loggers(self):
+    def initialize_loggers(self, verbose, output):
+        """Initialize the loggers
+
+        Args:
+            verbose (bool): Enable/disable verbose logging
+            output (Path/None): The path to the output file
+        """
         self.logger = logging.getLogger(self.name)
         self.logger.propagate = False  # Do not propagate to parent loggers
         handler = logging.StreamHandler()
         formatter = logging.Formatter(fmt=self.logging_fmt, style="{")
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)
-        if self.verbose:
+        if verbose:
             self.logger.setLevel(logging.INFO)
 
         self.output_logger = logging.getLogger(f"{self.name}.output")
         self.output_logger.propagate = False  # Do not propagate to parent loggers
-        if self.output is not None:
+        if output is not None:
             self.output_logger.setLevel(logging.DEBUG)
-            handler = logging.FileHandler(self.output, "a")
+            handler = logging.FileHandler(output, "a")
             handler.setFormatter(formatter)
             self.output_logger.addHandler(handler)
 

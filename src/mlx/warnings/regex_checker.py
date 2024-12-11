@@ -78,15 +78,15 @@ class CoverityChecker(RegexChecker):
     pattern = coverity_pattern
     logging_fmt = "{checker_name}: {classification:<14} | {message}"
 
-    def __init__(self, verbose, output):
-        super().__init__(verbose, output)
+    def __init__(self):
+        super().__init__()
         self._cq_description_template = Template('Coverity: CID $cid: $checker')
         self.checkers = {
-            "unclassified": CoverityClassificationChecker("unclassified", verbose=self.verbose, output=output),
-            "pending": CoverityClassificationChecker("pending", verbose=self.verbose, output=output),
-            "bug": CoverityClassificationChecker("bug", verbose=self.verbose, output=output),
-            "intentional": CoverityClassificationChecker("intentional", verbose=self.verbose, output=output),
-            "false positive": CoverityClassificationChecker("false positive", verbose=self.verbose, output=output),
+            "unclassified": CoverityClassificationChecker("unclassified"),
+            "pending": CoverityClassificationChecker("pending"),
+            "bug": CoverityClassificationChecker("bug"),
+            "intentional": CoverityClassificationChecker("intentional"),
+            "false positive": CoverityClassificationChecker("false positive"),
         }
 
     @property
@@ -184,13 +184,13 @@ class CoverityClassificationChecker(WarningsChecker):
         'pending': 'critical',
     }
 
-    def __init__(self, classification, **kwargs):
+    def __init__(self, classification):
         """Initialize the CoverityClassificationChecker:
 
         Args:
             classification (str): The coverity classification
         """
-        super().__init__(**kwargs)
+        super().__init__()
         self.classification = classification
         self.logger = logging.getLogger(self.name)
         self.output_logger = logging.getLogger(f"{self.name}.output")

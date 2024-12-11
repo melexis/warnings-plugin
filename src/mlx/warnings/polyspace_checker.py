@@ -16,9 +16,9 @@ class PolyspaceChecker(WarningsChecker):
     checkers = []
     logging_fmt = "{checker_name}: {column_info:<40} | {message}"
 
-    def __init__(self, verbose, output):
+    def __init__(self):
         '''Constructor to set the default code quality description template to "Polyspace: $check"'''
-        super().__init__(verbose, output)
+        super().__init__()
         self._cq_description_template = Template('Polyspace: $check')
 
     @property
@@ -148,8 +148,7 @@ class PolyspaceChecker(WarningsChecker):
                     column_name = key.lower()
                     check_value = value.lower()
                     padding = max(padding, len(f"{family_value}: {column_name}: {check_value}"))
-                    checker = PolyspaceFamilyChecker(family_value, column_name, check_value, verbose=self.verbose,
-                                                     output=self.output)
+                    checker = PolyspaceFamilyChecker(family_value, column_name, check_value)
                     checker.parse_config(check)
                     self.checkers.append(checker)
                 if not (column_name and check_value):
@@ -182,7 +181,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
         "orange": "major",
     }
 
-    def __init__(self, family_value, column_name, check_value, **kwargs):
+    def __init__(self, family_value, column_name, check_value):
         """Initialize the PolyspaceFamilyChecker
 
         Args:
@@ -190,7 +189,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
             column_name (str): The name of the column
             check_value (str): The value to check in the column
         """
-        super().__init__(**kwargs)
+        super().__init__()
         self.family_value = family_value
         self.column_name = column_name
         self.check_value = check_value

@@ -25,7 +25,7 @@ __version__ = distribution('mlx.warnings').version
 
 class WarningsPlugin:
 
-    def __init__(self, verbose=False, config_file=None, cq_enabled=False, output=""):
+    def __init__(self, verbose=False, config_file=None, cq_enabled=False, output=None):
         '''
         Function for initializing the parsers
 
@@ -33,14 +33,12 @@ class WarningsPlugin:
             verbose (bool): optional - enable verbose logging
             config_file (Path): optional - configuration file with setup
             cq_enabled (bool): optional - enable generation of Code Quality report
+            output (Path/None): optional - path to the output file
         '''
         self.activated_checkers = {}
-        self.verbose = verbose
         self.cq_enabled = cq_enabled
-        self.public_checkers = [SphinxChecker(self.verbose, output), DoxyChecker(self.verbose, output),
-                                JUnitChecker(self.verbose, output), XMLRunnerChecker(self.verbose, output),
-                                CoverityChecker(self.verbose, output), RobotChecker(self.verbose, output),
-                                PolyspaceChecker(self.verbose, output)]
+        self.public_checkers = [SphinxChecker(), DoxyChecker(), JUnitChecker(), XMLRunnerChecker(), CoverityChecker(),
+                                RobotChecker(), PolyspaceChecker()]
 
         if config_file:
             with open(config_file, encoding='utf-8') as open_file:
@@ -48,37 +46,41 @@ class WarningsPlugin:
                     config = YAML().load(open_file)
                 else:
                     config = json.load(open_file)
-            self.config_parser(config)
+            self.config_parser(config, verbose=verbose, output=output)
 
         self._minimum = 0
         self._maximum = 0
         self.count = 0
         self.printout = False
 
-    def activate_checker(self, checker):
+    def activate_checker(self, checker, verbose, output):
         '''
         Activate additional checkers after initialization
 
         Args:
             checker (WarningsChecker): checker object
+            verbose (bool): enable verbose logging
+            output (Path/None): path to the output file
         '''
         checker.cq_enabled = self.cq_enabled and checker.name in ('doxygen', 'sphinx', 'xmlrunner', 'polyspace', 'coverity')
         self.activated_checkers[checker.name] = checker
-        checker.initialize_loggers()
+        checker.initialize_loggers(verbose, output)
 
-    def activate_checker_name(self, name):
+    def activate_checker_name(self, name, verbose, output):
         '''
         Activates checker by name
 
         Args:
             name (str): checker name
+            verbose (bool): enable verbose logging
+            output (Path/None): path to the output file
 
         Returns:
             WarningsChecker: activated checker object, or None when no checker with the given name exists
         '''
         for checker in self.public_checkers:
             if checker.name == name:
-                self.activate_checker(checker)
+                self.activate_checker(checker, verbose, output)
                 return checker
         else:
             logging.error(f"Checker {name} does not exist")
@@ -202,11 +204,13 @@ class WarningsPlugin:
         '''
         self.printout = printout
 
-    def config_parser(self, config):
+    def config_parser(self, config, verbose, output):
         ''' Parsing configuration dict extracted by previously opened JSON or YAML file
 
         Args:
             config (dict): Content of configuration file
+            verbose (bool): enable verbose logging
+            output (Path/None): path to the output file
         '''
         # activate checker
         for checker in self.public_checkers:
@@ -214,7 +218,7 @@ class WarningsPlugin:
                 checker_config = config[checker.name]
                 try:
                     if bool(checker_config['enabled']):
-                        self.activate_checker(checker)
+                        self.activate_checker(checker, verbose, output)
                         checker.parse_config(checker_config)
                         logging.info(f"Config parsing for {checker.name} completed")
                 except KeyError as err:
@@ -274,9 +278,8 @@ def warnings_wrapper(args):
 
     args = parser.parse_args(args)
     code_quality_enabled = bool(args.code_quality)
-    if args.output and args.output.exists():
+    if args.output is not None and args.output.exists():
             os.remove(args.output)
-    output = args.output if args.output else ""
 
     # Read config file
     if args.configfile is not None:
@@ -286,21 +289,21 @@ def warnings_wrapper(args):
             logging.error("Configfile cannot be provided with other arguments")
             sys.exit(2)
         warnings = WarningsPlugin(verbose=args.verbose, config_file=args.configfile, cq_enabled=code_quality_enabled,
-                                  output=output)
+                                  output=args.output)
     else:
-        warnings = WarningsPlugin(verbose=args.verbose, cq_enabled=code_quality_enabled, output=output)
+        warnings = WarningsPlugin(verbose=args.verbose, cq_enabled=code_quality_enabled, output=args.output)
         if args.sphinx:
-            warnings.activate_checker_name('sphinx')
+            warnings.activate_checker_name('sphinx', verbose=args.verbose, output=args.output)
         if args.doxygen:
-            warnings.activate_checker_name('doxygen')
+            warnings.activate_checker_name('doxygen', verbose=args.verbose, output=args.output)
         if args.junit:
-            warnings.activate_checker_name('junit')
+            warnings.activate_checker_name('junit', verbose=args.verbose, output=args.output)
         if args.xmlrunner:
-            warnings.activate_checker_name('xmlrunner')
+            warnings.activate_checker_name('xmlrunner', verbose=args.verbose, output=args.output)
         if args.coverity:
-            warnings.activate_checker_name('coverity')
+            warnings.activate_checker_name('coverity', verbose=args.verbose, output=args.output)
         if args.robot:
-            robot_checker = warnings.activate_checker_name('robot')
+            robot_checker = warnings.activate_checker_name('robot', verbose=args.verbose, output=args.output)
             robot_checker.parse_config({
                 'suites': [{'name': args.name, 'min': 0, 'max': 0}],
                 'check_suite_names': True,
