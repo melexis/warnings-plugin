@@ -22,6 +22,8 @@ from .robot_checker import RobotChecker
 
 __version__ = distribution('mlx.warnings').version
 
+LOGGER = logging.getLogger(__name__)
+logging.basicConfig(format="%(levelname)s: %(message)s")
 
 class WarningsPlugin:
 
@@ -35,6 +37,8 @@ class WarningsPlugin:
             cq_enabled (bool): optional - enable generation of Code Quality report
             output (Path/None): optional - path to the output file
         '''
+        if verbose:
+            LOGGER.setLevel(logging.INFO)
         self.activated_checkers = {}
         self.cq_enabled = cq_enabled
         self.public_checkers = [SphinxChecker(), DoxyChecker(), JUnitChecker(), XMLRunnerChecker(), CoverityChecker(),
@@ -83,7 +87,7 @@ class WarningsPlugin:
                 self.activate_checker(checker, verbose, output)
                 return checker
         else:
-            logging.error(f"Checker {name} does not exist")
+            LOGGER.error(f"Checker {name} does not exist")
 
     def get_checker(self, name):
         ''' Get checker by name
@@ -105,7 +109,7 @@ class WarningsPlugin:
         if self.printout:
             print(content)
         if not self.activated_checkers:
-            logging.error("No checkers activated. Please use activate_checker function")
+            LOGGER.error("No checkers activated. Please use activate_checker function")
         else:
             for checker in self.activated_checkers.values():
                 if checker.name == "polyspace":
@@ -121,7 +125,7 @@ class WarningsPlugin:
             content (_io.TextIOWrapper): The open file to parse
         '''
         if not self.activated_checkers:
-            logging.error("No checkers activated. Please use activate_checker function")
+            LOGGER.error("No checkers activated. Please use activate_checker function")
         elif "polyspace" in self.activated_checkers:
             if len(self.activated_checkers) > 1:
                 raise WarningsConfigError("Polyspace checker cannot be combined with other warnings checkers")
@@ -220,7 +224,7 @@ class WarningsPlugin:
                     if bool(checker_config['enabled']):
                         self.activate_checker(checker, verbose, output)
                         checker.parse_config(checker_config)
-                        logging.info(f"Config parsing for {checker.name} completed")
+                        LOGGER.info(f"Config parsing for {checker.name} completed")
                 except KeyError as err:
                     raise WarningsConfigError(f"Incomplete config. Missing: {err}") from err
 
@@ -281,12 +285,15 @@ def warnings_wrapper(args):
     if args.output is not None and args.output.exists():
             os.remove(args.output)
 
+    if args.verbose:
+        LOGGER.setLevel(logging.INFO)
+
     # Read config file
     if args.configfile is not None:
         checker_flags = args.sphinx or args.doxygen or args.junit or args.coverity or args.xmlrunner or args.robot
         warning_args = args.maxwarnings or args.minwarnings or args.exact_warnings
         if checker_flags or warning_args:
-            logging.error("Configfile cannot be provided with other arguments")
+            LOGGER.error("Configfile cannot be provided with other arguments")
             sys.exit(2)
         warnings = WarningsPlugin(verbose=args.verbose, config_file=args.configfile, cq_enabled=code_quality_enabled,
                                   output=args.output)
@@ -310,7 +317,7 @@ def warnings_wrapper(args):
             })
         if args.exact_warnings:
             if args.maxwarnings | args.minwarnings:
-                logging.error("expected-warnings cannot be provided with maxwarnings or minwarnings")
+                LOGGER.error("expected-warnings cannot be provided with maxwarnings or minwarnings")
                 sys.exit(2)
             warnings.configure_maximum(args.exact_warnings)
             warnings.configure_minimum(args.exact_warnings)
@@ -334,7 +341,7 @@ def warnings_wrapper(args):
             return retval
     else:
         if args.flags:
-            logging.warning(f"Some keyword arguments have been ignored because they followed positional arguments: "
+            LOGGER.warning(f"Some keyword arguments have been ignored because they followed positional arguments: "
                             f"{' '.join(args.flags)!r}")
         retval = warnings_logfile(warnings, args.logfile)
         if retval != 0:
@@ -384,7 +391,7 @@ def warnings_command(warnings, cmd):
         return proc.returncode
     except OSError as err:
         if err.errno == errno.ENOENT:
-            logging.error("It seems like program " + str(cmd) + " is not installed.")
+            LOGGER.error("It seems like program " + str(cmd) + " is not installed.")
         raise
 
 
@@ -411,7 +418,7 @@ def warnings_logfile(warnings, log):
                 with open(logfile) as file:
                     warnings.check_logfile(file)
         else:
-            logging.error(f"FILE: {file_wildcard} does not exist")
+            LOGGER.error(f"FILE: {file_wildcard} does not exist")
             return 1
 
     return 0

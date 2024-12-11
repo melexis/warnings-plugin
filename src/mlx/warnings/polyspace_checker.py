@@ -112,7 +112,7 @@ class PolyspaceChecker(WarningsChecker):
             extra = {"column_info": f"{checker.family_value}: {checker.column_name}: {checker.check_value}"}
             count += checker.return_check_limits(extra)
         if count:
-            print(f"Polyspace: Returning error code {count}.")
+            print(f"{repr(self)}: Returning error code {count}.")
         return count
 
     def parse_config(self, config):
@@ -240,19 +240,17 @@ class PolyspaceFamilyChecker(WarningsChecker):
             content (dict): The row of the TSV file
         '''
         if content[self.column_name].lower() == self.check_value:
+            extra = {"checker_name": repr(self),
+                     "column_info": f"{self.family_value}: {self.column_name}: {self.check_value}",}
             if content["status"].lower() in ["not a defect", "justified"]:
                 self.logger.info(f"Excluded defect with ID {content.get('id', None)!r} because the status is "
                                  "'Not a defect' or 'Justified'",
-                                 extra={"checker_name": "Polyspace",
-                                        "column_info": f"{self.family_value}: {self.column_name}: {self.check_value}",})
+                                 extra=extra)
             else:
                 tab_sep_string = "\t".join(content.values())
-                if not self._is_excluded(tab_sep_string):
+                if not self._is_excluded(tab_sep_string, extra=extra):
                     self.count = self.count + 1
                     self.output_logger.debug(f"ID {content.get('id', None)!r}",
-                                             extra={"checker_name": "Polyspace",
-                                                    "column_info":
-                                                        f"{self.family_value}: {self.column_name}: {self.check_value}",
-                                                    })
+                                             extra=extra)
                     if self.cq_enabled and content["color"].lower() != "green":
                         self.add_code_quality_finding(content)

@@ -163,7 +163,7 @@ class WarningsChecker:
         when the exit code is not 0.
 
         Args:
-            extra (dict): Extra arguments for the logger.
+            extra (dict): optional - Extra arguments for the logger.
 
         Returns:
             int: 0 if the amount of warnings is within limits, the count of (the sum of sub-checker) warnings otherwise
@@ -179,7 +179,7 @@ class WarningsChecker:
                   "Well done.", extra=extra)
         return 0
 
-    def _return_error_code(self, extra={}):
+    def _return_error_code(self, extra):
         ''' Function for determining the return code and message on failure
 
         Args:
@@ -212,20 +212,23 @@ class WarningsChecker:
         if 'cq_description_template' in config:
             self.cq_description_template = Template(config['cq_description_template'])
 
-    def _is_excluded(self, content):
+    def _is_excluded(self, content, extra={}):
         ''' Checks if the specific text must be excluded based on the configured regexes for exclusion and inclusion.
 
         Inclusion has priority over exclusion.
 
         Args:
             content (str): The content to parse
+            extra (dict): optional - Extra arguments for the logger.
 
         Returns:
             bool: True for exclusion, False for inclusion
         '''
+        extra["checker_name"] = repr(self)
         matching_exclude_pattern = self._search_patterns(content, self.exclude_patterns)
         if not self._search_patterns(content, self.include_patterns) and matching_exclude_pattern:
-            self.logger.info(f"Excluded {content!r} because of configured regex {matching_exclude_pattern!r}")
+            self.logger.info(f"Excluded {content!r} because of configured regex {matching_exclude_pattern!r}",
+                             extra=extra)
             return True
         return False
 

@@ -19,6 +19,8 @@ xmlrunner_pattern = re.compile(PYTHON_XMLRUNNER_REGEX)
 COVERITY_WARNING_REGEX = r"(?P<path>[\w\.\\/\- ]+)(:(?P<line>\d+)(:(?P<column>\d+))?)?: ?CID (?P<cid>\d+) \(#(?P<curr>\d+) of (?P<max>\d+)\): (?P<checker>.+): (?P<classification>[\w ]+),.+"
 coverity_pattern = re.compile(COVERITY_WARNING_REGEX)
 
+LOGGER = logging.getLogger("mlx.warnings.warnings")
+
 
 class RegexChecker(WarningsChecker):
     name = 'regex'
@@ -46,7 +48,7 @@ class RegexChecker(WarningsChecker):
             if self._is_excluded(match_string):
                 continue
             self.count += 1
-            extra = {"checker_name": self.name.capitalize() if self.name != "junit" else "JUnit"}
+            extra = {"checker_name": repr(self)}
             self.output_logger.debug(match_string, extra=extra)
             self.logger.info(match_string, extra=extra)
             if self.cq_enabled:
@@ -130,7 +132,7 @@ class CoverityChecker(RegexChecker):
             }
             count += checker.return_check_limits(extra)
         if count:
-            print(f"Coverity: Returning error code {count}.")
+            print(f"{repr(self)}: Returning error code {count}.")
         return count
 
     def check(self, content):
@@ -151,7 +153,7 @@ class CoverityChecker(RegexChecker):
                 checker.cq_default_path = self.cq_default_path
                 checker.check(match)
             else:
-                logging.warning(f"Unrecognized classification {match.group('classification')!r}")
+                LOGGER.warning(f"{repr(self)}: Unrecognized classification {match.group('classification')!r}")
 
     def parse_config(self, config):
         """Process configuration
@@ -171,7 +173,7 @@ class CoverityChecker(RegexChecker):
             if classification_key in self.checkers:
                 self.checkers[classification_key].parse_config(checker_config)
             else:
-                logging.warning(f"Unrecognized classification {classification!r}")
+                LOGGER.warning(f"{repr(self)}: Unrecognized classification {classification!r}")
 
 
 class CoverityClassificationChecker(WarningsChecker):
@@ -238,12 +240,13 @@ class CoverityClassificationChecker(WarningsChecker):
         Args:
             content (re.Match): The regex match
         '''
+        extra={"checker_name": repr(self)}
         match_string = content.group(0).strip()
-        if not self._is_excluded(match_string) and (content.group('curr') == content.group('max')):
+        if not self._is_excluded(match_string, extra) and (content.group('curr') == content.group('max')):
             self.count += 1
             self.output_logger.debug(match_string,
-                          extra={"checker_name": "Coverity"})
-            self.logger.info(match_string, extra={"checker_name": "Coverity"})
+                          extra=extra)
+            self.logger.info(match_string, extra=extra)
             if self.cq_enabled:
                 self.add_code_quality_finding(content)
 

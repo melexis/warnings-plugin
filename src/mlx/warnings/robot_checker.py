@@ -88,7 +88,7 @@ class RobotChecker(WarningsChecker):
                 }
                 count += checker.return_check_limits(extra)
         if count:
-            print(f"Robot: Returning error code {count}.")
+            print(f"{repr(self)}: Returning error code {count}.")
         return count
 
     def parse_config(self, config):
@@ -148,5 +148,9 @@ class RobotSuiteChecker(JUnitChecker):
         """
         super().check(content)
         if not self.is_valid_suite_name and self.check_suite_name:
-            logging.error(f'No suite with name {self.suite_name!r} found. Returning error code -1.')
+            self.logger.error(f'No suite with name {self.suite_name!r} found. Returning error code -1.',
+                              extra={
+                                  "checker_name": repr(self),
+                                  "suite_name": self.suite_name
+                              })
             sys.exit(-1)
