@@ -238,6 +238,8 @@ class PolyspaceFamilyChecker(WarningsChecker):
         '''
         if content[self.column_name].lower() == self.check_value:
             if content["status"].lower() in ["not a defect", "justified"]:
+                self.logger.info(f"Excluded defect with ID {content.get('id', None)!r} because the status is "
+                                 "'Not a defect' or 'Justified'",
                                  extra={"checker_name": "Polyspace",
                                         "column_info": f"{self.family_value}: {self.column_name}: {self.check_value}",})
             else:
