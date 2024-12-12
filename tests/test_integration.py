@@ -59,11 +59,12 @@ class TestIntegration(TestCase):
         self.assertEqual(1, retval)
 
     def test_no_verbose(self):
-        with self.assertLogs(logger="junit", level="WARNING") as fake_out:
+        with self.assertLogs(logger="junit", level="DEBUG") as fake_out:
             retval = warnings_wrapper(['--junit', 'tests/test_in/junit_single_fail.xml'])
-        self.assertIn("WARNING:junit:number of warnings (1) is higher than the maximum limit (0). "
-                      "Returning error code 1.",
-                      fake_out.output)
+        self.assertEqual(
+            ["WARNING:junit:number of warnings (1) is higher than the maximum limit (0). Returning error code 1."],
+            fake_out.output
+        )
         self.assertEqual(1, retval)
 
     min_ret_val_on_failure = 1
