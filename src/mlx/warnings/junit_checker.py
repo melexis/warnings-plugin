@@ -56,7 +56,7 @@ class JUnitChecker(WarningsChecker):
             testsuites_root.append(root_input)
         return testsuites_root
 
-    def _check_testcase(self, testcase):
+    def _check_testcase(self, testcase, extra={}):
         """ Handles the check of a test case element by checking if the result is a failure/error.
 
         If it is to be excluded by a configured regex, 1 is returned.
@@ -69,7 +69,7 @@ class JUnitChecker(WarningsChecker):
             int: 1 if a failure/error is to be subtracted from the final count, 0 otherwise
         """
         if isinstance(testcase.result, (Failure, Error)):
-            extra={"checker_name": self.name_repr}
+            extra["checker_name"] = self.name_repr
             if self._is_excluded(testcase.result.message, extra=extra):
                 return 1
             string = f'{testcase.classname}.{testcase.name}'

@@ -118,6 +118,10 @@ class RobotSuiteChecker(JUnitChecker):
         self.logger = logging.getLogger(self.name)
         self.output_logger = logging.getLogger(f"{self.name}.output")
 
+    @property
+    def name_repr(self):
+        return self.name.capitalize()
+
     def _check_testcase(self, testcase):
         """ Handles the check of a test case element by checking if the result is a failure/error.
 
@@ -132,7 +136,8 @@ class RobotSuiteChecker(JUnitChecker):
         """
         if testcase.classname.endswith(self.suite_name):
             self.is_valid_suite_name = True
-            return super()._check_testcase(testcase)
+            return super()._check_testcase(testcase, extra={"checker_name": self.name_repr,
+                                                            "suite_name": self.suite_name})
         return int(self.suite_name and isinstance(testcase.result, (Failure, Error)))
 
     def check(self, content):
