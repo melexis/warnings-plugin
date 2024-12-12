@@ -32,19 +32,13 @@ def substitute_envvar(checker_config, keys):
 
 class WarningsChecker:
     name = 'checker'
+    subchecker = False
+    logging_fmt = "{checker_name}: {message}"
 
-    def __init__(self, verbose=False):
-        ''' Constructor
-
-        Args:
-            name (str): Name of the checker
-            verbose (bool): Enable/disable verbose logging
-        '''
-        self.verbose = verbose
+    def __init__(self):
         self.count = 0
         self._minimum = 0
         self._maximum = 0
-        self._counted_warnings = []
         self._cq_findings = []
         self.cq_enabled = False
         self.cq_default_path = '.gitlab-ci.yml'
@@ -52,15 +46,13 @@ class WarningsChecker:
         self.exclude_patterns = []
         self.include_patterns = []
 
+    def __repr__(self):
+        return self.name.capitalize()
+
     @property
     def cq_findings(self):
         ''' List[dict]: list of code quality findings'''
         return self._cq_findings
-
-    @property
-    def counted_warnings(self):
-        ''' List[str]: list of counted warnings'''
-        return self._counted_warnings
 
     @property
     def cq_description_template(self):
@@ -119,6 +111,30 @@ class WarningsChecker:
         '''
         return
 
+    def initialize_loggers(self, verbose, output):
+        """Initialize the loggers
+
+        Args:
+            verbose (bool): Enable/disable verbose logging
+            output (Path/None): The path to the output file
+        """
+        self.logger = logging.getLogger(self.name)
+        self.logger.propagate = False  # Do not propagate to parent loggers
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter(fmt=self.logging_fmt, style="{")
+        handler.setFormatter(formatter)
+        self.logger.addHandler(handler)
+        if verbose:
+            self.logger.setLevel(logging.INFO)
+
+        self.output_logger = logging.getLogger(f"{self.name}.output")
+        self.output_logger.propagate = False  # Do not propagate to parent loggers
+        if output is not None:
+            self.output_logger.setLevel(logging.DEBUG)
+            handler = logging.FileHandler(output, "a")
+            handler.setFormatter(formatter)
+            self.output_logger.addHandler(handler)
+
     def add_patterns(self, regexes, pattern_container):
         ''' Adds regexes as patterns to the specified container
 
@@ -141,33 +157,33 @@ class WarningsChecker:
         '''
         return self.count
 
-    def return_check_limits(self, extra=""):
+    def return_check_limits(self, extra={}):
         ''' Function for checking whether the warning count is within the configured limits
+        A checker instance with sub-checkers is responsible for printing 'Returning error code X.'
+        when the exit code is not 0.
 
         Args:
-            extra (str): Extra information, to insert between the checker name and the message.
+            extra (dict): optional - Extra arguments for the logger.
 
         Returns:
-            int: 0 if the amount of warnings is within limits, the count of warnings otherwise
+            int: 0 if the amount of warnings is within limits, the count of (the sum of sub-checker) warnings otherwise
                 (or 1 in case of a count of 0 warnings)
         '''
-        name = self.name.capitalize() if self.name != "junit" else "JUnit"
+        extra["checker_name"] = repr(self)
         if self.count > self._maximum or self.count < self._minimum:
-            return self._return_error_code(name, extra)
+            return self._return_error_code(extra)
         elif self._minimum == self._maximum and self.count == self._maximum:
-            print(f"{name + ':':<10} {extra}number of warnings ({self.count}) is exactly as "
-                  "expected. Well done.")
+            self.logger.warning(f"number of warnings ({self.count}) is exactly as expected. Well done.", extra=extra)
         else:
-            print(f"{name + ':':<10} {extra}number of warnings ({self.count}) is between limits "
-                  f"{self._minimum} and {self._maximum}. Well done.")
+            self.logger.warning(f"number of warnings ({self.count}) is between limits {self._minimum} and {self._maximum}. "
+                  "Well done.", extra=extra)
         return 0
 
-    def _return_error_code(self, name, extra=""):
+    def _return_error_code(self, extra):
         ''' Function for determining the return code and message on failure
 
         Args:
-            name (str): The capitalized name of the checker
-            extra (str): Extra information, to insert between the checker name and the message.
+            extra (dict): Extra arguments for the logger.
 
         Returns:
             int: The count of warnings (or 1 in case of a count of 0 warnings)
@@ -180,10 +196,10 @@ class WarningsChecker:
         error_code = self.count
         if error_code == 0:
             error_code = 1
-        string_to_print = f"{name + ':':<10} {extra}number of warnings ({self.count}) is {error_reason}."
-        if self.name not in ["polyspace", "coverity", "robot"]:
+        string_to_print = f"number of warnings ({self.count}) is {error_reason}."
+        if not self.subchecker:
             string_to_print += f" Returning error code {error_code}."
-        print(string_to_print)
+        self.logger.warning(string_to_print, extra=extra)
         return error_code
 
     def parse_config(self, config):
@@ -196,20 +212,23 @@ class WarningsChecker:
         if 'cq_description_template' in config:
             self.cq_description_template = Template(config['cq_description_template'])
 
-    def _is_excluded(self, content):
+    def _is_excluded(self, content, extra={}):
         ''' Checks if the specific text must be excluded based on the configured regexes for exclusion and inclusion.
 
         Inclusion has priority over exclusion.
 
         Args:
             content (str): The content to parse
+            extra (dict): optional - Extra arguments for the logger.
 
         Returns:
             bool: True for exclusion, False for inclusion
         '''
+        extra["checker_name"] = repr(self)
         matching_exclude_pattern = self._search_patterns(content, self.exclude_patterns)
         if not self._search_patterns(content, self.include_patterns) and matching_exclude_pattern:
-            logging.info(f"Excluded {content!r} because of configured regex {matching_exclude_pattern!r}")
+            self.logger.info(f"Excluded {content!r} because of configured regex {matching_exclude_pattern!r}",
+                             extra=extra)
             return True
         return False
 

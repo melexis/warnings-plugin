@@ -1,6 +1,9 @@
+from io import StringIO
+import logging
 import os
 from pathlib import Path
 from unittest import TestCase
+from unittest.mock import patch
 
 from mlx.warnings import (
     DoxyChecker,
@@ -13,6 +16,22 @@ from mlx.warnings import (
 )
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
+
+def check_xml_file_with_logging(warnings, file_path):
+    logging.basicConfig(format="%(levelname)s: %(message)s")
+    logging.getLogger().setLevel(logging.INFO)
+    buffer = StringIO()
+    with patch('sys.stdout', new=buffer):
+        logger = logging.getLogger()
+        stream_handler = logging.StreamHandler(buffer)
+        logger.addHandler(stream_handler)
+        try:
+            with open(file_path) as xmlfile:
+                warnings.check(xmlfile.read())
+                retval = warnings.return_check_limits()
+        finally:
+            logger.removeHandler(stream_handler)
+    return buffer.getvalue(), retval
 
 
 class TestConfig(TestCase):
@@ -198,18 +217,15 @@ class TestConfig(TestCase):
             }
         }
         warnings.config_parser(tmpjson)
-        with open('tests/test_in/robot_double_fail.xml') as xmlfile:
-            with self.assertLogs(level="INFO") as verbose_output:
-                warnings.check(xmlfile.read())
-                count = warnings.return_count()
-        self.assertEqual(count, 1)
-        self.assertEqual(warnings.return_check_limits(), 0)
+        stdout_log, retval = check_xml_file_with_logging(warnings, 'tests/test_in/robot_double_fail.xml')
+        self.assertEqual(warnings.return_count(), 1)
+        self.assertEqual(retval, 0)
         self.assertEqual(
-            [
-                r"INFO:root:Excluded 'Directory &#x27;C:\\nonexistent&#x27; does not exist.' because of configured regex 'does not exist'",
-                "INFO:root:Suite One &amp; Suite Two.Suite Two.Another test",
-            ],
-            verbose_output.output
+            "Excluded 'Directory &#x27;C:\\\\nonexistent&#x27; does not exist.' because of configured regex 'does not exist'\n"
+            "Suite One &amp; Suite Two.Suite Two.Another test\n"
+            "Robot:     test suite 'Suite One'        number of warnings (0) is exactly as expected. Well done.\n"
+            "Robot:     test suite 'Suite Two'        number of warnings (1) is exactly as expected. Well done.\n",
+            stdout_log
         )
 
     def test_partial_robot_config_empty_name(self):

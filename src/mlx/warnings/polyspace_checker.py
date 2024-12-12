@@ -14,10 +14,11 @@ from .warnings_checker import WarningsChecker
 class PolyspaceChecker(WarningsChecker):
     name = 'polyspace'
     checkers = []
+    logging_fmt = "{checker_name}: {column_info:<40} | {message}"
 
-    def __init__(self, verbose):
+    def __init__(self):
         '''Constructor to set the default code quality description template to "Polyspace: $check"'''
-        super().__init__(verbose)
+        super().__init__()
         self._cq_description_template = Template('Polyspace: $check')
 
     @property
@@ -26,14 +27,6 @@ class PolyspaceChecker(WarningsChecker):
         for checker in self.checkers:
             self._cq_findings.extend(checker.cq_findings)
         return self._cq_findings
-
-    @property
-    def counted_warnings(self):
-        '''List[str]: list of counted warnings'''
-        all_counted_warnings = []
-        for checker in self.checkers:
-            all_counted_warnings.extend(checker.counted_warnings)
-        return all_counted_warnings
 
     @property
     def cq_description_template(self):
@@ -116,11 +109,10 @@ class PolyspaceChecker(WarningsChecker):
         '''
         count = 0
         for checker in self.checkers:
-            padded_string = [f"{string:<30}" for string in [f"family {checker.family_value!r} ",
-                                                            f"{checker.column_name}: {checker.check_value} "]]
-            count += checker.return_check_limits("".join(padded_string))
+            extra = {"column_info": f"{checker.family_value}: {checker.column_name}: {checker.check_value}"}
+            count += checker.return_check_limits(extra)
         if count:
-            print(f"Returning error code {count}.")
+            print(f"{repr(self)}: Returning error code {count}.")
         return count
 
     def parse_config(self, config):
@@ -136,6 +128,7 @@ class PolyspaceChecker(WarningsChecker):
             {\n    <column-name>: <value_to_check>,\n    min: <number>,\n    max: <number>\n}
         """
         self.checkers = []
+        padding = 0
         for family_value, data in config.items():
             if family_value == "enabled":
                 continue
@@ -154,7 +147,8 @@ class PolyspaceChecker(WarningsChecker):
                         continue
                     column_name = key.lower()
                     check_value = value.lower()
-                    checker = PolyspaceFamilyChecker(family_value, column_name, check_value, verbose=self.verbose)
+                    padding = max(padding, len(f"{family_value}: {column_name}: {check_value}"))
+                    checker = PolyspaceFamilyChecker(family_value, column_name, check_value)
                     checker.parse_config(check)
                     self.checkers.append(checker)
                 if not (column_name and check_value):
@@ -171,9 +165,17 @@ class PolyspaceChecker(WarningsChecker):
             checker.cq_description_template = self.cq_description_template
             checker.cq_default_path = self.cq_default_path
 
+        self.logging_fmt = self.logging_fmt.replace("40", f"{padding}")
+        new_format = logging.Formatter(fmt=self.logging_fmt, style="{")
+        for handler in self.logger.handlers:
+            handler.setFormatter(new_format)
+        for handler in self.output_logger.handlers:
+            handler.setFormatter(new_format)
+
 
 class PolyspaceFamilyChecker(WarningsChecker):
     name = 'polyspace'
+    subchecker = True
     code_quality_severity = {
         "impact: high": "critical",
         "impact: medium": "major",
@@ -182,7 +184,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
         "orange": "major",
     }
 
-    def __init__(self, family_value, column_name, check_value, **kwargs):
+    def __init__(self, family_value, column_name, check_value):
         """Initialize the PolyspaceFamilyChecker
 
         Args:
@@ -190,10 +192,12 @@ class PolyspaceFamilyChecker(WarningsChecker):
             column_name (str): The name of the column
             check_value (str): The value to check in the column
         """
-        super().__init__(**kwargs)
+        super().__init__()
         self.family_value = family_value
         self.column_name = column_name
         self.check_value = check_value
+        self.logger = logging.getLogger(self.name)
+        self.output_logger = logging.getLogger(f"{self.name}.output")
 
     @property
     def cq_description_template(self):
@@ -236,16 +240,17 @@ class PolyspaceFamilyChecker(WarningsChecker):
             content (dict): The row of the TSV file
         '''
         if content[self.column_name].lower() == self.check_value:
+            extra = {"checker_name": repr(self),
+                     "column_info": f"{self.family_value}: {self.column_name}: {self.check_value}",}
             if content["status"].lower() in ["not a defect", "justified"]:
-                logging.info(f"Excluded row {content!r} because the status is 'Not a defect' or 'Justified'")
+                self.logger.info(f"Excluded defect with ID {content.get('id', None)!r} because the status is "
+                                 "'Not a defect' or 'Justified'",
+                                 extra=extra)
             else:
                 tab_sep_string = "\t".join(content.values())
-                if not self._is_excluded(tab_sep_string):
+                if not self._is_excluded(tab_sep_string, extra=extra):
                     self.count = self.count + 1
-                    self.counted_warnings.append('family: {} -> {}: {}'.format(
-                        self.family_value,
-                        self.column_name,
-                        self.check_value
-                    ))
+                    self.output_logger.debug(f"ID {content.get('id', None)!r}",
+                                             extra=extra)
                     if self.cq_enabled and content["color"].lower() != "green":
                         self.add_code_quality_finding(content)

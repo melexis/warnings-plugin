@@ -12,24 +12,13 @@ from .warnings_checker import WarningsChecker
 
 class RobotChecker(WarningsChecker):
     name = 'robot'
+    logging_fmt = "{checker_name}: {suite_name:<20} {message:>60}"
 
-    def __init__(self, verbose=False):
-        ''' Constructor
-
-        Args:
-            verbose (bool): Enable/disable verbose logging
-        '''
-        super().__init__(verbose)
+    def __init__(self):
+        ''' Constructor '''
+        super().__init__()
         self.checkers = []
         self.allow_unconfigured = True
-
-    @property
-    def counted_warnings(self):
-        '''List[str]: list of counted warnings'''
-        all_counted_warnings = []
-        for checker in self.checkers:
-            all_counted_warnings.extend(checker.counted_warnings)
-        return all_counted_warnings
 
     @property
     def minimum(self):
@@ -103,41 +92,45 @@ class RobotChecker(WarningsChecker):
         count = 0
         for checker in self.checkers:
             if checker.suite_name:
-                string = f"test suite {checker.suite_name!r}"
-                padded_string = f"{string:<30}"
-                count += checker.return_check_limits(padded_string)
+                extra = {
+                    "suite_name": f"test suite {checker.suite_name!r}",
+                }
+                count += checker.return_check_limits(extra)
             else:
-                string = "all test suites"
-                count += checker.return_check_limits(f"{string:<30}")
+                extra = {
+                    "suite_name": "all test suites",
+                }
+                count += checker.return_check_limits(extra)
         if count:
-            print(f"Returning error code {count}.")
+            print(f"{repr(self)}: Returning error code {count}.")
         return count
 
     def parse_config(self, config):
         self.allow_unconfigured = config.get('allow_unconfigured', True)
         for suite_config in config['suites']:
-            checker = RobotSuiteChecker(suite_config['name'],
-                                        check_suite_name=config.get('check_suite_names', True),
-                                        verbose=self.verbose)
+            checker = RobotSuiteChecker(suite_config['name'], check_suite_name=config.get('check_suite_names', True),)
             checker.parse_config(suite_config)
             self.checkers.append(checker)
 
 
 class RobotSuiteChecker(JUnitChecker):
     name = 'robot'
+    subchecker = True
 
-    def __init__(self, suite_name, check_suite_name=False, **kwargs):
+    def __init__(self, suite_name, check_suite_name=False):
         ''' Constructor
 
         Args:
             name (str): Name of the test suite to check the results of
             check_suite_name (bool): Whether to raise an error when no test in suite with given name is found
         '''
-        super().__init__(**kwargs)
+        super().__init__()
         self.suite_name = suite_name
         self.check_suite_name = check_suite_name
         self.is_valid_suite_name = False
         self.ignored_testsuites = set()
+        self.logger = logging.getLogger(self.name)
+        self.output_logger = logging.getLogger(f"{self.name}.output")
 
     def _check_testcase(self, testcase):
         """ Handles the check of a test case element by checking if the result is a failure/error.
@@ -170,5 +163,9 @@ class RobotSuiteChecker(JUnitChecker):
         """
         super().check(content)
         if not self.is_valid_suite_name and self.check_suite_name:
-            logging.error(f'No suite with name {self.suite_name!r} found. Returning error code -1.')
+            self.logger.error(f'No suite with name {self.suite_name!r} found. Returning error code -1.',
+                              extra={
+                                  "checker_name": repr(self),
+                                  "suite_name": self.suite_name
+                              })
             sys.exit(-1)
