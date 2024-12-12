@@ -314,9 +314,13 @@ of all test suites in the file are taken into account. If you only care about
 one specific test suite, you can use ``--name <<suite name>>``. If this suite
 name doesn't exist in the input file, an error is raised. The warning
 limits can be configured for multiple test suites individually by means of a
-`configuration file to pass options`_. If the setting ``"check_suite_names"``
-is false, no error is raised when a suite name doesn't exist in the
-input file. When this setting is missing, the default value ``true`` is used.
+`configuration file to pass options`_, which supports additional configuration parameters:
+
+- ``"check_suite_names"``, which is ``true`` by default, raises an error when a configured suite name
+  does not exist in the input XML file. This helps you verify that all of the test suites in your configuration file
+  were passed to the `robot` CLI.
+- ``"allow_unconfigured"``, which is ``true`` by default, raises an error when a suite name in the input
+  XML file is missing from your configuration file. Note: a configuration value ``""`` matches all suite names.
 
 .. code-block:: bash
 
