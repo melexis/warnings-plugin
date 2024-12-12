@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 from string import Template
@@ -17,6 +18,8 @@ xmlrunner_pattern = re.compile(PYTHON_XMLRUNNER_REGEX)
 
 COVERITY_WARNING_REGEX = r"(?P<path>[\w\.\\/\- ]+)(:(?P<line>\d+)(:(?P<column>\d+))?)?: ?CID (?P<cid>\d+) \(#(?P<curr>\d+) of (?P<max>\d+)\): (?P<checker>.+): (?P<classification>[\w ]+),.+"
 coverity_pattern = re.compile(COVERITY_WARNING_REGEX)
+
+LOGGER = logging.getLogger("mlx.warnings.warnings")
 
 
 class RegexChecker(WarningsChecker):
@@ -45,8 +48,9 @@ class RegexChecker(WarningsChecker):
             if self._is_excluded(match_string):
                 continue
             self.count += 1
-            self.counted_warnings.append(match_string)
-            self.print_when_verbose(match_string)
+            extra = {"checker_name": self.name_repr}
+            self.output_logger.debug(match_string, extra=extra)
+            self.logger.info(match_string, extra=extra)
             if self.cq_enabled:
                 self.add_code_quality_finding(match)
 
@@ -74,25 +78,18 @@ class RegexChecker(WarningsChecker):
 class CoverityChecker(RegexChecker):
     name = 'coverity'
     pattern = coverity_pattern
+    logging_fmt = "{checker_name}: {classification:<14} | {message}"
 
-    def __init__(self, verbose=False):
-        super().__init__(verbose)
+    def __init__(self, verbose=False, output=None):
+        super().__init__(verbose=verbose, output=output)
         self._cq_description_template = Template('Coverity: CID $cid: $checker')
         self.checkers = {
-            "unclassified": CoverityClassificationChecker("unclassified", verbose=self.verbose),
-            "pending": CoverityClassificationChecker("pending", verbose=self.verbose),
-            "bug": CoverityClassificationChecker("bug", verbose=self.verbose),
-            "intentional": CoverityClassificationChecker("intentional", verbose=self.verbose),
-            "false positive": CoverityClassificationChecker("false positive", verbose=self.verbose),
+            "unclassified": CoverityClassificationChecker("unclassified"),
+            "pending": CoverityClassificationChecker("pending"),
+            "bug": CoverityClassificationChecker("bug"),
+            "intentional": CoverityClassificationChecker("intentional"),
+            "false positive": CoverityClassificationChecker("false positive"),
         }
-
-    @property
-    def counted_warnings(self):
-        ''' List[str]: list of counted warnings'''
-        all_counted_warnings = []
-        for checker in self.checkers.values():
-            all_counted_warnings.extend(checker.counted_warnings)
-        return all_counted_warnings
 
     @property
     def cq_findings(self):
@@ -130,9 +127,12 @@ class CoverityChecker(RegexChecker):
         '''
         count = 0
         for checker in self.checkers.values():
-            print(f"Counted failures for classification {checker.classification!r}")
-            count += checker.return_check_limits()
-        print(f"total warnings = {count}")
+            extra = {
+                "classification": checker.classification,
+            }
+            count += checker.return_check_limits(extra)
+        if count:
+            print(f"{self.name_repr}: Returning error code {count}.")
         return count
 
     def check(self, content):
@@ -153,7 +153,7 @@ class CoverityChecker(RegexChecker):
                 checker.cq_default_path = self.cq_default_path
                 checker.check(match)
             else:
-                print(f"WARNING: Unrecognized classification {match.group('classification')!r}")
+                LOGGER.warning(f"{self.name_repr}: Unrecognized classification {match.group('classification')!r}")
 
     def parse_config(self, config):
         """Process configuration
@@ -173,10 +173,12 @@ class CoverityChecker(RegexChecker):
             if classification_key in self.checkers:
                 self.checkers[classification_key].parse_config(checker_config)
             else:
-                print(f"WARNING: Unrecognized classification {classification!r}")
+                LOGGER.warning(f"{self.name_repr}: Unrecognized classification {classification!r}")
 
 
 class CoverityClassificationChecker(WarningsChecker):
+    name = 'coverity'
+    subchecker = True
     SEVERITY_MAP = {
         'false positive': 'info',
         'intentional': 'info',
@@ -185,14 +187,16 @@ class CoverityClassificationChecker(WarningsChecker):
         'pending': 'critical',
     }
 
-    def __init__(self, classification, **kwargs):
+    def __init__(self, classification):
         """Initialize the CoverityClassificationChecker:
 
         Args:
             classification (str): The coverity classification
         """
-        super().__init__(**kwargs)
+        super().__init__()
         self.classification = classification
+        self.logger = logging.getLogger(self.name)
+        self.output_logger = logging.getLogger(f"{self.name}.output")
 
     @property
     def cq_description_template(self):
@@ -202,14 +206,6 @@ class CoverityClassificationChecker(WarningsChecker):
     @cq_description_template.setter
     def cq_description_template(self, template_obj):
         self._cq_description_template = template_obj
-
-    def return_count(self):
-        ''' Getter function for the amount of warnings found
-
-        Returns:
-            int: Number of warnings found
-        '''
-        return self.count
 
     def add_code_quality_finding(self, match):
         '''Add code quality finding
@@ -244,11 +240,13 @@ class CoverityClassificationChecker(WarningsChecker):
         Args:
             content (re.Match): The regex match
         '''
+        extra={"checker_name": self.name_repr, "classification": self.classification}
         match_string = content.group(0).strip()
-        if not self._is_excluded(match_string) and (content.group('curr') == content.group('max')):
+        if not self._is_excluded(match_string, extra) and (content.group('curr') == content.group('max')):
             self.count += 1
-            self.counted_warnings.append(match_string)
-            self.print_when_verbose(match_string)
+            self.output_logger.debug(match_string,
+                          extra=extra)
+            self.logger.info(match_string, extra=extra)
             if self.cq_enabled:
                 self.add_code_quality_finding(content)
 

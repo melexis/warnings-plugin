@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 # SPDX-License-Identifier: Apache-2.0
 
 import argparse
 import errno
 import glob
 import json
+import logging
+import os
 import subprocess
 import sys
 from importlib.metadata import distribution
@@ -15,55 +16,49 @@ from ruamel.yaml import YAML
 
 from .exceptions import WarningsConfigError
 from .junit_checker import JUnitChecker
+from .polyspace_checker import PolyspaceChecker
 from .regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker
 from .robot_checker import RobotChecker
-from .polyspace_checker import PolyspaceChecker
 
 __version__ = distribution('mlx.warnings').version
 
+LOGGER = logging.getLogger(__name__)
+logging.basicConfig(format="%(levelname)s: %(message)s")
 
 class WarningsPlugin:
 
-    def __init__(self, verbose=False, config_file=None, cq_enabled=False):
+    def __init__(self, cq_enabled=False):
         '''
         Function for initializing the parsers
 
         Args:
-            verbose (bool): optional - enable verbose logging
-            config_file (Path): optional - configuration file with setup
             cq_enabled (bool): optional - enable generation of Code Quality report
         '''
         self.activated_checkers = {}
-        self.verbose = verbose
         self.cq_enabled = cq_enabled
-        self.public_checkers = [SphinxChecker(self.verbose), DoxyChecker(self.verbose), JUnitChecker(self.verbose),
-                                XMLRunnerChecker(self.verbose), CoverityChecker(self.verbose),
-                                RobotChecker(self.verbose), PolyspaceChecker(self.verbose)]
-
-        if config_file:
-            with open(config_file, 'r', encoding='utf-8') as open_file:
-                if config_file.suffix.lower().startswith('.y'):
-                    config = YAML().load(open_file)
-                else:
-                    config = json.load(open_file)
-            self.config_parser(config)
-
+        self.public_checkers = (SphinxChecker, DoxyChecker, JUnitChecker, XMLRunnerChecker, CoverityChecker,
+                                RobotChecker, PolyspaceChecker)
         self._minimum = 0
         self._maximum = 0
         self.count = 0
         self.printout = False
 
-    def activate_checker(self, checker):
+    def activate_checker(self, checker_type, *args):
         '''
         Activate additional checkers after initialization
 
         Args:
-            checker (WarningsChecker): checker object
+            checker_type (WarningsChecker): checker class
+
+        Return:
+            WarningsChecker: activated checker object
         '''
+        checker = checker_type(*args)
         checker.cq_enabled = self.cq_enabled and checker.name in ('doxygen', 'sphinx', 'xmlrunner', 'polyspace', 'coverity')
         self.activated_checkers[checker.name] = checker
+        return checker
 
-    def activate_checker_name(self, name):
+    def activate_checker_name(self, name, *args):
         '''
         Activates checker by name
 
@@ -73,12 +68,12 @@ class WarningsPlugin:
         Returns:
             WarningsChecker: activated checker object, or None when no checker with the given name exists
         '''
-        for checker in self.public_checkers:
-            if checker.name == name:
-                self.activate_checker(checker)
+        for checker_type in self.public_checkers:
+            if checker_type.name == name:
+                checker = self.activate_checker(checker_type, *args)
                 return checker
         else:
-            print("Checker %s does not exist" % name)
+            LOGGER.error(f"Checker {name} does not exist")
 
     def get_checker(self, name):
         ''' Get checker by name
@@ -100,7 +95,7 @@ class WarningsPlugin:
         if self.printout:
             print(content)
         if not self.activated_checkers:
-            print("No checkers activated. Please use activate_checker function")
+            LOGGER.error("No checkers activated. Please use activate_checker function")
         else:
             for checker in self.activated_checkers.values():
                 if checker.name == "polyspace":
@@ -116,7 +111,7 @@ class WarningsPlugin:
             content (_io.TextIOWrapper): The open file to parse
         '''
         if not self.activated_checkers:
-            print("No checkers activated. Please use activate_checker function")
+            LOGGER.error("No checkers activated. Please use activate_checker function")
         elif "polyspace" in self.activated_checkers:
             if len(self.activated_checkers) > 1:
                 raise WarningsConfigError("Polyspace checker cannot be combined with other warnings checkers")
@@ -199,33 +194,32 @@ class WarningsPlugin:
         '''
         self.printout = printout
 
-    def config_parser(self, config):
+    def config_parser(self, config, verbose=False, output=None):
         ''' Parsing configuration dict extracted by previously opened JSON or YAML file
 
         Args:
-            config (dict): Content of configuration file
+            config (dict/Path): Content or path of configuration file
+            verbose (bool, optional): enable verbose logging
+            output (Path/None, optional): path to the output file
         '''
+        if isinstance(config, Path):
+            with open(config, encoding='utf-8') as open_file:
+                if config.suffix.lower().startswith('.y'):
+                    config = YAML().load(open_file)
+                else:
+                    config = json.load(open_file)
+
         # activate checker
-        for checker in self.public_checkers:
-            try:
-                checker_config = config[checker.name]
-                if bool(checker_config['enabled']):
-                    self.activate_checker(checker)
-                    checker.parse_config(checker_config)
-                    print("Config parsing for {name} completed".format(name=checker.name))
-            except KeyError as err:
-                print("Incomplete config. Missing: {key}".format(key=err))
-
-    def write_counted_warnings(self, out_file):
-        ''' Writes counted warnings to the given file
-
-        Args:
-            out_file (str): Location for the output file
-        '''
-        Path(out_file).parent.mkdir(parents=True, exist_ok=True)
-        with open(out_file, 'w', encoding='utf-8', newline='\n') as open_file:
-            for checker in self.activated_checkers.values():
-                open_file.write("\n".join(checker.counted_warnings) + "\n")
+        for checker_type in self.public_checkers:
+            if checker_type.name in config:
+                checker_config = config[checker_type.name]
+                try:
+                    if bool(checker_config['enabled']):
+                        checker = self.activate_checker(checker_type, verbose, output)
+                        checker.parse_config(checker_config)
+                        LOGGER.info(f"{checker.name_repr}: Config parsing completed")
+                except KeyError as err:
+                    raise WarningsConfigError(f"Incomplete config. Missing: {err}") from err
 
     def write_code_quality_report(self, out_file):
         ''' Generates the Code Quality report artifact as a JSON file that implements a subset of the Code Climate spec
@@ -265,7 +259,7 @@ def warnings_wrapper(args):
                         help='Config file in JSON or YAML format provides toggle of checkers and their limits')
     group2.add_argument('--include-sphinx-deprecation', dest='include_sphinx_deprecation', action='store_true',
                         help="Sphinx checker will include warnings matching (RemovedInSphinx\\d+Warning) regex")
-    parser.add_argument('-o', '--output',
+    parser.add_argument('-o', '--output', type=Path,
                         help='Output file that contains all counted warnings')
     parser.add_argument('-C', '--code-quality',
                         help='Output Code Quality report artifact for GitLab CI')
@@ -274,42 +268,50 @@ def warnings_wrapper(args):
                         help='Treat program arguments as command to execute to obtain data')
     parser.add_argument('--ignore-retval', dest='ignore', action='store_true',
                         help='Ignore return value of the executed command')
-    parser.add_argument('--version', action='version', version='%(prog)s {version}'.format(version=__version__))
+    parser.add_argument('--version', action='version', version=f'%(prog)s {__version__}')
     parser.add_argument('logfile', nargs='+', help='Logfile (or command) that might contain warnings')
     parser.add_argument('flags', nargs=argparse.REMAINDER,
                         help='Possible not-used flags from above are considered as command flags')
 
     args = parser.parse_args(args)
     code_quality_enabled = bool(args.code_quality)
+    if args.output is not None and args.output.exists():
+            os.remove(args.output)
+
+    if args.verbose:
+        LOGGER.setLevel(logging.INFO)
+
+    checker_options = [args.verbose, args.output]
+    warnings = WarningsPlugin(cq_enabled=code_quality_enabled)
     # Read config file
     if args.configfile is not None:
         checker_flags = args.sphinx or args.doxygen or args.junit or args.coverity or args.xmlrunner or args.robot
         warning_args = args.maxwarnings or args.minwarnings or args.exact_warnings
         if checker_flags or warning_args:
-            print("Configfile cannot be provided with other arguments")
+            LOGGER.error("Configfile cannot be provided with other arguments")
             sys.exit(2)
-        warnings = WarningsPlugin(verbose=args.verbose, config_file=args.configfile, cq_enabled=code_quality_enabled)
+        warnings.config_parser(args.configfile, *checker_options)
     else:
-        warnings = WarningsPlugin(verbose=args.verbose, cq_enabled=code_quality_enabled)
         if args.sphinx:
-            warnings.activate_checker_name('sphinx')
+            warnings.activate_checker_name('sphinx', *checker_options)
         if args.doxygen:
-            warnings.activate_checker_name('doxygen')
+            warnings.activate_checker_name('doxygen', *checker_options)
         if args.junit:
-            warnings.activate_checker_name('junit')
+            warnings.activate_checker_name('junit', *checker_options)
         if args.xmlrunner:
-            warnings.activate_checker_name('xmlrunner')
+            warnings.activate_checker_name('xmlrunner', *checker_options)
         if args.coverity:
-            warnings.activate_checker_name('coverity')
+            warnings.activate_checker_name('coverity', *checker_options)
         if args.robot:
-            robot_checker = warnings.activate_checker_name('robot')
-            robot_checker.parse_config({
-                'suites': [{'name': args.name, 'min': 0, 'max': 0}],
-                'check_suite_names': True,
-            })
+            robot_checker = warnings.activate_checker_name('robot', *checker_options)
+            if robot_checker is not None:
+                robot_checker.parse_config({
+                    'suites': [{'name': args.name, 'min': 0, 'max': 0}],
+                    'check_suite_names': True,
+                })
         if args.exact_warnings:
             if args.maxwarnings | args.minwarnings:
-                print("expected-warnings cannot be provided with maxwarnings or minwarnings")
+                LOGGER.error("expected-warnings cannot be provided with maxwarnings or minwarnings")
                 sys.exit(2)
             warnings.configure_maximum(args.exact_warnings)
             warnings.configure_minimum(args.exact_warnings)
@@ -333,15 +335,13 @@ def warnings_wrapper(args):
             return retval
     else:
         if args.flags:
-            print(f"WARNING: Some keyword arguments have been ignored because they followed positional arguments: "
-                  f"{' '.join(args.flags)!r}")
+            LOGGER.warning(f"Some keyword arguments have been ignored because they followed positional arguments: "
+                            f"{' '.join(args.flags)!r}")
         retval = warnings_logfile(warnings, args.logfile)
         if retval != 0:
             return retval
 
     warnings.return_count()
-    if args.output:
-        warnings.write_counted_warnings(args.output)
     if args.code_quality:
         warnings.write_code_quality_report(args.code_quality)
     return warnings.return_check_limits()
@@ -385,7 +385,7 @@ def warnings_command(warnings, cmd):
         return proc.returncode
     except OSError as err:
         if err.errno == errno.ENOENT:
-            print("It seems like program " + str(cmd) + " is not installed.")
+            LOGGER.error("It seems like program " + str(cmd) + " is not installed.")
         raise
 
 
@@ -409,10 +409,10 @@ def warnings_logfile(warnings, log):
     for file_wildcard in log:
         if glob.glob(file_wildcard):
             for logfile in glob.glob(file_wildcard):
-                with open(logfile, "r") as file:
+                with open(logfile) as file:
                     warnings.check_logfile(file)
         else:
-            print("FILE: %s does not exist" % file_wildcard)
+            LOGGER.error(f"FILE: {file_wildcard} does not exist")
             return 1
 
     return 0

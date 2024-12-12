@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
+import logging
 import sys
 
 from junitparser import Error, Failure
@@ -11,14 +12,7 @@ from .warnings_checker import WarningsChecker
 class RobotChecker(WarningsChecker):
     name = 'robot'
     checkers = []
-
-    @property
-    def counted_warnings(self):
-        '''List[str]: list of counted warnings'''
-        all_counted_warnings = []
-        for checker in self.checkers:
-            all_counted_warnings.extend(checker.counted_warnings)
-        return all_counted_warnings
+    logging_fmt = "{checker_name}: {suite_name:<20} {message:>60}"
 
     @property
     def minimum(self):
@@ -83,47 +77,46 @@ class RobotChecker(WarningsChecker):
         '''
         count = 0
         for checker in self.checkers:
-            if checker.name:
-                print('Counted failures for test suite {!r}.'.format(checker.name))
+            if checker.suite_name:
+                extra = {
+                    "suite_name": f"test suite {checker.suite_name!r}",
+                }
+                count += checker.return_check_limits(extra)
             else:
-                print('Counted failures for all test suites.')
-            count += checker.return_check_limits()
+                extra = {
+                    "suite_name": "all test suites",
+                }
+                count += checker.return_check_limits(extra)
+        if count:
+            print(f"{self.name_repr}: Returning error code {count}.")
         return count
 
     def parse_config(self, config):
         self.checkers = []
         check_suite_name = config.get('check_suite_names', True)
         for suite_config in config['suites']:
-            checker = RobotSuiteChecker(suite_config['name'], check_suite_name=check_suite_name,
-                                        verbose=self.verbose)
+            checker = RobotSuiteChecker(suite_config['name'], check_suite_name=check_suite_name)
             checker.parse_config(suite_config)
             self.checkers.append(checker)
 
 
 class RobotSuiteChecker(JUnitChecker):
-    def __init__(self, name, check_suite_name=False, **kwargs):
+    name = 'robot'
+    subchecker = True
+
+    def __init__(self, suite_name, check_suite_name=False):
         ''' Constructor
 
         Args:
             name (str): Name of the test suite to check the results of
             check_suite_name (bool): Whether to raise an error when no test in suite with given name is found
         '''
-        super().__init__(**kwargs)
-        self.name = name
+        super().__init__()
+        self.suite_name = suite_name
         self.check_suite_name = check_suite_name
         self.is_valid_suite_name = False
-
-    def return_count(self):
-        ''' Getter function for the amount of warnings found
-
-        Returns:
-            int: Number of warnings found
-        '''
-        msg = "{} warnings found".format(self.count)
-        if self.name:
-            msg = "Suite {!r}: {}".format(self.name, msg)
-        print(msg)
-        return self.count
+        self.logger = logging.getLogger(self.name)
+        self.output_logger = logging.getLogger(f"{self.name}.output")
 
     def _check_testcase(self, testcase):
         """ Handles the check of a test case element by checking if the result is a failure/error.
@@ -137,10 +130,10 @@ class RobotSuiteChecker(JUnitChecker):
         Returns:
             int: 1 if a failure/error is to be subtracted from the final count, 0 otherwise
         """
-        if testcase.classname.endswith(self.name):
+        if testcase.classname.endswith(self.suite_name):
             self.is_valid_suite_name = True
             return super()._check_testcase(testcase)
-        return int(self.name and isinstance(testcase.result, (Failure, Error)))
+        return int(self.suite_name and isinstance(testcase.result, (Failure, Error)))
 
     def check(self, content):
         """ Function for counting the number of JUnit failures in a specific text
@@ -151,9 +144,13 @@ class RobotSuiteChecker(JUnitChecker):
             content (str): The content to parse
 
         Raises:
-            SystemExit: No suite with name ``self.name`` found. Returning error code -1.
+            SystemExit: No suite with name ``self.suite_name`` found. Returning error code -1.
         """
         super().check(content)
         if not self.is_valid_suite_name and self.check_suite_name:
-            print('ERROR: No suite with name {!r} found. Returning error code -1.'.format(self.name))
+            self.logger.error(f'No suite with name {self.suite_name!r} found. Returning error code -1.',
+                              extra={
+                                  "checker_name": self.name_repr,
+                                  "suite_name": self.suite_name
+                              })
             sys.exit(-1)
