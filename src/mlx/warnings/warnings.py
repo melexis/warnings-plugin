@@ -27,64 +27,50 @@ logging.basicConfig(format="%(levelname)s: %(message)s")
 
 class WarningsPlugin:
 
-    def __init__(self, verbose=False, config_file=None, cq_enabled=False, output=None):
+    def __init__(self, cq_enabled=False):
         '''
         Function for initializing the parsers
 
         Args:
-            verbose (bool): optional - enable verbose logging
-            config_file (Path): optional - configuration file with setup
             cq_enabled (bool): optional - enable generation of Code Quality report
-            output (Path/None): optional - path to the output file
         '''
-        if verbose:
-            LOGGER.setLevel(logging.INFO)
         self.activated_checkers = {}
         self.cq_enabled = cq_enabled
-        self.public_checkers = [SphinxChecker(), DoxyChecker(), JUnitChecker(), XMLRunnerChecker(), CoverityChecker(),
-                                RobotChecker(), PolyspaceChecker()]
-
-        if config_file:
-            with open(config_file, encoding='utf-8') as open_file:
-                if config_file.suffix.lower().startswith('.y'):
-                    config = YAML().load(open_file)
-                else:
-                    config = json.load(open_file)
-            self.config_parser(config, verbose=verbose, output=output)
-
+        self.public_checkers = (SphinxChecker, DoxyChecker, JUnitChecker, XMLRunnerChecker, CoverityChecker,
+                                RobotChecker, PolyspaceChecker)
         self._minimum = 0
         self._maximum = 0
         self.count = 0
         self.printout = False
 
-    def activate_checker(self, checker, verbose, output):
+    def activate_checker(self, checker_type, *args):
         '''
         Activate additional checkers after initialization
 
         Args:
-            checker (WarningsChecker): checker object
-            verbose (bool): enable verbose logging
-            output (Path/None): path to the output file
+            checker_type (WarningsChecker): checker class
+
+        Return:
+            WarningsChecker: activated checker object
         '''
+        checker = checker_type(*args)
         checker.cq_enabled = self.cq_enabled and checker.name in ('doxygen', 'sphinx', 'xmlrunner', 'polyspace', 'coverity')
         self.activated_checkers[checker.name] = checker
-        checker.initialize_loggers(verbose, output)
+        return checker
 
-    def activate_checker_name(self, name, verbose, output):
+    def activate_checker_name(self, name, *args):
         '''
         Activates checker by name
 
         Args:
             name (str): checker name
-            verbose (bool): enable verbose logging
-            output (Path/None): path to the output file
 
         Returns:
             WarningsChecker: activated checker object, or None when no checker with the given name exists
         '''
-        for checker in self.public_checkers:
-            if checker.name == name:
-                self.activate_checker(checker, verbose, output)
+        for checker_type in self.public_checkers:
+            if checker_type.name == name:
+                checker = self.activate_checker(checker_type, *args)
                 return checker
         else:
             LOGGER.error(f"Checker {name} does not exist")
@@ -212,19 +198,26 @@ class WarningsPlugin:
         ''' Parsing configuration dict extracted by previously opened JSON or YAML file
 
         Args:
-            config (dict): Content of configuration file
+            config (dict/Path): Content or path of configuration file
             verbose (bool): enable verbose logging
             output (Path/None): path to the output file
         '''
+        if isinstance(config, Path):
+            with open(config, encoding='utf-8') as open_file:
+                if config.suffix.lower().startswith('.y'):
+                    config = YAML().load(open_file)
+                else:
+                    config = json.load(open_file)
+
         # activate checker
-        for checker in self.public_checkers:
-            if checker.name in config:
-                checker_config = config[checker.name]
+        for checker_type in self.public_checkers:
+            if checker_type.name in config:
+                checker_config = config[checker_type.name]
                 try:
                     if bool(checker_config['enabled']):
-                        self.activate_checker(checker, verbose, output)
+                        checker = self.activate_checker(checker_type, verbose, output)
                         checker.parse_config(checker_config)
-                        LOGGER.info(f"Config parsing for {checker.name} completed")
+                        LOGGER.info(f"{checker.name_repr}: Config parsing completed")
                 except KeyError as err:
                     raise WarningsConfigError(f"Incomplete config. Missing: {err}") from err
 
@@ -288,6 +281,8 @@ def warnings_wrapper(args):
     if args.verbose:
         LOGGER.setLevel(logging.INFO)
 
+    checker_options = [args.verbose, args.output]
+    warnings = WarningsPlugin(cq_enabled=code_quality_enabled)
     # Read config file
     if args.configfile is not None:
         checker_flags = args.sphinx or args.doxygen or args.junit or args.coverity or args.xmlrunner or args.robot
@@ -295,26 +290,25 @@ def warnings_wrapper(args):
         if checker_flags or warning_args:
             LOGGER.error("Configfile cannot be provided with other arguments")
             sys.exit(2)
-        warnings = WarningsPlugin(verbose=args.verbose, config_file=args.configfile, cq_enabled=code_quality_enabled,
-                                  output=args.output)
+        warnings.config_parser(args.configfile, *checker_options)
     else:
-        warnings = WarningsPlugin(verbose=args.verbose, cq_enabled=code_quality_enabled, output=args.output)
         if args.sphinx:
-            warnings.activate_checker_name('sphinx', verbose=args.verbose, output=args.output)
+            warnings.activate_checker_name('sphinx', *checker_options)
         if args.doxygen:
-            warnings.activate_checker_name('doxygen', verbose=args.verbose, output=args.output)
+            warnings.activate_checker_name('doxygen', *checker_options)
         if args.junit:
-            warnings.activate_checker_name('junit', verbose=args.verbose, output=args.output)
+            warnings.activate_checker_name('junit', *checker_options)
         if args.xmlrunner:
-            warnings.activate_checker_name('xmlrunner', verbose=args.verbose, output=args.output)
+            warnings.activate_checker_name('xmlrunner', *checker_options)
         if args.coverity:
-            warnings.activate_checker_name('coverity', verbose=args.verbose, output=args.output)
+            warnings.activate_checker_name('coverity', *checker_options)
         if args.robot:
-            robot_checker = warnings.activate_checker_name('robot', verbose=args.verbose, output=args.output)
-            robot_checker.parse_config({
-                'suites': [{'name': args.name, 'min': 0, 'max': 0}],
-                'check_suite_names': True,
-            })
+            robot_checker = warnings.activate_checker_name('robot', *checker_options)
+            if robot_checker is not None:
+                robot_checker.parse_config({
+                    'suites': [{'name': args.name, 'min': 0, 'max': 0}],
+                    'check_suite_names': True,
+                })
         if args.exact_warnings:
             if args.maxwarnings | args.minwarnings:
                 LOGGER.error("expected-warnings cannot be provided with maxwarnings or minwarnings")

@@ -80,8 +80,8 @@ class CoverityChecker(RegexChecker):
     pattern = coverity_pattern
     logging_fmt = "{checker_name}: {classification:<14} | {message}"
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, verbose=False, output=None):
+        super().__init__(verbose=verbose, output=output)
         self._cq_description_template = Template('Coverity: CID $cid: $checker')
         self.checkers = {
             "unclassified": CoverityClassificationChecker("unclassified"),

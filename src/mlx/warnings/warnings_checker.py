@@ -35,7 +35,13 @@ class WarningsChecker:
     subchecker = False
     logging_fmt = "{checker_name}: {message}"
 
-    def __init__(self):
+    def __init__(self, verbose=False, output=None):
+        """Constructor
+
+        Args:
+            verbose (bool, optional): Enable/disable verbose logging
+            output (Path/None, optional): The path to the output file
+        """
         self.count = 0
         self._minimum = 0
         self._maximum = 0
@@ -45,6 +51,25 @@ class WarningsChecker:
         self._cq_description_template = Template('$description')
         self.exclude_patterns = []
         self.include_patterns = []
+
+        if not self.subchecker:
+            self.logger = logging.getLogger(self.name)
+            self.logger.propagate = False  # Do not propagate to parent loggers
+            handler = logging.StreamHandler()
+            formatter = logging.Formatter(fmt=self.logging_fmt, style="{")
+            handler.setFormatter(formatter)
+            self.logger.addHandler(handler)
+            if verbose:
+                self.logger.setLevel(logging.INFO)
+
+            self.output_logger = logging.getLogger(f"{self.name}.output")
+            self.output_logger.propagate = False  # Do not propagate to parent loggers
+            if output is not None:
+                self.output_logger.setLevel(logging.DEBUG)
+                handler = logging.FileHandler(output, "a")
+                handler.setFormatter(formatter)
+                self.output_logger.addHandler(handler)
+
 
     @property
     def name_repr(self):
@@ -111,30 +136,6 @@ class WarningsChecker:
             content (str): The content to parse
         '''
         return
-
-    def initialize_loggers(self, verbose, output):
-        """Initialize the loggers
-
-        Args:
-            verbose (bool): Enable/disable verbose logging
-            output (Path/None): The path to the output file
-        """
-        self.logger = logging.getLogger(self.name)
-        self.logger.propagate = False  # Do not propagate to parent loggers
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter(fmt=self.logging_fmt, style="{")
-        handler.setFormatter(formatter)
-        self.logger.addHandler(handler)
-        if verbose:
-            self.logger.setLevel(logging.INFO)
-
-        self.output_logger = logging.getLogger(f"{self.name}.output")
-        self.output_logger.propagate = False  # Do not propagate to parent loggers
-        if output is not None:
-            self.output_logger.setLevel(logging.DEBUG)
-            handler = logging.FileHandler(output, "a")
-            handler.setFormatter(formatter)
-            self.output_logger.addHandler(handler)
 
     def add_patterns(self, regexes, pattern_container):
         ''' Adds regexes as patterns to the specified container

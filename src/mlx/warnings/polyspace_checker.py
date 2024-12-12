@@ -16,9 +16,9 @@ class PolyspaceChecker(WarningsChecker):
     checkers = []
     logging_fmt = "{checker_name}: {column_info:<40} | {message}"
 
-    def __init__(self):
+    def __init__(self, verbose=False, output=None):
         '''Constructor to set the default code quality description template to "Polyspace: $check"'''
-        super().__init__()
+        super().__init__(verbose=verbose, output=output)
         self._cq_description_template = Template('Polyspace: $check')
 
     @property
