@@ -25,6 +25,7 @@ __version__ = distribution('mlx.warnings').version
 LOGGER = logging.getLogger(__name__)
 logging.basicConfig(format="%(levelname)s: %(message)s")
 
+
 class WarningsPlugin:
 
     def __init__(self, cq_enabled=False):
@@ -276,7 +277,7 @@ def warnings_wrapper(args):
     args = parser.parse_args(args)
     code_quality_enabled = bool(args.code_quality)
     if args.output is not None and args.output.exists():
-            os.remove(args.output)
+        os.remove(args.output)
 
     if args.verbose:
         LOGGER.setLevel(logging.INFO)
@@ -336,7 +337,7 @@ def warnings_wrapper(args):
     else:
         if args.flags:
             LOGGER.warning(f"Some keyword arguments have been ignored because they followed positional arguments: "
-                            f"{' '.join(args.flags)!r}")
+                           f"{' '.join(args.flags)!r}")
         retval = warnings_logfile(warnings, args.logfile)
         if retval != 0:
             return retval

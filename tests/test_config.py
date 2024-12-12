@@ -50,7 +50,7 @@ class TestConfig(TestCase):
 
     def _helper_exclude(self, warnings):
         logger_name = "sphinx"
-        with self.assertLogs(logger=logger_name ,level="INFO") as verbose_output:
+        with self.assertLogs(logger=logger_name, level="INFO") as verbose_output:
             warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
             self.assertEqual(warnings.return_count(), 0)
             warnings.check('<testcase classname="dummy_class" name="dummy_name"><failure message="some random message from test case" /></testcase>')

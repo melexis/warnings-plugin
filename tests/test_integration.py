@@ -50,16 +50,16 @@ class TestIntegration(TestCase):
         self.assertEqual(2, ex.exception.code)
 
     def test_verbose(self):
-        with self.assertLogs(logger="junit" ,level="INFO") as fake_out:
+        with self.assertLogs(logger="junit", level="INFO") as fake_out:
             retval = warnings_wrapper(['--verbose', '--junit', 'tests/test_in/junit_single_fail.xml'])
         self.assertEqual(["INFO:junit:test_warn_plugin_single_fail.myfirstfai1ure",
-                         "WARNING:junit:number of warnings (1) is higher than the maximum limit (0). "
-                         "Returning error code 1."],
+                          "WARNING:junit:number of warnings (1) is higher than the maximum limit (0). "
+                          "Returning error code 1."],
                          fake_out.output)
         self.assertEqual(1, retval)
 
     def test_no_verbose(self):
-        with self.assertLogs(logger="junit" ,level="WARNING") as fake_out:
+        with self.assertLogs(logger="junit", level="WARNING") as fake_out:
             retval = warnings_wrapper(['--junit', 'tests/test_in/junit_single_fail.xml'])
         self.assertIn("WARNING:junit:number of warnings (1) is higher than the maximum limit (0). "
                       "Returning error code 1.",
@@ -197,7 +197,11 @@ class TestIntegration(TestCase):
         The input file contains 18 Sphinx warnings, but exactly 19 are required to pass.
         The number of warnings (18) must be returned as return code.
         '''
-        retval = warnings_wrapper(['--sphinx', '--exact-warnings', '19', 'tests/test_in/sphinx_traceability_output.txt'])
+        retval = warnings_wrapper([
+            '--sphinx',
+            '--exact-warnings', '19',
+            'tests/test_in/sphinx_traceability_output.txt',
+        ])
         self.assertEqual(18, retval)
 
     def test_robot_with_name_arg(self):
@@ -213,14 +217,16 @@ class TestIntegration(TestCase):
         ''' If no suite name is configured, all suites must be taken into account '''
         with self.assertLogs(logger="mlx.warnings.warnings", level="INFO") as fake_logger:
             with self.assertLogs(logger="robot", level="INFO") as fake_out:
-                retval = warnings_wrapper(['--verbose',
-                                           '--robot',
-                                           '--name', 'Suite Two',
-                                           'tests/test_in/robot_double_fail.xml'])
+                retval = warnings_wrapper([
+                    '--verbose',
+                    '--robot',
+                    '--name', 'Suite Two',
+                    'tests/test_in/robot_double_fail.xml',
+                ])
         self.assertEqual(1, retval)
         self.assertEqual(["INFO:robot:Suite One &amp; Suite Two.Suite Two.Another test",
-                      "WARNING:robot:number of warnings (1) is higher than the maximum limit (0)."],
-                      fake_out.output)
+                          "WARNING:robot:number of warnings (1) is higher than the maximum limit (0)."],
+                         fake_out.output)
         self.assertEqual(["WARNING:mlx.warnings.warnings:Robot: Returning error code 1."], fake_logger.output)
 
     def test_robot_config(self):
@@ -228,9 +234,11 @@ class TestIntegration(TestCase):
         os.environ['MAX_ROBOT_WARNINGS'] = '0'
         with self.assertLogs(logger="mlx.warnings.warnings", level="WARNING") as fake_logger:
             with self.assertLogs(logger="robot", level="WARNING") as fake_out:
-                retval = warnings_wrapper(['--config',
-                                        'tests/test_in/config_example_robot.json',
-                                        'tests/test_in/robot_double_fail.xml'])
+                retval = warnings_wrapper([
+                    '--config',
+                    'tests/test_in/config_example_robot.json',
+                    'tests/test_in/robot_double_fail.xml',
+                ])
         self.assertEqual(
             ["WARNING:robot:number of warnings (1) is between limits 0 and 1. Well done.",
              "WARNING:robot:number of warnings (2) is higher than the maximum limit (1).",
@@ -248,8 +256,11 @@ class TestIntegration(TestCase):
         self.maxDiff = None
         with self.assertLogs(logger="robot", level="INFO") as fake_out:
             with self.assertRaises(SystemExit) as cm_err:
-                warnings_wrapper(['--config', 'tests/test_in/config_example_robot_invalid_suite.json',
-                                  'tests/test_in/robot_double_fail.xml'])
+                warnings_wrapper([
+                    '--config',
+                    'tests/test_in/config_example_robot_invalid_suite.json',
+                    'tests/test_in/robot_double_fail.xml',
+                ])
         stdout_log = fake_out.output
         self.assertIn("ERROR:robot:No suite with name 'b4d su1te name' found. Returning error code -1.",
                       stdout_log)
@@ -370,7 +381,7 @@ class TestIntegration(TestCase):
         filename = 'code_quality_format.json'
         out_file = str(TEST_OUT_DIR / filename)
         ref_file = str(TEST_IN_DIR / filename)
-        with self.assertLogs(logger="mlx.warnings.warnings" ,level="INFO") as fake_out:
+        with self.assertLogs(logger="mlx.warnings.warnings", level="INFO") as fake_out:
             retval = warnings_wrapper([
                 '--code-quality', out_file,
                 '--config', 'tests/test_in/config_cq_description_format.json',
