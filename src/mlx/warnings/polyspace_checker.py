@@ -250,7 +250,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
                 tab_sep_string = "\t".join(content.values())
                 if not self._is_excluded(tab_sep_string, extra=extra):
                     self.count = self.count + 1
-                    self.output_logger.debug(f"ID {content.get('id', None)!r}",
-                                             extra=extra)
+                    self.output_logger.debug(f"ID {content.get('id', None)!r}", extra=extra)
+                    self.logger.info(f"ID {content.get('id', None)!r}", extra=extra)
                     if self.cq_enabled and content["color"].lower() != "green":
                         self.add_code_quality_finding(content)
