@@ -240,7 +240,7 @@ class CoverityClassificationChecker(WarningsChecker):
         Args:
             content (re.Match): The regex match
         '''
-        extra={"checker_name": repr(self)}
+        extra={"checker_name": repr(self), "classification": self.classification}
         match_string = content.group(0).strip()
         if not self._is_excluded(match_string, extra) and (content.group('curr') == content.group('max')):
             self.count += 1
