@@ -46,7 +46,8 @@ class WarningsChecker:
         self.exclude_patterns = []
         self.include_patterns = []
 
-    def __repr__(self):
+    @property
+    def name_repr(self):
         return self.name.capitalize()
 
     @property
@@ -169,7 +170,7 @@ class WarningsChecker:
             int: 0 if the amount of warnings is within limits, the count of (the sum of sub-checker) warnings otherwise
                 (or 1 in case of a count of 0 warnings)
         '''
-        extra["checker_name"] = repr(self)
+        extra["checker_name"] = self.name_repr
         if self.count > self._maximum or self.count < self._minimum:
             return self._return_error_code(extra)
         elif self._minimum == self._maximum and self.count == self._maximum:
@@ -224,7 +225,7 @@ class WarningsChecker:
         Returns:
             bool: True for exclusion, False for inclusion
         '''
-        extra["checker_name"] = repr(self)
+        extra["checker_name"] = self.name_repr
         matching_exclude_pattern = self._search_patterns(content, self.exclude_patterns)
         if not self._search_patterns(content, self.include_patterns) and matching_exclude_pattern:
             self.logger.info(f"Excluded {content!r} because of configured regex {matching_exclude_pattern!r}",

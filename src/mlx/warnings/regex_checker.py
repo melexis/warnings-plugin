@@ -48,7 +48,7 @@ class RegexChecker(WarningsChecker):
             if self._is_excluded(match_string):
                 continue
             self.count += 1
-            extra = {"checker_name": repr(self)}
+            extra = {"checker_name": self.name_repr}
             self.output_logger.debug(match_string, extra=extra)
             self.logger.info(match_string, extra=extra)
             if self.cq_enabled:
@@ -132,7 +132,7 @@ class CoverityChecker(RegexChecker):
             }
             count += checker.return_check_limits(extra)
         if count:
-            print(f"{repr(self)}: Returning error code {count}.")
+            print(f"{self.name_repr}: Returning error code {count}.")
         return count
 
     def check(self, content):
@@ -153,7 +153,7 @@ class CoverityChecker(RegexChecker):
                 checker.cq_default_path = self.cq_default_path
                 checker.check(match)
             else:
-                LOGGER.warning(f"{repr(self)}: Unrecognized classification {match.group('classification')!r}")
+                LOGGER.warning(f"{self.name_repr}: Unrecognized classification {match.group('classification')!r}")
 
     def parse_config(self, config):
         """Process configuration
@@ -173,7 +173,7 @@ class CoverityChecker(RegexChecker):
             if classification_key in self.checkers:
                 self.checkers[classification_key].parse_config(checker_config)
             else:
-                LOGGER.warning(f"{repr(self)}: Unrecognized classification {classification!r}")
+                LOGGER.warning(f"{self.name_repr}: Unrecognized classification {classification!r}")
 
 
 class CoverityClassificationChecker(WarningsChecker):
@@ -240,7 +240,7 @@ class CoverityClassificationChecker(WarningsChecker):
         Args:
             content (re.Match): The regex match
         '''
-        extra={"checker_name": repr(self), "classification": self.classification}
+        extra={"checker_name": self.name_repr, "classification": self.classification}
         match_string = content.group(0).strip()
         if not self._is_excluded(match_string, extra) and (content.group('curr') == content.group('max')):
             self.count += 1

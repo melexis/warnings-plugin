@@ -16,9 +16,6 @@ LOGGER = logging.getLogger("mlx.warnings.warnings")
 class JUnitChecker(WarningsChecker):
     name = 'junit'
 
-    def __repr__(self):
-        return "JUnit"
-
     def check(self, content):
         ''' Function for counting the number of JUnit failures in a specific text
 
@@ -36,7 +33,11 @@ class JUnitChecker(WarningsChecker):
             suites.update_statistics()
             self.count += suites.failures + suites.errors - amount_to_exclude
         except etree.ParseError as err:
-            LOGGER.error(f"{repr(self)}: {err}")
+            LOGGER.error(f"{self.name_repr}: {err}")
+
+    @property
+    def name_repr(self):
+        return "JUnit"
 
     @staticmethod
     def prepare_tree(root_input):
@@ -68,7 +69,7 @@ class JUnitChecker(WarningsChecker):
             int: 1 if a failure/error is to be subtracted from the final count, 0 otherwise
         """
         if isinstance(testcase.result, (Failure, Error)):
-            extra={"checker_name": repr(self)}
+            extra={"checker_name": self.name_repr}
             if self._is_excluded(testcase.result.message, extra=extra):
                 return 1
             string = f'{testcase.classname}.{testcase.name}'
