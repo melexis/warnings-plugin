@@ -8,6 +8,8 @@ from junitparser import Error, Failure
 from .junit_checker import JUnitChecker
 from .warnings_checker import WarningsChecker
 
+LOGGER = logging.getLogger("mlx.warnings.warnings")
+
 
 class RobotChecker(WarningsChecker):
     name = 'robot'
@@ -88,7 +90,7 @@ class RobotChecker(WarningsChecker):
                 }
                 count += checker.return_check_limits(extra)
         if count:
-            print(f"{self.name_repr}: Returning error code {count}.")
+            LOGGER.warning(f"{self.name_repr}: Returning error code {count}.")
         return count
 
     def parse_config(self, config):

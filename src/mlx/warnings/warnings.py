@@ -93,7 +93,7 @@ class WarningsPlugin:
             content (str): The content to parse
         '''
         if self.printout:
-            print(content)
+            LOGGER.warning(content)
         if not self.activated_checkers:
             LOGGER.error("No checkers activated. Please use activate_checker function")
         else:
@@ -365,8 +365,7 @@ def warnings_command(warnings, cmd):
         OSError: When program is not installed.
     '''
     try:
-        print("Executing: ", end='')
-        print(cmd)
+        LOGGER.info(f"Executing: {cmd}")
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                 stdin=subprocess.PIPE, bufsize=1, universal_newlines=True)
         out, err = proc.communicate()
