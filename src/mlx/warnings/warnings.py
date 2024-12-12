@@ -194,13 +194,13 @@ class WarningsPlugin:
         '''
         self.printout = printout
 
-    def config_parser(self, config, verbose, output):
+    def config_parser(self, config, verbose=False, output=None):
         ''' Parsing configuration dict extracted by previously opened JSON or YAML file
 
         Args:
             config (dict/Path): Content or path of configuration file
-            verbose (bool): enable verbose logging
-            output (Path/None): path to the output file
+            verbose (bool, optional): enable verbose logging
+            output (Path/None, optional): path to the output file
         '''
         if isinstance(config, Path):
             with open(config, encoding='utf-8') as open_file:
