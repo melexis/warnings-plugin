@@ -122,6 +122,6 @@ class TestWarningsPlugin(TestCase):
     def test_non_existent_checker_name(self):
         warnings = WarningsPlugin()
         invalid_checker_name = 'non-existent'
-        with self.assertLogs(level="INFO") as fake_out:
+        with self.assertLogs(logger="mlx.warnings.warnings", level="INFO") as fake_out:
             warnings.activate_checker_name(invalid_checker_name)
-        self.assertIn(f"ERROR:root:Checker {invalid_checker_name} does not exist", fake_out.output)
+        self.assertIn(f"ERROR:mlx.warnings.warnings:Checker {invalid_checker_name} does not exist", fake_out.output)

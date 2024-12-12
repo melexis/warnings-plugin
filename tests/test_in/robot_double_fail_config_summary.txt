@@ -1,4 +1,4 @@
-Suite One &amp; Suite Two.Suite One.First Test: Directory &#x27;C:\nonexistent&#x27; does not exist.
-Suite One &amp; Suite Two.Suite One.First Test: Directory &#x27;C:\nonexistent&#x27; does not exist.
-Suite One &amp; Suite Two.Suite Two.Another test: Expected str; got int.
-Suite One &amp; Suite Two.Suite Two.Another test: Expected str; got int.
+Robot: Suite One            Suite One &amp; Suite Two.Suite One.First Test: Directory &#x27;C:\nonexistent&#x27; does not exist.
+Robot:                      Suite One &amp; Suite Two.Suite One.First Test: Directory &#x27;C:\nonexistent&#x27; does not exist.
+Robot:                      Suite One &amp; Suite Two.Suite Two.Another test: Expected str; got int.
+Robot: Suite Two            Suite One &amp; Suite Two.Suite Two.Another test: Expected str; got int.

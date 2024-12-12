@@ -1,18 +1,17 @@
 import unittest
 
-from mlx.warnings import RobotSuiteChecker, WarningsPlugin
-from test_integration import run_test_with_logging
+from mlx.warnings import RobotSuiteChecker, WarningsPlugin, warnings_wrapper
 
 
 class TestRobotWarnings(unittest.TestCase):
     def setUp(self):
-        self.warnings = WarningsPlugin(verbose=True)
-        self.dut = self.warnings.activate_checker_name('robot')
+        self.warnings = WarningsPlugin()
+        self.dut = self.warnings.activate_checker_name('robot', True)
         self.suite1 = 'Suite One'
         self.suite2 = 'Suite Two'
         self.dut.checkers = [
-            RobotSuiteChecker(self.suite1, verbose=True),
-            RobotSuiteChecker(self.suite2, verbose=True),
+            RobotSuiteChecker(self.suite1),
+            RobotSuiteChecker(self.suite2),
         ]
 
     def test_no_warning(self):
@@ -22,26 +21,26 @@ class TestRobotWarnings(unittest.TestCase):
 
     def test_single_warning(self):
         with open('tests/test_in/robot_single_fail.xml') as xmlfile:
-            with self.assertLogs(level="INFO") as fake_out:
+            with self.assertLogs(logger="robot", level="INFO") as fake_out:
                 self.warnings.check(xmlfile.read())
                 count = self.warnings.return_count()
-        stdout_log = fake_out.output
-
         self.assertEqual(count, 1)
-        self.assertIn("INFO:root:Suite One &amp; Suite Two.Suite One.First Test", stdout_log)
+        self.assertIn("INFO:robot:Suite One &amp; Suite Two.Suite One.First Test", fake_out.output)
 
     def test_double_warning_and_verbosity(self):
-        stdout_log, retval = run_test_with_logging(['--verbose',
-                                                    '--robot',
-                                                    'tests/test_in/robot_double_fail.xml'])
-        self.assertEqual(retval, 2)
+        with self.assertLogs(logger="mlx.warnings.warnings", level="INFO") as fake_logger:
+            with self.assertLogs(logger="robot", level="INFO") as fake_out:
+                retval = warnings_wrapper(['--verbose',
+                                           '--robot',
+                                           'tests/test_in/robot_double_fail.xml'])
         self.assertEqual(
-            "Suite One &amp; Suite Two.Suite One.First Test\n"
-            "Suite One &amp; Suite Two.Suite Two.Another test\n"
-            "robot:     all test suites               number of warnings (2) is higher than the maximum limit (0).\n"
-            "Returning error code 2.\n",
-            stdout_log
+            ["INFO:robot:Suite One &amp; Suite Two.Suite One.First Test",
+             "INFO:robot:Suite One &amp; Suite Two.Suite Two.Another test",
+             "WARNING:robot:number of warnings (2) is higher than the maximum limit (0).",],
+            fake_out.output
         )
+        self.assertEqual(["WARNING:mlx.warnings.warnings:Robot: Returning error code 2."], fake_logger.output)
+        self.assertEqual(retval, 2)
 
     def test_invalid_xml(self):
         self.warnings.check('this is not xml')

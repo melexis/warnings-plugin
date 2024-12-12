@@ -1,9 +1,7 @@
 import filecmp
 import os
 import unittest
-from io import StringIO
 from pathlib import Path
-from unittest.mock import patch
 
 from mlx.warnings import (
     Finding,
@@ -19,34 +17,32 @@ TEST_OUT_DIR = Path(__file__).parent / 'test_out'
 class TestCodeProverWarnings(unittest.TestCase):
     def setUp(self):
         Finding.fingerprints = {}
-        self.warnings = WarningsPlugin(verbose=True)
-        self.dut = self.warnings.activate_checker_name('polyspace')
+        self.warnings = WarningsPlugin()
+        self.dut = self.warnings.activate_checker_name('polyspace', True)
         self.dut.checkers = [
             PolyspaceFamilyChecker("run-time check", "color", "red"),
             PolyspaceFamilyChecker("run-time check", "color", "orange"),
         ]
 
     def test_code_prover_tsv_file(self):
-        with open(TEST_IN_DIR / 'polyspace.tsv', newline="") as file:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
-                self.warnings.check_logfile(file)
-                count = self.warnings.return_check_limits()
-        stdout_log = fake_out.getvalue()
+        with self.assertLogs(logger="mlx.warnings.warnings", level="WARNING") as fake_logger:
+            with self.assertLogs(logger="polyspace", level="WARNING") as fake_out:
+                with open(TEST_IN_DIR / 'polyspace.tsv', newline="") as file:
+                    self.warnings.check_logfile(file)
+                    count = self.warnings.return_check_limits()
         self.assertEqual(
-            '\n'.join([
-                "polyspace: family 'run-time check'       color: red                    number of warnings (0) is exactly as expected. Well done.",
-                "polyspace: family 'run-time check'       color: orange                 number of warnings (19) is higher than the maximum limit (0).",
-                "Returning error code 19."
-            ]) + '\n',
-            stdout_log
+            ["WARNING:polyspace:number of warnings (0) is exactly as expected. Well done.",
+             "WARNING:polyspace:number of warnings (19) is higher than the maximum limit (0).",],
+            fake_out.output
         )
+        self.assertEqual(["WARNING:mlx.warnings.warnings:Polyspace: Returning error code 19."], fake_logger.output)
         self.assertEqual(count, 19)
 
 
 class TestBugFinderWarnings(unittest.TestCase):
     def setUp(self):
-        self.warnings = WarningsPlugin(verbose=True)
-        self.dut = self.warnings.activate_checker_name('polyspace')
+        self.warnings = WarningsPlugin()
+        self.dut = self.warnings.activate_checker_name('polyspace', True)
         self.dut.checkers = [
             PolyspaceFamilyChecker("defect", "information", "impact: high"),
             PolyspaceFamilyChecker("defect", "information", "impact: medium"),
@@ -54,20 +50,18 @@ class TestBugFinderWarnings(unittest.TestCase):
         ]
 
     def test_bug_finder_tsv_file(self):
-        with open(TEST_IN_DIR / 'polyspace.tsv', newline="") as file:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
-                self.warnings.check_logfile(file)
-                count = self.warnings.return_check_limits()
-        stdout_log = fake_out.getvalue()
+        with self.assertLogs(logger="mlx.warnings.warnings", level="WARNING") as fake_logger:
+            with self.assertLogs(logger="polyspace", level="WARNING") as fake_out:
+                with open(TEST_IN_DIR / 'polyspace.tsv', newline="") as file:
+                    self.warnings.check_logfile(file)
+                    count = self.warnings.return_check_limits()
         self.assertEqual(
-            '\n'.join([
-                "polyspace: family 'defect'               information: impact: high     number of warnings (42) is higher than the maximum limit (0).",
-                "polyspace: family 'defect'               information: impact: medium   number of warnings (9) is higher than the maximum limit (0).",
-                "polyspace: family 'defect'               information: impact: low      number of warnings (4) is higher than the maximum limit (0).",
-                "Returning error code 55."
-            ]) + '\n',
-            stdout_log
+            ["WARNING:polyspace:number of warnings (42) is higher than the maximum limit (0).",
+             "WARNING:polyspace:number of warnings (9) is higher than the maximum limit (0).",
+             "WARNING:polyspace:number of warnings (4) is higher than the maximum limit (0).",],
+            fake_out.output
         )
+        self.assertEqual(["WARNING:mlx.warnings.warnings:Polyspace: Returning error code 55."], fake_logger.output)
         self.assertEqual(count, 55)
 
 
