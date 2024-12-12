@@ -5,13 +5,10 @@ try:
 except ImportError:
     from xml.etree import ElementTree as etree
 
-import logging
-
 from junitparser import Error, Failure, JUnitXml
 
 from .warnings_checker import WarningsChecker
 
-LOGGER = logging.getLogger("mlx.warnings.warnings")
 
 class JUnitChecker(WarningsChecker):
     name = 'junit'
@@ -33,11 +30,11 @@ class JUnitChecker(WarningsChecker):
             suites.update_statistics()
             self.count += suites.failures + suites.errors - amount_to_exclude
         except etree.ParseError as err:
-            LOGGER.error(f"{self.name_repr}: {err}")
+            self.logger.error(err.msg)
 
     @property
     def name_repr(self):
-        return "JUnit"
+        return "JUnit" if self.name == 'junit' else self.name.capitalize()
 
     @staticmethod
     def prepare_tree(root_input):
@@ -69,10 +66,9 @@ class JUnitChecker(WarningsChecker):
             int: 1 if a failure/error is to be subtracted from the final count, 0 otherwise
         """
         if isinstance(testcase.result, (Failure, Error)):
-            extra["checker_name"] = self.name_repr
-            if self._is_excluded(testcase.result.message, extra=extra):
+            if self._is_excluded(testcase.result.message):
                 return 1
             string = f'{testcase.classname}.{testcase.name}'
-            self.output_logger.debug(f'{string}: {testcase.result.message}', extra=extra)
-            self.logger.info(string, extra=extra)
+            self.output_logger.debug(f'{string}: {testcase.result.message}')
+            self.logger.info(string, extra={'checker': self})
         return 0

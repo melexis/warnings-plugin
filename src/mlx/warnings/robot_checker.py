@@ -14,7 +14,7 @@ LOGGER = logging.getLogger("mlx.warnings.warnings")
 class RobotChecker(WarningsChecker):
     name = 'robot'
     checkers = []
-    logging_fmt = "{checker_name}: {suite_name:<20} {message:>60}"
+    logging_fmt = "{checker.name_repr}: {checker.suite_name_repr:<20} {message}"
 
     @property
     def minimum(self):
@@ -79,16 +79,7 @@ class RobotChecker(WarningsChecker):
         '''
         count = 0
         for checker in self.checkers:
-            if checker.suite_name:
-                extra = {
-                    "suite_name": f"test suite {checker.suite_name!r}",
-                }
-                count += checker.return_check_limits(extra)
-            else:
-                extra = {
-                    "suite_name": "all test suites",
-                }
-                count += checker.return_check_limits(extra)
+            count += checker.return_check_limits()
         if count:
             LOGGER.warning(f"{self.name_repr}: Returning error code {count}.")
         return count
@@ -117,8 +108,10 @@ class RobotSuiteChecker(JUnitChecker):
         self.suite_name = suite_name
         self.check_suite_name = check_suite_name
         self.is_valid_suite_name = False
-        self.logger = logging.getLogger(self.name)
-        self.output_logger = logging.getLogger(f"{self.name}.output")
+
+    @property
+    def suite_name_repr(self):
+        return f"suite {self.suite_name!r}" if self.suite_name else "all test suites"
 
     @property
     def name_repr(self):
@@ -138,8 +131,7 @@ class RobotSuiteChecker(JUnitChecker):
         """
         if testcase.classname.endswith(self.suite_name):
             self.is_valid_suite_name = True
-            return super()._check_testcase(testcase, extra={"checker_name": self.name_repr,
-                                                            "suite_name": self.suite_name})
+            return super()._check_testcase(testcase)
         return int(self.suite_name and isinstance(testcase.result, (Failure, Error)))
 
     def check(self, content):
@@ -155,9 +147,5 @@ class RobotSuiteChecker(JUnitChecker):
         """
         super().check(content)
         if not self.is_valid_suite_name and self.check_suite_name:
-            self.logger.error(f'No suite with name {self.suite_name!r} found. Returning error code -1.',
-                              extra={
-                                  "checker_name": self.name_repr,
-                                  "suite_name": self.suite_name
-                              })
+            self.logger.error(f'No suite with name {self.suite_name!r} found. Returning error code -1.')
             sys.exit(-1)

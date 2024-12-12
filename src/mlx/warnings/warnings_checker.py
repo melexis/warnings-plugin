@@ -33,14 +33,17 @@ def substitute_envvar(checker_config, keys):
 class WarningsChecker:
     name = 'checker'
     subchecker = False
-    logging_fmt = "{checker_name}: {message}"
+    logging_fmt = "{checker.name_repr}: {message}"
 
     def __init__(self, verbose=False, output=None):
         """Constructor
 
+        The logging is configured. A handler is added only if a parent checker hasn't done this already.
+        A parent-checker uses the same logger as its sub-checkers, but each with their own LoggerAdapter.
+
         Args:
             verbose (bool, optional): Enable/disable verbose logging
-            output (Path/None, optional): The path to the output file
+            output (Path, optional): The path to the output file
         """
         self.count = 0
         self._minimum = 0
@@ -52,24 +55,26 @@ class WarningsChecker:
         self.exclude_patterns = []
         self.include_patterns = []
 
-        if not self.subchecker:
-            self.logger = logging.getLogger(self.name)
+        self.logger = logging.getLogger(self.name)
+        formatter = logging.Formatter(fmt=self.logging_fmt, style="{")
+        if not self.logger.handlers:
             self.logger.propagate = False  # Do not propagate to parent loggers
             handler = logging.StreamHandler()
-            formatter = logging.Formatter(fmt=self.logging_fmt, style="{")
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
             if verbose:
                 self.logger.setLevel(logging.INFO)
-
-            self.output_logger = logging.getLogger(f"{self.name}.output")
+        self.output_logger = logging.getLogger(f"{self.name}.output")
+        if not self.output_logger.handlers:
             self.output_logger.propagate = False  # Do not propagate to parent loggers
             if output is not None:
-                self.output_logger.setLevel(logging.DEBUG)
                 handler = logging.FileHandler(output, "a")
                 handler.setFormatter(formatter)
                 self.output_logger.addHandler(handler)
-
+                self.output_logger.setLevel(logging.DEBUG)
+        logging_vars = {"checker": self}
+        self.logger = logging.LoggerAdapter(self.logger, extra=logging_vars)
+        self.output_logger = logging.LoggerAdapter(self.output_logger, extra=logging_vars)
 
     @property
     def name_repr(self):
@@ -159,33 +164,26 @@ class WarningsChecker:
         '''
         return self.count
 
-    def return_check_limits(self, extra={}):
+    def return_check_limits(self):
         ''' Function for checking whether the warning count is within the configured limits
         A checker instance with sub-checkers is responsible for printing 'Returning error code X.'
         when the exit code is not 0.
-
-        Args:
-            extra (dict): optional - Extra arguments for the logger.
 
         Returns:
             int: 0 if the amount of warnings is within limits, the count of (the sum of sub-checker) warnings otherwise
                 (or 1 in case of a count of 0 warnings)
         '''
-        extra["checker_name"] = self.name_repr
         if self.count > self._maximum or self.count < self._minimum:
-            return self._return_error_code(extra)
+            return self._return_error_code()
         elif self._minimum == self._maximum and self.count == self._maximum:
-            self.logger.warning(f"number of warnings ({self.count}) is exactly as expected. Well done.", extra=extra)
+            msg = f"number of warnings ({self.count}) is exactly as expected. Well done."
         else:
-            self.logger.warning(f"number of warnings ({self.count}) is between limits {self._minimum} and {self._maximum}. "
-                  "Well done.", extra=extra)
+            msg = f"number of warnings ({self.count}) is between limits {self._minimum} and {self._maximum}. Well done."
+        self.logger.warning(msg)
         return 0
 
-    def _return_error_code(self, extra):
+    def _return_error_code(self):
         ''' Function for determining the return code and message on failure
-
-        Args:
-            extra (dict): Extra arguments for the logger.
 
         Returns:
             int: The count of warnings (or 1 in case of a count of 0 warnings)
@@ -201,7 +199,7 @@ class WarningsChecker:
         string_to_print = f"number of warnings ({self.count}) is {error_reason}."
         if not self.subchecker:
             string_to_print += f" Returning error code {error_code}."
-        self.logger.warning(string_to_print, extra=extra)
+        self.logger.warning(string_to_print)
         return error_code
 
     def parse_config(self, config):
@@ -214,23 +212,20 @@ class WarningsChecker:
         if 'cq_description_template' in config:
             self.cq_description_template = Template(config['cq_description_template'])
 
-    def _is_excluded(self, content, extra={}):
+    def _is_excluded(self, content):
         ''' Checks if the specific text must be excluded based on the configured regexes for exclusion and inclusion.
 
         Inclusion has priority over exclusion.
 
         Args:
             content (str): The content to parse
-            extra (dict): optional - Extra arguments for the logger.
 
         Returns:
             bool: True for exclusion, False for inclusion
         '''
-        extra["checker_name"] = self.name_repr
         matching_exclude_pattern = self._search_patterns(content, self.exclude_patterns)
         if not self._search_patterns(content, self.include_patterns) and matching_exclude_pattern:
-            self.logger.info(f"Excluded {content!r} because of configured regex {matching_exclude_pattern!r}",
-                             extra=extra)
+            self.logger.info(f"Excluded {content!r} because of configured regex {matching_exclude_pattern!r}")
             return True
         return False
 

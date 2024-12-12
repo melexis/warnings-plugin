@@ -1,2 +1,2 @@
-Robot:                      Suite One &amp; Suite Two.Suite One.First Test: Directory &#x27;C:\nonexistent&#x27; does not exist.
-Robot:                      Suite One &amp; Suite Two.Suite Two.Another test: Expected str; got int.
+Robot: all test suites      Suite One &amp; Suite Two.Suite One.First Test: Directory &#x27;C:\nonexistent&#x27; does not exist.
+Robot: all test suites      Suite One &amp; Suite Two.Suite Two.Another test: Expected str; got int.

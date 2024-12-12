@@ -1,4 +1,5 @@
 import filecmp
+import logging
 import os
 from pathlib import Path
 from unittest import TestCase
@@ -8,6 +9,17 @@ from mlx.warnings import Finding, WarningsConfigError, exceptions, warnings_wrap
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
 TEST_OUT_DIR = Path(__file__).parent / 'test_out'
+
+
+def reset_logging():
+    loggers = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
+    loggers.append(logging.getLogger())
+    for logger in loggers:
+        for handler in logger.handlers:
+            logger.removeHandler(handler)
+            handler.close()
+        logger.setLevel(logging.NOTSET)
+        logger.propagate = True
 
 
 class TestIntegration(TestCase):
@@ -20,6 +32,7 @@ class TestIntegration(TestCase):
         for var in ('FIRST_ENVVAR', 'SECOND_ENVVAR', 'MIN_SPHINX_WARNINGS', 'MAX_SPHINX_WARNINGS'):
             if var in os.environ:
                 del os.environ[var]
+        reset_logging()
 
     def test_help(self):
         with self.assertRaises(SystemExit) as ex:

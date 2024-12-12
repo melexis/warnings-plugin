@@ -48,9 +48,8 @@ class RegexChecker(WarningsChecker):
             if self._is_excluded(match_string):
                 continue
             self.count += 1
-            extra = {"checker_name": self.name_repr}
-            self.output_logger.debug(match_string, extra=extra)
-            self.logger.info(match_string, extra=extra)
+            self.output_logger.debug(match_string)
+            self.logger.info(match_string)
             if self.cq_enabled:
                 self.add_code_quality_finding(match)
 
@@ -78,7 +77,7 @@ class RegexChecker(WarningsChecker):
 class CoverityChecker(RegexChecker):
     name = 'coverity'
     pattern = coverity_pattern
-    logging_fmt = "{checker_name}: {classification:<14} | {message}"
+    logging_fmt = "{checker.name_repr}: {checker.classification:<14} | {message}"
 
     def __init__(self, verbose=False, output=None):
         super().__init__(verbose=verbose, output=output)
@@ -127,10 +126,7 @@ class CoverityChecker(RegexChecker):
         '''
         count = 0
         for checker in self.checkers.values():
-            extra = {
-                "classification": checker.classification,
-            }
-            count += checker.return_check_limits(extra)
+            count += checker.return_check_limits()
         if count:
             LOGGER.warning(f"{self.name_repr}: Returning error code {count}.")
         return count
@@ -195,8 +191,6 @@ class CoverityClassificationChecker(WarningsChecker):
         """
         super().__init__()
         self.classification = classification
-        self.logger = logging.getLogger(self.name)
-        self.output_logger = logging.getLogger(f"{self.name}.output")
 
     @property
     def cq_description_template(self):
@@ -240,13 +234,11 @@ class CoverityClassificationChecker(WarningsChecker):
         Args:
             content (re.Match): The regex match
         '''
-        extra={"checker_name": self.name_repr, "classification": self.classification}
         match_string = content.group(0).strip()
-        if not self._is_excluded(match_string, extra) and (content.group('curr') == content.group('max')):
+        if not self._is_excluded(match_string) and (content.group('curr') == content.group('max')):
             self.count += 1
-            self.output_logger.debug(match_string,
-                          extra=extra)
-            self.logger.info(match_string, extra=extra)
+            self.output_logger.debug(match_string)
+            self.logger.info(match_string)
             if self.cq_enabled:
                 self.add_code_quality_finding(content)
 
