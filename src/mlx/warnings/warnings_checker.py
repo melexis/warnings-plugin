@@ -54,16 +54,19 @@ class WarningsChecker:
         self._cq_description_template = Template('$description')
         self.exclude_patterns = []
         self.include_patterns = []
+        self.logging_args = (verbose, output)
 
         self.logger = logging.getLogger(self.name)
+        if verbose:
+            self.logger.setLevel(logging.INFO)
+        elif not self.subchecker:
+            self.logger.setLevel(logging.WARNING)
         formatter = logging.Formatter(fmt=self.logging_fmt, style="{")
         if not self.logger.handlers:
             self.logger.propagate = True  # Propagate to parent loggers
             handler = logging.StreamHandler()
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
-            if verbose:
-                self.logger.setLevel(logging.INFO)
         self.output_logger = logging.getLogger(f"{self.name}.output")
         if not self.output_logger.handlers:
             self.output_logger.propagate = False  # Do not propagate to parent loggers
