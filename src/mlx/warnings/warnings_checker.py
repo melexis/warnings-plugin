@@ -35,15 +35,15 @@ class WarningsChecker:
     subchecker = False
     logging_fmt = "{checker.name_repr}: {message}"
 
-    def __init__(self, verbose=False, output=None):
+    def __init__(self, verbose, output):
         """Constructor
 
         The logging is configured. A handler is added only if a parent checker hasn't done this already.
         A parent-checker uses the same logger as its sub-checkers, but each with their own LoggerAdapter.
 
         Args:
-            verbose (bool, optional): Enable/disable verbose logging
-            output (Path, optional): The path to the output file
+            verbose (bool): Enable/disable verbose logging
+            output (Path/None): The path to the output file
         """
         self.count = 0
         self._minimum = 0
@@ -57,31 +57,32 @@ class WarningsChecker:
         self.logging_args = (verbose, output)
 
         self.logger = logging.getLogger(self.name)
-        if verbose:
-            self.logger.setLevel(logging.INFO)
-        elif not self.subchecker:
-            self.logger.setLevel(logging.WARNING)
+        self.logger.setLevel(logging.WARNING)
+        if verbose or output:
+            self.logger.setLevel(logging.DEBUG)
         formatter = logging.Formatter(fmt=self.logging_fmt, style="{")
         if not self.logger.handlers:
             self.logger.propagate = True  # Propagate to parent loggers
             handler = logging.StreamHandler()
             handler.setFormatter(formatter)
+            if verbose:
+                handler.setLevel(logging.DEBUG)
+            else:
+                handler.setLevel(logging.WARNING)
             self.logger.addHandler(handler)
-        self.output_logger = logging.getLogger(f"{self.name}.output")
-        if not self.output_logger.handlers:
-            self.output_logger.propagate = False  # Do not propagate to parent loggers
+
             if output is not None:
                 handler = logging.FileHandler(output, "a")
                 handler.setFormatter(formatter)
-                self.output_logger.addHandler(handler)
-                self.output_logger.setLevel(logging.DEBUG)
+                handler.setLevel(logging.DEBUG)
+                self.logger.addHandler(handler)
+
         logging_vars = {"checker": self}
         self.logger = logging.LoggerAdapter(self.logger, extra=logging_vars)
-        self.output_logger = logging.LoggerAdapter(self.output_logger, extra=logging_vars)
 
     @property
     def name_repr(self):
-        return self.name.capitalize()
+        return self.name.replace('.sub', '').capitalize()
 
     @property
     def cq_findings(self):

@@ -43,7 +43,7 @@ class WarningsPlugin:
         self.count = 0
         self.printout = False
 
-    def activate_checker(self, checker_type, *args):
+    def activate_checker(self, checker_type, *logging_args):
         '''
         Activate additional checkers after initialization
 
@@ -53,7 +53,7 @@ class WarningsPlugin:
         Return:
             WarningsChecker: activated checker object
         '''
-        checker = checker_type(*args)
+        checker = checker_type(*logging_args)
         checker.cq_enabled = self.cq_enabled and checker.name in ('doxygen', 'sphinx', 'xmlrunner', 'polyspace', 'coverity')
         self.activated_checkers[checker.name] = checker
         return checker
@@ -194,13 +194,11 @@ class WarningsPlugin:
         '''
         self.printout = printout
 
-    def config_parser(self, config, verbose=False, output=None):
+    def config_parser(self, config, *logging_args):
         ''' Parsing configuration dict extracted by previously opened JSON or YAML file
 
         Args:
             config (dict/Path): Content or path of configuration file
-            verbose (bool, optional): enable verbose logging
-            output (Path/None, optional): path to the output file
         '''
         if isinstance(config, Path):
             with open(config, encoding='utf-8') as open_file:
@@ -215,7 +213,7 @@ class WarningsPlugin:
                 checker_config = config[checker_type.name]
                 try:
                     if bool(checker_config['enabled']):
-                        checker = self.activate_checker(checker_type, verbose, output)
+                        checker = self.activate_checker(checker_type, *logging_args)
                         checker.parse_config(checker_config)
                         LOGGER.info(f"{checker.name_repr}: Config parsing completed")
                 except KeyError as err:
@@ -281,7 +279,7 @@ def warnings_wrapper(args):
     if args.verbose:
         LOGGER.setLevel(logging.INFO)
 
-    checker_options = [args.verbose, args.output]
+    logging_args = [args.verbose, args.output]
     warnings = WarningsPlugin(cq_enabled=code_quality_enabled)
     # Read config file
     if args.configfile is not None:
@@ -290,20 +288,20 @@ def warnings_wrapper(args):
         if checker_flags or warning_args:
             LOGGER.error("Configfile cannot be provided with other arguments")
             sys.exit(2)
-        warnings.config_parser(args.configfile, *checker_options)
+        warnings.config_parser(args.configfile, *logging_args)
     else:
         if args.sphinx:
-            warnings.activate_checker_name('sphinx', *checker_options)
+            warnings.activate_checker_name('sphinx', *logging_args)
         if args.doxygen:
-            warnings.activate_checker_name('doxygen', *checker_options)
+            warnings.activate_checker_name('doxygen', *logging_args)
         if args.junit:
-            warnings.activate_checker_name('junit', *checker_options)
+            warnings.activate_checker_name('junit', *logging_args)
         if args.xmlrunner:
-            warnings.activate_checker_name('xmlrunner', *checker_options)
+            warnings.activate_checker_name('xmlrunner', *logging_args)
         if args.coverity:
-            warnings.activate_checker_name('coverity', *checker_options)
+            warnings.activate_checker_name('coverity', *logging_args)
         if args.robot:
-            robot_checker = warnings.activate_checker_name('robot', *checker_options)
+            robot_checker = warnings.activate_checker_name('robot', *logging_args)
             if robot_checker is not None:
                 robot_checker.parse_config({
                     'suites': [{'name': args.name, 'min': 0, 'max': 0}],

@@ -33,7 +33,7 @@ class TestConfig(TestCase):
 
     def test_configfile_parsing(self):
         warnings = WarningsPlugin()
-        warnings.config_parser((TEST_IN_DIR / "config_example.json"))
+        warnings.config_parser((TEST_IN_DIR / "config_example.json"), False, None)
         warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
         self.assertEqual(warnings.return_count(), 1)
         warnings.check('<testcase classname="dummy_class" name="dummy_name"><failure message="some random message from test case" /></testcase>')
@@ -49,7 +49,7 @@ class TestConfig(TestCase):
         del os.environ['MAX_SPHINX_WARNINGS']
         with self.assertRaises(WarningsConfigError) as c_m:
             warnings = WarningsPlugin()
-            warnings.config_parser((TEST_IN_DIR / "config_example.json"))
+            warnings.config_parser((TEST_IN_DIR / "config_example.json"), False, None)
         self.assertEqual(
             str(c_m.exception),
             "Failed to find environment variable 'MAX_SPHINX_WARNINGS' for configuration value 'max'")
@@ -79,17 +79,17 @@ class TestConfig(TestCase):
 
     def test_configfile_parsing_exclude_json(self):
         warnings = WarningsPlugin()
-        warnings.config_parser((TEST_IN_DIR / "config_example_exclude.json"), verbose=True)
+        warnings.config_parser((TEST_IN_DIR / "config_example_exclude.json"), True, None)
         self._helper_exclude(warnings)
 
     def test_configfile_parsing_exclude_yml(self):
         warnings = WarningsPlugin()
-        warnings.config_parser((TEST_IN_DIR / "config_example_exclude.yml"), verbose=True)
+        warnings.config_parser((TEST_IN_DIR / "config_example_exclude.yml"), True, None)
         self._helper_exclude(warnings)
 
     def test_configfile_parsing_include_priority(self):
         warnings = WarningsPlugin()
-        warnings.config_parser((TEST_IN_DIR / "config_example_exclude.json"), verbose=True)
+        warnings.config_parser((TEST_IN_DIR / "config_example_exclude.json"), True, None)
         warnings.get_checker('sphinx').include_sphinx_deprecation()
         deprecation_warning = 'sphinx/application.py:402: RemovedInSphinx20Warning: app.info() is now deprecated. Use sphinx.util.logging instead.'
         warnings.check(deprecation_warning)
@@ -105,7 +105,7 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
+        warnings.config_parser(tmpjson, False, None)
         warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
         self.assertEqual(warnings.return_count(), 0)
         with open('tests/test_in/junit_single_fail.xml') as xmlfile:
@@ -126,7 +126,7 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
+        warnings.config_parser(tmpjson, False, None)
         with open('tests/test_in/junit_single_fail.xml') as xmlfile:
             warnings.check(xmlfile.read())
         self.assertEqual(warnings.return_count(), 0)
@@ -147,7 +147,7 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
+        warnings.config_parser(tmpjson, False, None)
         warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
         self.assertEqual(warnings.return_count(), 0)
         warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
@@ -169,7 +169,7 @@ class TestConfig(TestCase):
             }
         }
         with self.assertRaises(TypeError) as c_m:
-            warnings.config_parser(tmpjson)
+            warnings.config_parser(tmpjson, False, None)
         self.assertEqual(str(c_m.exception), "Expected a list value for exclude key in configuration file; got str")
 
     def test_partial_junit_config_parsing_exclude_regex(self):
@@ -182,7 +182,7 @@ class TestConfig(TestCase):
                 "exclude": ["able to trace this random failure msg"]
             }
         }
-        warnings.config_parser(tmpjson)
+        warnings.config_parser(tmpjson, False, None)
         with open('tests/test_in/junit_single_fail.xml') as xmlfile:
             warnings.check(xmlfile.read())
         self.assertEqual(warnings.return_count(), 0)
@@ -208,7 +208,7 @@ class TestConfig(TestCase):
                 ]
             }
         }
-        warnings.config_parser(tmpjson, verbose=True)
+        warnings.config_parser(tmpjson, True, None)
         with open('tests/test_in/robot_double_fail.xml') as xmlfile:
             warnings.check(xmlfile.read())
             retval = warnings.return_check_limits()
@@ -238,7 +238,7 @@ class TestConfig(TestCase):
                 ]
             }
         }
-        warnings.config_parser(tmpjson, verbose=True)
+        warnings.config_parser(tmpjson, True, None)
         with open('tests/test_in/robot_double_fail.xml') as xmlfile:
             warnings.check(xmlfile.read())
             count = warnings.return_count()
@@ -264,7 +264,7 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
+        warnings.config_parser(tmpjson, False, None)
         with open('tests/test_in/junit_single_fail.xml') as xmlfile:
             warnings.check(xmlfile.read())
         self.assertEqual(warnings.return_count(), 0)
@@ -290,7 +290,7 @@ class TestConfig(TestCase):
             }
 
         }
-        warnings.config_parser(tmpjson)
+        warnings.config_parser(tmpjson, False, None)
         warnings.check("/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'")
         self.assertEqual(warnings.return_count(), 0)
         warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
@@ -314,7 +314,7 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
+        warnings.config_parser(tmpjson, False, None)
         with open('tests/test_in/junit_single_fail.xml') as xmlfile:
             warnings.check(xmlfile.read())
         self.assertEqual(warnings.return_count(), 0)
@@ -340,8 +340,8 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(SphinxChecker().name).maximum, 5)
+        warnings.config_parser(tmpjson, False, None)
+        self.assertEqual(warnings.get_checker(SphinxChecker.name).maximum, 5)
 
     def test_doxygen_config_max(self):
         warnings = WarningsPlugin()
@@ -353,8 +353,8 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(DoxyChecker().name).maximum, 5)
+        warnings.config_parser(tmpjson, False, None)
+        self.assertEqual(warnings.get_checker(DoxyChecker.name).maximum, 5)
 
     def test_junit_config_max(self):
         warnings = WarningsPlugin()
@@ -366,8 +366,8 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(JUnitChecker().name).maximum, 5)
+        warnings.config_parser(tmpjson, False, None)
+        self.assertEqual(warnings.get_checker(JUnitChecker.name).maximum, 5)
 
     def test_xmlrunner_config_max(self):
         warnings = WarningsPlugin()
@@ -379,8 +379,8 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(XMLRunnerChecker().name).maximum, 5)
+        warnings.config_parser(tmpjson, False, None)
+        self.assertEqual(warnings.get_checker(XMLRunnerChecker.name).maximum, 5)
 
     def test_all_config_max(self):
         warnings = WarningsPlugin()
@@ -427,12 +427,12 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(SphinxChecker().name).maximum, 4)
-        self.assertEqual(warnings.get_checker(DoxyChecker().name).maximum, 5)
-        self.assertEqual(warnings.get_checker(JUnitChecker().name).maximum, 6)
-        self.assertEqual(warnings.get_checker(XMLRunnerChecker().name).maximum, 6)
-        self.assertEqual(warnings.get_checker(RobotChecker().name).maximum, 9)
+        warnings.config_parser(tmpjson, False, None)
+        self.assertEqual(warnings.get_checker(SphinxChecker.name).maximum, 4)
+        self.assertEqual(warnings.get_checker(DoxyChecker.name).maximum, 5)
+        self.assertEqual(warnings.get_checker(JUnitChecker.name).maximum, 6)
+        self.assertEqual(warnings.get_checker(XMLRunnerChecker.name).maximum, 6)
+        self.assertEqual(warnings.get_checker(RobotChecker.name).maximum, 9)
 
     def test_sphinx_config_min(self):
         warnings = WarningsPlugin()
@@ -444,8 +444,8 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(SphinxChecker().name).minimum, 5)
+        warnings.config_parser(tmpjson, False, None)
+        self.assertEqual(warnings.get_checker(SphinxChecker.name).minimum, 5)
 
     def test_doxygen_config_min(self):
         warnings = WarningsPlugin()
@@ -457,8 +457,8 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(DoxyChecker().name).minimum, 5)
+        warnings.config_parser(tmpjson, False, None)
+        self.assertEqual(warnings.get_checker(DoxyChecker.name).minimum, 5)
 
     def test_junit_config_min(self):
         warnings = WarningsPlugin()
@@ -470,8 +470,8 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(JUnitChecker().name).minimum, 5)
+        warnings.config_parser(tmpjson, False, None)
+        self.assertEqual(warnings.get_checker(JUnitChecker.name).minimum, 5)
 
     def test_xmlrunner_config_min(self):
         warnings = WarningsPlugin()
@@ -483,8 +483,8 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(XMLRunnerChecker().name).minimum, 5)
+        warnings.config_parser(tmpjson, False, None)
+        self.assertEqual(warnings.get_checker(XMLRunnerChecker.name).minimum, 5)
 
     def test_all_config_min(self):
         warnings = WarningsPlugin()
@@ -531,12 +531,12 @@ class TestConfig(TestCase):
             }
         }
 
-        warnings.config_parser(tmpjson)
-        self.assertEqual(warnings.get_checker(SphinxChecker().name).minimum, 4)
-        self.assertEqual(warnings.get_checker(DoxyChecker().name).minimum, 3)
-        self.assertEqual(warnings.get_checker(JUnitChecker().name).minimum, 5)
-        self.assertEqual(warnings.get_checker(XMLRunnerChecker().name).minimum, 5)
-        self.assertEqual(warnings.get_checker(RobotChecker().name).minimum, 1)
+        warnings.config_parser(tmpjson, False, None)
+        self.assertEqual(warnings.get_checker(SphinxChecker.name).minimum, 4)
+        self.assertEqual(warnings.get_checker(DoxyChecker.name).minimum, 3)
+        self.assertEqual(warnings.get_checker(JUnitChecker.name).minimum, 5)
+        self.assertEqual(warnings.get_checker(XMLRunnerChecker.name).minimum, 5)
+        self.assertEqual(warnings.get_checker(RobotChecker.name).minimum, 1)
 
     def test_invalid_config(self):
         warnings = WarningsPlugin()
@@ -563,6 +563,6 @@ class TestConfig(TestCase):
             }
         }
         with self.assertRaises(ValueError) as c_m:
-            warnings.config_parser(tmpjson)
+            warnings.config_parser(tmpjson, False, None)
         self.assertEqual(str(c_m.exception),
                          'Invalid argument: minimum limit must be lower than maximum limit (9); cannot set 10.')

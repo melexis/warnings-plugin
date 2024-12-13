@@ -7,7 +7,7 @@ class TestLimits(TestCase):
 
     def setUp(self):
         self.warnings = WarningsPlugin()
-        self.warnings.activate_checker_name('doxygen', True)
+        self.warnings.activate_checker_name('doxygen', True, None)
 
     def test_set_maximum(self):
         for x in range(0, 10):

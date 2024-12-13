@@ -24,10 +24,10 @@ class TestCodeProverWarnings(unittest.TestCase):
     def setUp(self):
         Finding.fingerprints = {}
         self.warnings = WarningsPlugin()
-        self.dut = self.warnings.activate_checker_name('polyspace')
+        self.dut = self.warnings.activate_checker_name('polyspace', False, None)
         self.dut.checkers = [
-            PolyspaceFamilyChecker("run-time check", "color", "red"),
-            PolyspaceFamilyChecker("run-time check", "color", "orange"),
+            PolyspaceFamilyChecker("run-time check", "color", "red", *self.dut.logging_args),
+            PolyspaceFamilyChecker("run-time check", "color", "orange", *self.dut.logging_args),
         ]
 
     def test_code_prover_tsv_file(self):
@@ -37,7 +37,7 @@ class TestCodeProverWarnings(unittest.TestCase):
         self.assertEqual(
             ["number of warnings (0) is exactly as expected. Well done.",
              "number of warnings (19) is higher than the maximum limit (0).",
-             "Polyspace: Returning error code 19."],
+             "Returning error code 19."],
             self.caplog.messages
         )
         self.assertEqual(count, 19)
@@ -50,11 +50,11 @@ class TestBugFinderWarnings(unittest.TestCase):
 
     def setUp(self):
         self.warnings = WarningsPlugin()
-        self.dut = self.warnings.activate_checker_name('polyspace')
+        self.dut = self.warnings.activate_checker_name('polyspace', False, None)
         self.dut.checkers = [
-            PolyspaceFamilyChecker("defect", "information", "impact: high"),
-            PolyspaceFamilyChecker("defect", "information", "impact: medium"),
-            PolyspaceFamilyChecker("defect", "information", "impact: low"),
+            PolyspaceFamilyChecker("defect", "information", "impact: high", *self.dut.logging_args),
+            PolyspaceFamilyChecker("defect", "information", "impact: medium", *self.dut.logging_args),
+            PolyspaceFamilyChecker("defect", "information", "impact: low", *self.dut.logging_args),
         ]
 
     def test_bug_finder_tsv_file(self):
@@ -62,10 +62,10 @@ class TestBugFinderWarnings(unittest.TestCase):
             self.warnings.check_logfile(file)
             count = self.warnings.return_check_limits()
         self.assertEqual(
-            ["WARNING:polyspace:number of warnings (42) is higher than the maximum limit (0).",
-             "WARNING:polyspace:number of warnings (9) is higher than the maximum limit (0).",
-             "WARNING:polyspace:number of warnings (4) is higher than the maximum limit (0).",
-             "Polyspace: Returning error code 55."],
+            ["number of warnings (42) is higher than the maximum limit (0).",
+             "number of warnings (9) is higher than the maximum limit (0).",
+             "number of warnings (4) is higher than the maximum limit (0).",
+             "Returning error code 55."],
             self.caplog.messages
         )
         self.assertEqual(count, 55)

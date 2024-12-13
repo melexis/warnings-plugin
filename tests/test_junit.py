@@ -12,7 +12,7 @@ class TestJUnitFailures(TestCase):
 
     def setUp(self):
         self.warnings = WarningsPlugin()
-        self.warnings.activate_checker_name('junit', True)
+        self.warnings.activate_checker_name('junit', True, None)
 
     def test_no_warning(self):
         with open('tests/test_in/junit_no_fail.xml') as xmlfile:

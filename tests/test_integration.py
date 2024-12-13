@@ -231,7 +231,7 @@ class TestIntegration(TestCase):
         self.assertEqual(1, retval)
         self.assertEqual(["Suite One &amp; Suite Two.Suite Two.Another test",
                           "number of warnings (1) is higher than the maximum limit (0).",
-                          "Robot: Returning error code 1."],
+                          "Returning error code 1."],
                          self.caplog.messages)
 
     def test_robot_config(self):

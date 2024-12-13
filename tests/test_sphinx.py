@@ -12,7 +12,7 @@ class TestSphinxWarnings(TestCase):
 
     def setUp(self):
         self.warnings = WarningsPlugin()
-        self.warnings.activate_checker_name('sphinx', True)
+        self.warnings.activate_checker_name('sphinx', True, None)
 
     def test_no_warning(self):
         self.warnings.check('This should not be treated as warning')

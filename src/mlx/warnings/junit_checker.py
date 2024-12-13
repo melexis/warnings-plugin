@@ -57,7 +57,8 @@ class JUnitChecker(WarningsChecker):
         """ Handles the check of a test case element by checking if the result is a failure/error.
 
         If it is to be excluded by a configured regex, 1 is returned.
-        Otherwise, when in verbose mode, the suite name and test case name are printed.
+        Otherwise, when in verbose/output mode, the suite name and test case name are printed/written along with the
+        failure/error message.
 
         Args:
             testcase (junitparser.TestCase): Test case element to check for failure or error
@@ -68,7 +69,5 @@ class JUnitChecker(WarningsChecker):
         if isinstance(testcase.result, (Failure, Error)):
             if self._is_excluded(testcase.result.message):
                 return 1
-            string = f'{testcase.classname}.{testcase.name}'
-            self.output_logger.debug(f'{string}: {testcase.result.message}')
-            self.logger.info(string, extra={'checker': self})
+            self.logger.info(f'{testcase.classname}.{testcase.name} | {testcase.result.message}')
         return 0

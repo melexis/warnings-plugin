@@ -12,7 +12,7 @@ class TestXMLRunnerWarnings(TestCase):
 
     def setUp(self):
         self.warnings = WarningsPlugin()
-        self.warnings.activate_checker_name('xmlrunner', True)
+        self.warnings.activate_checker_name('xmlrunner', True, None)
 
     def test_no_warning(self):
         dut = 'This should not be treated as warning'

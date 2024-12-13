@@ -34,7 +34,7 @@ class TestCoverityWarnings(TestCase):
     def setUp(self):
         Finding.fingerprints = {}
         self.warnings = WarningsPlugin()
-        self.warnings.activate_checker_name('coverity', True)
+        self.warnings.activate_checker_name('coverity', True, None)
 
     def test_no_warning_normal_text(self):
         dut = 'This should not be treated as warning'

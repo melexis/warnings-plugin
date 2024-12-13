@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import csv
-import logging
 import os
 from io import TextIOWrapper
 from string import Template
@@ -10,17 +9,14 @@ from .code_quality import Finding
 from .exceptions import WarningsConfigError
 from .warnings_checker import WarningsChecker
 
-LOGGER = logging.getLogger("mlx.warnings.warnings")
-
 
 class PolyspaceChecker(WarningsChecker):
     name = 'polyspace'
     checkers = []
-    logging_fmt = "{checker.name_repr}: {checker.family_value:15s} : {checker.column_name:11s} : {checker.check_value:14s} | {message}"
 
-    def __init__(self, verbose=False, output=None):
+    def __init__(self, *logging_args):
         '''Constructor to set the default code quality description template to "Polyspace: $check"'''
-        super().__init__(verbose=verbose, output=output)
+        super().__init__(*logging_args)
         self._cq_description_template = Template('Polyspace: $check')
 
     @property
@@ -113,7 +109,7 @@ class PolyspaceChecker(WarningsChecker):
         for checker in self.checkers:
             count += checker.return_check_limits()
         if count:
-            LOGGER.warning(f"{self.name_repr}: Returning error code {count}.")
+            self.logger.warning(f"Returning error code {count}.")
         return count
 
     def parse_config(self, config):
@@ -149,7 +145,7 @@ class PolyspaceChecker(WarningsChecker):
                     column_name = key.lower()
                     check_value = value.lower()
                     padding = max(padding, len(f"{family_value}: {column_name}: {check_value}"))
-                    checker = PolyspaceFamilyChecker(family_value, column_name, check_value)
+                    checker = PolyspaceFamilyChecker(family_value, column_name, check_value, *self.logging_args)
                     checker.parse_config(check)
                     self.checkers.append(checker)
                 if not (column_name and check_value):
@@ -168,7 +164,7 @@ class PolyspaceChecker(WarningsChecker):
 
 
 class PolyspaceFamilyChecker(WarningsChecker):
-    name = 'polyspace'
+    name = 'polyspace.sub'
     subchecker = True
     code_quality_severity = {
         "impact: high": "critical",
@@ -177,8 +173,9 @@ class PolyspaceFamilyChecker(WarningsChecker):
         "red": "critical",
         "orange": "major",
     }
+    logging_fmt = "{checker.name_repr}: {checker.family_value:15s} : {checker.column_name:11s} : {checker.check_value:14s} | {message}"
 
-    def __init__(self, family_value, column_name, check_value):
+    def __init__(self, family_value, column_name, check_value, *logging_args):
         """Initialize the PolyspaceFamilyChecker
 
         Args:
@@ -186,7 +183,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
             column_name (str): The name of the column
             check_value (str): The value to check in the column
         """
-        super().__init__()
+        super().__init__(*logging_args)
         self.family_value = family_value
         self.column_name = column_name
         self.check_value = check_value
@@ -239,7 +236,6 @@ class PolyspaceFamilyChecker(WarningsChecker):
                 tab_sep_string = "\t".join(content.values())
                 if not self._is_excluded(tab_sep_string):
                     self.count = self.count + 1
-                    self.output_logger.debug(f"ID {content.get('id', None)!r}")
                     self.logger.info(f"ID {content.get('id', None)!r}")
                     if self.cq_enabled and content["color"].lower() != "green":
                         self.add_code_quality_finding(content)

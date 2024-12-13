@@ -1,6 +1,5 @@
 # SPDX-License-Identifier: Apache-2.0
 
-import logging
 import sys
 
 from junitparser import Error, Failure
@@ -8,13 +7,11 @@ from junitparser import Error, Failure
 from .junit_checker import JUnitChecker
 from .warnings_checker import WarningsChecker
 
-LOGGER = logging.getLogger("mlx.warnings.warnings")
-
 
 class RobotChecker(WarningsChecker):
     name = 'robot'
     checkers = []
-    logging_fmt = "{checker.name_repr}: {checker.suite_name_repr:<20} {message}"
+    logging_fmt = "{checker.name_repr}: {message}"
 
     @property
     def minimum(self):
@@ -81,30 +78,31 @@ class RobotChecker(WarningsChecker):
         for checker in self.checkers:
             count += checker.return_check_limits()
         if count:
-            LOGGER.warning(f"{self.name_repr}: Returning error code {count}.")
+            self.logger.warning(f"Returning error code {count}.")
         return count
 
     def parse_config(self, config):
         self.checkers = []
         check_suite_name = config.get('check_suite_names', True)
         for suite_config in config['suites']:
-            checker = RobotSuiteChecker(suite_config['name'], check_suite_name=check_suite_name)
+            checker = RobotSuiteChecker(suite_config['name'], *self.logging_args, check_suite_name=check_suite_name)
             checker.parse_config(suite_config)
             self.checkers.append(checker)
 
 
 class RobotSuiteChecker(JUnitChecker):
-    name = 'robot'
+    name = 'robot.sub'
     subchecker = True
+    logging_fmt = "{checker.name_repr}: {checker.suite_name_repr:<20} {message}"
 
-    def __init__(self, suite_name, check_suite_name=False):
+    def __init__(self, suite_name, *logging_args, check_suite_name=False):
         ''' Constructor
 
         Args:
             name (str): Name of the test suite to check the results of
             check_suite_name (bool): Whether to raise an error when no test in suite with given name is found
         '''
-        super().__init__()
+        super().__init__(*logging_args)
         self.suite_name = suite_name
         self.check_suite_name = check_suite_name
         self.is_valid_suite_name = False
@@ -115,13 +113,14 @@ class RobotSuiteChecker(JUnitChecker):
 
     @property
     def name_repr(self):
-        return self.name.capitalize()
+        return self.name.replace('.sub', '').capitalize()
 
     def _check_testcase(self, testcase):
         """ Handles the check of a test case element by checking if the result is a failure/error.
 
         If it is to be excluded by a configured regex, or the test case does not belong to the suite, 1 is returned.
-        Otherwise, when in verbose mode, the suite name and test case name are printed.
+        Otherwise, when in verbose/output mode, the suite name and test case name are printed/written along with the
+        failure/error message.
 
         Args:
             testcase (junitparser.TestCase): Test case element to check for failure or error
