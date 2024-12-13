@@ -58,7 +58,7 @@ class WarningsChecker:
         self.logger = logging.getLogger(self.name)
         formatter = logging.Formatter(fmt=self.logging_fmt, style="{")
         if not self.logger.handlers:
-            self.logger.propagate = False  # Do not propagate to parent loggers
+            self.logger.propagate = True  # Propagate to parent loggers
             handler = logging.StreamHandler()
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
