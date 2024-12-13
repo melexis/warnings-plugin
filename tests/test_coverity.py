@@ -4,6 +4,8 @@ from pathlib import Path
 from unittest import TestCase
 from unittest.mock import patch
 
+import pytest
+
 from mlx.warnings import Finding, WarningsPlugin, warnings_wrapper
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
@@ -25,6 +27,10 @@ def ordered(obj):
     "MIN_FALSE_POSITIVE": "2", "MAX_FALSE_POSITIVE": "2",
 })
 class TestCoverityWarnings(TestCase):
+    @pytest.fixture(autouse=True)
+    def caplog(self, caplog):
+        self.caplog = caplog
+
     def setUp(self):
         Finding.fingerprints = {}
         self.warnings = WarningsPlugin()
@@ -42,30 +48,27 @@ class TestCoverityWarnings(TestCase):
 
     def test_single_warning(self):
         dut = '/src/somefile.c:82: CID 113396 (#2 of 2): Coding standard violation (MISRA C-2012 Rule 10.1): Unclassified, Unspecified, Undecided, owner is nobody, first detected on 2017-07-27.'
-        with self.assertLogs(logger="coverity", level="INFO") as fake_out:
-            self.warnings.check(dut)
+        self.warnings.check(dut)
         self.assertEqual(self.warnings.return_count(), 1)
-        self.assertIn(f"INFO:coverity:{dut}", fake_out.output)
+        self.assertEqual([f"{dut}"], self.caplog.messages)
 
     def test_single_warning_count_one(self):
         dut1 = '/src/somefile.c:80: CID 113396 (#1 of 2): Coding standard violation (MISRA C-2012 Rule 10.1): Unclassified, Unspecified, Undecided, owner is nobody, first detected on 2017-07-27.'
         dut2 = '/src/somefile.c:82: CID 113396 (#2 of 2): Coding standard violation (MISRA C-2012 Rule 10.1): Unclassified, Unspecified, Undecided, owner is nobody, first detected on 2017-07-27.'
-        with self.assertLogs(logger="coverity", level="INFO") as fake_out:
-            self.warnings.check(dut1)
-            self.warnings.check(dut2)
+        self.warnings.check(dut1)
+        self.warnings.check(dut2)
         self.assertEqual(self.warnings.return_count(), 1)
-        self.assertIn(f"INFO:coverity:{dut2}", fake_out.output)
+        self.assertEqual([f"{dut2}"], self.caplog.messages)
 
     def test_single_warning_real_output(self):
         dut1 = '/src/somefile.c:80: CID 113396 (#1 of 2): Coding standard violation (MISRA C-2012 Rule 10.1): Unclassified, Unspecified, Undecided, owner is nobody, first detected on 2017-07-27.'
         dut2 = '/src/somefile.c:82: CID 113396 (#2 of 2): Coding standard violation (MISRA C-2012 Rule 10.1): Unclassified, Unspecified, Undecided, owner is nobody, first detected on 2017-07-27.'
         dut3 = 'src/something/src/somefile.c:82: 1. misra_violation: Essential type of the left hand operand "0U" (unsigned) is not the same as that of the right operand "1U"(signed).'
-        with self.assertLogs(logger="coverity", level="INFO") as fake_out:
-            self.warnings.check(dut1)
-            self.warnings.check(dut2)
-            self.warnings.check(dut3)
+        self.warnings.check(dut1)
+        self.warnings.check(dut2)
+        self.warnings.check(dut3)
         self.assertEqual(self.warnings.return_count(), 1)
-        self.assertIn(f"INFO:coverity:{dut2}", fake_out.output)
+        self.assertEqual([f"{dut2}"], self.caplog.messages)
 
     def test_code_quality_without_config(self):
         filename = 'coverity_cq.json'

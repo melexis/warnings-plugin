@@ -2,6 +2,8 @@ import os
 from pathlib import Path
 from unittest import TestCase
 
+import pytest
+
 from mlx.warnings import (
     DoxyChecker,
     JUnitChecker,
@@ -16,6 +18,10 @@ TEST_IN_DIR = Path(__file__).parent / 'test_in'
 
 
 class TestConfig(TestCase):
+    @pytest.fixture(autouse=True)
+    def caplog(self, caplog):
+        self.caplog = caplog
+
     def setUp(self):
         os.environ['MIN_SPHINX_WARNINGS'] = '0'
         os.environ['MAX_SPHINX_WARNINGS'] = '0'
@@ -49,28 +55,27 @@ class TestConfig(TestCase):
             "Failed to find environment variable 'MAX_SPHINX_WARNINGS' for configuration value 'max'")
 
     def _helper_exclude(self, warnings):
-        logger_name = "sphinx"
-        with self.assertLogs(logger=logger_name, level="INFO") as verbose_output:
-            warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
-            self.assertEqual(warnings.return_count(), 0)
-            warnings.check('<testcase classname="dummy_class" name="dummy_name"><failure message="some random message from test case" /></testcase>')
-            self.assertEqual(warnings.return_count(), 0)
-            deprecation_warning = 'sphinx/application.py:402: RemovedInSphinx20Warning: app.info() is now deprecated. Use sphinx.util.logging instead.'
-            warnings.check(deprecation_warning)
-            self.assertEqual(warnings.return_count(), 0)
-            toctree_warning = "/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'"
-            warnings.check(toctree_warning)
-            self.assertEqual(warnings.return_count(), 0)  # ignored because of configured "exclude" regex
-            warnings.check("home/bljah/test/index.rst:5: WARNING: this warning should not get excluded")
-            self.assertEqual(warnings.return_count(), 1)
-            warnings.check('This should not be treated as warning2')
-            self.assertEqual(warnings.return_count(), 1)
-            warnings.check('ERROR [0.000s]: test_some_error_test (something.anything.somewhere)')
-            self.assertEqual(warnings.return_count(), 1)
+        warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
+        self.assertEqual(warnings.return_count(), 0)
+        warnings.check('<testcase classname="dummy_class" name="dummy_name"><failure message="some random message from test case" /></testcase>')
+        self.assertEqual(warnings.return_count(), 0)
+        deprecation_warning = 'sphinx/application.py:402: RemovedInSphinx20Warning: app.info() is now deprecated. Use sphinx.util.logging instead.'
+        warnings.check(deprecation_warning)
+        self.assertEqual(warnings.return_count(), 0)
+        toctree_warning = "/home/bljah/test/index.rst:5: WARNING: toctree contains reference to nonexisting document u'installation'"
+        warnings.check(toctree_warning)
+        self.assertEqual(warnings.return_count(), 0)  # ignored because of configured "exclude" regex
+        warnings.check("home/bljah/test/index.rst:5: WARNING: this warning should not get excluded")
+        self.assertEqual(warnings.return_count(), 1)
+        warnings.check('This should not be treated as warning2')
+        self.assertEqual(warnings.return_count(), 1)
+        warnings.check('ERROR [0.000s]: test_some_error_test (something.anything.somewhere)')
+        self.assertEqual(warnings.return_count(), 1)
         excluded_toctree_warning = "Excluded {!r} because of configured regex {!r}".format(toctree_warning, "WARNING: toctree")
-        self.assertIn(f"INFO:{logger_name}:{excluded_toctree_warning}", verbose_output.output)
+        self.assertIn(f"Sphinx: Config parsing completed", self.caplog.messages)
+        self.assertIn(f"{excluded_toctree_warning}", self.caplog.messages)
         warning_echo = "home/bljah/test/index.rst:5: WARNING: this warning should not get excluded"
-        self.assertIn(f"INFO:{logger_name}:{warning_echo}", verbose_output.output)
+        self.assertIn(f"{warning_echo}", self.caplog.messages)
 
     def test_configfile_parsing_exclude_json(self):
         warnings = WarningsPlugin()
@@ -204,18 +209,18 @@ class TestConfig(TestCase):
             }
         }
         warnings.config_parser(tmpjson, verbose=True)
-        with self.assertLogs(logger="robot", level="INFO") as verbose_output:
-            with open('tests/test_in/robot_double_fail.xml') as xmlfile:
-                warnings.check(xmlfile.read())
-                retval = warnings.return_check_limits()
+        with open('tests/test_in/robot_double_fail.xml') as xmlfile:
+            warnings.check(xmlfile.read())
+            retval = warnings.return_check_limits()
         self.assertEqual(warnings.return_count(), 1)
         self.assertEqual(retval, 0)
         self.assertEqual(
-            ["INFO:robot:Excluded 'Directory &#x27;C:\\\\nonexistent&#x27; does not exist.' because of configured regex 'does not exist'",
-             "INFO:robot:Suite One &amp; Suite Two.Suite Two.Another test",
-             "WARNING:robot:number of warnings (0) is exactly as expected. Well done.",
-             "WARNING:robot:number of warnings (1) is exactly as expected. Well done."],
-            verbose_output.output
+            ["Robot: Config parsing completed",
+             "Excluded 'Directory &#x27;C:\\\\nonexistent&#x27; does not exist.' because of configured regex 'does not exist'",
+             "Suite One &amp; Suite Two.Suite Two.Another test",
+             "number of warnings (0) is exactly as expected. Well done.",
+             "number of warnings (1) is exactly as expected. Well done."],
+            self.caplog.messages
         )
 
     def test_partial_robot_config_empty_name(self):
@@ -235,17 +240,18 @@ class TestConfig(TestCase):
         }
         warnings.config_parser(tmpjson, verbose=True)
         with open('tests/test_in/robot_double_fail.xml') as xmlfile:
-            with self.assertLogs(logger="robot", level="INFO") as verbose_output:
-                warnings.check(xmlfile.read())
-                count = warnings.return_count()
+            warnings.check(xmlfile.read())
+            count = warnings.return_count()
         self.assertEqual(count, 1)
         self.assertEqual(warnings.return_check_limits(), 0)
         self.assertEqual(
             [
-                r"INFO:robot:Excluded 'Directory &#x27;C:\\nonexistent&#x27; does not exist.' because of configured regex 'does not exist'",
-                "INFO:robot:Suite One &amp; Suite Two.Suite Two.Another test",
+                "Robot: Config parsing completed",
+                r"Excluded 'Directory &#x27;C:\\nonexistent&#x27; does not exist.' because of configured regex 'does not exist'",
+                "Suite One &amp; Suite Two.Suite Two.Another test",
+                "number of warnings (1) is exactly as expected. Well done."
             ],
-            verbose_output.output
+            self.caplog.messages
         )
 
     def test_partial_xmlrunner_config_parsing(self):

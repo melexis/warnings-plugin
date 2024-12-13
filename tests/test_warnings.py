@@ -1,9 +1,15 @@
 from unittest import TestCase
 
+import pytest
+
 from mlx.warnings import WarningsPlugin
 
 
 class TestWarningsPlugin(TestCase):
+    @pytest.fixture(autouse=True)
+    def caplog(self, caplog):
+        self.caplog = caplog
+
     def test_doxygen_warning(self):
         warnings = WarningsPlugin()
         warnings.activate_checker_name('doxygen')
@@ -122,6 +128,5 @@ class TestWarningsPlugin(TestCase):
     def test_non_existent_checker_name(self):
         warnings = WarningsPlugin()
         invalid_checker_name = 'non-existent'
-        with self.assertLogs(logger="mlx.warnings.warnings", level="INFO") as fake_out:
-            warnings.activate_checker_name(invalid_checker_name)
-        self.assertIn(f"ERROR:mlx.warnings.warnings:Checker {invalid_checker_name} does not exist", fake_out.output)
+        warnings.activate_checker_name(invalid_checker_name)
+        self.assertEqual([f"Checker {invalid_checker_name} does not exist"], self.caplog.messages)

@@ -1,9 +1,15 @@
 import unittest
 
+import pytest
+
 from mlx.warnings import RobotSuiteChecker, WarningsPlugin, warnings_wrapper
 
 
 class TestRobotWarnings(unittest.TestCase):
+    @pytest.fixture(autouse=True)
+    def caplog(self, caplog):
+        self.caplog = caplog
+
     def setUp(self):
         self.warnings = WarningsPlugin()
         self.dut = self.warnings.activate_checker_name('robot', True)
@@ -21,25 +27,22 @@ class TestRobotWarnings(unittest.TestCase):
 
     def test_single_warning(self):
         with open('tests/test_in/robot_single_fail.xml') as xmlfile:
-            with self.assertLogs(logger="robot", level="INFO") as fake_out:
-                self.warnings.check(xmlfile.read())
-                count = self.warnings.return_count()
+            self.warnings.check(xmlfile.read())
+            count = self.warnings.return_count()
         self.assertEqual(count, 1)
-        self.assertIn("INFO:robot:Suite One &amp; Suite Two.Suite One.First Test", fake_out.output)
+        self.assertEqual(["Suite One &amp; Suite Two.Suite One.First Test"], self.caplog.messages)
 
     def test_double_warning_and_verbosity(self):
-        with self.assertLogs(logger="mlx.warnings.warnings", level="INFO") as fake_logger:
-            with self.assertLogs(logger="robot", level="INFO") as fake_out:
-                retval = warnings_wrapper(['--verbose',
-                                           '--robot',
-                                           'tests/test_in/robot_double_fail.xml'])
+        retval = warnings_wrapper(['--verbose',
+                                    '--robot',
+                                    'tests/test_in/robot_double_fail.xml'])
         self.assertEqual(
-            ["INFO:robot:Suite One &amp; Suite Two.Suite One.First Test",
-             "INFO:robot:Suite One &amp; Suite Two.Suite Two.Another test",
-             "WARNING:robot:number of warnings (2) is higher than the maximum limit (0).",],
-            fake_out.output
+            ["Suite One &amp; Suite Two.Suite One.First Test",
+             "Suite One &amp; Suite Two.Suite Two.Another test",
+             "number of warnings (2) is higher than the maximum limit (0).",
+             "Robot: Returning error code 2."],
+            self.caplog.messages
         )
-        self.assertEqual(["WARNING:mlx.warnings.warnings:Robot: Returning error code 2."], fake_logger.output)
         self.assertEqual(retval, 2)
 
     def test_invalid_xml(self):

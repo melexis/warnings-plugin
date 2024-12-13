@@ -5,6 +5,8 @@ from pathlib import Path
 from unittest import TestCase
 from unittest.mock import patch
 
+import pytest
+
 from mlx.warnings import Finding, WarningsConfigError, exceptions, warnings_wrapper
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
@@ -23,6 +25,10 @@ def reset_logging():
 
 
 class TestIntegration(TestCase):
+    @pytest.fixture(autouse=True)
+    def caplog(self, caplog):
+        self.caplog = caplog
+
     def setUp(self):
         Finding.fingerprints = {}
         if not TEST_OUT_DIR.exists():
@@ -50,20 +56,20 @@ class TestIntegration(TestCase):
         self.assertEqual(2, ex.exception.code)
 
     def test_verbose(self):
-        with self.assertLogs(logger="junit", level="INFO") as fake_out:
-            retval = warnings_wrapper(['--verbose', '--junit', 'tests/test_in/junit_single_fail.xml'])
-        self.assertEqual(["INFO:junit:test_warn_plugin_single_fail.myfirstfai1ure",
-                          "WARNING:junit:number of warnings (1) is higher than the maximum limit (0). "
-                          "Returning error code 1."],
-                         fake_out.output)
+        retval = warnings_wrapper(['--verbose', '--junit', 'tests/test_in/junit_single_fail.xml'])
+        self.assertEqual(
+            [
+                "test_warn_plugin_single_fail.myfirstfai1ure",
+                "number of warnings (1) is higher than the maximum limit (0). Returning error code 1.",
+            ],
+            self.caplog.messages)
         self.assertEqual(1, retval)
 
     def test_no_verbose(self):
-        with self.assertLogs(logger="junit", level="DEBUG") as fake_out:
-            retval = warnings_wrapper(['--junit', 'tests/test_in/junit_single_fail.xml'])
+        retval = warnings_wrapper(['--junit', 'tests/test_in/junit_single_fail.xml'])
         self.assertEqual(
-            ["WARNING:junit:number of warnings (1) is higher than the maximum limit (0). Returning error code 1."],
-            fake_out.output
+            ["number of warnings (1) is higher than the maximum limit (0). Returning error code 1."],
+            self.caplog.messages
         )
         self.assertEqual(1, retval)
 
@@ -216,38 +222,34 @@ class TestIntegration(TestCase):
 
     def test_robot_verbose(self):
         ''' If no suite name is configured, all suites must be taken into account '''
-        with self.assertLogs(logger="mlx.warnings.warnings", level="INFO") as fake_logger:
-            with self.assertLogs(logger="robot", level="INFO") as fake_out:
-                retval = warnings_wrapper([
-                    '--verbose',
-                    '--robot',
-                    '--name', 'Suite Two',
-                    'tests/test_in/robot_double_fail.xml',
-                ])
+        retval = warnings_wrapper([
+            '--verbose',
+            '--robot',
+            '--name', 'Suite Two',
+            'tests/test_in/robot_double_fail.xml',
+        ])
         self.assertEqual(1, retval)
-        self.assertEqual(["INFO:robot:Suite One &amp; Suite Two.Suite Two.Another test",
-                          "WARNING:robot:number of warnings (1) is higher than the maximum limit (0)."],
-                         fake_out.output)
-        self.assertEqual(["WARNING:mlx.warnings.warnings:Robot: Returning error code 1."], fake_logger.output)
+        self.assertEqual(["Suite One &amp; Suite Two.Suite Two.Another test",
+                          "number of warnings (1) is higher than the maximum limit (0).",
+                          "Robot: Returning error code 1."],
+                         self.caplog.messages)
 
     def test_robot_config(self):
         os.environ['MIN_ROBOT_WARNINGS'] = '0'
         os.environ['MAX_ROBOT_WARNINGS'] = '0'
-        with self.assertLogs(logger="mlx.warnings.warnings", level="WARNING") as fake_logger:
-            with self.assertLogs(logger="robot", level="WARNING") as fake_out:
-                retval = warnings_wrapper([
-                    '--config',
-                    'tests/test_in/config_example_robot.json',
-                    'tests/test_in/robot_double_fail.xml',
-                ])
+        retval = warnings_wrapper([
+            '--config',
+            'tests/test_in/config_example_robot.json',
+            'tests/test_in/robot_double_fail.xml',
+        ])
         self.assertEqual(
-            ["WARNING:robot:number of warnings (1) is between limits 0 and 1. Well done.",
-             "WARNING:robot:number of warnings (2) is higher than the maximum limit (1).",
-             "WARNING:robot:number of warnings (1) is between limits 1 and 2. Well done.",
-             "WARNING:robot:number of warnings (0) is exactly as expected. Well done.",],
-            fake_out.output
+            ["number of warnings (1) is between limits 0 and 1. Well done.",
+             "number of warnings (2) is higher than the maximum limit (1).",
+             "number of warnings (1) is between limits 1 and 2. Well done.",
+             "number of warnings (0) is exactly as expected. Well done.",
+             "Returning error code 2."],
+            self.caplog.messages
         )
-        self.assertEqual(["WARNING:mlx.warnings.warnings:Robot: Returning error code 2."], fake_logger.output)
         self.assertEqual(2, retval)
         for var in ('MIN_ROBOT_WARNINGS', 'MAX_ROBOT_WARNINGS'):
             if var in os.environ:
@@ -255,27 +257,23 @@ class TestIntegration(TestCase):
 
     def test_robot_config_check_names(self):
         self.maxDiff = None
-        with self.assertLogs(logger="robot", level="INFO") as fake_out:
-            with self.assertRaises(SystemExit) as cm_err:
-                warnings_wrapper([
-                    '--config',
-                    'tests/test_in/config_example_robot_invalid_suite.json',
-                    'tests/test_in/robot_double_fail.xml',
-                ])
-        stdout_log = fake_out.output
-        self.assertIn("ERROR:robot:No suite with name 'b4d su1te name' found. Returning error code -1.",
-                      stdout_log)
+        with self.assertRaises(SystemExit) as cm_err:
+            warnings_wrapper([
+                '--config',
+                'tests/test_in/config_example_robot_invalid_suite.json',
+                'tests/test_in/robot_double_fail.xml',
+            ])
+        self.assertEqual(["No suite with name 'b4d su1te name' found. Returning error code -1."],
+                      self.caplog.messages)
         self.assertEqual(cm_err.exception.code, -1)
 
     def test_robot_cli_check_name(self):
         self.maxDiff = None
-        with self.assertLogs(logger="robot", level="INFO") as fake_out:
-            with self.assertRaises(SystemExit) as cm_err:
-                warnings_wrapper(['--verbose', '--robot', '--name', 'Inv4lid Name',
-                                  'tests/test_in/robot_double_fail.xml'])
-        stdout_log = fake_out.output
-
-        self.assertIn("ERROR:robot:No suite with name 'Inv4lid Name' found. Returning error code -1.", stdout_log)
+        with self.assertRaises(SystemExit) as cm_err:
+            warnings_wrapper(['--verbose', '--robot', '--name', 'Inv4lid Name',
+                                'tests/test_in/robot_double_fail.xml'])
+        self.assertEqual(["No suite with name 'Inv4lid Name' found. Returning error code -1."],
+                         self.caplog.messages)
         self.assertEqual(cm_err.exception.code, -1)
 
     def test_output_file_sphinx(self):
@@ -382,15 +380,26 @@ class TestIntegration(TestCase):
         filename = 'code_quality_format.json'
         out_file = str(TEST_OUT_DIR / filename)
         ref_file = str(TEST_IN_DIR / filename)
-        with self.assertLogs(logger="mlx.warnings.warnings", level="INFO") as fake_out:
-            retval = warnings_wrapper([
-                '--code-quality', out_file,
-                '--config', 'tests/test_in/config_cq_description_format.json',
-                'tests/test_in/mixed_warnings.txt',
-            ])
-        output = fake_out.output
-        self.assertIn("WARNING:mlx.warnings.warnings:Coverity: Unrecognized classification 'max'", output)
-        self.assertIn("WARNING:mlx.warnings.warnings:Coverity: Unrecognized classification 'min'", output)
+        retval = warnings_wrapper([
+            '--code-quality', out_file,
+            '--config', 'tests/test_in/config_cq_description_format.json',
+            'tests/test_in/mixed_warnings.txt',
+        ])
+        self.assertEqual(["Sphinx: Config parsing completed",
+                          "Doxygen: Config parsing completed",
+                          "Xmlrunner: Config parsing completed",
+                          "Coverity: Unrecognized classification 'min'",
+                          "Coverity: Unrecognized classification 'max'",
+                          "Coverity: Config parsing completed",
+                          "git/test/index.rst:None: WARNING: toctree contains reference to nonexisting document u'installation'",
+                          "WARNING: List item 'CL-UNDEFINED_CL_ITEM' in merge/pull request 138 is not defined as a checklist-item.",
+                          "Notice: Output directory `doc/doxygen/framework' does not exist. I have created it for you.",
+                          "/home/user/myproject/helper/SimpleTimer.h:19: Error: Unexpected character `\"'",
+                          "<v_peq>:1: Warning: The following parameters of sofa::component::odesolver::EulerKaapiSolver::v_peq(VecId v, VecId a, double f) are not documented:",
+                          "error: Could not read image `/home/user/myproject/html/struct_foo_graph.png' generated by dot!",
+                          "ERROR [0.000s]: test_some_error_test (something.anything.somewhere)'",
+                          "src/somefile.c:82: CID 113396 (#2 of 2): Coding standard violation (MISRA C-2012 Rule 10.1): Unclassified, Unspecified, Undecided, owner is nobody, first detected on 2017-07-27.",
+                          "number of warnings (2) is higher than the maximum limit (0). Returning error code 2."], self.caplog.messages)
         self.assertEqual(2, retval)
         self.assertTrue(filecmp.cmp(out_file, ref_file), f'{out_file} differs from {ref_file}')
 
