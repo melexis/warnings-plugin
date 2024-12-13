@@ -69,5 +69,6 @@ class JUnitChecker(WarningsChecker):
         if isinstance(testcase.result, (Failure, Error)):
             if self._is_excluded(testcase.result.message):
                 return 1
-            self.logger.info(f'{testcase.classname}.{testcase.name} | {testcase.result.message}')
+            self.logger.info(f'{testcase.classname}.{testcase.name}')
+            self.logger.debug(f'{testcase.classname}.{testcase.name} | {testcase.result.message}')
         return 0

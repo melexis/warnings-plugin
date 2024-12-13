@@ -164,7 +164,7 @@ class PolyspaceChecker(WarningsChecker):
 
 
 class PolyspaceFamilyChecker(WarningsChecker):
-    name = 'polyspace.sub'
+    name = 'polyspace_sub'
     subchecker = True
     code_quality_severity = {
         "impact: high": "critical",
@@ -236,6 +236,8 @@ class PolyspaceFamilyChecker(WarningsChecker):
                 tab_sep_string = "\t".join(content.values())
                 if not self._is_excluded(tab_sep_string):
                     self.count = self.count + 1
-                    self.logger.info(f"ID {content.get('id', None)!r}")
+                    verbose_log_msg = f"ID {content.get('id', None)!r}"
+                    self.logger.info(verbose_log_msg)
+                    self.logger.debug(verbose_log_msg)
                     if self.cq_enabled and content["color"].lower() != "green":
                         self.add_code_quality_finding(content)

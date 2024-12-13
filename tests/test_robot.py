@@ -32,7 +32,7 @@ class TestRobotWarnings(unittest.TestCase):
         self.assertEqual(count, 1)
         self.assertEqual(
             [
-                "Suite One &amp; Suite Two.Suite One.First Test | Directory &#x27;C:\\nonexistent&#x27; does not exist."
+                "Suite One &amp; Suite Two.Suite One.First Test"
             ],
             self.caplog.messages)
 
@@ -44,8 +44,8 @@ class TestRobotWarnings(unittest.TestCase):
         ])
         self.assertEqual(
             [
-                "Suite One &amp; Suite Two.Suite One.First Test | Directory &#x27;C:\\nonexistent&#x27; does not exist.",
-                "Suite One &amp; Suite Two.Suite Two.Another test | Expected str; got int.",
+                "Suite One &amp; Suite Two.Suite One.First Test",
+                "Suite One &amp; Suite Two.Suite Two.Another test",
                 "number of warnings (2) is higher than the maximum limit (0).",
                 "Returning error code 2."
             ],

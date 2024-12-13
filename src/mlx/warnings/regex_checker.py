@@ -47,6 +47,7 @@ class RegexChecker(WarningsChecker):
                 continue
             self.count += 1
             self.logger.info(match_string)
+            self.logger.debug(match_string)
             if self.cq_enabled:
                 self.add_code_quality_finding(match)
 
@@ -169,7 +170,7 @@ class CoverityChecker(RegexChecker):
 
 
 class CoverityClassificationChecker(WarningsChecker):
-    name = 'coverity.sub'
+    name = 'coverity_sub'
     subchecker = True
     logging_fmt = "{checker.name_repr}: {checker.classification:<14} | {message}"
     SEVERITY_MAP = {
@@ -235,6 +236,7 @@ class CoverityClassificationChecker(WarningsChecker):
         if not self._is_excluded(match_string) and (content.group('curr') == content.group('max')):
             self.count += 1
             self.logger.info(match_string)
+            self.logger.debug(match_string)
             if self.cq_enabled:
                 self.add_code_quality_finding(content)
 

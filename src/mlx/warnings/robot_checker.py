@@ -91,7 +91,7 @@ class RobotChecker(WarningsChecker):
 
 
 class RobotSuiteChecker(JUnitChecker):
-    name = 'robot.sub'
+    name = 'robot_sub'
     subchecker = True
     logging_fmt = "{checker.name_repr}: {checker.suite_name_repr:<20} {message}"
 
@@ -113,7 +113,7 @@ class RobotSuiteChecker(JUnitChecker):
 
     @property
     def name_repr(self):
-        return self.name.replace('.sub', '').capitalize()
+        return self.name.replace('_sub', '').capitalize()
 
     def _check_testcase(self, testcase):
         """ Handles the check of a test case element by checking if the result is a failure/error.

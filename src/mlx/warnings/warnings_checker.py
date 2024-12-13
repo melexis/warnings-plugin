@@ -58,15 +58,15 @@ class WarningsChecker:
 
         self.logger = logging.getLogger(self.name)
         self.logger.setLevel(logging.WARNING)
-        if verbose or output:
-            self.logger.setLevel(logging.DEBUG)
+        if verbose:
+            self.logger.setLevel(logging.INFO)
         formatter = logging.Formatter(fmt=self.logging_fmt, style="{")
         if not self.logger.handlers:
             self.logger.propagate = True  # Propagate to parent loggers
             handler = logging.StreamHandler()
             handler.setFormatter(formatter)
             if verbose:
-                handler.setLevel(logging.DEBUG)
+                handler.setLevel(logging.INFO)
             else:
                 handler.setLevel(logging.WARNING)
             self.logger.addHandler(handler)
@@ -75,14 +75,16 @@ class WarningsChecker:
                 handler = logging.FileHandler(output, "a")
                 handler.setFormatter(formatter)
                 handler.setLevel(logging.DEBUG)
+                self.logger.setLevel(logging.DEBUG)
                 self.logger.addHandler(handler)
+                # TODO filter out non-debug logs
 
         logging_vars = {"checker": self}
         self.logger = logging.LoggerAdapter(self.logger, extra=logging_vars)
 
     @property
     def name_repr(self):
-        return self.name.replace('.sub', '').capitalize()
+        return self.name.replace('_sub', '').capitalize()
 
     @property
     def cq_findings(self):
