@@ -1,4 +1,3 @@
-import logging
 import os
 import re
 from string import Template
