@@ -1,9 +1,9 @@
 import filecmp
 import os
 import unittest
-from io import StringIO
 from pathlib import Path
-from unittest.mock import patch
+
+import pytest
 
 from mlx.warnings import (
     Finding,
@@ -17,56 +17,56 @@ TEST_OUT_DIR = Path(__file__).parent / 'test_out'
 
 
 class TestCodeProverWarnings(unittest.TestCase):
+    @pytest.fixture(autouse=True)
+    def caplog(self, caplog):
+        self.caplog = caplog
+
     def setUp(self):
         Finding.fingerprints = {}
-        self.warnings = WarningsPlugin(verbose=True)
-        self.dut = self.warnings.activate_checker_name('polyspace')
+        self.warnings = WarningsPlugin()
+        self.dut = self.warnings.activate_checker_name('polyspace', False, None)
         self.dut.checkers = [
-            PolyspaceFamilyChecker("run-time check", "color", "red"),
-            PolyspaceFamilyChecker("run-time check", "color", "orange"),
+            PolyspaceFamilyChecker("run-time check", "color", "red", *self.dut.logging_args),
+            PolyspaceFamilyChecker("run-time check", "color", "orange", *self.dut.logging_args),
         ]
 
     def test_code_prover_tsv_file(self):
         with open(TEST_IN_DIR / 'polyspace.tsv', newline="") as file:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
-                self.warnings.check_logfile(file)
-                count = self.warnings.return_check_limits()
-        stdout_log = fake_out.getvalue()
+            self.warnings.check_logfile(file)
+            count = self.warnings.return_check_limits()
         self.assertEqual(
-            '\n'.join([
-                "polyspace: family 'run-time check'       color: red                    number of warnings (0) is exactly as expected. Well done.",
-                "polyspace: family 'run-time check'       color: orange                 number of warnings (19) is higher than the maximum limit (0).",
-                "Returning error code 19."
-            ]) + '\n',
-            stdout_log
+            ["number of warnings (0) is exactly as expected. Well done.",
+             "number of warnings (19) is higher than the maximum limit (0).",
+             "Returning error code 19."],
+            self.caplog.messages
         )
         self.assertEqual(count, 19)
 
 
 class TestBugFinderWarnings(unittest.TestCase):
+    @pytest.fixture(autouse=True)
+    def caplog(self, caplog):
+        self.caplog = caplog
+
     def setUp(self):
-        self.warnings = WarningsPlugin(verbose=True)
-        self.dut = self.warnings.activate_checker_name('polyspace')
+        self.warnings = WarningsPlugin()
+        self.dut = self.warnings.activate_checker_name('polyspace', False, None)
         self.dut.checkers = [
-            PolyspaceFamilyChecker("defect", "information", "impact: high"),
-            PolyspaceFamilyChecker("defect", "information", "impact: medium"),
-            PolyspaceFamilyChecker("defect", "information", "impact: low"),
+            PolyspaceFamilyChecker("defect", "information", "impact: high", *self.dut.logging_args),
+            PolyspaceFamilyChecker("defect", "information", "impact: medium", *self.dut.logging_args),
+            PolyspaceFamilyChecker("defect", "information", "impact: low", *self.dut.logging_args),
         ]
 
     def test_bug_finder_tsv_file(self):
         with open(TEST_IN_DIR / 'polyspace.tsv', newline="") as file:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
-                self.warnings.check_logfile(file)
-                count = self.warnings.return_check_limits()
-        stdout_log = fake_out.getvalue()
+            self.warnings.check_logfile(file)
+            count = self.warnings.return_check_limits()
         self.assertEqual(
-            '\n'.join([
-                "polyspace: family 'defect'               information: impact: high     number of warnings (42) is higher than the maximum limit (0).",
-                "polyspace: family 'defect'               information: impact: medium   number of warnings (9) is higher than the maximum limit (0).",
-                "polyspace: family 'defect'               information: impact: low      number of warnings (4) is higher than the maximum limit (0).",
-                "Returning error code 55."
-            ]) + '\n',
-            stdout_log
+            ["number of warnings (42) is higher than the maximum limit (0).",
+             "number of warnings (9) is higher than the maximum limit (0).",
+             "number of warnings (4) is higher than the maximum limit (0).",
+             "Returning error code 55."],
+            self.caplog.messages
         )
         self.assertEqual(count, 55)
 

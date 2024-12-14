@@ -1,30 +1,40 @@
 import filecmp
 import logging
 import os
-from io import StringIO
 from pathlib import Path
 from unittest import TestCase
 from unittest.mock import patch
+
+import pytest
 
 from mlx.warnings import Finding, WarningsConfigError, exceptions, warnings_wrapper
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
 TEST_OUT_DIR = Path(__file__).parent / 'test_out'
 
-def run_test_with_logging(args):
-        buffer = StringIO()
-        with patch('sys.stdout', new=buffer):
-            logger = logging.getLogger()
-            stream_handler = logging.StreamHandler(buffer)
-            logger.addHandler(stream_handler)
-            try:
-                retval = warnings_wrapper(args)
-            finally:
-                logger.removeHandler(stream_handler)
-        return buffer.getvalue(), retval
+
+def reset_logging():
+    loggers = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
+    loggers.append(logging.getLogger())
+    for logger in loggers:
+        for handler in list(logger.handlers):  # copy list before removing elements
+            logger.removeHandler(handler)
+            handler.close()
+        logger.setLevel(logging.NOTSET)
+        logger.propagate = True
 
 
 class TestIntegration(TestCase):
+
+    @pytest.fixture(autouse=True)
+    def capsys(self, capsys):
+        self.capsys = capsys
+
+    @property
+    def stderr_lines(self):
+        read_obj = self.capsys.readouterr()
+        return read_obj.err.splitlines()
+
     def setUp(self):
         Finding.fingerprints = {}
         if not TEST_OUT_DIR.exists():
@@ -34,6 +44,7 @@ class TestIntegration(TestCase):
         for var in ('FIRST_ENVVAR', 'SECOND_ENVVAR', 'MIN_SPHINX_WARNINGS', 'MAX_SPHINX_WARNINGS'):
             if var in os.environ:
                 del os.environ[var]
+        reset_logging()
 
     def test_help(self):
         with self.assertRaises(SystemExit) as ex:
@@ -51,18 +62,21 @@ class TestIntegration(TestCase):
         self.assertEqual(2, ex.exception.code)
 
     def test_verbose(self):
-        stdout_log, retval = run_test_with_logging(['--verbose', '--junit', 'tests/test_in/junit_single_fail.xml'])
-        self.assertEqual("test_warn_plugin_single_fail.myfirstfai1ure\n"
-                         "junit:     number of warnings (1) is higher than the maximum limit (0). "
-                         "Returning error code 1.\n",
-                         stdout_log)
+        retval = warnings_wrapper(['--verbose', '--junit', 'tests/test_in/junit_single_fail.xml'])
+        self.assertEqual(
+            [
+                "JUnit: test_warn_plugin_single_fail.myfirstfai1ure",
+                "JUnit: number of warnings (1) is higher than the maximum limit (0). Returning error code 1.",
+            ],
+            self.stderr_lines)
         self.assertEqual(1, retval)
 
     def test_no_verbose(self):
-        stdout_log, retval = run_test_with_logging(['--junit', 'tests/test_in/junit_single_fail.xml'])
-        self.assertEqual("junit:     number of warnings (1) is higher than the maximum limit (0). "
-                         "Returning error code 1.\n",
-                         stdout_log)
+        retval = warnings_wrapper(['--junit', 'tests/test_in/junit_single_fail.xml'])
+        self.assertEqual(
+            ["JUnit: number of warnings (1) is higher than the maximum limit (0). Returning error code 1."],
+            self.stderr_lines
+        )
         self.assertEqual(1, retval)
 
     min_ret_val_on_failure = 1
@@ -196,7 +210,11 @@ class TestIntegration(TestCase):
         The input file contains 18 Sphinx warnings, but exactly 19 are required to pass.
         The number of warnings (18) must be returned as return code.
         '''
-        retval = warnings_wrapper(['--sphinx', '--exact-warnings', '19', 'tests/test_in/sphinx_traceability_output.txt'])
+        retval = warnings_wrapper([
+            '--sphinx',
+            '--exact-warnings', '19',
+            'tests/test_in/sphinx_traceability_output.txt',
+        ])
         self.assertEqual(18, retval)
 
     def test_robot_with_name_arg(self):
@@ -210,30 +228,34 @@ class TestIntegration(TestCase):
 
     def test_robot_verbose(self):
         ''' If no suite name is configured, all suites must be taken into account '''
-        stdout_log, retval = run_test_with_logging(['--verbose',
-                                                    '--robot',
-                                                    '--name', 'Suite Two',
-                                                    'tests/test_in/robot_double_fail.xml'])
+        retval = warnings_wrapper([
+            '--verbose',
+            '--robot',
+            '--name', 'Suite Two',
+            'tests/test_in/robot_double_fail.xml',
+        ])
         self.assertEqual(1, retval)
-        self.assertIn("Suite One &amp; Suite Two.Suite Two.Another test\n"
-                      "robot:     test suite 'Suite Two'        number of warnings (1) is higher than the maximum limit (0).\n"
-                      "Returning error code 1.\n", stdout_log)
+        self.assertEqual(
+            ["Robot: suite 'Suite Two'    Suite One &amp; Suite Two.Suite Two.Another test",
+             "Robot: suite 'Suite Two'    number of warnings (1) is higher than the maximum limit (0).",
+             'Robot: Returning error code 1.'],
+            self.stderr_lines)  # TODO
 
     def test_robot_config(self):
         os.environ['MIN_ROBOT_WARNINGS'] = '0'
         os.environ['MAX_ROBOT_WARNINGS'] = '0'
-        stdout_log, retval = run_test_with_logging(['--config',
-                                                    'tests/test_in/config_example_robot.json',
-                                                    'tests/test_in/robot_double_fail.xml'])
+        retval = warnings_wrapper([
+            '--config',
+            'tests/test_in/config_example_robot.json',
+            'tests/test_in/robot_double_fail.xml',
+        ])
         self.assertEqual(
-            '\n'.join([
-                "robot:     test suite 'Suite One'        number of warnings (1) is between limits 0 and 1. Well done.",
-                "robot:     all test suites               number of warnings (2) is higher than the maximum limit (1).",
-                "robot:     test suite 'Suite Two'        number of warnings (1) is between limits 1 and 2. Well done.",
-                "robot:     test suite 'b4d su1te name'   number of warnings (0) is exactly as expected. Well done.",
-                "Returning error code 4."
-            ]) + '\n',
-            stdout_log
+            ["Robot: suite 'Suite One'    number of warnings (1) is between limits 0 and 1. Well done.",
+             'Robot: all test suites      number of warnings (2) is higher than the maximum limit (1).',
+             "Robot: suite 'Suite Two'    number of warnings (1) is between limits 1 and 2. Well done.",
+             "Robot: suite 'b4d su1te name' number of warnings (0) is exactly as expected. Well done.",
+             'Robot: Returning error code 2.'],
+            self.stderr_lines
         )
         self.assertEqual(2, retval)
         for var in ('MIN_ROBOT_WARNINGS', 'MAX_ROBOT_WARNINGS'):
@@ -242,24 +264,25 @@ class TestIntegration(TestCase):
 
     def test_robot_config_check_names(self):
         self.maxDiff = None
-        with self.assertLogs(level="INFO") as fake_out:
-            with self.assertRaises(SystemExit) as cm_err:
-                warnings_wrapper(['--config', 'tests/test_in/config_example_robot_invalid_suite.json',
-                                  'tests/test_in/robot_double_fail.xml'])
-        stdout_log = fake_out.output
-        self.assertIn("ERROR:root:No suite with name 'b4d su1te name' found. Returning error code -1.",
-                      stdout_log)
+        with self.assertRaises(SystemExit) as cm_err:
+            warnings_wrapper([
+                '--config',
+                'tests/test_in/config_example_robot_invalid_suite.json',
+                'tests/test_in/robot_double_fail.xml',
+            ])
+        self.assertEqual(
+            ["Robot: suite 'b4d su1te name' No suite with name 'b4d su1te name' found. Returning error code -1."],
+            self.stderr_lines)
         self.assertEqual(cm_err.exception.code, -1)
 
     def test_robot_cli_check_name(self):
         self.maxDiff = None
-        with self.assertLogs(level="INFO") as fake_out:
-            with self.assertRaises(SystemExit) as cm_err:
-                warnings_wrapper(['--verbose', '--robot', '--name', 'Inv4lid Name',
-                                  'tests/test_in/robot_double_fail.xml'])
-        stdout_log = fake_out.output
-
-        self.assertIn("ERROR:root:No suite with name 'Inv4lid Name' found. Returning error code -1.", stdout_log)
+        with self.assertRaises(SystemExit) as cm_err:
+            warnings_wrapper(['--verbose', '--robot', '--name', 'Inv4lid Name',
+                              'tests/test_in/robot_double_fail.xml'])
+        self.assertEqual(
+            ["Robot: suite 'Inv4lid Name' No suite with name 'Inv4lid Name' found. Returning error code -1."],
+            self.stderr_lines)
         self.assertEqual(cm_err.exception.code, -1)
 
     def test_output_file_sphinx(self):
@@ -366,20 +389,41 @@ class TestIntegration(TestCase):
         filename = 'code_quality_format.json'
         out_file = str(TEST_OUT_DIR / filename)
         ref_file = str(TEST_IN_DIR / filename)
-        with self.assertLogs(level="INFO") as fake_out:
-            retval = warnings_wrapper([
-                '--code-quality', out_file,
-                '--config', 'tests/test_in/config_cq_description_format.json',
-                'tests/test_in/mixed_warnings.txt',
-            ])
-        output = fake_out.output
-        self.assertIn("WARNING:root:Unrecognized classification 'max'", output)
-        self.assertIn("WARNING:root:Unrecognized classification 'min'", output)
+        retval = warnings_wrapper([
+            '-v',
+            '--code-quality', out_file,
+            '--config', 'tests/test_in/config_cq_description_format.json',
+            'tests/test_in/mixed_warnings.txt',
+        ])
+        self.assertEqual(
+            [
+                'Sphinx: Config parsing completed',
+                'Doxygen: Config parsing completed',
+                'Xmlrunner: Config parsing completed',
+                "Coverity: Unrecognized classification 'min'",
+                "Coverity: Unrecognized classification 'max'",
+                'Coverity: Config parsing completed',
+                'Sphinx: git/test/index.rst:None: WARNING: toctree contains reference to nonexisting document '
+                "u'installation'",
+                "Sphinx: WARNING: List item 'CL-UNDEFINED_CL_ITEM' in merge/pull request 138 is not defined as a "
+                'checklist-item.',
+                "Doxygen: Notice: Output directory `doc/doxygen/framework' does not exist. I have created it for you.",
+                'Doxygen: /home/user/myproject/helper/SimpleTimer.h:19: Error: Unexpected character `"\'',
+                'Doxygen: <v_peq>:1: Warning: The following parameters of '
+                'sofa::component::odesolver::EulerKaapiSolver::v_peq(VecId v, VecId a, double f) are not documented:',
+                "Doxygen: error: Could not read image `/home/user/myproject/html/struct_foo_graph.png' generated by "
+                'dot!',
+                "Xmlrunner: ERROR [0.000s]: test_some_error_test (something.anything.somewhere)'",
+                'Coverity: unclassified   | src/somefile.c:82: CID 113396 (#2 of 2): Coding standard violation (MISRA '
+                'C-2012 Rule 10.1): Unclassified, Unspecified, Undecided, owner is nobody, first detected on '
+                '2017-07-27.',
+                'Sphinx: number of warnings (2) is higher than the maximum limit (0). Returning error code 2.'
+            ],
+            self.stderr_lines)
         self.assertEqual(2, retval)
         self.assertTrue(filecmp.cmp(out_file, ref_file), f'{out_file} differs from {ref_file}')
 
-    @patch('pathlib.Path.cwd')
-    def test_polyspace_error(self, path_cwd_mock):
+    def test_polyspace_error(self):
         config_file = str(TEST_IN_DIR / 'config_example_polyspace_error.yml')
         with self.assertRaises(exceptions.WarningsConfigError) as context:
             warnings_wrapper([

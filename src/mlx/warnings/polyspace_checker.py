@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import csv
-import logging
 import os
 from io import TextIOWrapper
 from string import Template
@@ -14,11 +13,10 @@ from .warnings_checker import WarningsChecker
 class PolyspaceChecker(WarningsChecker):
     name = 'polyspace'
     checkers = []
-    logging_fmt = "{checker_name}: {column_info:<40} | {message}"
 
-    def __init__(self):
+    def __init__(self, *logging_args):
         '''Constructor to set the default code quality description template to "Polyspace: $check"'''
-        super().__init__()
+        super().__init__(*logging_args)
         self._cq_description_template = Template('Polyspace: $check')
 
     @property
@@ -109,10 +107,9 @@ class PolyspaceChecker(WarningsChecker):
         '''
         count = 0
         for checker in self.checkers:
-            extra = {"column_info": f"{checker.family_value}: {checker.column_name}: {checker.check_value}"}
-            count += checker.return_check_limits(extra)
+            count += checker.return_check_limits()
         if count:
-            print(f"{repr(self)}: Returning error code {count}.")
+            self.logger.warning(f"Returning error code {count}.")
         return count
 
     def parse_config(self, config):
@@ -148,7 +145,7 @@ class PolyspaceChecker(WarningsChecker):
                     column_name = key.lower()
                     check_value = value.lower()
                     padding = max(padding, len(f"{family_value}: {column_name}: {check_value}"))
-                    checker = PolyspaceFamilyChecker(family_value, column_name, check_value)
+                    checker = PolyspaceFamilyChecker(family_value, column_name, check_value, *self.logging_args)
                     checker.parse_config(check)
                     self.checkers.append(checker)
                 if not (column_name and check_value):
@@ -165,16 +162,9 @@ class PolyspaceChecker(WarningsChecker):
             checker.cq_description_template = self.cq_description_template
             checker.cq_default_path = self.cq_default_path
 
-        self.logging_fmt = self.logging_fmt.replace("40", f"{padding}")
-        new_format = logging.Formatter(fmt=self.logging_fmt, style="{")
-        for handler in self.logger.handlers:
-            handler.setFormatter(new_format)
-        for handler in self.output_logger.handlers:
-            handler.setFormatter(new_format)
-
 
 class PolyspaceFamilyChecker(WarningsChecker):
-    name = 'polyspace'
+    name = 'polyspace_sub'
     subchecker = True
     code_quality_severity = {
         "impact: high": "critical",
@@ -183,8 +173,9 @@ class PolyspaceFamilyChecker(WarningsChecker):
         "red": "critical",
         "orange": "major",
     }
+    logging_fmt = "{checker.name_repr}: {checker.family_value:15s} : {checker.column_name:11s} : {checker.check_value:14s} | {message}"
 
-    def __init__(self, family_value, column_name, check_value):
+    def __init__(self, family_value, column_name, check_value, *logging_args):
         """Initialize the PolyspaceFamilyChecker
 
         Args:
@@ -192,12 +183,10 @@ class PolyspaceFamilyChecker(WarningsChecker):
             column_name (str): The name of the column
             check_value (str): The value to check in the column
         """
-        super().__init__()
+        super().__init__(*logging_args)
         self.family_value = family_value
         self.column_name = column_name
         self.check_value = check_value
-        self.logger = logging.getLogger(self.name)
-        self.output_logger = logging.getLogger(f"{self.name}.output")
 
     @property
     def cq_description_template(self):
@@ -240,17 +229,15 @@ class PolyspaceFamilyChecker(WarningsChecker):
             content (dict): The row of the TSV file
         '''
         if content[self.column_name].lower() == self.check_value:
-            extra = {"checker_name": repr(self),
-                     "column_info": f"{self.family_value}: {self.column_name}: {self.check_value}",}
             if content["status"].lower() in ["not a defect", "justified"]:
                 self.logger.info(f"Excluded defect with ID {content.get('id', None)!r} because the status is "
-                                 "'Not a defect' or 'Justified'",
-                                 extra=extra)
+                                 "'Not a defect' or 'Justified'")
             else:
                 tab_sep_string = "\t".join(content.values())
-                if not self._is_excluded(tab_sep_string, extra=extra):
+                if not self._is_excluded(tab_sep_string):
                     self.count = self.count + 1
-                    self.output_logger.debug(f"ID {content.get('id', None)!r}",
-                                             extra=extra)
+                    verbose_log_msg = f"ID {content.get('id', None)!r}"
+                    self.logger.info(verbose_log_msg)
+                    self.logger.debug(verbose_log_msg)
                     if self.cq_enabled and content["color"].lower() != "green":
                         self.add_code_quality_finding(content)

@@ -1,12 +1,18 @@
 from unittest import TestCase
 
+import pytest
+
 from mlx.warnings import WarningsPlugin
 
 
 class TestJUnitFailures(TestCase):
+    @pytest.fixture(autouse=True)
+    def caplog(self, caplog):
+        self.caplog = caplog
+
     def setUp(self):
-        self.warnings = WarningsPlugin(verbose=True)
-        self.warnings.activate_checker_name('junit')
+        self.warnings = WarningsPlugin()
+        self.warnings.activate_checker_name('junit', True, None)
 
     def test_no_warning(self):
         with open('tests/test_in/junit_no_fail.xml') as xmlfile:
@@ -15,18 +21,17 @@ class TestJUnitFailures(TestCase):
 
     def test_single_warning(self):
         with open('tests/test_in/junit_single_fail.xml') as xmlfile:
-            with self.assertLogs(level="INFO") as fake_out:
-                self.warnings.check(xmlfile.read())
+            self.warnings.check(xmlfile.read())
         self.assertEqual(self.warnings.return_count(), 1)
-        self.assertIn("INFO:root:test_warn_plugin_single_fail.myfirstfai1ure", fake_out.output)
+        self.assertEqual(["test_warn_plugin_single_fail.myfirstfai1ure"], self.caplog.messages)
 
     def test_dual_warning(self):
         with open('tests/test_in/junit_double_fail.xml') as xmlfile:
-            with self.assertLogs(level="INFO") as fake_out:
-                self.warnings.check(xmlfile.read())
+            self.warnings.check(xmlfile.read())
         self.assertEqual(self.warnings.return_count(), 2)
-        self.assertIn("INFO:root:test_warn_plugin_double_fail.myfirstfai1ure", fake_out.output)
-        self.assertIn("INFO:root:test_warn_plugin_no_double_fail.mysecondfai1ure", fake_out.output)
+        self.assertEqual(["test_warn_plugin_double_fail.myfirstfai1ure",
+                          "test_warn_plugin_no_double_fail.mysecondfai1ure"],
+                         self.caplog.messages)
 
     def test_invalid_xml(self):
         self.warnings.check('this is not xml')

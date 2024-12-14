@@ -5,19 +5,13 @@ try:
 except ImportError:
     from xml.etree import ElementTree as etree
 
-import logging
-
 from junitparser import Error, Failure, JUnitXml
 
 from .warnings_checker import WarningsChecker
 
-LOGGER = logging.getLogger("mlx.warnings.warnings")
 
 class JUnitChecker(WarningsChecker):
     name = 'junit'
-
-    def __repr__(self):
-        return "JUnit"
 
     def check(self, content):
         ''' Function for counting the number of JUnit failures in a specific text
@@ -36,7 +30,11 @@ class JUnitChecker(WarningsChecker):
             suites.update_statistics()
             self.count += suites.failures + suites.errors - amount_to_exclude
         except etree.ParseError as err:
-            LOGGER.error(f"{repr(self)}: {err}")
+            self.logger.error(err.msg)
+
+    @property
+    def name_repr(self):
+        return "JUnit" if self.name == 'junit' else self.name.capitalize()
 
     @staticmethod
     def prepare_tree(root_input):
@@ -55,11 +53,12 @@ class JUnitChecker(WarningsChecker):
             testsuites_root.append(root_input)
         return testsuites_root
 
-    def _check_testcase(self, testcase):
+    def _check_testcase(self, testcase, extra={}):
         """ Handles the check of a test case element by checking if the result is a failure/error.
 
         If it is to be excluded by a configured regex, 1 is returned.
-        Otherwise, when in verbose mode, the suite name and test case name are printed.
+        Otherwise, when in verbose/output mode, the suite name and test case name are printed/written along with the
+        failure/error message.
 
         Args:
             testcase (junitparser.TestCase): Test case element to check for failure or error
@@ -68,10 +67,8 @@ class JUnitChecker(WarningsChecker):
             int: 1 if a failure/error is to be subtracted from the final count, 0 otherwise
         """
         if isinstance(testcase.result, (Failure, Error)):
-            extra={"checker_name": repr(self)}
-            if self._is_excluded(testcase.result.message, extra=extra):
+            if self._is_excluded(testcase.result.message):
                 return 1
-            string = f'{testcase.classname}.{testcase.name}'
-            self.output_logger.debug(f'{string}: {testcase.result.message}', extra=extra)
-            self.logger.info(string, extra=extra)
+            self.logger.info(f'{testcase.classname}.{testcase.name}')
+            self.logger.debug(f'{testcase.classname}.{testcase.name} | {testcase.result.message}')
         return 0

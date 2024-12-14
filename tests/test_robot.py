@@ -1,18 +1,23 @@
 import unittest
 
-from mlx.warnings import RobotSuiteChecker, WarningsPlugin, WarningsConfigError
-from test_integration import run_test_with_logging
+import pytest
+
+from mlx.warnings import RobotSuiteChecker, WarningsConfigError, WarningsPlugin, warnings_wrapper
 
 
 class TestRobotWarnings(unittest.TestCase):
+    @pytest.fixture(autouse=True)
+    def caplog(self, caplog):
+        self.caplog = caplog
+
     def setUp(self):
-        self.warnings = WarningsPlugin(verbose=True)
-        self.dut = self.warnings.activate_checker_name('robot')
+        self.warnings = WarningsPlugin()
+        self.dut = self.warnings.activate_checker_name('robot', True, None)
         self.suite1 = 'Suite One'
         self.suite2 = 'Suite Two'
         self.dut.checkers = [
-            RobotSuiteChecker(self.suite1, verbose=True),
-            RobotSuiteChecker(self.suite2, verbose=True),
+            RobotSuiteChecker(self.suite1, *self.dut.logging_args),
+            RobotSuiteChecker(self.suite2, *self.dut.logging_args),
         ]
 
     def test_no_warning(self):
@@ -22,26 +27,31 @@ class TestRobotWarnings(unittest.TestCase):
 
     def test_single_warning(self):
         with open('tests/test_in/robot_single_fail.xml') as xmlfile:
-            with self.assertLogs(level="INFO") as fake_out:
-                self.warnings.check(xmlfile.read())
-                count = self.warnings.return_count()
-        stdout_log = fake_out.output
-
+            self.warnings.check(xmlfile.read())
+            count = self.warnings.return_count()
         self.assertEqual(count, 1)
-        self.assertIn("INFO:root:Suite One &amp; Suite Two.Suite One.First Test", stdout_log)
+        self.assertEqual(
+            [
+                "Suite One &amp; Suite Two.Suite One.First Test"
+            ],
+            self.caplog.messages)
 
     def test_double_warning_and_verbosity(self):
-        stdout_log, retval = run_test_with_logging(['--verbose',
-                                                    '--robot',
-                                                    'tests/test_in/robot_double_fail.xml'])
-        self.assertEqual(retval, 2)
+        retval = warnings_wrapper([
+            '--verbose',
+            '--robot',
+            'tests/test_in/robot_double_fail.xml',
+        ])
         self.assertEqual(
-            "Suite One &amp; Suite Two.Suite One.First Test\n"
-            "Suite One &amp; Suite Two.Suite Two.Another test\n"
-            "robot:     all test suites               number of warnings (2) is higher than the maximum limit (0).\n"
-            "Returning error code 2.\n",
-            stdout_log
+            [
+                "Suite One &amp; Suite Two.Suite One.First Test",
+                "Suite One &amp; Suite Two.Suite Two.Another test",
+                "number of warnings (2) is higher than the maximum limit (0).",
+                "Returning error code 2."
+            ],
+            self.caplog.messages
         )
+        self.assertEqual(retval, 2)
 
     def test_invalid_xml(self):
         self.warnings.check('this is not xml')
@@ -49,8 +59,8 @@ class TestRobotWarnings(unittest.TestCase):
 
     def test_testsuites_root(self):
         self.dut.checkers = [
-            RobotSuiteChecker('test_warn_plugin_double_fail'),
-            RobotSuiteChecker('test_warn_plugin_no_double_fail'),
+            RobotSuiteChecker('test_warn_plugin_double_fail', *self.dut.logging_args),
+            RobotSuiteChecker('test_warn_plugin_no_double_fail', *self.dut.logging_args),
         ]
         with open('tests/test_in/junit_double_fail.xml') as xmlfile:
             self.warnings.check(xmlfile.read())
@@ -59,7 +69,7 @@ class TestRobotWarnings(unittest.TestCase):
 
     def test_check_suite_name(self):
         self.dut.checkers = [
-            RobotSuiteChecker('nonexistent_suite_name', check_suite_name=True),
+            RobotSuiteChecker('nonexistent_suite_name', *self.dut.logging_args, check_suite_name=True),
         ]
         with open('tests/test_in/robot_double_fail.xml') as xmlfile:
             with self.assertRaises(SystemExit) as c_m:
@@ -69,7 +79,7 @@ class TestRobotWarnings(unittest.TestCase):
     def test_robot_version_5(self):
         self.dut.allow_unconfigured = False
         self.dut.checkers = [
-            RobotSuiteChecker('Empty Flash Product Id', check_suite_name=True),
+            RobotSuiteChecker('Empty Flash Product Id', *self.dut.logging_args, check_suite_name=True),
         ]
         with open('tests/test_in/robot_version_5.xml') as xmlfile:
             self.warnings.check(xmlfile.read())
@@ -79,8 +89,8 @@ class TestRobotWarnings(unittest.TestCase):
     def test_disallow_unconfigured_pass(self):
         self.dut.allow_unconfigured = False
         self.dut.checkers = [
-            RobotSuiteChecker('Empty Flash Product Id'),
-            RobotSuiteChecker('Empty Flash Mlx Device Project Id'),
+            RobotSuiteChecker('Empty Flash Product Id', *self.dut.logging_args),
+            RobotSuiteChecker('Empty Flash Mlx Device Project Id', *self.dut.logging_args),
         ]
         with open('tests/test_in/robot_version_5.xml') as xmlfile:
             self.warnings.check(xmlfile.read())
@@ -90,7 +100,7 @@ class TestRobotWarnings(unittest.TestCase):
     def test_disallow_unconfigured_pass_wildcard(self):
         self.dut.allow_unconfigured = False
         self.dut.checkers = [
-            RobotSuiteChecker(''),
+            RobotSuiteChecker('', *self.dut.logging_args),
         ]
         with open('tests/test_in/robot_version_5.xml') as xmlfile:
             self.warnings.check(xmlfile.read())
@@ -100,7 +110,7 @@ class TestRobotWarnings(unittest.TestCase):
     def test_disallow_unconfigured_fail(self):
         self.dut.allow_unconfigured = False
         self.dut.checkers = [
-            RobotSuiteChecker('Empty Flash Mlx Device Project Id'),
+            RobotSuiteChecker('Empty Flash Mlx Device Project Id', *self.dut.logging_args),
         ]
         with open('tests/test_in/robot_version_5.xml') as xmlfile:
             with self.assertRaises(WarningsConfigError) as exc:
