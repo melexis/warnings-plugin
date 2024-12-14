@@ -97,8 +97,8 @@ class RobotChecker(WarningsChecker):
 
     def parse_config(self, config):
         self.allow_unconfigured = config.get('allow_unconfigured', True)
+        check_suite_name = config.get('check_suite_names', True)
         for suite_config in config['suites']:
-            check_suite_name=config.get('check_suite_names', True)
             checker = RobotSuiteChecker(suite_config['name'], *self.logging_args, check_suite_name=check_suite_name)
             checker.parse_config(suite_config)
             self.checkers.append(checker)
