@@ -30,6 +30,13 @@ def substitute_envvar(checker_config, keys):
                     from None
 
 
+class DebugOnlyFilter(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        if record.levelno <= logging.DEBUG:
+            return True
+        return False
+
+
 class WarningsChecker:
     name = 'checker'
     subchecker = False
@@ -75,10 +82,9 @@ class WarningsChecker:
                 handler = logging.FileHandler(output, "a")
                 handler.setFormatter(formatter)
                 handler.setLevel(logging.DEBUG)
+                handler.addFilter(DebugOnlyFilter())
                 self.logger.setLevel(logging.DEBUG)
                 self.logger.addHandler(handler)
-                # TODO filter out non-debug logs
-
         logging_vars = {"checker": self}
         self.logger = logging.LoggerAdapter(self.logger, extra=logging_vars)
 
