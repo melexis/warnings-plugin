@@ -25,9 +25,15 @@ def reset_logging():
 
 
 class TestIntegration(TestCase):
+
     @pytest.fixture(autouse=True)
-    def caplog(self, caplog):
-        self.caplog = caplog
+    def capsys(self, capsys):
+        self.capsys = capsys
+
+    @property
+    def stderr_lines(self):
+        read_obj = self.capsys.readouterr()
+        return read_obj.err.splitlines()
 
     def setUp(self):
         Finding.fingerprints = {}
@@ -59,17 +65,17 @@ class TestIntegration(TestCase):
         retval = warnings_wrapper(['--verbose', '--junit', 'tests/test_in/junit_single_fail.xml'])
         self.assertEqual(
             [
-                "test_warn_plugin_single_fail.myfirstfai1ure",
-                "number of warnings (1) is higher than the maximum limit (0). Returning error code 1.",
+                "JUnit: test_warn_plugin_single_fail.myfirstfai1ure",
+                "JUnit: number of warnings (1) is higher than the maximum limit (0). Returning error code 1.",
             ],
-            self.caplog.messages)
+            self.stderr_lines)
         self.assertEqual(1, retval)
 
     def test_no_verbose(self):
         retval = warnings_wrapper(['--junit', 'tests/test_in/junit_single_fail.xml'])
         self.assertEqual(
-            ["number of warnings (1) is higher than the maximum limit (0). Returning error code 1."],
-            self.caplog.messages
+            ["JUnit: number of warnings (1) is higher than the maximum limit (0). Returning error code 1."],
+            self.stderr_lines
         )
         self.assertEqual(1, retval)
 
@@ -229,10 +235,11 @@ class TestIntegration(TestCase):
             'tests/test_in/robot_double_fail.xml',
         ])
         self.assertEqual(1, retval)
-        self.assertEqual(["Suite One &amp; Suite Two.Suite Two.Another test",
-                          "number of warnings (1) is higher than the maximum limit (0).",
-                          "Returning error code 1."],
-                         self.caplog.messages)
+        self.assertEqual(
+            ["Robot: suite 'Suite Two'    Suite One &amp; Suite Two.Suite Two.Another test",
+             "Robot: suite 'Suite Two'    number of warnings (1) is higher than the maximum limit (0).",
+             'Robot: Returning error code 1.'],
+            self.stderr_lines)  # TODO
 
     def test_robot_config(self):
         os.environ['MIN_ROBOT_WARNINGS'] = '0'
@@ -243,12 +250,12 @@ class TestIntegration(TestCase):
             'tests/test_in/robot_double_fail.xml',
         ])
         self.assertEqual(
-            ["number of warnings (1) is between limits 0 and 1. Well done.",
-             "number of warnings (2) is higher than the maximum limit (1).",
-             "number of warnings (1) is between limits 1 and 2. Well done.",
-             "number of warnings (0) is exactly as expected. Well done.",
-             "Returning error code 2."],
-            self.caplog.messages
+            ["Robot: suite 'Suite One'    number of warnings (1) is between limits 0 and 1. Well done.",
+             'Robot: all test suites      number of warnings (2) is higher than the maximum limit (1).',
+             "Robot: suite 'Suite Two'    number of warnings (1) is between limits 1 and 2. Well done.",
+             "Robot: suite 'b4d su1te name' number of warnings (0) is exactly as expected. Well done.",
+             'Robot: Returning error code 2.'],
+            self.stderr_lines
         )
         self.assertEqual(2, retval)
         for var in ('MIN_ROBOT_WARNINGS', 'MAX_ROBOT_WARNINGS'):
@@ -263,17 +270,19 @@ class TestIntegration(TestCase):
                 'tests/test_in/config_example_robot_invalid_suite.json',
                 'tests/test_in/robot_double_fail.xml',
             ])
-        self.assertEqual(["No suite with name 'b4d su1te name' found. Returning error code -1."],
-                      self.caplog.messages)
+        self.assertEqual(
+            ["Robot: suite 'b4d su1te name' No suite with name 'b4d su1te name' found. Returning error code -1."],
+            self.stderr_lines)
         self.assertEqual(cm_err.exception.code, -1)
 
     def test_robot_cli_check_name(self):
         self.maxDiff = None
         with self.assertRaises(SystemExit) as cm_err:
             warnings_wrapper(['--verbose', '--robot', '--name', 'Inv4lid Name',
-                                'tests/test_in/robot_double_fail.xml'])
-        self.assertEqual(["No suite with name 'Inv4lid Name' found. Returning error code -1."],
-                         self.caplog.messages)
+                              'tests/test_in/robot_double_fail.xml'])
+        self.assertEqual(
+            ["Robot: suite 'Inv4lid Name' No suite with name 'Inv4lid Name' found. Returning error code -1."],
+            self.stderr_lines)
         self.assertEqual(cm_err.exception.code, -1)
 
     def test_output_file_sphinx(self):
@@ -381,25 +390,36 @@ class TestIntegration(TestCase):
         out_file = str(TEST_OUT_DIR / filename)
         ref_file = str(TEST_IN_DIR / filename)
         retval = warnings_wrapper([
+            '-v',
             '--code-quality', out_file,
             '--config', 'tests/test_in/config_cq_description_format.json',
             'tests/test_in/mixed_warnings.txt',
         ])
-        self.assertEqual(["Sphinx: Config parsing completed",
-                          "Doxygen: Config parsing completed",
-                          "Xmlrunner: Config parsing completed",
-                          "Coverity: Unrecognized classification 'min'",
-                          "Coverity: Unrecognized classification 'max'",
-                          "Coverity: Config parsing completed",
-                          "git/test/index.rst:None: WARNING: toctree contains reference to nonexisting document u'installation'",
-                          "WARNING: List item 'CL-UNDEFINED_CL_ITEM' in merge/pull request 138 is not defined as a checklist-item.",
-                          "Notice: Output directory `doc/doxygen/framework' does not exist. I have created it for you.",
-                          "/home/user/myproject/helper/SimpleTimer.h:19: Error: Unexpected character `\"'",
-                          "<v_peq>:1: Warning: The following parameters of sofa::component::odesolver::EulerKaapiSolver::v_peq(VecId v, VecId a, double f) are not documented:",
-                          "error: Could not read image `/home/user/myproject/html/struct_foo_graph.png' generated by dot!",
-                          "ERROR [0.000s]: test_some_error_test (something.anything.somewhere)'",
-                          "src/somefile.c:82: CID 113396 (#2 of 2): Coding standard violation (MISRA C-2012 Rule 10.1): Unclassified, Unspecified, Undecided, owner is nobody, first detected on 2017-07-27.",
-                          "number of warnings (2) is higher than the maximum limit (0). Returning error code 2."], self.caplog.messages)
+        self.assertEqual(
+            [
+                'Sphinx: Config parsing completed',
+                'Doxygen: Config parsing completed',
+                'Xmlrunner: Config parsing completed',
+                "Coverity: Unrecognized classification 'min'",
+                "Coverity: Unrecognized classification 'max'",
+                'Coverity: Config parsing completed',
+                'Sphinx: git/test/index.rst:None: WARNING: toctree contains reference to nonexisting document '
+                "u'installation'",
+                "Sphinx: WARNING: List item 'CL-UNDEFINED_CL_ITEM' in merge/pull request 138 is not defined as a "
+                'checklist-item.',
+                "Doxygen: Notice: Output directory `doc/doxygen/framework' does not exist. I have created it for you.",
+                'Doxygen: /home/user/myproject/helper/SimpleTimer.h:19: Error: Unexpected character `"\'',
+                'Doxygen: <v_peq>:1: Warning: The following parameters of '
+                'sofa::component::odesolver::EulerKaapiSolver::v_peq(VecId v, VecId a, double f) are not documented:',
+                "Doxygen: error: Could not read image `/home/user/myproject/html/struct_foo_graph.png' generated by "
+                'dot!',
+                "Xmlrunner: ERROR [0.000s]: test_some_error_test (something.anything.somewhere)'",
+                'Coverity: unclassified   | src/somefile.c:82: CID 113396 (#2 of 2): Coding standard violation (MISRA '
+                'C-2012 Rule 10.1): Unclassified, Unspecified, Undecided, owner is nobody, first detected on '
+                '2017-07-27.',
+                'Sphinx: number of warnings (2) is higher than the maximum limit (0). Returning error code 2.'
+            ],
+            self.stderr_lines)
         self.assertEqual(2, retval)
         self.assertTrue(filecmp.cmp(out_file, ref_file), f'{out_file} differs from {ref_file}')
 
