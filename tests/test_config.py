@@ -1,3 +1,4 @@
+import logging
 import os
 from pathlib import Path
 from unittest import TestCase
@@ -15,6 +16,7 @@ from mlx.warnings import (
 )
 
 TEST_IN_DIR = Path(__file__).parent / 'test_in'
+logging.getLogger('mlx.warnings.warnings').setLevel(logging.DEBUG)
 
 
 class TestConfig(TestCase):
@@ -72,7 +74,7 @@ class TestConfig(TestCase):
         warnings.check('ERROR [0.000s]: test_some_error_test (something.anything.somewhere)')
         self.assertEqual(warnings.return_count(), 1)
         excluded_toctree_warning = "Excluded {!r} because of configured regex {!r}".format(toctree_warning, "WARNING: toctree")
-        self.assertIn(f"Sphinx: Config parsing completed", self.caplog.messages)
+        self.assertIn("Sphinx: Config parsing completed", self.caplog.messages)
         self.assertIn(f"{excluded_toctree_warning}", self.caplog.messages)
         warning_echo = "home/bljah/test/index.rst:5: WARNING: this warning should not get excluded"
         self.assertIn(f"{warning_echo}", self.caplog.messages)
