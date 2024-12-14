@@ -64,6 +64,8 @@ napoleon_use_ivar = True
 napoleon_use_rtype = False
 napoleon_use_param = False
 
+linkcheck_ignore = [r'https://www\.mathworks\.com.+']
+
 # Point to plantuml jar file
 # confirm we have plantuml in the path
 if 'nt' in os.name:
