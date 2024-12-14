@@ -65,7 +65,9 @@ class WarningsChecker:
 
         self.logger = logging.getLogger(self.name)
         self.logger.setLevel(logging.WARNING)
-        if verbose:
+        if output:
+            self.logger.setLevel(logging.DEBUG)
+        elif verbose:
             self.logger.setLevel(logging.INFO)
         formatter = logging.Formatter(fmt=self.logging_fmt, style="{")
         if not self.logger.handlers:
@@ -77,13 +79,11 @@ class WarningsChecker:
             else:
                 handler.setLevel(logging.WARNING)
             self.logger.addHandler(handler)
-
             if output is not None:
                 handler = logging.FileHandler(output, "a")
                 handler.setFormatter(formatter)
                 handler.setLevel(logging.DEBUG)
                 handler.addFilter(DebugOnlyFilter())
-                self.logger.setLevel(logging.DEBUG)
                 self.logger.addHandler(handler)
         logging_vars = {"checker": self}
         self.logger = logging.LoggerAdapter(self.logger, extra=logging_vars)
