@@ -77,7 +77,7 @@ class TestRobotWarnings(unittest.TestCase):
         self.assertEqual(c_m.exception.code, -1)
 
     def test_robot_version_5(self):
-        self.dut.allow_unconfigured = False
+        self.dut.allow_unconfigured = True
         self.dut.checkers = [
             RobotSuiteChecker('Empty Flash Product Id', *self.dut.logging_args, check_suite_name=True),
         ]
