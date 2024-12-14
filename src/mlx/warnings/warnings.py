@@ -276,6 +276,8 @@ def warnings_wrapper(args):
     if args.output is not None and args.output.exists():
         os.remove(args.output)
 
+    LOGGER.addHandler(logging.StreamHandler())
+    LOGGER.setLevel(logging.WARNING)
     if args.verbose:
         LOGGER.setLevel(logging.INFO)
 

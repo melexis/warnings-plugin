@@ -17,7 +17,7 @@ def reset_logging():
     loggers = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
     loggers.append(logging.getLogger())
     for logger in loggers:
-        for handler in logger.handlers:
+        for handler in list(logger.handlers):  # copy list before removing elements
             logger.removeHandler(handler)
             handler.close()
         logger.setLevel(logging.NOTSET)
