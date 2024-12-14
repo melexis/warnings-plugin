@@ -27,6 +27,9 @@ jobs:
       run: tox -e py
     - name: Build HTML documentation
       run: tox -e docs
+    - name: Checks hyperlinks in documentation
+      if: matrix.python-version == '3.10'
+      run: tox -e docs_linkcheck
     - name: Calculate coverage
       run: tox -e coverage
     - name: Codecov uploader
