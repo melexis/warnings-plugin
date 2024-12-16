@@ -602,3 +602,63 @@ class TestIntegration(TestCase):
                           "Polyspace: Returning error code 61."],
                          self.stderr_lines)
         self.assertTrue(filecmp.cmp(out_file, ref_file))
+
+    def test_polyspace_exclude_with_verbose(self):
+        retval = warnings_wrapper([
+            "--verbose",
+            "--config", str(TEST_IN_DIR / "config_example_polyspace_exclude.yml"),
+            str(TEST_IN_DIR / "polyspace_short.tsv"),
+        ])
+        self.assertEqual(2, retval)
+        self.assertEqual(["Polyspace: Config parsing completed",
+                          "Polyspace: run-time check  : color       : orange         | Excluded defect with ID "
+                          "'19339' because the status is 'Not a defect' or 'Justified'",
+                          "Polyspace: run-time check  : color       : orange         | Excluded '19338\\tRun-time "
+                          "Check\\tNumerical\\tOrange\\tno\\tOverflow\\t\\tdummy_function()\\tdummy_file_name.c\\t"
+                          "Unreviewed\\tUnset\\t\\t66CC91F4CA91263468\\t9\\t9' because of configured regex "
+                          "'.+\\\\tdummy_function\\\\(\\\\)\\\\tdummy_file_name\\\\.c\\\\t'",
+                          "Polyspace: run-time check  : color       : orange         | Excluded '19336\\tRun-time "
+                          "Check\\tNumerical\\tOrange\\tno\\tOverflow\\t\\tdummy_function()\\tdummy_file_name.c\\t"
+                          "Unreviewed\\tUnset\\t\\t66CC91F4CA91263970\\t9\\t10' because of configured regex "
+                          "'.+\\\\tdummy_function\\\\(\\\\)\\\\tdummy_file_name\\\\.c\\\\t'",
+                          "Polyspace: run-time check  : color       : orange         | Excluded '19335\\tRun-time "
+                          "Check\\tNumerical\\tOrange\\tno\\tOverflow\\t\\tdummy_function()\\tdummy_file_name.c\\t"
+                          "Unreviewed\\tUnset\\t\\tCC9923E995234C62C0C9\\t10\\t11' because of configured regex "
+                          "'.+\\\\tdummy_function\\\\(\\\\)\\\\tdummy_file_name\\\\.c\\\\t'",
+                          "Polyspace: defect          : information : impact: high   | ID '17533'",
+                          "Polyspace: defect          : information : impact: high   | ID '17544'",
+                          "Polyspace: defect          : information : impact: medium | Excluded '17559\\tDefect\\t"
+                          "Numerical\\tRed\\tno\\tSign change integer conversion overflow\\tImpact: Medium\\t"
+                          "dummy_function()\\tdummy_file_name.c\\tUnreviewed\\tUnset\\t\\t"
+                          "3366C89A94E893AF4390057274A84E1C\\t22\\t7' because of configured regex "
+                          "'.+\\\\tdummy_function\\\\(\\\\)\\\\tdummy_file_name\\\\.c\\\\t'",
+                          "Polyspace: defect          : information : impact: medium | Excluded "
+                          "'17560\\tDefect\\tNumerical\\tRed\\tno\\tSign change integer conversion "
+                          "overflow\\tImpact: Medium\\tdummy_function()\\tdummy_file_name.c\\tUnreviewed\\t"
+                          "Unset\\t\\t3364E09A94E893AF4390057274A80D1C\\t22\\t8' because of configured regex "
+                          "'.+\\\\tdummy_function\\\\(\\\\)\\\\tdummy_file_name\\\\.c\\\\t'",
+                          "Polyspace: defect          : information : impact: low    | Excluded "
+                          "'17557\\tDefect\\tData flow\\tRed\\tno\\tDead code\\tImpact: Low\\tdummy_function()\\t"
+                          "dummy_file_name.c\\tUnreviewed\\tUnset\\t\\t0E1B3288150A44EBD0A7448AC489\\t24\\t16' because "
+                          "of configured regex '.+\\\\tdummy_function\\\\(\\\\)\\\\tdummy_file_name\\\\.c\\\\t'",
+                          "Polyspace: defect          : information : impact: low    | Excluded "
+                          "'17564\\tDefect\\tData flow\\tRed\\tno\\tDead code\\tImpact: "
+                          "Low\\tdummy_function()\\tdummy_file_name.c\\tUnreviewed\\tUnset\\t\\t"
+                          "070C1B448A0522F568D3224568\\t25\\t7' because of configured regex "
+                          "'.+\\\\tdummy_function\\\\(\\\\)\\\\tdummy_file_name\\\\.c\\\\t'",
+                          "Polyspace: run-time check  : color       : red            | number of warnings (0) is "
+                          "exactly as expected. Well done.",
+                          "Polyspace: run-time check  : color       : orange         | number of warnings (0) is "
+                          "between limits 0 and 10. Well done.",
+                          "Polyspace: global variable : color       : red            | number of warnings (0) is "
+                          "exactly as expected. Well done.",
+                          "Polyspace: global variable : color       : orange         | number of warnings (0) is "
+                          "between limits 0 and 10. Well done.",
+                          "Polyspace: defect          : information : impact: high   | number of warnings (2) is "
+                          "higher than the maximum limit (0).",
+                          "Polyspace: defect          : information : impact: medium | number of warnings (0) is "
+                          "between limits 0 and 10. Well done.",
+                          "Polyspace: defect          : information : impact: low    | number of warnings (0) is "
+                          "between limits 0 and 30. Well done.",
+                          "Polyspace: Returning error code 2."],
+                         self.stderr_lines)
