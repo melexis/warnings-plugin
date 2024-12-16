@@ -543,109 +543,36 @@ class TestIntegration(TestCase):
         retval = warnings_wrapper([
             "--verbose",
             "--config", str(TEST_IN_DIR / "config_example_polyspace.yml"),
-            str(TEST_IN_DIR / "polyspace.tsv"),
+            str(TEST_IN_DIR / "polyspace_short.tsv"),
         ])
-        self.assertEqual(61, retval)
+        self.assertEqual(2, retval)
         self.assertEqual(["Polyspace: Config parsing completed",
-                          "Polyspace: run-time check  : color       : orange         | ID '19928'",
-                          "Polyspace: run-time check  : color       : orange         | Excluded defect with ID "
-                          "'19962' because the status is 'Not a defect' or 'Justified'",
-                          "Polyspace: run-time check  : color       : orange         | ID '19526'",
-                          "Polyspace: run-time check  : color       : orange         | ID '19424'",
-                          "Polyspace: run-time check  : color       : orange         | Excluded defect with ID "
-                          "'19429' because the status is 'Not a defect' or 'Justified'",
-                          "Polyspace: run-time check  : color       : orange         | ID '19442'",
-                          "Polyspace: run-time check  : color       : orange         | Excluded defect with ID "
-                          "'19450' because the status is 'Not a defect' or 'Justified'",
-                          "Polyspace: run-time check  : color       : orange         | ID '19375'",
-                          "Polyspace: run-time check  : color       : orange         | ID '19378'",
-                          "Polyspace: run-time check  : color       : orange         | ID '19377'",
-                          "Polyspace: run-time check  : color       : orange         | ID '19357'",
-                          "Polyspace: run-time check  : color       : orange         | ID '19352'",
-                          "Polyspace: run-time check  : color       : orange         | Excluded defect with ID "
-                          "'19351' because the status is 'Not a defect' or 'Justified'",
-                          "Polyspace: run-time check  : color       : orange         | ID '19355'",
-                          "Polyspace: run-time check  : color       : orange         | ID '19354'",
-                          "Polyspace: run-time check  : color       : orange         | ID '19358'",
-                          "Polyspace: run-time check  : color       : orange         | ID '19360'",
-                          "Polyspace: run-time check  : color       : orange         | ID '19349'",
-                          "Polyspace: run-time check  : color       : orange         | ID '19345'",
-                          "Polyspace: run-time check  : color       : orange         | ID '19344'",
-                          "Polyspace: run-time check  : color       : orange         | Excluded defect with ID "
-                          "'19339' because the status is 'Not a defect' or 'Justified'",
+                          "Polyspace: run-time check  : color       : orange         | Excluded defect with ID '19339' "
+                          "because the status is 'Not a defect' or 'Justified'",
                           "Polyspace: run-time check  : color       : orange         | ID '19338'",
                           "Polyspace: run-time check  : color       : orange         | ID '19336'",
                           "Polyspace: run-time check  : color       : orange         | ID '19335'",
-                          "Polyspace: defect          : information : impact: high   | ID '17503'",
-                          "Polyspace: defect          : information : impact: high   | ID '17504'",
-                          "Polyspace: defect          : information : impact: high   | ID '17505'",
-                          "Polyspace: defect          : information : impact: high   | ID '17506'",
-                          "Polyspace: defect          : information : impact: high   | ID '17507'",
-                          "Polyspace: defect          : information : impact: high   | ID '17508'",
-                          "Polyspace: defect          : information : impact: high   | ID '17509'",
-                          "Polyspace: defect          : information : impact: high   | ID '17510'",
-                          "Polyspace: defect          : information : impact: high   | ID '17511'",
-                          "Polyspace: defect          : information : impact: high   | ID '17512'",
-                          "Polyspace: defect          : information : impact: high   | ID '17513'",
-                          "Polyspace: defect          : information : impact: high   | ID '17514'",
-                          "Polyspace: defect          : information : impact: high   | ID '17515'",
-                          "Polyspace: defect          : information : impact: high   | ID '17516'",
-                          "Polyspace: defect          : information : impact: high   | ID '17517'",
-                          "Polyspace: defect          : information : impact: high   | ID '17518'",
-                          "Polyspace: defect          : information : impact: high   | ID '17519'",
-                          "Polyspace: defect          : information : impact: high   | ID '17520'",
-                          "Polyspace: defect          : information : impact: high   | ID '17521'",
-                          "Polyspace: defect          : information : impact: high   | ID '17522'",
-                          "Polyspace: defect          : information : impact: high   | ID '17523'",
-                          "Polyspace: defect          : information : impact: high   | ID '17524'",
-                          "Polyspace: defect          : information : impact: high   | ID '17525'",
-                          "Polyspace: defect          : information : impact: high   | ID '17526'",
-                          "Polyspace: defect          : information : impact: high   | ID '17527'",
-                          "Polyspace: defect          : information : impact: high   | ID '17528'",
-                          "Polyspace: defect          : information : impact: high   | ID '17529'",
-                          "Polyspace: defect          : information : impact: high   | ID '17530'",
-                          "Polyspace: defect          : information : impact: high   | ID '17531'",
-                          "Polyspace: defect          : information : impact: high   | ID '17532'",
                           "Polyspace: defect          : information : impact: high   | ID '17533'",
-                          "Polyspace: defect          : information : impact: high   | ID '17534'",
-                          "Polyspace: defect          : information : impact: high   | ID '17535'",
-                          "Polyspace: defect          : information : impact: high   | ID '17536'",
-                          "Polyspace: defect          : information : impact: high   | ID '17537'",
-                          "Polyspace: defect          : information : impact: high   | ID '17538'",
-                          "Polyspace: defect          : information : impact: high   | ID '17539'",
-                          "Polyspace: defect          : information : impact: high   | ID '17540'",
-                          "Polyspace: defect          : information : impact: high   | ID '17541'",
-                          "Polyspace: defect          : information : impact: high   | ID '17542'",
-                          "Polyspace: defect          : information : impact: high   | ID '17543'",
                           "Polyspace: defect          : information : impact: high   | ID '17544'",
                           "Polyspace: defect          : information : impact: medium | ID '17559'",
                           "Polyspace: defect          : information : impact: medium | ID '17560'",
-                          "Polyspace: defect          : information : impact: medium | ID '17561'",
-                          "Polyspace: defect          : information : impact: medium | ID '17562'",
-                          "Polyspace: defect          : information : impact: medium | ID '17563'",
-                          "Polyspace: defect          : information : impact: medium | ID '17568'",
-                          "Polyspace: defect          : information : impact: medium | ID '17569'",
-                          "Polyspace: defect          : information : impact: medium | ID '17570'",
-                          "Polyspace: defect          : information : impact: medium | ID '17571'",
                           "Polyspace: defect          : information : impact: low    | ID '17557'",
                           "Polyspace: defect          : information : impact: low    | ID '17564'",
-                          "Polyspace: defect          : information : impact: low    | ID '17565'",
-                          "Polyspace: defect          : information : impact: low    | ID '17566'",
                           "Polyspace: run-time check  : color       : red            | number of warnings (0) is "
                           "exactly as expected. Well done.",
-                          "Polyspace: run-time check  : color       : orange         | number of warnings (19) is "
-                          "higher than the maximum limit (10).",
+                          "Polyspace: run-time check  : color       : orange         | number of warnings (3) is "
+                          "between limits 0 and 10. Well done.",
                           "Polyspace: global variable : color       : red            | number of warnings (0) is "
                           "exactly as expected. Well done.",
                           "Polyspace: global variable : color       : orange         | number of warnings (0) is "
                           "between limits 0 and 10. Well done.",
-                          "Polyspace: defect          : information : impact: high   | number of warnings (42) is "
+                          "Polyspace: defect          : information : impact: high   | number of warnings (2) is "
                           "higher than the maximum limit (0).",
-                          "Polyspace: defect          : information : impact: medium | number of warnings (9) is "
+                          "Polyspace: defect          : information : impact: medium | number of warnings (2) is "
                           "between limits 0 and 10. Well done.",
-                          "Polyspace: defect          : information : impact: low    | number of warnings (4) is "
+                          "Polyspace: defect          : information : impact: low    | number of warnings (2) is "
                           "between limits 0 and 30. Well done.",
-                          "Polyspace: Returning error code 61."],
+                          "Polyspace: Returning error code 2."],
                          self.stderr_lines)
 
     def test_polyspace_output(self):
