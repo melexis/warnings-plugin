@@ -1,5 +1,5 @@
 .. image:: https://img.shields.io/hexpm/l/plug.svg
-    :target: http://www.apache.org/licenses/LICENSE-2.0
+    :target: https://www.apache.org/licenses/LICENSE-2.0
     :alt: Apache2 License
 
 .. image:: https://github.com/melexis/warnings-plugin/actions/workflows/python-package.yml/badge.svg?branch=master
@@ -7,8 +7,8 @@
     :alt: Build status
 
 .. image:: https://badge.fury.io/py/mlx.warnings.svg
-    :target: https://badge.fury.io/py/mlx.warnings
-    :alt: Pypi packaged release
+    :target: https://pypi.org/project/mlx.warnings
+    :alt: PyPI packaged release
 
 .. image:: https://img.shields.io/badge/Documentation-published-brightgreen.svg
     :target: https://melexis.github.io/warnings-plugin/
@@ -19,7 +19,7 @@
     :alt: Coverity Scan Build Status
 
 .. image:: https://codecov.io/gh/melexis/warnings-plugin/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/melexis/warnings-plugin
+    :target: https://app.codecov.io/gh/melexis/warnings-plugin
     :alt: Code Coverage
 
 .. image:: https://codeclimate.com/github/melexis/warnings-plugin/badges/gpa.svg
@@ -27,15 +27,15 @@
     :alt: Code Climate Status
 
 .. image:: https://codeclimate.com/github/melexis/warnings-plugin/badges/issue_count.svg
-    :target: https://codeclimate.com/github/melexis/warnings-plugin
+    :target: https://codeclimate.com/github/melexis/warnings-plugin/issues
     :alt: Issue Count
 
 .. image:: https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat
     :target: https://github.com/melexis/warnings-plugin/issues
     :alt: Contributions welcome
 
-.. image:: https://bestpractices.coreinfrastructure.org/projects/4368/badge
-    :target: https://bestpractices.coreinfrastructure.org/projects/4368
+.. image:: https://www.bestpractices.dev/projects/4368/badge
+    :target: https://www.bestpractices.dev/projects/4368
     :alt: CII Best Practices
 
 
@@ -379,7 +379,7 @@ These statuses indicate that you have given due consideration and justified that
 in `Polyspace's documentation about results`_.
 The status "No Action Planned" is not treated differently because this is the default status for annotations.
 
-.. _`Polyspace's documentation about results`: https://nl.mathworks.com/help/polyspace_access/ug/fix-or-comment-polyspace-results-web-browser.html
+.. _`Polyspace's documentation about results`: https://www.mathworks.com/help/polyspace_access/ug/fix-or-comment-polyspace-results-web-browser.html
 
 Example Checks
 ^^^^^^^^^^^^^^
