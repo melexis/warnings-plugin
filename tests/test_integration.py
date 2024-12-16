@@ -90,6 +90,72 @@ class TestIntegration(TestCase):
         retval = warnings_wrapper(["--coverity", "tests/test_in/coverity_single_defect.txt"])
         self.assertEqual(1, retval)
 
+    def test_coverity_verbose(self):
+        retval = warnings_wrapper([
+            "--verbose",
+            "--coverity",
+            str(TEST_IN_DIR / "coverity_full.txt"),
+        ])
+        self.assertEqual(11, retval)
+        self.assertEqual(["Coverity: unclassified   | some/path/boot.c:32:5: CID 446411 (#1 of 1): Infinite loop "
+                          "(INFINITE_LOOP): Unclassified, Unspecified, Undecided, owner is Unassigned, defect "
+                          "only exists locally.",
+                          "Coverity: unclassified   | some/path/boot.c:55:12: CID 446410 (#1 of 1): MISRA C-2012 "
+                          "The Essential Type Model (MISRA C-2012 Rule 10.3, Required): Unclassified, "
+                          "Unspecified, Undecided, owner is Unassigned, defect only exists locally.",
+                          "Coverity: unclassified   | some/path/boot.c:37:13: CID 446409 (#1 of 1): MISRA C-2012 "
+                          "Control Flow Expressions (MISRA C-2012 Rule 14.3, Required): Unclassified, "
+                          "Unspecified, Undecided, owner is Unassigned, defect only exists locally.",
+                          "Coverity: unclassified   | some/path/boot.c:37:13: CID 446408 (#1 of 1): Logically "
+                          "dead code (DEADCODE): Unclassified, Unspecified, Undecided, owner is Unassigned, "
+                          "defect only exists locally.",
+                          "Coverity: unclassified   | some/path/boot.c:36:13: CID 446407 (#1 of 1): MISRA C-2012 "
+                          "The Essential Type Model (MISRA C-2012 Rule 10.4, Required): Unclassified, "
+                          "Unspecified, Undecided, owner is Unassigned, defect only exists locally.",
+                          "Coverity: unclassified   | some/path/boot.c:32:5: CID 446406 (#1 of 1): MISRA C-2012 "
+                          "Control Flow Expressions (MISRA C-2012 Rule 14.3, Required): Unclassified, "
+                          "Unspecified, Undecided, owner is Unassigned, defect only exists locally.",
+                          "Coverity: unclassified   | some/path/boot.c:37:31: CID 446405 (#1 of 1): MISRA C-2012 "
+                          "Unused Code (MISRA C-2012 Rule 2.2, Required): Unclassified, Unspecified, Undecided, "
+                          "owner is Unassigned, defect only exists locally.",
+                          "Coverity: intentional    | some/path/dummy_int.h:34:12: CID 264736 (#1 of 1): MISRA "
+                          "C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory): Intentional, Minor, "
+                          "Ignore, owner is Unassigned, defect only exists locally.",
+                          "Coverity: false positive | some/path/dummy_fp.c:367:13: CID 423570 (#1 of 1): "
+                          "Out-of-bounds write (OVERRUN): False Positive, Minor, Ignore, owner is sfo, defect "
+                          "only exists locally.",
+                          "Coverity: false positive | some/path/dummy_fp.c:367:13: CID 423568 (#1 of 1): MISRA "
+                          "C-2012 Pointers and Arrays (MISRA C-2012 Rule 18.1, Required): False Positive, Minor, "
+                          "Ignore, owner is sfo, defect only exists locally.",
+                          "Coverity: unclassified   | some/path/dummy_uncl.h:194:14: CID 431350 (#1 of 1): MISRA "
+                          "C-2012 Declarations and Definitions (MISRA C-2012 Rule 8.5, Required): Unclassified, "
+                          "Unspecified, Undecided, owner is Unassigned, defect only exists locally.",
+                          "Coverity: unclassified   | number of warnings (8) is higher than the maximum limit (0).",
+                          "Coverity: pending        | number of warnings (0) is exactly as expected. Well done.",
+                          "Coverity: bug            | number of warnings (0) is exactly as expected. Well done.",
+                          "Coverity: intentional    | number of warnings (1) is higher than the maximum limit (0).",
+                          "Coverity: false positive | number of warnings (2) is higher than the maximum limit (0).",
+                          "Coverity: Returning error code 11."],
+                         self.stderr_lines)
+
+    def test_coverity_output(self):
+        ref_file = str(TEST_IN_DIR / "cov_out.txt")
+        out_file = str(TEST_OUT_DIR / "cov_out.txt")
+        retval = warnings_wrapper([
+            "--output", out_file,
+            "--coverity",
+            str(TEST_IN_DIR / "coverity_full.txt"),
+        ])
+        self.assertEqual(11, retval)
+        self.assertEqual(["Coverity: unclassified   | number of warnings (8) is higher than the maximum limit (0).",
+                          "Coverity: pending        | number of warnings (0) is exactly as expected. Well done.",
+                          "Coverity: bug            | number of warnings (0) is exactly as expected. Well done.",
+                          "Coverity: intentional    | number of warnings (1) is higher than the maximum limit (0).",
+                          "Coverity: false positive | number of warnings (2) is higher than the maximum limit (0).",
+                          "Coverity: Returning error code 11."],
+                         self.stderr_lines)
+        self.assertTrue(filecmp.cmp(out_file, ref_file))
+
     def test_two_arguments(self):
         retval = warnings_wrapper(["--junit", "tests/test_in/junit_single_fail.xml",
                                    "tests/test_in/junit_double_fail.xml"])
