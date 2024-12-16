@@ -9,17 +9,17 @@ from .warnings_checker import WarningsChecker
 
 
 class RobotChecker(WarningsChecker):
-    name = 'robot'
+    name = "robot"
     checkers = []
     logging_fmt = "{checker.name_repr}: {message}"
 
     @property
     def minimum(self):
-        ''' Gets the lowest minimum amount of warnings
+        """Gets the lowest minimum amount of warnings
 
         Returns:
             int: the lowest minimum for warnings
-        '''
+        """
         if self.checkers:
             return min(x.minimum for x in self.checkers)
         return 0
@@ -31,11 +31,11 @@ class RobotChecker(WarningsChecker):
 
     @property
     def maximum(self):
-        ''' Gets the highest minimum amount of warnings
+        """Gets the highest minimum amount of warnings
 
         Returns:
             int: the highest maximum for warnings
-        '''
+        """
         if self.checkers:
             return max(x.maximum for x in self.checkers)
         return 0
@@ -46,34 +46,34 @@ class RobotChecker(WarningsChecker):
             checker.maximum = maximum
 
     def check(self, content):
-        '''
+        """
         Function for counting the number of failures in a specific Robot
         Framework test suite
 
         Args:
             content (str): The content to parse
-        '''
+        """
         for checker in self.checkers:
             checker.check(content)
 
     def return_count(self):
-        ''' Getter function for the amount of warnings found
+        """Getter function for the amount of warnings found
 
         Returns:
             int: Number of warnings found
-        '''
+        """
         self.count = 0
         for checker in self.checkers:
             self.count += checker.return_count()
         return self.count
 
     def return_check_limits(self):
-        ''' Function for checking whether the warning count is within the configured limits
+        """Function for checking whether the warning count is within the configured limits
 
         Returns:
             int: 0 if the amount of warnings is within limits, the count of warnings otherwise
                 (or 1 in case of a count of 0 warnings)
-        '''
+        """
         count = 0
         for checker in self.checkers:
             count += checker.return_check_limits()
@@ -83,25 +83,25 @@ class RobotChecker(WarningsChecker):
 
     def parse_config(self, config):
         self.checkers = []
-        check_suite_name = config.get('check_suite_names', True)
-        for suite_config in config['suites']:
-            checker = RobotSuiteChecker(suite_config['name'], *self.logging_args, check_suite_name=check_suite_name)
+        check_suite_name = config.get("check_suite_names", True)
+        for suite_config in config["suites"]:
+            checker = RobotSuiteChecker(suite_config["name"], *self.logging_args, check_suite_name=check_suite_name)
             checker.parse_config(suite_config)
             self.checkers.append(checker)
 
 
 class RobotSuiteChecker(JUnitChecker):
-    name = 'robot_sub'
+    name = "robot_sub"
     subchecker = True
     logging_fmt = "{checker.name_repr}: {checker.suite_name_repr:<20} {message}"
 
     def __init__(self, suite_name, *logging_args, check_suite_name=False):
-        ''' Constructor
+        """Constructor
 
         Args:
             name (str): Name of the test suite to check the results of
             check_suite_name (bool): Whether to raise an error when no test in suite with given name is found
-        '''
+        """
         super().__init__(*logging_args)
         self.suite_name = suite_name
         self.check_suite_name = check_suite_name
@@ -113,10 +113,10 @@ class RobotSuiteChecker(JUnitChecker):
 
     @property
     def name_repr(self):
-        return self.name.replace('_sub', '').capitalize()
+        return self.name.replace("_sub", "").capitalize()
 
     def _check_testcase(self, testcase):
-        """ Handles the check of a test case element by checking if the result is a failure/error.
+        """Handles the check of a test case element by checking if the result is a failure/error.
 
         If it is to be excluded by a configured regex, or the test case does not belong to the suite, 1 is returned.
         Otherwise, when in verbose/output mode, the suite name and test case name are printed/written along with the
@@ -134,7 +134,7 @@ class RobotSuiteChecker(JUnitChecker):
         return int(self.suite_name and isinstance(testcase.result, (Failure, Error)))
 
     def check(self, content):
-        """ Function for counting the number of JUnit failures in a specific text
+        """Function for counting the number of JUnit failures in a specific text
 
         The test cases with a ``classname`` that does not end with the ``name`` class attribute are ignored.
 
@@ -146,5 +146,5 @@ class RobotSuiteChecker(JUnitChecker):
         """
         super().check(content)
         if not self.is_valid_suite_name and self.check_suite_name:
-            self.logger.error(f'No suite with name {self.suite_name!r} found. Returning error code -1.')
+            self.logger.error(f"No suite with name {self.suite_name!r} found. Returning error code -1.")
             sys.exit(-1)

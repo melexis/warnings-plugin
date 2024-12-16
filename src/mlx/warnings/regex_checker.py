@@ -20,25 +20,25 @@ coverity_pattern = re.compile(COVERITY_WARNING_REGEX)
 
 
 class RegexChecker(WarningsChecker):
-    name = 'regex'
+    name = "regex"
     pattern = None
     SEVERITY_MAP = {
-        'debug': 'info',
-        'info': 'info',
-        'notice': 'info',
-        'warning': 'major',
-        'error': 'critical',
-        'severe': 'critical',
-        'critical': 'critical',
-        'failed': 'critical',
+        "debug": "info",
+        "info": "info",
+        "notice": "info",
+        "warning": "major",
+        "error": "critical",
+        "severe": "critical",
+        "critical": "critical",
+        "failed": "critical",
     }
 
     def check(self, content):
-        ''' Function for counting the number of warnings in a specific text
+        """Function for counting the number of warnings in a specific text
 
         Args:
             content (str): The content to parse
-        '''
+        """
         matches = re.finditer(self.pattern, content)
         for match in matches:
             match_string = match.group(0).strip()
@@ -51,11 +51,11 @@ class RegexChecker(WarningsChecker):
                 self.add_code_quality_finding(match)
 
     def add_code_quality_finding(self, match):
-        '''Add code quality finding
+        """Add code quality finding
 
         Args:
             match (re.Match): The regex match
-        '''
+        """
         groups = {name: result for name, result in match.groupdict().items() if result}
 
         description = next((result for name, result in groups.items() if name.startswith("description")), None)
@@ -72,12 +72,12 @@ class RegexChecker(WarningsChecker):
 
 
 class CoverityChecker(RegexChecker):
-    name = 'coverity'
+    name = "coverity"
     pattern = coverity_pattern
 
     def __init__(self, *logging_args):
         super().__init__(*logging_args)
-        self._cq_description_template = Template('Coverity: CID $cid: $checker')
+        self._cq_description_template = Template("Coverity: CID $cid: $checker")
         self.checkers = {
             "unclassified": CoverityClassificationChecker("unclassified", *logging_args),
             "pending": CoverityClassificationChecker("pending", *logging_args),
@@ -88,14 +88,14 @@ class CoverityChecker(RegexChecker):
 
     @property
     def cq_findings(self):
-        ''' List[dict]: list of code quality findings'''
+        """List[dict]: list of code quality findings"""
         for checker in self.checkers.values():
             self._cq_findings.extend(checker.cq_findings)
         return self._cq_findings
 
     @property
     def cq_description_template(self):
-        ''' Template: string.Template instance based on the configured template string '''
+        """Template: string.Template instance based on the configured template string"""
         return self._cq_description_template
 
     @cq_description_template.setter
@@ -103,23 +103,23 @@ class CoverityChecker(RegexChecker):
         self._cq_description_template = template_obj
 
     def return_count(self):
-        ''' Getter function for the amount of warnings found
+        """Getter function for the amount of warnings found
 
         Returns:
             int: Number of warnings found
-        '''
+        """
         self.count = 0
         for checker in self.checkers.values():
             self.count += checker.return_count()
         return self.count
 
     def return_check_limits(self):
-        ''' Function for checking whether the warning count is within the configured limits
+        """Function for checking whether the warning count is within the configured limits
 
         Returns:
             int: 0 if the amount of warnings is within limits, the count of warnings otherwise
                 (or 1 in case of a count of 0 warnings)
-        '''
+        """
         count = 0
         for checker in self.checkers.values():
             count += checker.return_check_limits()
@@ -128,13 +128,13 @@ class CoverityChecker(RegexChecker):
         return count
 
     def check(self, content):
-        '''
+        """
         Function for counting the number of warnings, but adopted for Coverity
         output
 
         Args:
             content (str): The content to parse
-        '''
+        """
         matches = re.finditer(self.pattern, content)
         for match in matches:
             if (classification := match.group("classification").lower()) in self.checkers:
@@ -169,15 +169,15 @@ class CoverityChecker(RegexChecker):
 
 
 class CoverityClassificationChecker(WarningsChecker):
-    name = 'coverity_sub'
+    name = "coverity_sub"
     subchecker = True
     logging_fmt = "{checker.name_repr}: {checker.classification:<14} | {message}"
     SEVERITY_MAP = {
-        'false positive': 'info',
-        'intentional': 'info',
-        'bug': 'major',
-        'unclassified': 'major',
-        'pending': 'critical',
+        "false positive": "info",
+        "intentional": "info",
+        "bug": "major",
+        "unclassified": "major",
+        "pending": "critical",
     }
 
     def __init__(self, classification, *args):
@@ -191,7 +191,7 @@ class CoverityClassificationChecker(WarningsChecker):
 
     @property
     def cq_description_template(self):
-        ''' Template: string.Template instance based on the configured template string '''
+        """Template: string.Template instance based on the configured template string"""
         return self._cq_description_template
 
     @cq_description_template.setter
@@ -199,11 +199,11 @@ class CoverityClassificationChecker(WarningsChecker):
         self._cq_description_template = template_obj
 
     def add_code_quality_finding(self, match):
-        '''Add code quality finding
+        """Add code quality finding
 
         Args:
             match (re.Match): The regex match
-        '''
+        """
         groups = {name: result for name, result in match.groupdict().items() if result}
         try:
             description = self.cq_description_template.substitute(os.environ, **groups)
@@ -224,15 +224,15 @@ class CoverityClassificationChecker(WarningsChecker):
         self.cq_findings.append(finding.to_dict())
 
     def check(self, content):
-        '''
+        """
         Function for counting the number of warnings, but adopted for Coverity output.
         Multiple warnings for the same CID are counted as one.
 
         Args:
             content (re.Match): The regex match
-        '''
+        """
         match_string = content.group(0).strip()
-        if not self._is_excluded(match_string) and (content.group('curr') == content.group('max')):
+        if not self._is_excluded(match_string) and (content.group("curr") == content.group("max")):
             self.count += 1
             self.logger.info(match_string)
             self.logger.debug(match_string)
@@ -241,24 +241,24 @@ class CoverityClassificationChecker(WarningsChecker):
 
 
 class DoxyChecker(RegexChecker):
-    name = 'doxygen'
+    name = "doxygen"
     pattern = doxy_pattern
 
 
 class SphinxChecker(RegexChecker):
-    name = 'sphinx'
+    name = "sphinx"
     pattern = sphinx_pattern
     sphinx_deprecation_regex = r"(?m)^(?:(.+?:(?:\d+|None)?):?\s*)?(DEBUG|INFO|WARNING|ERROR|SEVERE|(?:\w+Sphinx\d+Warning)):\s*(.+)$"
     sphinx_deprecation_regex_in_match = "RemovedInSphinx\\d+Warning"
 
     def include_sphinx_deprecation(self):
-        '''
+        """
         Adds the pattern for sphinx_deprecation_regex to the list patterns to include and alters the main pattern
-        '''
+        """
         self.pattern = re.compile(self.sphinx_deprecation_regex)
         self.add_patterns([self.sphinx_deprecation_regex_in_match], self.include_patterns)
 
 
 class XMLRunnerChecker(RegexChecker):
-    name = 'xmlrunner'
+    name = "xmlrunner"
     pattern = xmlrunner_pattern

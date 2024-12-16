@@ -11,24 +11,24 @@ from .warnings_checker import WarningsChecker
 
 
 class PolyspaceChecker(WarningsChecker):
-    name = 'polyspace'
+    name = "polyspace"
     checkers = []
 
     def __init__(self, *logging_args):
         '''Constructor to set the default code quality description template to "Polyspace: $check"'''
         super().__init__(*logging_args)
-        self._cq_description_template = Template('Polyspace: $check')
+        self._cq_description_template = Template("Polyspace: $check")
 
     @property
     def cq_findings(self):
-        ''' List[dict]: list of code quality findings'''
+        """List[dict]: list of code quality findings"""
         for checker in self.checkers:
             self._cq_findings.extend(checker.cq_findings)
         return self._cq_findings
 
     @property
     def cq_description_template(self):
-        ''' Template: string.Template instance based on the configured template string '''
+        """Template: string.Template instance based on the configured template string"""
         return self._cq_description_template
 
     @cq_description_template.setter
@@ -37,11 +37,11 @@ class PolyspaceChecker(WarningsChecker):
 
     @property
     def minimum(self):
-        ''' Gets the lowest minimum amount of warnings
+        """Gets the lowest minimum amount of warnings
 
         Returns:
             int: the lowest minimum for warnings
-        '''
+        """
         if self.checkers:
             return min(x.minimum for x in self.checkers)
         return 0
@@ -53,11 +53,11 @@ class PolyspaceChecker(WarningsChecker):
 
     @property
     def maximum(self):
-        ''' Gets the highest minimum amount of warnings
+        """Gets the highest minimum amount of warnings
 
         Returns:
             int: the highest maximum for warnings
-        '''
+        """
         if self.checkers:
             return max(x.maximum for x in self.checkers)
         return 0
@@ -68,43 +68,43 @@ class PolyspaceChecker(WarningsChecker):
             checker.maximum = maximum
 
     def check(self, content):
-        '''
+        """
         Function for counting the number of failures in a TSV file exported by Polyspace
 
         Args:
             content (_io.TextIOWrapper): The open file to parse
-        '''
+        """
         if not isinstance(content, TextIOWrapper):
             raise TypeError(
                 f"{self.__class__.__name__} can't handle this type; expected {type(TextIOWrapper)}; got {type(content)}"
             )
-        reader = csv.DictReader(content, dialect='excel-tab')
+        reader = csv.DictReader(content, dialect="excel-tab")
         # set column names to lowercase
         reader.fieldnames = [name.lower() for name in reader.fieldnames]
 
         for row in reader:
             for checker in self.checkers:
-                if row['family'].lower() == checker.family_value:
+                if row["family"].lower() == checker.family_value:
                     checker.check(row)
 
     def return_count(self):
-        ''' Getter function for the amount of warnings found
+        """Getter function for the amount of warnings found
 
         Returns:
             int: Number of warnings found
-        '''
+        """
         self.count = 0
         for checker in self.checkers:
             self.count += checker.return_count()
         return self.count
 
     def return_check_limits(self):
-        ''' Function for checking whether the warning count is within the configured limits
+        """Function for checking whether the warning count is within the configured limits
 
         Returns:
             int: 0 if the amount of warnings is within limits, the count of warnings otherwise
                 (or 1 in case of a count of 0 warnings)
-        '''
+        """
         count = 0
         for checker in self.checkers:
             count += checker.return_check_limits()
@@ -130,10 +130,10 @@ class PolyspaceChecker(WarningsChecker):
             if family_value == "enabled":
                 continue
             if family_value == "cq_description_template":
-                self.cq_description_template = Template(config['cq_description_template'])
+                self.cq_description_template = Template(config["cq_description_template"])
                 continue
             if family_value == "cq_default_path":
-                self.cq_default_path = config['cq_default_path']
+                self.cq_default_path = config["cq_default_path"]
                 continue
             if family_value == "exclude":
                 self.add_patterns(config.get("exclude"), self.exclude_patterns)
@@ -164,7 +164,7 @@ class PolyspaceChecker(WarningsChecker):
 
 
 class PolyspaceFamilyChecker(WarningsChecker):
-    name = 'polyspace_sub'
+    name = "polyspace_sub"
     subchecker = True
     code_quality_severity = {
         "impact: high": "critical",
@@ -190,7 +190,7 @@ class PolyspaceFamilyChecker(WarningsChecker):
 
     @property
     def cq_description_template(self):
-        ''' Template: string.Template instance based on the configured template string '''
+        """Template: string.Template instance based on the configured template string"""
         return self._cq_description_template
 
     @cq_description_template.setter
@@ -198,11 +198,11 @@ class PolyspaceFamilyChecker(WarningsChecker):
         self._cq_description_template = template_obj
 
     def add_code_quality_finding(self, row):
-        '''Add code quality finding
+        """Add code quality finding
 
         Args:
             row (dict): The row of the warning with the corresponding colomn names
-        '''
+        """
         try:
             description = self.cq_description_template.substitute(os.environ, **row)
         except KeyError as err:
@@ -222,12 +222,12 @@ class PolyspaceFamilyChecker(WarningsChecker):
         self.cq_findings.append(finding.to_dict())
 
     def check(self, content):
-        '''
+        """
         Function for counting the number of failures in a TSV/CSV file exported by Polyspace
 
         Args:
             content (dict): The row of the TSV file
-        '''
+        """
         if content[self.column_name].lower() == self.check_value:
             if content["status"].lower() in ["not a defect", "justified"]:
                 self.logger.info(f"Excluded defect with ID {content.get('id', None)!r} because the status is "

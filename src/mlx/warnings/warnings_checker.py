@@ -38,7 +38,7 @@ class DebugOnlyFilter(logging.Filter):
 
 
 class WarningsChecker:
-    name = 'checker'
+    name = "checker"
     subchecker = False
     logging_fmt = "{checker.name_repr}: {message}"
 
@@ -57,8 +57,8 @@ class WarningsChecker:
         self._maximum = 0
         self._cq_findings = []
         self.cq_enabled = False
-        self.cq_default_path = '.gitlab-ci.yml'
-        self._cq_description_template = Template('$description')
+        self.cq_default_path = ".gitlab-ci.yml"
+        self._cq_description_template = Template("$description")
         self.exclude_patterns = []
         self.include_patterns = []
         self.logging_args = (verbose, output)
@@ -90,22 +90,22 @@ class WarningsChecker:
 
     @property
     def name_repr(self):
-        return self.name.replace('_sub', '').capitalize()
+        return self.name.replace("_sub", "").capitalize()
 
     @property
     def cq_findings(self):
-        ''' List[dict]: list of code quality findings'''
+        """List[dict]: list of code quality findings"""
         return self._cq_findings
 
     @property
     def cq_description_template(self):
-        ''' Template: string.Template instance based on the configured template string '''
+        """Template: string.Template instance based on the configured template string"""
         return self._cq_description_template
 
     @cq_description_template.setter
     def cq_description_template(self, template_obj):
         try:
-            template_obj.template = template_obj.substitute(os.environ, description='$description')
+            template_obj.template = template_obj.substitute(os.environ, description="$description")
         except KeyError as err:
             raise WarningsConfigError(f"Failed to find environment variable from configuration value "
                                       f"'cq_description_template': {err}") from err
@@ -113,11 +113,11 @@ class WarningsChecker:
 
     @property
     def maximum(self):
-        ''' Getter function for the maximum amount of warnings
+        """Getter function for the maximum amount of warnings
 
         Returns:
             int: Maximum amount of warnings
-        '''
+        """
         return self._maximum
 
     @maximum.setter
@@ -131,11 +131,11 @@ class WarningsChecker:
 
     @property
     def minimum(self):
-        ''' Getter function for the minimum amount of warnings
+        """Getter function for the minimum amount of warnings
 
         Returns:
             int: Minimum amount of warnings
-        '''
+        """
         return self._minimum
 
     @minimum.setter
@@ -147,20 +147,20 @@ class WarningsChecker:
 
     @abc.abstractmethod
     def check(self, content):
-        ''' Function for counting the number of warnings in a specific text
+        """Function for counting the number of warnings in a specific text
 
         Args:
             content (str): The content to parse
-        '''
+        """
         return
 
     def add_patterns(self, regexes, pattern_container):
-        ''' Adds regexes as patterns to the specified container
+        """Adds regexes as patterns to the specified container
 
         Args:
             regexes (list[str]|None): List of regexes to add
             pattern_container (list[re.Pattern]): Target storage container for patterns
-        '''
+        """
         if regexes:
             if not isinstance(regexes, list):
                 raise TypeError("Expected a list value for exclude key in configuration file; got {}"
@@ -169,22 +169,22 @@ class WarningsChecker:
                 pattern_container.append(re.compile(regex))
 
     def return_count(self):
-        ''' Getter function for the amount of warnings found
+        """Getter function for the amount of warnings found
 
         Returns:
             int: Number of warnings found
-        '''
+        """
         return self.count
 
     def return_check_limits(self):
-        ''' Function for checking whether the warning count is within the configured limits
+        """Function for checking whether the warning count is within the configured limits
         A checker instance with sub-checkers is responsible for printing 'Returning error code X.'
         when the exit code is not 0.
 
         Returns:
             int: 0 if the amount of warnings is within limits, the count of (the sum of sub-checker) warnings otherwise
                 (or 1 in case of a count of 0 warnings)
-        '''
+        """
         if self.count > self._maximum or self.count < self._minimum:
             return self._return_error_code()
         elif self._minimum == self._maximum and self.count == self._maximum:
@@ -195,11 +195,11 @@ class WarningsChecker:
         return 0
 
     def _return_error_code(self):
-        ''' Function for determining the return code and message on failure
+        """Function for determining the return code and message on failure
 
         Returns:
             int: The count of warnings (or 1 in case of a count of 0 warnings)
-        '''
+        """
         if self.count > self._maximum:
             error_reason = f"higher than the maximum limit ({self._maximum})"
         else:
@@ -215,17 +215,17 @@ class WarningsChecker:
         return error_code
 
     def parse_config(self, config):
-        substitute_envvar(config, {'min', 'max'})
-        self.maximum = int(config['max'])
-        self.minimum = int(config['min'])
+        substitute_envvar(config, {"min", "max"})
+        self.maximum = int(config["max"])
+        self.minimum = int(config["min"])
         self.add_patterns(config.get("exclude"), self.exclude_patterns)
-        if 'cq_default_path' in config:
-            self.cq_default_path = config['cq_default_path']
-        if 'cq_description_template' in config:
-            self.cq_description_template = Template(config['cq_description_template'])
+        if "cq_default_path" in config:
+            self.cq_default_path = config["cq_default_path"]
+        if "cq_description_template" in config:
+            self.cq_description_template = Template(config["cq_description_template"])
 
     def _is_excluded(self, content):
-        ''' Checks if the specific text must be excluded based on the configured regexes for exclusion and inclusion.
+        """Checks if the specific text must be excluded based on the configured regexes for exclusion and inclusion.
 
         Inclusion has priority over exclusion.
 
@@ -234,7 +234,7 @@ class WarningsChecker:
 
         Returns:
             bool: True for exclusion, False for inclusion
-        '''
+        """
         matching_exclude_pattern = self._search_patterns(content, self.exclude_patterns)
         if not self._search_patterns(content, self.include_patterns) and matching_exclude_pattern:
             self.logger.info(f"Excluded {content!r} because of configured regex {matching_exclude_pattern!r}")
@@ -243,7 +243,7 @@ class WarningsChecker:
 
     @staticmethod
     def _search_patterns(content, patterns):
-        ''' Returns the regex of the first pattern that matches specified content, None if nothing matches '''
+        """Returns the regex of the first pattern that matches specified content, None if nothing matches"""
         for pattern in patterns:
             if pattern.search(content):
                 return pattern.pattern
