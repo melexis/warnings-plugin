@@ -2,7 +2,7 @@ import unittest
 
 import pytest
 
-from mlx.warnings import RobotSuiteChecker, WarningsPlugin, warnings_wrapper
+from mlx.warnings import RobotSuiteChecker, WarningsConfigError, WarningsPlugin, warnings_wrapper
 
 
 class TestRobotWarnings(unittest.TestCase):
@@ -77,6 +77,7 @@ class TestRobotWarnings(unittest.TestCase):
         self.assertEqual(c_m.exception.code, -1)
 
     def test_robot_version_5(self):
+        self.dut.allow_unconfigured = True
         self.dut.checkers = [
             RobotSuiteChecker("Empty Flash Product Id", *self.dut.logging_args, check_suite_name=True),
         ]
@@ -84,6 +85,38 @@ class TestRobotWarnings(unittest.TestCase):
             self.warnings.check(xmlfile.read())
             count = self.warnings.return_count()
         self.assertEqual(count, 6)
+
+    def test_disallow_unconfigured_pass(self):
+        self.dut.allow_unconfigured = False
+        self.dut.checkers = [
+            RobotSuiteChecker('Empty Flash Product Id', *self.dut.logging_args),
+            RobotSuiteChecker('Empty Flash Mlx Device Project Id', *self.dut.logging_args),
+        ]
+        with open('tests/test_in/robot_version_5.xml') as xmlfile:
+            self.warnings.check(xmlfile.read())
+            count = self.warnings.return_count()
+        self.assertEqual(count, 8)
+
+    def test_disallow_unconfigured_pass_wildcard(self):
+        self.dut.allow_unconfigured = False
+        self.dut.checkers = [
+            RobotSuiteChecker('', *self.dut.logging_args),
+        ]
+        with open('tests/test_in/robot_version_5.xml') as xmlfile:
+            self.warnings.check(xmlfile.read())
+            count = self.warnings.return_count()
+        self.assertEqual(count, 8)
+
+    def test_disallow_unconfigured_fail(self):
+        self.dut.allow_unconfigured = False
+        self.dut.checkers = [
+            RobotSuiteChecker('Empty Flash Mlx Device Project Id', *self.dut.logging_args),
+        ]
+        with open('tests/test_in/robot_version_5.xml') as xmlfile:
+            with self.assertRaises(WarningsConfigError) as exc:
+                self.warnings.check(xmlfile.read())
+                self.warnings.return_count()
+        self.assertEqual(str(exc.exception), "1 test suites have been ignored due to incomplete configuration: ['Empty Flash Product Id']")
 
 
 if __name__ == "__main__":

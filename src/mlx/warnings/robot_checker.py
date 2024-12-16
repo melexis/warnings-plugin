@@ -4,14 +4,20 @@ import sys
 
 from junitparser import Error, Failure
 
+from .exceptions import WarningsConfigError
 from .junit_checker import JUnitChecker
 from .warnings_checker import WarningsChecker
 
 
 class RobotChecker(WarningsChecker):
     name = "robot"
-    checkers = []
     logging_fmt = "{checker.name_repr}: {message}"
+
+    def __init__(self, *logging_args):
+        ''' Constructor '''
+        super().__init__(*logging_args)
+        self.checkers = []
+        self.allow_unconfigured = True
 
     @property
     def minimum(self):
@@ -45,6 +51,11 @@ class RobotChecker(WarningsChecker):
         for checker in self.checkers:
             checker.maximum = maximum
 
+    @property
+    def ignored_testsuites(self):
+        ignored_testcases = set.intersection(*(c.ignored_testsuites for c in self.checkers))
+        return sorted({t.classname.split(".")[-1] for t in ignored_testcases})
+
     def check(self, content):
         """
         Function for counting the number of failures in a specific Robot
@@ -65,6 +76,9 @@ class RobotChecker(WarningsChecker):
         self.count = 0
         for checker in self.checkers:
             self.count += checker.return_count()
+        if not self.allow_unconfigured and self.ignored_testsuites:
+            raise WarningsConfigError(f"{len(self.ignored_testsuites)} test suites have been ignored due to "
+                                      f"incomplete configuration: {self.ignored_testsuites}")
         return self.count
 
     def return_check_limits(self):
@@ -82,7 +96,7 @@ class RobotChecker(WarningsChecker):
         return count
 
     def parse_config(self, config):
-        self.checkers = []
+        self.allow_unconfigured = config.get("allow_unconfigured", True)
         check_suite_name = config.get("check_suite_names", True)
         for suite_config in config["suites"]:
             checker = RobotSuiteChecker(suite_config["name"], *self.logging_args, check_suite_name=check_suite_name)
@@ -105,6 +119,7 @@ class RobotSuiteChecker(JUnitChecker):
         self.suite_name = suite_name
         self.check_suite_name = check_suite_name
         self.is_valid_suite_name = False
+        self.ignored_testsuites = set()
 
     @property
     def suite_name_repr(self):
@@ -126,7 +141,8 @@ class RobotSuiteChecker(JUnitChecker):
         if testcase.classname.endswith(self.suite_name):
             self.is_valid_suite_name = True
             return super()._check_testcase(testcase)
-        return int(self.suite_name and isinstance(testcase.result, (Failure, Error)))
+        self.ignored_testsuites.add(testcase)
+        return int(isinstance(testcase.result, (Failure, Error)))
 
     def check(self, content):
         """Function for counting the number of JUnit failures in a specific text
