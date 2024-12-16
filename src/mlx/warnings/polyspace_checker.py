@@ -125,7 +125,6 @@ class PolyspaceChecker(WarningsChecker):
             {\n    <column-name>: <value_to_check>,\n    min: <number>,\n    max: <number>\n}
         """
         self.checkers = []
-        padding = 0
         for family_value, data in config.items():
             if family_value == "enabled":
                 continue
@@ -144,7 +143,6 @@ class PolyspaceChecker(WarningsChecker):
                         continue
                     column_name = key.lower()
                     check_value = value.lower()
-                    padding = max(padding, len(f"{family_value}: {column_name}: {check_value}"))
                     checker = PolyspaceFamilyChecker(family_value, column_name, check_value, *self.logging_args)
                     checker.parse_config(check)
                     self.checkers.append(checker)
@@ -165,7 +163,6 @@ class PolyspaceChecker(WarningsChecker):
 
 class PolyspaceFamilyChecker(WarningsChecker):
     name = "polyspace_sub"
-    subchecker = True
     code_quality_severity = {
         "impact: high": "critical",
         "impact: medium": "major",

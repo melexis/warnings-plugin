@@ -39,7 +39,6 @@ class DebugOnlyFilter(logging.Filter):
 
 class WarningsChecker:
     name = "checker"
-    subchecker = False
     logging_fmt = "{checker.name_repr}: {message}"
 
     def __init__(self, verbose, output):
@@ -91,6 +90,10 @@ class WarningsChecker:
     @property
     def name_repr(self):
         return self.name.replace("_sub", "").capitalize()
+
+    @property
+    def is_sub_checker(self):
+        return self.name.endswith("_sub")
 
     @property
     def cq_findings(self):
@@ -209,7 +212,7 @@ class WarningsChecker:
         if error_code == 0:
             error_code = 1
         string_to_print = f"number of warnings ({self.count}) is {error_reason}."
-        if not self.subchecker:
+        if not self.is_sub_checker:
             string_to_print += f" Returning error code {error_code}."
         self.logger.warning(string_to_print)
         return error_code
