@@ -4,11 +4,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx.warnings.regex_checker &#8212; warning-plugin 5.6.0 documentation</title>
+    <title>mlx.warnings.regex_checker &#8212; warning-plugin 6.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d10597a4" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pydoctheme.css?v=8635fa60" />
     
-    <script src="../../../_static/documentation_options.js?v=31fa7d35"></script>
+    <script src="../../../_static/documentation_options.js?v=12958129"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -27,7 +27,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="../../../index.html">warning-plugin-5.6.0</a> &#187;</li>
+        <li><a href="../../../index.html">warning-plugin-6.0.0</a> &#187;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -62,47 +62,47 @@
 <span class="n">PYTHON_XMLRUNNER_REGEX</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(\s*(?P&lt;severity1&gt;ERROR|FAILED) (\[\d+\.\d</span><span class="si">{3}</span><span class="s2">s\]: \s*(?P&lt;description1&gt;.+)))\n?&quot;</span>
 <span class="n">xmlrunner_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">PYTHON_XMLRUNNER_REGEX</span><span class="p">)</span>
 
-<span class="n">COVERITY_WARNING_REGEX</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?P&lt;path&gt;[\d\w/</span><span class="se">\\</span><span class="s2">/-_]+\.\w+)(:(?P&lt;line&gt;\d+)(:(?P&lt;column&gt;\d+))?)?: ?CID \d+ \(#(?P&lt;curr&gt;\d+) of (?P&lt;max&gt;\d+)\): (?P&lt;checker&gt;.+): (?P&lt;classification&gt;[\w ]+),.+&quot;</span>
+<span class="n">COVERITY_WARNING_REGEX</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?P&lt;path&gt;[\w\.</span><span class="se">\\</span><span class="s2">/\- ]+)(:(?P&lt;line&gt;\d+)(:(?P&lt;column&gt;\d+))?)?: ?CID (?P&lt;cid&gt;\d+) \(#(?P&lt;curr&gt;\d+) of (?P&lt;max&gt;\d+)\): (?P&lt;checker&gt;.+): (?P&lt;classification&gt;[\w ]+),.+&quot;</span>
 <span class="n">coverity_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">COVERITY_WARNING_REGEX</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">RegexChecker</span><span class="p">(</span><span class="n">WarningsChecker</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;regex&#39;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;regex&quot;</span>
     <span class="n">pattern</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">SEVERITY_MAP</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;debug&#39;</span><span class="p">:</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;info&#39;</span><span class="p">:</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;notice&#39;</span><span class="p">:</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;warning&#39;</span><span class="p">:</span> <span class="s1">&#39;major&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;critical&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;severe&#39;</span><span class="p">:</span> <span class="s1">&#39;critical&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;critical&#39;</span><span class="p">:</span> <span class="s1">&#39;critical&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;failed&#39;</span><span class="p">:</span> <span class="s1">&#39;critical&#39;</span><span class="p">,</span>
+        <span class="s2">&quot;debug&quot;</span><span class="p">:</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;info&quot;</span><span class="p">:</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;notice&quot;</span><span class="p">:</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;warning&quot;</span><span class="p">:</span> <span class="s2">&quot;major&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;critical&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;severe&quot;</span><span class="p">:</span> <span class="s2">&quot;critical&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;critical&quot;</span><span class="p">:</span> <span class="s2">&quot;critical&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;failed&quot;</span><span class="p">:</span> <span class="s2">&quot;critical&quot;</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Function for counting the number of warnings in a specific text</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Function for counting the number of warnings in a specific text</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            content (str): The content to parse</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pattern</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
             <span class="n">match_string</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_excluded</span><span class="p">(</span><span class="n">match_string</span><span class="p">):</span>
                 <span class="k">continue</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">counted_warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match_string</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">print_when_verbose</span><span class="p">(</span><span class="n">match_string</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">match_string</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">match_string</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_enabled</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">add_code_quality_finding</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">add_code_quality_finding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">match</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;Add code quality finding</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add code quality finding</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            match (re.Match): The regex match</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">groups</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">result</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">match</span><span class="o">.</span><span class="n">groupdict</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">result</span><span class="p">}</span>
 
         <span class="n">description</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">result</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">groups</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">)),</span> <span class="kc">None</span><span class="p">)</span>
@@ -121,38 +121,30 @@
 <div class="viewcode-block" id="CoverityChecker">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.CoverityChecker">[docs]</a>
 <span class="k">class</span> <span class="nc">CoverityChecker</span><span class="p">(</span><span class="n">RegexChecker</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;coverity&#39;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;coverity&quot;</span>
     <span class="n">pattern</span> <span class="o">=</span> <span class="n">coverity_pattern</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="s1">&#39;Coverity: $checker&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">logging_args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="s2">&quot;Coverity: CID $cid: $checker&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;unclassified&quot;</span><span class="p">:</span> <span class="n">CoverityClassificationChecker</span><span class="p">(</span><span class="s2">&quot;unclassified&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">),</span>
-            <span class="s2">&quot;pending&quot;</span><span class="p">:</span> <span class="n">CoverityClassificationChecker</span><span class="p">(</span><span class="s2">&quot;pending&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">),</span>
-            <span class="s2">&quot;bug&quot;</span><span class="p">:</span> <span class="n">CoverityClassificationChecker</span><span class="p">(</span><span class="s2">&quot;bug&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">),</span>
-            <span class="s2">&quot;intentional&quot;</span><span class="p">:</span> <span class="n">CoverityClassificationChecker</span><span class="p">(</span><span class="s2">&quot;intentional&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">),</span>
-            <span class="s2">&quot;false positive&quot;</span><span class="p">:</span> <span class="n">CoverityClassificationChecker</span><span class="p">(</span><span class="s2">&quot;false positive&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">),</span>
+            <span class="s2">&quot;unclassified&quot;</span><span class="p">:</span> <span class="n">CoverityClassificationChecker</span><span class="p">(</span><span class="s2">&quot;unclassified&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">),</span>
+            <span class="s2">&quot;pending&quot;</span><span class="p">:</span> <span class="n">CoverityClassificationChecker</span><span class="p">(</span><span class="s2">&quot;pending&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">),</span>
+            <span class="s2">&quot;bug&quot;</span><span class="p">:</span> <span class="n">CoverityClassificationChecker</span><span class="p">(</span><span class="s2">&quot;bug&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">),</span>
+            <span class="s2">&quot;intentional&quot;</span><span class="p">:</span> <span class="n">CoverityClassificationChecker</span><span class="p">(</span><span class="s2">&quot;intentional&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">),</span>
+            <span class="s2">&quot;false positive&quot;</span><span class="p">:</span> <span class="n">CoverityClassificationChecker</span><span class="p">(</span><span class="s2">&quot;false positive&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">),</span>
         <span class="p">}</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">counted_warnings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; List[str]: list of counted warnings&#39;&#39;&#39;</span>
-        <span class="n">all_counted_warnings</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="n">all_counted_warnings</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">checker</span><span class="o">.</span><span class="n">counted_warnings</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">all_counted_warnings</span>
-
-    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">cq_findings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; List[dict]: list of code quality findings&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List[dict]: list of code quality findings&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cq_findings</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">checker</span><span class="o">.</span><span class="n">cq_findings</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cq_findings</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Template: string.Template instance based on the configured template string &#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Template: string.Template instance based on the configured template string&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span>
 
     <span class="nd">@cq_description_template</span><span class="o">.</span><span class="n">setter</span>
@@ -162,11 +154,11 @@
 <div class="viewcode-block" id="CoverityChecker.return_count">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.CoverityChecker.return_count">[docs]</a>
     <span class="k">def</span> <span class="nf">return_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Getter function for the amount of warnings found</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Getter function for the amount of warnings found</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            int: Number of warnings found</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="n">checker</span><span class="o">.</span><span class="n">return_count</span><span class="p">()</span>
@@ -176,30 +168,30 @@
 <div class="viewcode-block" id="CoverityChecker.return_check_limits">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.CoverityChecker.return_check_limits">[docs]</a>
     <span class="k">def</span> <span class="nf">return_check_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Function for checking whether the warning count is within the configured limits</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Function for checking whether the warning count is within the configured limits</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            int: 0 if the amount of warnings is within limits, the count of warnings otherwise</span>
 <span class="sd">                (or 1 in case of a count of 0 warnings)</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Counted failures for classification </span><span class="si">{</span><span class="n">checker</span><span class="o">.</span><span class="n">classification</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">count</span> <span class="o">+=</span> <span class="n">checker</span><span class="o">.</span><span class="n">return_check_limits</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;total warnings = </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">count</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Returning error code </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">count</span></div>
 
 
 <div class="viewcode-block" id="CoverityChecker.check">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.CoverityChecker.check">[docs]</a>
     <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function for counting the number of warnings, but adopted for Coverity</span>
 <span class="sd">        output</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            content (str): The content to parse</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pattern</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">classification</span> <span class="o">:=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="p">:</span>
@@ -210,7 +202,7 @@
                 <span class="n">checker</span><span class="o">.</span><span class="n">cq_default_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_default_path</span>
                 <span class="n">checker</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;WARNING: Unrecognized classification </span><span class="si">{</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;classification&#39;</span><span class="p">)</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unrecognized classification </span><span class="si">{</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;classification&#39;</span><span class="p">)</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="CoverityChecker.parse_config">
@@ -233,52 +225,46 @@
             <span class="k">if</span> <span class="n">classification_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="p">[</span><span class="n">classification_key</span><span class="p">]</span><span class="o">.</span><span class="n">parse_config</span><span class="p">(</span><span class="n">checker_config</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;WARNING: Unrecognized classification </span><span class="si">{</span><span class="n">classification</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unrecognized classification </span><span class="si">{</span><span class="n">classification</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 </div>
 
 
 
 <span class="k">class</span> <span class="nc">CoverityClassificationChecker</span><span class="p">(</span><span class="n">WarningsChecker</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;coverity_sub&quot;</span>
+    <span class="n">logging_fmt</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{checker.name_repr}</span><span class="s2">: </span><span class="si">{checker.classification:&lt;14}</span><span class="s2"> | </span><span class="si">{message}</span><span class="s2">&quot;</span>
     <span class="n">SEVERITY_MAP</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;false positive&#39;</span><span class="p">:</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;intentional&#39;</span><span class="p">:</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;bug&#39;</span><span class="p">:</span> <span class="s1">&#39;major&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;unclassified&#39;</span><span class="p">:</span> <span class="s1">&#39;major&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;pending&#39;</span><span class="p">:</span> <span class="s1">&#39;critical&#39;</span><span class="p">,</span>
+        <span class="s2">&quot;false positive&quot;</span><span class="p">:</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;intentional&quot;</span><span class="p">:</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;bug&quot;</span><span class="p">:</span> <span class="s2">&quot;major&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;unclassified&quot;</span><span class="p">:</span> <span class="s2">&quot;major&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pending&quot;</span><span class="p">:</span> <span class="s2">&quot;critical&quot;</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classification</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classification</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the CoverityClassificationChecker:</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            classification (str): The coverity classification</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">classification</span> <span class="o">=</span> <span class="n">classification</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Template: string.Template instance based on the configured template string &#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Template: string.Template instance based on the configured template string&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span>
 
     <span class="nd">@cq_description_template</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_obj</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span> <span class="o">=</span> <span class="n">template_obj</span>
 
-    <span class="k">def</span> <span class="nf">return_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Getter function for the amount of warnings found</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            int: Number of warnings found</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span>
-
     <span class="k">def</span> <span class="nf">add_code_quality_finding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">match</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;Add code quality finding</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add code quality finding</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            match (re.Match): The regex match</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">groups</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">result</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">match</span><span class="o">.</span><span class="n">groupdict</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">result</span><span class="p">}</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">description</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_description_template</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="o">**</span><span class="n">groups</span><span class="p">)</span>
@@ -299,18 +285,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cq_findings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">finding</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
 
     <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function for counting the number of warnings, but adopted for Coverity output.</span>
 <span class="sd">        Multiple warnings for the same CID are counted as one.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            content (re.Match): The regex match</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">match_string</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_excluded</span><span class="p">(</span><span class="n">match_string</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;curr&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">content</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;max&#39;</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_excluded</span><span class="p">(</span><span class="n">match_string</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;curr&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">content</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;max&quot;</span><span class="p">)):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">counted_warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match_string</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">print_when_verbose</span><span class="p">(</span><span class="n">match_string</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">match_string</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">match_string</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_enabled</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">add_code_quality_finding</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
 
@@ -318,7 +304,7 @@
 <div class="viewcode-block" id="DoxyChecker">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.DoxyChecker">[docs]</a>
 <span class="k">class</span> <span class="nc">DoxyChecker</span><span class="p">(</span><span class="n">RegexChecker</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;doxygen&#39;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;doxygen&quot;</span>
     <span class="n">pattern</span> <span class="o">=</span> <span class="n">doxy_pattern</span></div>
 
 
@@ -326,7 +312,7 @@
 <div class="viewcode-block" id="SphinxChecker">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.SphinxChecker">[docs]</a>
 <span class="k">class</span> <span class="nc">SphinxChecker</span><span class="p">(</span><span class="n">RegexChecker</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;sphinx&#39;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;sphinx&quot;</span>
     <span class="n">pattern</span> <span class="o">=</span> <span class="n">sphinx_pattern</span>
     <span class="n">sphinx_deprecation_regex</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?m)^(?:(.+?:(?:\d+|None)?):?\s*)?(DEBUG|INFO|WARNING|ERROR|SEVERE|(?:\w+Sphinx\d+Warning)):\s*(.+)$&quot;</span>
     <span class="n">sphinx_deprecation_regex_in_match</span> <span class="o">=</span> <span class="s2">&quot;RemovedInSphinx</span><span class="se">\\</span><span class="s2">d+Warning&quot;</span>
@@ -334,9 +320,9 @@
 <div class="viewcode-block" id="SphinxChecker.include_sphinx_deprecation">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.SphinxChecker.include_sphinx_deprecation">[docs]</a>
     <span class="k">def</span> <span class="nf">include_sphinx_deprecation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Adds the pattern for sphinx_deprecation_regex to the list patterns to include and alters the main pattern</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sphinx_deprecation_regex</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_patterns</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">sphinx_deprecation_regex_in_match</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">include_patterns</span><span class="p">)</span></div>
 </div>
@@ -346,7 +332,7 @@
 <div class="viewcode-block" id="XMLRunnerChecker">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.XMLRunnerChecker">[docs]</a>
 <span class="k">class</span> <span class="nc">XMLRunnerChecker</span><span class="p">(</span><span class="n">RegexChecker</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;xmlrunner&#39;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;xmlrunner&quot;</span>
     <span class="n">pattern</span> <span class="o">=</span> <span class="n">xmlrunner_pattern</span></div>
 
 </pre></div>
@@ -381,6 +367,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contribution Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html#getting-started">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html#reporting-issues-or-requesting-a-new-feature">Reporting Issues or Requesting a New Feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html#code-of-conduct">Code of Conduct</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../security.html">Security Policy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
 </ul>
@@ -407,7 +394,7 @@
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Nov 26, 2024.
+      Last updated on Dec 16, 2024.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>

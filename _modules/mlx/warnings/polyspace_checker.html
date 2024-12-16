@@ -4,11 +4,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx.warnings.polyspace_checker &#8212; warning-plugin 5.6.0 documentation</title>
+    <title>mlx.warnings.polyspace_checker &#8212; warning-plugin 6.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d10597a4" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pydoctheme.css?v=8635fa60" />
     
-    <script src="../../../_static/documentation_options.js?v=31fa7d35"></script>
+    <script src="../../../_static/documentation_options.js?v=12958129"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -27,7 +27,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="../../../index.html">warning-plugin-5.6.0</a> &#187;</li>
+        <li><a href="../../../index.html">warning-plugin-6.0.0</a> &#187;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -48,8 +48,8 @@
 <span></span><span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
 
 <span class="kn">import</span> <span class="nn">csv</span>
-<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">TextIOWrapper</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">TextIOWrapper</span>
 <span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="n">Template</span>
 
 <span class="kn">from</span> <span class="nn">.code_quality</span> <span class="kn">import</span> <span class="n">Finding</span>
@@ -60,32 +60,24 @@
 <div class="viewcode-block" id="PolyspaceChecker">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceChecker">[docs]</a>
 <span class="k">class</span> <span class="nc">PolyspaceChecker</span><span class="p">(</span><span class="n">WarningsChecker</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;polyspace&#39;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;polyspace&quot;</span>
     <span class="n">checkers</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;Constructor to set the default code quality description template to &quot;Polyspace: $check&quot;&#39;&#39;&#39;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="s1">&#39;Polyspace: $check&#39;</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">logging_args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="s2">&quot;Polyspace: $check&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">cq_findings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; List[dict]: list of code quality findings&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List[dict]: list of code quality findings&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cq_findings</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">checker</span><span class="o">.</span><span class="n">cq_findings</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cq_findings</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">counted_warnings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;List[str]: list of counted warnings&#39;&#39;&#39;</span>
-        <span class="n">all_counted_warnings</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="p">:</span>
-            <span class="n">all_counted_warnings</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">checker</span><span class="o">.</span><span class="n">counted_warnings</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">all_counted_warnings</span>
-
-    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Template: string.Template instance based on the configured template string &#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Template: string.Template instance based on the configured template string&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span>
 
     <span class="nd">@cq_description_template</span><span class="o">.</span><span class="n">setter</span>
@@ -94,11 +86,11 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">minimum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Gets the lowest minimum amount of warnings</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the lowest minimum amount of warnings</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            int: the lowest minimum for warnings</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">minimum</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">0</span>
@@ -110,11 +102,11 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">maximum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Gets the highest minimum amount of warnings</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the highest minimum amount of warnings</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            int: the highest maximum for warnings</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">maximum</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">0</span>
@@ -127,34 +119,34 @@
 <div class="viewcode-block" id="PolyspaceChecker.check">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceChecker.check">[docs]</a>
     <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function for counting the number of failures in a TSV file exported by Polyspace</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            content (_io.TextIOWrapper): The open file to parse</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">TextIOWrapper</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> can&#39;t handle this type; expected </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">TextIOWrapper</span><span class="p">)</span><span class="si">}</span><span class="s2">; got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">content</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
-        <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="s1">&#39;excel-tab&#39;</span><span class="p">)</span>
+        <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="s2">&quot;excel-tab&quot;</span><span class="p">)</span>
         <span class="c1"># set column names to lowercase</span>
         <span class="n">reader</span><span class="o">.</span><span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">reader</span><span class="o">.</span><span class="n">fieldnames</span><span class="p">]</span>
 
         <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;family&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">checker</span><span class="o">.</span><span class="n">family_value</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;family&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">checker</span><span class="o">.</span><span class="n">family_value</span><span class="p">:</span>
                     <span class="n">checker</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">row</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="PolyspaceChecker.return_count">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceChecker.return_count">[docs]</a>
     <span class="k">def</span> <span class="nf">return_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Getter function for the amount of warnings found</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Getter function for the amount of warnings found</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            int: Number of warnings found</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="n">checker</span><span class="o">.</span><span class="n">return_count</span><span class="p">()</span>
@@ -164,19 +156,17 @@
 <div class="viewcode-block" id="PolyspaceChecker.return_check_limits">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceChecker.return_check_limits">[docs]</a>
     <span class="k">def</span> <span class="nf">return_check_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Function for checking whether the warning count is within the configured limits</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Function for checking whether the warning count is within the configured limits</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            int: 0 if the amount of warnings is within limits, the count of warnings otherwise</span>
 <span class="sd">                (or 1 in case of a count of 0 warnings)</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span>
-                <span class="s1">&#39;Counted failures for family </span><span class="si">{!r}</span><span class="s1"> </span><span class="se">\&#39;</span><span class="si">{}</span><span class="se">\&#39;</span><span class="s1">: </span><span class="se">\&#39;</span><span class="si">{}</span><span class="se">\&#39;</span><span class="s1">&#39;</span>
-                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">checker</span><span class="o">.</span><span class="n">family_value</span><span class="p">,</span> <span class="n">checker</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span> <span class="n">checker</span><span class="o">.</span><span class="n">check_value</span><span class="p">)</span>
-            <span class="p">)</span>
             <span class="n">count</span> <span class="o">+=</span> <span class="n">checker</span><span class="o">.</span><span class="n">return_check_limits</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">count</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Returning error code </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">count</span></div>
 
 
@@ -199,10 +189,10 @@
             <span class="k">if</span> <span class="n">family_value</span> <span class="o">==</span> <span class="s2">&quot;enabled&quot;</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="n">family_value</span> <span class="o">==</span> <span class="s2">&quot;cq_description_template&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">cq_description_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;cq_description_template&#39;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cq_description_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;cq_description_template&quot;</span><span class="p">])</span>
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="n">family_value</span> <span class="o">==</span> <span class="s2">&quot;cq_default_path&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">cq_default_path</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;cq_default_path&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cq_default_path</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;cq_default_path&quot;</span><span class="p">]</span>
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="n">family_value</span> <span class="o">==</span> <span class="s2">&quot;exclude&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">add_patterns</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;exclude&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">exclude_patterns</span><span class="p">)</span>
@@ -213,7 +203,7 @@
                         <span class="k">continue</span>
                     <span class="n">column_name</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
                     <span class="n">check_value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-                    <span class="n">checker</span> <span class="o">=</span> <span class="n">PolyspaceFamilyChecker</span><span class="p">(</span><span class="n">family_value</span><span class="p">,</span> <span class="n">column_name</span><span class="p">,</span> <span class="n">check_value</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
+                    <span class="n">checker</span> <span class="o">=</span> <span class="n">PolyspaceFamilyChecker</span><span class="p">(</span><span class="n">family_value</span><span class="p">,</span> <span class="n">column_name</span><span class="p">,</span> <span class="n">check_value</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">logging_args</span><span class="p">)</span>
                     <span class="n">checker</span><span class="o">.</span><span class="n">parse_config</span><span class="p">(</span><span class="n">check</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">checker</span><span class="p">)</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">column_name</span> <span class="ow">and</span> <span class="n">check_value</span><span class="p">):</span>
@@ -236,6 +226,7 @@
 <div class="viewcode-block" id="PolyspaceFamilyChecker">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceFamilyChecker">[docs]</a>
 <span class="k">class</span> <span class="nc">PolyspaceFamilyChecker</span><span class="p">(</span><span class="n">WarningsChecker</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;polyspace_sub&quot;</span>
     <span class="n">code_quality_severity</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;impact: high&quot;</span><span class="p">:</span> <span class="s2">&quot;critical&quot;</span><span class="p">,</span>
         <span class="s2">&quot;impact: medium&quot;</span><span class="p">:</span> <span class="s2">&quot;major&quot;</span><span class="p">,</span>
@@ -243,8 +234,9 @@
         <span class="s2">&quot;red&quot;</span><span class="p">:</span> <span class="s2">&quot;critical&quot;</span><span class="p">,</span>
         <span class="s2">&quot;orange&quot;</span><span class="p">:</span> <span class="s2">&quot;major&quot;</span><span class="p">,</span>
     <span class="p">}</span>
+    <span class="n">logging_fmt</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{checker.name_repr}</span><span class="s2">: </span><span class="si">{checker.family_value:15s}</span><span class="s2"> : </span><span class="si">{checker.column_name:11s}</span><span class="s2"> : </span><span class="si">{checker.check_value:14s}</span><span class="s2"> | </span><span class="si">{message}</span><span class="s2">&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">family_value</span><span class="p">,</span> <span class="n">column_name</span><span class="p">,</span> <span class="n">check_value</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">family_value</span><span class="p">,</span> <span class="n">column_name</span><span class="p">,</span> <span class="n">check_value</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the PolyspaceFamilyChecker</span>
 
 <span class="sd">        Args:</span>
@@ -252,40 +244,28 @@
 <span class="sd">            column_name (str): The name of the column</span>
 <span class="sd">            check_value (str): The value to check in the column</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">logging_args</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">family_value</span> <span class="o">=</span> <span class="n">family_value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">column_name</span> <span class="o">=</span> <span class="n">column_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_value</span> <span class="o">=</span> <span class="n">check_value</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Template: string.Template instance based on the configured template string &#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Template: string.Template instance based on the configured template string&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span>
 
     <span class="nd">@cq_description_template</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_obj</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span> <span class="o">=</span> <span class="n">template_obj</span>
 
-<div class="viewcode-block" id="PolyspaceFamilyChecker.return_count">
-<a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceFamilyChecker.return_count">[docs]</a>
-    <span class="k">def</span> <span class="nf">return_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Getter function for the amount of warnings found</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            int: Number of warnings found</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> warnings found for </span><span class="si">{!r}</span><span class="s2">: </span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_value</span><span class="p">))</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span></div>
-
-
 <div class="viewcode-block" id="PolyspaceFamilyChecker.add_code_quality_finding">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceFamilyChecker.add_code_quality_finding">[docs]</a>
     <span class="k">def</span> <span class="nf">add_code_quality_finding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;Add code quality finding</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add code quality finding</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            row (dict): The row of the warning with the corresponding colomn names</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">description</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_description_template</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="o">**</span><span class="n">row</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
@@ -308,25 +288,23 @@
 <div class="viewcode-block" id="PolyspaceFamilyChecker.check">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceFamilyChecker.check">[docs]</a>
     <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function for counting the number of failures in a TSV/CSV file exported by Polyspace</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            content (dict): The row of the TSV file</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">content</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">column_name</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_value</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">content</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;not a defect&quot;</span><span class="p">,</span> <span class="s2">&quot;justified&quot;</span><span class="p">]:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">print_when_verbose</span><span class="p">(</span><span class="s2">&quot;Excluded row </span><span class="si">{!r}</span><span class="s2"> because the status is &#39;Not a defect&#39; or &#39;Justified&#39;&quot;</span>
-                                        <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">content</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Excluded defect with ID </span><span class="si">{</span><span class="n">content</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span><span class="w"> </span><span class="kc">None</span><span class="p">)</span><span class="si">!r}</span><span class="s2"> because the status is &quot;</span>
+                                 <span class="s2">&quot;&#39;Not a defect&#39; or &#39;Justified&#39;&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">tab_sep_string</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_excluded</span><span class="p">(</span><span class="n">tab_sep_string</span><span class="p">):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">counted_warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;family: </span><span class="si">{}</span><span class="s1"> -&gt; </span><span class="si">{}</span><span class="s1">: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">family_value</span><span class="p">,</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">check_value</span>
-                    <span class="p">))</span>
+                    <span class="n">verbose_log_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;ID </span><span class="si">{</span><span class="n">content</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span><span class="w"> </span><span class="kc">None</span><span class="p">)</span><span class="si">!r}</span><span class="s2">&quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">verbose_log_msg</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">verbose_log_msg</span><span class="p">)</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_enabled</span> <span class="ow">and</span> <span class="n">content</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;green&quot;</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">add_code_quality_finding</span><span class="p">(</span><span class="n">content</span><span class="p">)</span></div>
 </div>
@@ -363,6 +341,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contribution Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html#getting-started">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html#reporting-issues-or-requesting-a-new-feature">Reporting Issues or Requesting a New Feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html#code-of-conduct">Code of Conduct</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../security.html">Security Policy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
 </ul>
@@ -389,7 +368,7 @@
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Nov 26, 2024.
+      Last updated on Dec 16, 2024.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>

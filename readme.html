@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Command Line Warnings Plugin &#8212; warning-plugin 5.6.0 documentation</title>
+    <title>Command Line Warnings Plugin &#8212; warning-plugin 6.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d10597a4" />
     <link rel="stylesheet" type="text/css" href="_static/pydoctheme.css?v=8635fa60" />
     
-    <script src="_static/documentation_options.js?v=31fa7d35"></script>
+    <script src="_static/documentation_options.js?v=12958129"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -30,7 +30,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="index.html">warning-plugin-5.6.0</a> &#187;</li> 
+        <li><a href="index.html">warning-plugin-6.0.0</a> &#187;</li> 
       </ul>
     </div>
     
@@ -46,25 +46,25 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <a class="reference external image-reference" href="http://www.apache.org/licenses/LICENSE-2.0"><img alt="Apache2 License" src="https://img.shields.io/hexpm/l/plug.svg" />
+  <a class="reference external image-reference" href="https://www.apache.org/licenses/LICENSE-2.0"><img alt="Apache2 License" src="https://img.shields.io/hexpm/l/plug.svg" />
 </a>
 <a class="reference external image-reference" href="https://github.com/melexis/warnings-plugin/actions/workflows/python-package.yml"><img alt="Build status" src="https://github.com/melexis/warnings-plugin/actions/workflows/python-package.yml/badge.svg?branch=master" />
 </a>
-<a class="reference external image-reference" href="https://badge.fury.io/py/mlx.warnings"><img alt="Pypi packaged release" src="https://badge.fury.io/py/mlx.warnings.svg" />
+<a class="reference external image-reference" href="https://pypi.org/project/mlx.warnings"><img alt="PyPI packaged release" src="https://badge.fury.io/py/mlx.warnings.svg" />
 </a>
 <a class="reference external image-reference" href="https://melexis.github.io/warnings-plugin/"><img alt="Documentation" src="https://img.shields.io/badge/Documentation-published-brightgreen.svg" />
 </a>
 <a class="reference external image-reference" href="https://scan.coverity.com/projects/melexis-warnings-plugin"><img alt="Coverity Scan Build Status" src="https://scan.coverity.com/projects/15266/badge.svg" />
 </a>
-<a class="reference external image-reference" href="https://codecov.io/gh/melexis/warnings-plugin"><img alt="Code Coverage" src="https://codecov.io/gh/melexis/warnings-plugin/branch/master/graph/badge.svg" />
+<a class="reference external image-reference" href="https://app.codecov.io/gh/melexis/warnings-plugin"><img alt="Code Coverage" src="https://codecov.io/gh/melexis/warnings-plugin/branch/master/graph/badge.svg" />
 </a>
 <a class="reference external image-reference" href="https://codeclimate.com/github/melexis/warnings-plugin"><img alt="Code Climate Status" src="https://codeclimate.com/github/melexis/warnings-plugin/badges/gpa.svg" />
 </a>
-<a class="reference external image-reference" href="https://codeclimate.com/github/melexis/warnings-plugin"><img alt="Issue Count" src="https://codeclimate.com/github/melexis/warnings-plugin/badges/issue_count.svg" />
+<a class="reference external image-reference" href="https://codeclimate.com/github/melexis/warnings-plugin/issues"><img alt="Issue Count" src="https://codeclimate.com/github/melexis/warnings-plugin/badges/issue_count.svg" />
 </a>
 <a class="reference external image-reference" href="https://github.com/melexis/warnings-plugin/issues"><img alt="Contributions welcome" src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat" />
 </a>
-<a class="reference external image-reference" href="https://bestpractices.coreinfrastructure.org/projects/4368"><img alt="CII Best Practices" src="https://bestpractices.coreinfrastructure.org/projects/4368/badge" />
+<a class="reference external image-reference" href="https://www.bestpractices.dev/projects/4368"><img alt="CII Best Practices" src="https://www.bestpractices.dev/projects/4368/badge" />
 </a>
 <section id="command-line-warnings-plugin">
 <h1>Command Line Warnings Plugin<a class="headerlink" href="#command-line-warnings-plugin" title="Link to this heading">¶</a></h1>
@@ -288,9 +288,14 @@ of all test suites in the file are taken into account. If you only care about
 one specific test suite, you can use <code class="docutils literal notranslate"><span class="pre">--name</span> <span class="pre">&lt;&lt;suite</span> <span class="pre">name&gt;&gt;</span></code>. If this suite
 name doesn’t exist in the input file, an error is raised. The warning
 limits can be configured for multiple test suites individually by means of a
-<a class="reference internal" href="#configuration-file-to-pass-options">configuration file to pass options</a>. If the setting <code class="docutils literal notranslate"><span class="pre">&quot;check_suite_names&quot;</span></code>
-is false, no error is raised when a suite name doesn’t exist in the
-input file. When this setting is missing, the default value <code class="docutils literal notranslate"><span class="pre">true</span></code> is used.</p>
+<a class="reference internal" href="#configuration-file-to-pass-options">configuration file to pass options</a>, which supports additional configuration parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;check_suite_names&quot;</span></code>, which is <code class="docutils literal notranslate"><span class="pre">true</span></code> by default, raises an error when a configured suite name
+does not exist in the input XML file. This helps you verify that all of the test suites in your configuration file
+were passed to the <cite>robot</cite> CLI.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;allow_unconfigured&quot;</span></code>, which is <code class="docutils literal notranslate"><span class="pre">true</span></code> by default, raises an error when a suite name in the input
+XML file is missing from your configuration file. Note: a configuration value <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> matches all suite names.</p></li>
+</ul>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># command line xunit file</span>
 mlx-warnings<span class="w"> </span>--robot<span class="w"> </span>report.xml
 <span class="c1"># ignore all but the specified suite</span>
@@ -336,7 +341,7 @@ the value of that column to check together with <code class="docutils literal no
 <li><p>Not a Defect</p></li>
 </ul>
 <p>These statuses indicate that you have given due consideration and justified that result, as described
-in <a class="reference external" href="https://nl.mathworks.com/help/polyspace_access/ug/fix-or-comment-polyspace-results-web-browser.html">Polyspace’s documentation about results</a>.
+in <a class="reference external" href="https://www.mathworks.com/help/polyspace_access/ug/fix-or-comment-polyspace-results-web-browser.html">Polyspace’s documentation about results</a>.
 The status “No Action Planned” is not treated differently because this is the default status for annotations.</p>
 </section>
 <section id="example-checks">
@@ -524,7 +529,7 @@ The default template is <code class="docutils literal notranslate"><span class="
 </dd>
 <dt>Coverity</dt><dd><p>Named groups of the regular expression can be used as variables.
 Useful names are: <cite>checker</cite> and <cite>classification</cite>.
-The default template is <code class="docutils literal notranslate"><span class="pre">Coverity:</span> <span class="pre">$checker</span></code>.</p>
+The default template is <code class="docutils literal notranslate"><span class="pre">Coverity:</span> <span class="pre">CID</span> <span class="pre">$cid:</span> <span class="pre">$checker</span></code>.</p>
 </dd>
 <dt>Other</dt><dd><p>The template should contain <code class="docutils literal notranslate"><span class="pre">$description</span></code>, which is the default.</p>
 </dd>
@@ -587,6 +592,7 @@ development of the plugin. We encourage anyone to contribute to our repository.<
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contribution Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html#getting-started">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html#reporting-issues-or-requesting-a-new-feature">Reporting Issues or Requesting a New Feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#code-of-conduct">Code of Conduct</a></li>
 <li class="toctree-l1"><a class="reference internal" href="security.html">Security Policy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
 </ul>
@@ -626,7 +632,7 @@ development of the plugin. We encourage anyone to contribute to our repository.<
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Nov 26, 2024.
+      Last updated on Dec 16, 2024.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>

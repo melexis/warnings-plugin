@@ -4,11 +4,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx.warnings.warnings &#8212; warning-plugin 5.6.0 documentation</title>
+    <title>mlx.warnings.warnings &#8212; warning-plugin 6.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d10597a4" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pydoctheme.css?v=8635fa60" />
     
-    <script src="../../../_static/documentation_options.js?v=31fa7d35"></script>
+    <script src="../../../_static/documentation_options.js?v=12958129"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -27,7 +27,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="../../../index.html">warning-plugin-5.6.0</a> &#187;</li>
+        <li><a href="../../../index.html">warning-plugin-6.0.0</a> &#187;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -46,13 +46,14 @@
             
   <h1>Source code for mlx.warnings.warnings</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
-<span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
 
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">errno</span>
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">importlib.metadata</span> <span class="kn">import</span> <span class="n">distribution</span>
@@ -62,41 +63,30 @@
 
 <span class="kn">from</span> <span class="nn">.exceptions</span> <span class="kn">import</span> <span class="n">WarningsConfigError</span>
 <span class="kn">from</span> <span class="nn">.junit_checker</span> <span class="kn">import</span> <span class="n">JUnitChecker</span>
+<span class="kn">from</span> <span class="nn">.polyspace_checker</span> <span class="kn">import</span> <span class="n">PolyspaceChecker</span>
 <span class="kn">from</span> <span class="nn">.regex_checker</span> <span class="kn">import</span> <span class="n">CoverityChecker</span><span class="p">,</span> <span class="n">DoxyChecker</span><span class="p">,</span> <span class="n">SphinxChecker</span><span class="p">,</span> <span class="n">XMLRunnerChecker</span>
 <span class="kn">from</span> <span class="nn">.robot_checker</span> <span class="kn">import</span> <span class="n">RobotChecker</span>
-<span class="kn">from</span> <span class="nn">.polyspace_checker</span> <span class="kn">import</span> <span class="n">PolyspaceChecker</span>
 
-<span class="n">__version__</span> <span class="o">=</span> <span class="n">distribution</span><span class="p">(</span><span class="s1">&#39;mlx.warnings&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">version</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="n">distribution</span><span class="p">(</span><span class="s2">&quot;mlx.warnings&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">version</span>
+
+<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="WarningsPlugin">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsPlugin">[docs]</a>
 <span class="k">class</span> <span class="nc">WarningsPlugin</span><span class="p">:</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cq_enabled</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cq_enabled</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function for initializing the parsers</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            verbose (bool): optional - enable verbose logging</span>
-<span class="sd">            config_file (Path): optional - configuration file with setup</span>
 <span class="sd">            cq_enabled (bool): optional - enable generation of Code Quality report</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">activated_checkers</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cq_enabled</span> <span class="o">=</span> <span class="n">cq_enabled</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">public_checkers</span> <span class="o">=</span> <span class="p">[</span><span class="n">SphinxChecker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">),</span> <span class="n">DoxyChecker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">),</span> <span class="n">JUnitChecker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">),</span>
-                                <span class="n">XMLRunnerChecker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">),</span> <span class="n">CoverityChecker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">),</span>
-                                <span class="n">RobotChecker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">),</span> <span class="n">PolyspaceChecker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)]</span>
-
-        <span class="k">if</span> <span class="n">config_file</span><span class="p">:</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_file</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">config_file</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;.y&#39;</span><span class="p">):</span>
-                    <span class="n">config</span> <span class="o">=</span> <span class="n">YAML</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">open_file</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">open_file</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">config_parser</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">public_checkers</span> <span class="o">=</span> <span class="p">(</span><span class="n">SphinxChecker</span><span class="p">,</span> <span class="n">DoxyChecker</span><span class="p">,</span> <span class="n">JUnitChecker</span><span class="p">,</span> <span class="n">XMLRunnerChecker</span><span class="p">,</span> <span class="n">CoverityChecker</span><span class="p">,</span>
+                                <span class="n">RobotChecker</span><span class="p">,</span> <span class="n">PolyspaceChecker</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_minimum</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_maximum</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
@@ -104,21 +94,27 @@
 
 <div class="viewcode-block" id="WarningsPlugin.activate_checker">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsPlugin.activate_checker">[docs]</a>
-    <span class="k">def</span> <span class="nf">activate_checker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checker</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">activate_checker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checker_type</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Activate additional checkers after initialization</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            checker (WarningsChecker): checker object</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">checker</span><span class="o">.</span><span class="n">cq_enabled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_enabled</span> <span class="ow">and</span> <span class="n">checker</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;doxygen&#39;</span><span class="p">,</span> <span class="s1">&#39;sphinx&#39;</span><span class="p">,</span> <span class="s1">&#39;xmlrunner&#39;</span><span class="p">,</span> <span class="s1">&#39;polyspace&#39;</span><span class="p">,</span> <span class="s1">&#39;coverity&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">activated_checkers</span><span class="p">[</span><span class="n">checker</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">checker</span></div>
+<span class="sd">            checker_type (WarningsChecker): checker class</span>
+
+<span class="sd">        Return:</span>
+<span class="sd">            WarningsChecker: activated checker object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">checker</span> <span class="o">=</span> <span class="n">checker_type</span><span class="p">(</span><span class="o">*</span><span class="n">logging_args</span><span class="p">)</span>
+        <span class="n">checker</span><span class="o">.</span><span class="n">cq_enabled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_enabled</span> <span class="ow">and</span> <span class="n">checker</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;doxygen&quot;</span><span class="p">,</span> <span class="s2">&quot;sphinx&quot;</span><span class="p">,</span> <span class="s2">&quot;xmlrunner&quot;</span><span class="p">,</span> <span class="s2">&quot;polyspace&quot;</span><span class="p">,</span>
+                                                                  <span class="s2">&quot;coverity&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">activated_checkers</span><span class="p">[</span><span class="n">checker</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">checker</span>
+        <span class="k">return</span> <span class="n">checker</span></div>
 
 
 <div class="viewcode-block" id="WarningsPlugin.activate_checker_name">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsPlugin.activate_checker_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">activate_checker_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">activate_checker_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Activates checker by name</span>
 
 <span class="sd">        Args:</span>
@@ -126,41 +122,41 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            WarningsChecker: activated checker object, or None when no checker with the given name exists</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">public_checkers</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">checker</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">activate_checker</span><span class="p">(</span><span class="n">checker</span><span class="p">)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">checker_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">public_checkers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">checker_type</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+                <span class="n">checker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activate_checker</span><span class="p">(</span><span class="n">checker_type</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">checker</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Checker </span><span class="si">%s</span><span class="s2"> does not exist&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span></div>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Checker </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not exist&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="WarningsPlugin.get_checker">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsPlugin.get_checker">[docs]</a>
     <span class="k">def</span> <span class="nf">get_checker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Get checker by name</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get checker by name</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            name (str): checker name</span>
 <span class="sd">        Return:</span>
 <span class="sd">            checker object (WarningsChecker)</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">activated_checkers</span><span class="p">[</span><span class="n">name</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="WarningsPlugin.check">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsPlugin.check">[docs]</a>
     <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Count the number of warnings in a specified content</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            content (str): The content to parse</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">printout</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">activated_checkers</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No checkers activated. Please use activate_checker function&quot;</span><span class="p">)</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No checkers activated. Please use activate_checker function&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">activated_checkers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">checker</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;polyspace&quot;</span><span class="p">:</span>
@@ -172,14 +168,14 @@
 <div class="viewcode-block" id="WarningsPlugin.check_logfile">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsPlugin.check_logfile">[docs]</a>
     <span class="k">def</span> <span class="nf">check_logfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Count the number of warnings in a specified content</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            content (_io.TextIOWrapper): The open file to parse</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">activated_checkers</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No checkers activated. Please use activate_checker function&quot;</span><span class="p">)</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No checkers activated. Please use activate_checker function&quot;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="s2">&quot;polyspace&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">activated_checkers</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">activated_checkers</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">WarningsConfigError</span><span class="p">(</span><span class="s2">&quot;Polyspace checker cannot be combined with other warnings checkers&quot;</span><span class="p">)</span>
@@ -193,11 +189,11 @@
 <div class="viewcode-block" id="WarningsPlugin.configure_maximum">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsPlugin.configure_maximum">[docs]</a>
     <span class="k">def</span> <span class="nf">configure_maximum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maximum</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Configure the maximum amount of warnings for each activated checker</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Configure the maximum amount of warnings for each activated checker</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            maximum (int): maximum amount of warnings allowed</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">activated_checkers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">checker</span><span class="o">.</span><span class="n">maximum</span> <span class="o">=</span> <span class="n">maximum</span></div>
 
@@ -205,11 +201,11 @@
 <div class="viewcode-block" id="WarningsPlugin.configure_minimum">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsPlugin.configure_minimum">[docs]</a>
     <span class="k">def</span> <span class="nf">configure_minimum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">minimum</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Configure the minimum amount of warnings for each activated checker</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Configure the minimum amount of warnings for each activated checker</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            minimum (int): minimum amount of warnings allowed</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">activated_checkers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">checker</span><span class="o">.</span><span class="n">minimum</span> <span class="o">=</span> <span class="n">minimum</span></div>
 
@@ -217,7 +213,7 @@
 <div class="viewcode-block" id="WarningsPlugin.return_count">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsPlugin.return_count">[docs]</a>
     <span class="k">def</span> <span class="nf">return_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Getter function for the amount of found warnings</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Getter function for the amount of found warnings</span>
 
 <span class="sd">        If the name parameter is set, this function will return the amount of</span>
 <span class="sd">        warnings found by that checker. If not, the function will return the sum</span>
@@ -228,7 +224,7 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            int: Amount of found warnings</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">activated_checkers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
@@ -241,7 +237,7 @@
 <div class="viewcode-block" id="WarningsPlugin.return_check_limits">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsPlugin.return_check_limits">[docs]</a>
     <span class="k">def</span> <span class="nf">return_check_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Function for determining the return value of the script</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Function for determining the return value of the script</span>
 
 <span class="sd">        If the name parameter is set, this function will check (and return) the</span>
 <span class="sd">        return value of that checker. If not, this function checks whether the</span>
@@ -253,7 +249,7 @@
 <span class="sd">        Return:</span>
 <span class="sd">            int: 0 if the amount of warnings is within limits, the count of warnings otherwise</span>
 <span class="sd">                (or 1 in case of a count of 0 warnings)</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">activated_checkers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                 <span class="n">retval</span> <span class="o">=</span> <span class="n">checker</span><span class="o">.</span><span class="n">return_check_limits</span><span class="p">()</span>
@@ -268,65 +264,59 @@
 <div class="viewcode-block" id="WarningsPlugin.toggle_printout">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsPlugin.toggle_printout">[docs]</a>
     <span class="k">def</span> <span class="nf">toggle_printout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">printout</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Toggle printout of all the parsed content</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Toggle printout of all the parsed content</span>
 
 <span class="sd">        Useful for command input where we want to print content as well</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            printout (bool): True enables the printout, False provides more silent mode</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">printout</span> <span class="o">=</span> <span class="n">printout</span></div>
 
 
 <div class="viewcode-block" id="WarningsPlugin.config_parser">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsPlugin.config_parser">[docs]</a>
-    <span class="k">def</span> <span class="nf">config_parser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Parsing configuration dict extracted by previously opened JSON or YAML file</span>
+    <span class="k">def</span> <span class="nf">config_parser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parsing configuration dict extracted by previously opened JSON or YAML file</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            config (dict): Content of configuration file</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">            config (dict/Path): Content or path of configuration file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_file</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;.y&quot;</span><span class="p">):</span>
+                    <span class="n">config</span> <span class="o">=</span> <span class="n">YAML</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">open_file</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">open_file</span><span class="p">)</span>
+
         <span class="c1"># activate checker</span>
-        <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">public_checkers</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">checker_config</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">checker</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
-                <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="n">checker_config</span><span class="p">[</span><span class="s1">&#39;enabled&#39;</span><span class="p">]):</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">activate_checker</span><span class="p">(</span><span class="n">checker</span><span class="p">)</span>
-                    <span class="n">checker</span><span class="o">.</span><span class="n">parse_config</span><span class="p">(</span><span class="n">checker_config</span><span class="p">)</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Config parsing for </span><span class="si">{name}</span><span class="s2"> completed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">checker</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
-            <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Incomplete config. Missing: </span><span class="si">{key}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">err</span><span class="p">))</span></div>
-
-
-<div class="viewcode-block" id="WarningsPlugin.write_counted_warnings">
-<a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsPlugin.write_counted_warnings">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_counted_warnings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_file</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Writes counted warnings to the given file</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            out_file (str): Location for the output file</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">Path</span><span class="p">(</span><span class="n">out_file</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">out_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_file</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">activated_checkers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-                <span class="n">open_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">checker</span><span class="o">.</span><span class="n">counted_warnings</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+        <span class="k">for</span> <span class="n">checker_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">public_checkers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">checker_type</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+                <span class="n">checker_config</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">checker_type</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="n">checker_config</span><span class="p">[</span><span class="s2">&quot;enabled&quot;</span><span class="p">]):</span>
+                        <span class="n">checker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activate_checker</span><span class="p">(</span><span class="n">checker_type</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">)</span>
+                        <span class="n">checker</span><span class="o">.</span><span class="n">parse_config</span><span class="p">(</span><span class="n">checker_config</span><span class="p">)</span>
+                        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">checker</span><span class="o">.</span><span class="n">name_repr</span><span class="si">}</span><span class="s2">: Config parsing completed&quot;</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">WarningsConfigError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Incomplete config. Missing: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span></div>
 
 
 <div class="viewcode-block" id="WarningsPlugin.write_code_quality_report">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.WarningsPlugin.write_code_quality_report">[docs]</a>
     <span class="k">def</span> <span class="nf">write_code_quality_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_file</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39; Generates the Code Quality report artifact as a JSON file that implements a subset of the Code Climate spec</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates the Code Quality report artifact as a JSON file that implements a subset of the Code Climate spec</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            out_file (str): Location for the output file</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">activated_checkers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">checker</span><span class="o">.</span><span class="n">cq_findings</span><span class="p">)</span>
         <span class="n">content</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="n">Path</span><span class="p">(</span><span class="n">out_file</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">out_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_file</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">out_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_file</span><span class="p">:</span>
             <span class="n">open_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">content</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 </div>
 
@@ -335,72 +325,82 @@
 <div class="viewcode-block" id="warnings_wrapper">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.warnings_wrapper">[docs]</a>
 <span class="k">def</span> <span class="nf">warnings_wrapper</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;mlx-warnings&#39;</span><span class="p">)</span>
-    <span class="n">group1</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_argument_group</span><span class="p">(</span><span class="s1">&#39;Configuration command line options&#39;</span><span class="p">)</span>
-    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--coverity&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;coverity&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
-    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-d&#39;</span><span class="p">,</span> <span class="s1">&#39;--doxygen&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;doxygen&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
-    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-j&#39;</span><span class="p">,</span> <span class="s1">&#39;--junit&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;junit&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
-    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="s1">&#39;--robot&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;robot&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
-    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span> <span class="s1">&#39;--sphinx&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;sphinx&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
-    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-x&#39;</span><span class="p">,</span> <span class="s1">&#39;--xmlrunner&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;xmlrunner&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
-    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--name&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Name of the Robot Framework test suite to check results of&#39;</span><span class="p">)</span>
-    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-m&#39;</span><span class="p">,</span> <span class="s1">&#39;--maxwarnings&#39;</span><span class="p">,</span> <span class="s1">&#39;--max-warnings&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Maximum amount of warnings accepted&#39;</span><span class="p">)</span>
-    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--minwarnings&#39;</span><span class="p">,</span> <span class="s1">&#39;--min-warnings&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Minimum amount of warnings accepted&#39;</span><span class="p">)</span>
-    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--exact-warnings&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Exact amount of warnings expected&#39;</span><span class="p">)</span>
-    <span class="n">group2</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_argument_group</span><span class="p">(</span><span class="s1">&#39;Configuration file with options&#39;</span><span class="p">)</span>
-    <span class="n">group2</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--config&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;configfile&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">Path</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Config file in JSON or YAML format provides toggle of checkers and their limits&#39;</span><span class="p">)</span>
-    <span class="n">group2</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--include-sphinx-deprecation&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;include_sphinx_deprecation&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s2">&quot;mlx-warnings&quot;</span><span class="p">)</span>
+    <span class="n">group1</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_argument_group</span><span class="p">(</span><span class="s2">&quot;Configuration command line options&quot;</span><span class="p">)</span>
+    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--coverity&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;coverity&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="s2">&quot;--doxygen&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;doxygen&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-j&quot;</span><span class="p">,</span> <span class="s2">&quot;--junit&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;junit&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="s2">&quot;--robot&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;robot&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-s&quot;</span><span class="p">,</span> <span class="s2">&quot;--sphinx&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;sphinx&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-x&quot;</span><span class="p">,</span> <span class="s2">&quot;--xmlrunner&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;xmlrunner&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--name&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Name of the Robot Framework test suite to check results of&quot;</span><span class="p">)</span>
+    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;--maxwarnings&quot;</span><span class="p">,</span> <span class="s2">&quot;--max-warnings&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Maximum amount of warnings accepted&quot;</span><span class="p">)</span>
+    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--minwarnings&quot;</span><span class="p">,</span> <span class="s2">&quot;--min-warnings&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Minimum amount of warnings accepted&quot;</span><span class="p">)</span>
+    <span class="n">group1</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--exact-warnings&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Exact amount of warnings expected&quot;</span><span class="p">)</span>
+    <span class="n">group2</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_argument_group</span><span class="p">(</span><span class="s2">&quot;Configuration file with options&quot;</span><span class="p">)</span>
+    <span class="n">group2</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--config&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;configfile&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">Path</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Config file in JSON or YAML format provides toggle of checkers and their limits&quot;</span><span class="p">)</span>
+    <span class="n">group2</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--include-sphinx-deprecation&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;include_sphinx_deprecation&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Sphinx checker will include warnings matching (RemovedInSphinx</span><span class="se">\\</span><span class="s2">d+Warning) regex&quot;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="s1">&#39;--output&#39;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Output file that contains all counted warnings&#39;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-C&#39;</span><span class="p">,</span> <span class="s1">&#39;--code-quality&#39;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Output Code Quality report artifact for GitLab CI&#39;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-v&#39;</span><span class="p">,</span> <span class="s1">&#39;--verbose&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--command&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;command&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Treat program arguments as command to execute to obtain data&#39;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--ignore-retval&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Ignore return value of the executed command&#39;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--version&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;version&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(prog)s</span><span class="s1"> </span><span class="si">{version}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">__version__</span><span class="p">))</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;logfile&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Logfile (or command) that might contain warnings&#39;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;flags&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">REMAINDER</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Possible not-used flags from above are considered as command flags&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-o&quot;</span><span class="p">,</span> <span class="s2">&quot;--output&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">Path</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output file that contains all counted warnings&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-C&quot;</span><span class="p">,</span> <span class="s2">&quot;--code-quality&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output Code Quality report artifact for GitLab CI&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--command&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;command&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Treat program arguments as command to execute to obtain data&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--ignore-retval&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Ignore return value of the executed command&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--version&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;version&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;%(prog)s </span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;logfile&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Logfile (or command) that might contain warnings&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;flags&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">REMAINDER</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Possible not-used flags from above are considered as command flags&quot;</span><span class="p">)</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
     <span class="n">code_quality_enabled</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">code_quality</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">())</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+    <span class="n">logging_args</span> <span class="o">=</span> <span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="p">]</span>
+    <span class="n">warnings</span> <span class="o">=</span> <span class="n">WarningsPlugin</span><span class="p">(</span><span class="n">cq_enabled</span><span class="o">=</span><span class="n">code_quality_enabled</span><span class="p">)</span>
     <span class="c1"># Read config file</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">configfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">checker_flags</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">sphinx</span> <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">doxygen</span> <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">junit</span> <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">coverity</span> <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">xmlrunner</span> <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">robot</span>
         <span class="n">warning_args</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">maxwarnings</span> <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">minwarnings</span> <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">exact_warnings</span>
         <span class="k">if</span> <span class="n">checker_flags</span> <span class="ow">or</span> <span class="n">warning_args</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Configfile cannot be provided with other arguments&quot;</span><span class="p">)</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Configfile cannot be provided with other arguments&quot;</span><span class="p">)</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">warnings</span> <span class="o">=</span> <span class="n">WarningsPlugin</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">configfile</span><span class="p">,</span> <span class="n">cq_enabled</span><span class="o">=</span><span class="n">code_quality_enabled</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">config_parser</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">configfile</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">warnings</span> <span class="o">=</span> <span class="n">WarningsPlugin</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="n">cq_enabled</span><span class="o">=</span><span class="n">code_quality_enabled</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">sphinx</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">activate_checker_name</span><span class="p">(</span><span class="s1">&#39;sphinx&#39;</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">activate_checker_name</span><span class="p">(</span><span class="s2">&quot;sphinx&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">doxygen</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">activate_checker_name</span><span class="p">(</span><span class="s1">&#39;doxygen&#39;</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">activate_checker_name</span><span class="p">(</span><span class="s2">&quot;doxygen&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">junit</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">activate_checker_name</span><span class="p">(</span><span class="s1">&#39;junit&#39;</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">activate_checker_name</span><span class="p">(</span><span class="s2">&quot;junit&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">xmlrunner</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">activate_checker_name</span><span class="p">(</span><span class="s1">&#39;xmlrunner&#39;</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">activate_checker_name</span><span class="p">(</span><span class="s2">&quot;xmlrunner&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">coverity</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">activate_checker_name</span><span class="p">(</span><span class="s1">&#39;coverity&#39;</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">activate_checker_name</span><span class="p">(</span><span class="s2">&quot;coverity&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">robot</span><span class="p">:</span>
-            <span class="n">robot_checker</span> <span class="o">=</span> <span class="n">warnings</span><span class="o">.</span><span class="n">activate_checker_name</span><span class="p">(</span><span class="s1">&#39;robot&#39;</span><span class="p">)</span>
-            <span class="n">robot_checker</span><span class="o">.</span><span class="n">parse_config</span><span class="p">({</span>
-                <span class="s1">&#39;suites&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}],</span>
-                <span class="s1">&#39;check_suite_names&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-            <span class="p">})</span>
+            <span class="n">robot_checker</span> <span class="o">=</span> <span class="n">warnings</span><span class="o">.</span><span class="n">activate_checker_name</span><span class="p">(</span><span class="s2">&quot;robot&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">robot_checker</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">robot_checker</span><span class="o">.</span><span class="n">parse_config</span><span class="p">({</span>
+                    <span class="s2">&quot;suites&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}],</span>
+                    <span class="s2">&quot;check_suite_names&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="p">})</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">exact_warnings</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">maxwarnings</span> <span class="o">|</span> <span class="n">args</span><span class="o">.</span><span class="n">minwarnings</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;expected-warnings cannot be provided with maxwarnings or minwarnings&quot;</span><span class="p">)</span>
+                <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;expected-warnings cannot be provided with maxwarnings or minwarnings&quot;</span><span class="p">)</span>
                 <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">configure_maximum</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">exact_warnings</span><span class="p">)</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">configure_minimum</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">exact_warnings</span><span class="p">)</span>
@@ -408,8 +408,8 @@
             <span class="n">warnings</span><span class="o">.</span><span class="n">configure_maximum</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">maxwarnings</span><span class="p">)</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">configure_minimum</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">minwarnings</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">include_sphinx_deprecation</span> <span class="ow">and</span> <span class="s1">&#39;sphinx&#39;</span> <span class="ow">in</span> <span class="n">warnings</span><span class="o">.</span><span class="n">activated_checkers</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">get_checker</span><span class="p">(</span><span class="s1">&#39;sphinx&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">include_sphinx_deprecation</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">include_sphinx_deprecation</span> <span class="ow">and</span> <span class="s2">&quot;sphinx&quot;</span> <span class="ow">in</span> <span class="n">warnings</span><span class="o">.</span><span class="n">activated_checkers</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">get_checker</span><span class="p">(</span><span class="s2">&quot;sphinx&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">include_sphinx_deprecation</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">command</span><span class="p">:</span>
         <span class="k">if</span> <span class="s2">&quot;polyspace&quot;</span> <span class="ow">in</span> <span class="n">warnings</span><span class="o">.</span><span class="n">activated_checkers</span><span class="p">:</span>
@@ -424,15 +424,13 @@
             <span class="k">return</span> <span class="n">retval</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">flags</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;WARNING: Some keyword arguments have been ignored because they followed positional arguments: &quot;</span>
-                  <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">flags</span><span class="p">)</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Some keyword arguments have been ignored because they followed positional arguments: &quot;</span>
+                           <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">flags</span><span class="p">)</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">retval</span> <span class="o">=</span> <span class="n">warnings_logfile</span><span class="p">(</span><span class="n">warnings</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">logfile</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">retval</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">retval</span>
 
     <span class="n">warnings</span><span class="o">.</span><span class="n">return_count</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="p">:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">write_counted_warnings</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">code_quality</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">write_code_quality_report</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">code_quality</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">warnings</span><span class="o">.</span><span class="n">return_check_limits</span><span class="p">()</span></div>
@@ -440,7 +438,7 @@
 
 
 <span class="k">def</span> <span class="nf">warnings_command</span><span class="p">(</span><span class="n">warnings</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39; Execute command to obtain input for parsing for warnings</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute command to obtain input for parsing for warnings</span>
 
 <span class="sd">    Usually log files are output of the commands. To avoid this additional step</span>
 <span class="sd">    this function runs a command instead and parses the stderr and stdout of the</span>
@@ -455,10 +453,9 @@
 
 <span class="sd">    Raises:</span>
 <span class="sd">        OSError: When program is not installed.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Executing: &quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Executing: </span><span class="si">{</span><span class="n">cmd</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
                                 <span class="n">stdin</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">bufsize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">universal_newlines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
@@ -477,12 +474,12 @@
         <span class="k">return</span> <span class="n">proc</span><span class="o">.</span><span class="n">returncode</span>
     <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">err</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">ENOENT</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;It seems like program &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; is not installed.&quot;</span><span class="p">)</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;It seems like program &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; is not installed.&quot;</span><span class="p">)</span>
         <span class="k">raise</span>
 
 
 <span class="k">def</span> <span class="nf">warnings_logfile</span><span class="p">(</span><span class="n">warnings</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39; Parse logfile for warnings</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse logfile for warnings</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        warnings (WarningsPlugin): Object for warnings where errors should be logged</span>
@@ -491,7 +488,7 @@
 <span class="sd">    Return:</span>
 <span class="sd">        0: Log files existed and are parsed successfully</span>
 <span class="sd">        1: Log files did not exist</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># args.logfile doesn&#39;t necessarily contain wildcards, but just to be safe, we</span>
     <span class="c1"># assume it does, and try to expand them.</span>
     <span class="c1"># This mechanism is put in place to allow wildcards to be passed on even when</span>
@@ -501,10 +498,10 @@
     <span class="k">for</span> <span class="n">file_wildcard</span> <span class="ow">in</span> <span class="n">log</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">file_wildcard</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">logfile</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">file_wildcard</span><span class="p">):</span>
-                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
                     <span class="n">warnings</span><span class="o">.</span><span class="n">check_logfile</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;FILE: </span><span class="si">%s</span><span class="s2"> does not exist&quot;</span> <span class="o">%</span> <span class="n">file_wildcard</span><span class="p">)</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;FILE: </span><span class="si">{</span><span class="n">file_wildcard</span><span class="si">}</span><span class="s2"> does not exist&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span>
 
     <span class="k">return</span> <span class="mi">0</span>
@@ -514,7 +511,7 @@
     <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">warnings_wrapper</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
 
@@ -548,6 +545,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contribution Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html#getting-started">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html#reporting-issues-or-requesting-a-new-feature">Reporting Issues or Requesting a New Feature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html#code-of-conduct">Code of Conduct</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../security.html">Security Policy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
 </ul>
@@ -574,7 +572,7 @@
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Nov 26, 2024.
+      Last updated on Dec 16, 2024.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
