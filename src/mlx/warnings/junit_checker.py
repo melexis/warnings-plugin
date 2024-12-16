@@ -11,16 +11,16 @@ from .warnings_checker import WarningsChecker
 
 
 class JUnitChecker(WarningsChecker):
-    name = 'junit'
+    name = "junit"
 
     def check(self, content):
-        ''' Function for counting the number of JUnit failures in a specific text
+        """Function for counting the number of JUnit failures in a specific text
 
         Args:
             content (str): The content to parse
-        '''
+        """
         try:
-            root_input = etree.fromstring(content.encode('utf-8'))
+            root_input = etree.fromstring(content.encode("utf-8"))
             testsuites_root = self.prepare_tree(root_input)
             suites = JUnitXml.fromelem(testsuites_root)
             amount_to_exclude = 0
@@ -30,19 +30,23 @@ class JUnitChecker(WarningsChecker):
             suites.update_statistics()
             self.count += suites.failures + suites.errors - amount_to_exclude
         except etree.ParseError as err:
-            print(err)
+            self.logger.error(err.msg)
+
+    @property
+    def name_repr(self):
+        return "JUnit" if self.name == "junit" else super().name_repr
 
     @staticmethod
     def prepare_tree(root_input):
-        ''' Prepares the tree element by adding a testsuites element as root when missing (to please JUnitXml)
+        """Prepares the tree element by adding a testsuites element as root when missing (to please JUnitXml)
 
         Args:
             root_input (lxml.etree._Element/xml.etree.ElementTree.Element): Top-level XML element from input file
 
         Returns:
             lxml.etree._Element/xml.etree.ElementTree.Element: Top-level XML element with testsuites tag
-        '''
-        if root_input.tag.startswith('testsuite') and root_input.find('testcase') is None:
+        """
+        if root_input.tag.startswith("testsuite") and root_input.find("testcase") is None:
             testsuites_root = root_input
         else:
             testsuites_root = etree.Element("testsuites")
@@ -50,10 +54,11 @@ class JUnitChecker(WarningsChecker):
         return testsuites_root
 
     def _check_testcase(self, testcase):
-        """ Handles the check of a test case element by checking if the result is a failure/error.
+        """Handles the check of a test case element by checking if the result is a failure/error.
 
         If it is to be excluded by a configured regex, 1 is returned.
-        Otherwise, when in verbose mode, the suite name and test case name are printed.
+        Otherwise, when in verbose/output mode, the suite name and test case name are printed/written
+        In output mode, the failure/error message is written additionally.
 
         Args:
             testcase (junitparser.TestCase): Test case element to check for failure or error
@@ -64,7 +69,6 @@ class JUnitChecker(WarningsChecker):
         if isinstance(testcase.result, (Failure, Error)):
             if self._is_excluded(testcase.result.message):
                 return 1
-            string = '{classname}.{testname}'.format(classname=testcase.classname, testname=testcase.name)
-            self.counted_warnings.append('{}: {}'.format(string, testcase.result.message))
-            self.print_when_verbose(string)
+            self.logger.info(f"{testcase.classname}.{testcase.name}")
+            self.logger.debug(f"{testcase.classname}.{testcase.name} | {testcase.result.message}")
         return 0

@@ -1,36 +1,38 @@
-from io import StringIO
 from unittest import TestCase
 
-from unittest.mock import patch
+import pytest
 
 from mlx.warnings import WarningsPlugin
 
 
 class TestJUnitFailures(TestCase):
+    @pytest.fixture(autouse=True)
+    def caplog(self, caplog):
+        self.caplog = caplog
+
     def setUp(self):
-        self.warnings = WarningsPlugin(verbose=True)
-        self.warnings.activate_checker_name('junit')
+        self.warnings = WarningsPlugin()
+        self.warnings.activate_checker_name("junit", True, None)
 
     def test_no_warning(self):
-        with open('tests/test_in/junit_no_fail.xml', 'r') as xmlfile:
+        with open("tests/test_in/junit_no_fail.xml") as xmlfile:
             self.warnings.check(xmlfile.read())
         self.assertEqual(self.warnings.return_count(), 0)
 
     def test_single_warning(self):
-        with open('tests/test_in/junit_single_fail.xml', 'r') as xmlfile:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
-                self.warnings.check(xmlfile.read())
+        with open("tests/test_in/junit_single_fail.xml") as xmlfile:
+            self.warnings.check(xmlfile.read())
         self.assertEqual(self.warnings.return_count(), 1)
-        self.assertRegex(fake_out.getvalue(), 'myfirstfai1ure')
+        self.assertEqual(["test_warn_plugin_single_fail.myfirstfai1ure"], self.caplog.messages)
 
     def test_dual_warning(self):
-        with open('tests/test_in/junit_double_fail.xml', 'r') as xmlfile:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
-                self.warnings.check(xmlfile.read())
+        with open("tests/test_in/junit_double_fail.xml") as xmlfile:
+            self.warnings.check(xmlfile.read())
         self.assertEqual(self.warnings.return_count(), 2)
-        self.assertRegex(fake_out.getvalue(), 'myfirstfai1ure')
-        self.assertRegex(fake_out.getvalue(), 'mysecondfai1ure')
+        self.assertEqual(["test_warn_plugin_double_fail.myfirstfai1ure",
+                          "test_warn_plugin_no_double_fail.mysecondfai1ure"],
+                         self.caplog.messages)
 
     def test_invalid_xml(self):
-        self.warnings.check('this is not xml')
+        self.warnings.check("this is not xml")
         self.assertEqual(self.warnings.return_count(), 0)
