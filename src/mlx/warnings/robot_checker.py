@@ -92,7 +92,6 @@ class RobotChecker(WarningsChecker):
 
 class RobotSuiteChecker(JUnitChecker):
     name = "robot_sub"
-    subchecker = True
     logging_fmt = "{checker.name_repr}: {checker.suite_name_repr:<20} {message}"
 
     def __init__(self, suite_name, *logging_args, check_suite_name=False):

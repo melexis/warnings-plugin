@@ -170,7 +170,6 @@ class CoverityChecker(RegexChecker):
 
 class CoverityClassificationChecker(WarningsChecker):
     name = "coverity_sub"
-    subchecker = True
     logging_fmt = "{checker.name_repr}: {checker.classification:<14} | {message}"
     SEVERITY_MAP = {
         "false positive": "info",
