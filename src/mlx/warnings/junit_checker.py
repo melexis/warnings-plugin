@@ -34,7 +34,7 @@ class JUnitChecker(WarningsChecker):
 
     @property
     def name_repr(self):
-        return "JUnit" if self.name == "junit" else self.name.capitalize()
+        return "JUnit" if self.name == "junit" else super().name_repr
 
     @staticmethod
     def prepare_tree(root_input):
@@ -53,7 +53,7 @@ class JUnitChecker(WarningsChecker):
             testsuites_root.append(root_input)
         return testsuites_root
 
-    def _check_testcase(self, testcase, extra={}):
+    def _check_testcase(self, testcase):
         """Handles the check of a test case element by checking if the result is a failure/error.
 
         If it is to be excluded by a configured regex, 1 is returned.
