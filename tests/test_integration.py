@@ -90,6 +90,72 @@ class TestIntegration(TestCase):
         retval = warnings_wrapper(["--coverity", "tests/test_in/coverity_single_defect.txt"])
         self.assertEqual(1, retval)
 
+    def test_coverity_verbose(self):
+        retval = warnings_wrapper([
+            "--verbose",
+            "--coverity",
+            str(TEST_IN_DIR / "coverity_full.txt"),
+        ])
+        self.assertEqual(11, retval)
+        self.assertEqual(["Coverity: unclassified   | some/path/boot.c:32:5: CID 446411 (#1 of 1): Infinite loop "
+                          "(INFINITE_LOOP): Unclassified, Unspecified, Undecided, owner is Unassigned, defect "
+                          "only exists locally.",
+                          "Coverity: unclassified   | some/path/boot.c:55:12: CID 446410 (#1 of 1): MISRA C-2012 "
+                          "The Essential Type Model (MISRA C-2012 Rule 10.3, Required): Unclassified, "
+                          "Unspecified, Undecided, owner is Unassigned, defect only exists locally.",
+                          "Coverity: unclassified   | some/path/boot.c:37:13: CID 446409 (#1 of 1): MISRA C-2012 "
+                          "Control Flow Expressions (MISRA C-2012 Rule 14.3, Required): Unclassified, "
+                          "Unspecified, Undecided, owner is Unassigned, defect only exists locally.",
+                          "Coverity: unclassified   | some/path/boot.c:37:13: CID 446408 (#1 of 1): Logically "
+                          "dead code (DEADCODE): Unclassified, Unspecified, Undecided, owner is Unassigned, "
+                          "defect only exists locally.",
+                          "Coverity: unclassified   | some/path/boot.c:36:13: CID 446407 (#1 of 1): MISRA C-2012 "
+                          "The Essential Type Model (MISRA C-2012 Rule 10.4, Required): Unclassified, "
+                          "Unspecified, Undecided, owner is Unassigned, defect only exists locally.",
+                          "Coverity: unclassified   | some/path/boot.c:32:5: CID 446406 (#1 of 1): MISRA C-2012 "
+                          "Control Flow Expressions (MISRA C-2012 Rule 14.3, Required): Unclassified, "
+                          "Unspecified, Undecided, owner is Unassigned, defect only exists locally.",
+                          "Coverity: unclassified   | some/path/boot.c:37:31: CID 446405 (#1 of 1): MISRA C-2012 "
+                          "Unused Code (MISRA C-2012 Rule 2.2, Required): Unclassified, Unspecified, Undecided, "
+                          "owner is Unassigned, defect only exists locally.",
+                          "Coverity: intentional    | some/path/dummy_int.h:34:12: CID 264736 (#1 of 1): MISRA "
+                          "C-2012 Standard C Environment (MISRA C-2012 Rule 1.2, Advisory): Intentional, Minor, "
+                          "Ignore, owner is Unassigned, defect only exists locally.",
+                          "Coverity: false positive | some/path/dummy_fp.c:367:13: CID 423570 (#1 of 1): "
+                          "Out-of-bounds write (OVERRUN): False Positive, Minor, Ignore, owner is sfo, defect "
+                          "only exists locally.",
+                          "Coverity: false positive | some/path/dummy_fp.c:367:13: CID 423568 (#1 of 1): MISRA "
+                          "C-2012 Pointers and Arrays (MISRA C-2012 Rule 18.1, Required): False Positive, Minor, "
+                          "Ignore, owner is sfo, defect only exists locally.",
+                          "Coverity: unclassified   | some/path/dummy_uncl.h:194:14: CID 431350 (#1 of 1): MISRA "
+                          "C-2012 Declarations and Definitions (MISRA C-2012 Rule 8.5, Required): Unclassified, "
+                          "Unspecified, Undecided, owner is Unassigned, defect only exists locally.",
+                          "Coverity: unclassified   | number of warnings (8) is higher than the maximum limit (0).",
+                          "Coverity: pending        | number of warnings (0) is exactly as expected. Well done.",
+                          "Coverity: bug            | number of warnings (0) is exactly as expected. Well done.",
+                          "Coverity: intentional    | number of warnings (1) is higher than the maximum limit (0).",
+                          "Coverity: false positive | number of warnings (2) is higher than the maximum limit (0).",
+                          "Coverity: Returning error code 11."],
+                         self.stderr_lines)
+
+    def test_coverity_output(self):
+        ref_file = str(TEST_IN_DIR / "cov_out.txt")
+        out_file = str(TEST_OUT_DIR / "cov_out.txt")
+        retval = warnings_wrapper([
+            "--output", out_file,
+            "--coverity",
+            str(TEST_IN_DIR / "coverity_full.txt"),
+        ])
+        self.assertEqual(11, retval)
+        self.assertEqual(["Coverity: unclassified   | number of warnings (8) is higher than the maximum limit (0).",
+                          "Coverity: pending        | number of warnings (0) is exactly as expected. Well done.",
+                          "Coverity: bug            | number of warnings (0) is exactly as expected. Well done.",
+                          "Coverity: intentional    | number of warnings (1) is higher than the maximum limit (0).",
+                          "Coverity: false positive | number of warnings (2) is higher than the maximum limit (0).",
+                          "Coverity: Returning error code 11."],
+                         self.stderr_lines)
+        self.assertTrue(filecmp.cmp(out_file, ref_file))
+
     def test_two_arguments(self):
         retval = warnings_wrapper(["--junit", "tests/test_in/junit_single_fail.xml",
                                    "tests/test_in/junit_double_fail.xml"])
@@ -438,3 +504,140 @@ class TestIntegration(TestCase):
                 "tests/test_in/mixed_warnings.txt",
             ])
         self.assertEqual(str(context.exception), "Polyspace checker cannot be combined with other warnings checkers")
+
+    def test_polyspace_verbose(self):
+        retval = warnings_wrapper([
+            "--verbose",
+            "--config", str(TEST_IN_DIR / "config_example_polyspace.yml"),
+            str(TEST_IN_DIR / "polyspace.tsv"),
+        ])
+        self.assertEqual(61, retval)
+        self.assertEqual(["Polyspace: Config parsing completed",
+                          "Polyspace: run-time check  : color       : orange         | ID '19928'",
+                          "Polyspace: run-time check  : color       : orange         | Excluded defect with ID "
+                          "'19962' because the status is 'Not a defect' or 'Justified'",
+                          "Polyspace: run-time check  : color       : orange         | ID '19526'",
+                          "Polyspace: run-time check  : color       : orange         | ID '19424'",
+                          "Polyspace: run-time check  : color       : orange         | Excluded defect with ID "
+                          "'19429' because the status is 'Not a defect' or 'Justified'",
+                          "Polyspace: run-time check  : color       : orange         | ID '19442'",
+                          "Polyspace: run-time check  : color       : orange         | Excluded defect with ID "
+                          "'19450' because the status is 'Not a defect' or 'Justified'",
+                          "Polyspace: run-time check  : color       : orange         | ID '19375'",
+                          "Polyspace: run-time check  : color       : orange         | ID '19378'",
+                          "Polyspace: run-time check  : color       : orange         | ID '19377'",
+                          "Polyspace: run-time check  : color       : orange         | ID '19357'",
+                          "Polyspace: run-time check  : color       : orange         | ID '19352'",
+                          "Polyspace: run-time check  : color       : orange         | Excluded defect with ID "
+                          "'19351' because the status is 'Not a defect' or 'Justified'",
+                          "Polyspace: run-time check  : color       : orange         | ID '19355'",
+                          "Polyspace: run-time check  : color       : orange         | ID '19354'",
+                          "Polyspace: run-time check  : color       : orange         | ID '19358'",
+                          "Polyspace: run-time check  : color       : orange         | ID '19360'",
+                          "Polyspace: run-time check  : color       : orange         | ID '19349'",
+                          "Polyspace: run-time check  : color       : orange         | ID '19345'",
+                          "Polyspace: run-time check  : color       : orange         | ID '19344'",
+                          "Polyspace: run-time check  : color       : orange         | Excluded defect with ID "
+                          "'19339' because the status is 'Not a defect' or 'Justified'",
+                          "Polyspace: run-time check  : color       : orange         | ID '19338'",
+                          "Polyspace: run-time check  : color       : orange         | ID '19336'",
+                          "Polyspace: run-time check  : color       : orange         | ID '19335'",
+                          "Polyspace: defect          : information : impact: high   | ID '17503'",
+                          "Polyspace: defect          : information : impact: high   | ID '17504'",
+                          "Polyspace: defect          : information : impact: high   | ID '17505'",
+                          "Polyspace: defect          : information : impact: high   | ID '17506'",
+                          "Polyspace: defect          : information : impact: high   | ID '17507'",
+                          "Polyspace: defect          : information : impact: high   | ID '17508'",
+                          "Polyspace: defect          : information : impact: high   | ID '17509'",
+                          "Polyspace: defect          : information : impact: high   | ID '17510'",
+                          "Polyspace: defect          : information : impact: high   | ID '17511'",
+                          "Polyspace: defect          : information : impact: high   | ID '17512'",
+                          "Polyspace: defect          : information : impact: high   | ID '17513'",
+                          "Polyspace: defect          : information : impact: high   | ID '17514'",
+                          "Polyspace: defect          : information : impact: high   | ID '17515'",
+                          "Polyspace: defect          : information : impact: high   | ID '17516'",
+                          "Polyspace: defect          : information : impact: high   | ID '17517'",
+                          "Polyspace: defect          : information : impact: high   | ID '17518'",
+                          "Polyspace: defect          : information : impact: high   | ID '17519'",
+                          "Polyspace: defect          : information : impact: high   | ID '17520'",
+                          "Polyspace: defect          : information : impact: high   | ID '17521'",
+                          "Polyspace: defect          : information : impact: high   | ID '17522'",
+                          "Polyspace: defect          : information : impact: high   | ID '17523'",
+                          "Polyspace: defect          : information : impact: high   | ID '17524'",
+                          "Polyspace: defect          : information : impact: high   | ID '17525'",
+                          "Polyspace: defect          : information : impact: high   | ID '17526'",
+                          "Polyspace: defect          : information : impact: high   | ID '17527'",
+                          "Polyspace: defect          : information : impact: high   | ID '17528'",
+                          "Polyspace: defect          : information : impact: high   | ID '17529'",
+                          "Polyspace: defect          : information : impact: high   | ID '17530'",
+                          "Polyspace: defect          : information : impact: high   | ID '17531'",
+                          "Polyspace: defect          : information : impact: high   | ID '17532'",
+                          "Polyspace: defect          : information : impact: high   | ID '17533'",
+                          "Polyspace: defect          : information : impact: high   | ID '17534'",
+                          "Polyspace: defect          : information : impact: high   | ID '17535'",
+                          "Polyspace: defect          : information : impact: high   | ID '17536'",
+                          "Polyspace: defect          : information : impact: high   | ID '17537'",
+                          "Polyspace: defect          : information : impact: high   | ID '17538'",
+                          "Polyspace: defect          : information : impact: high   | ID '17539'",
+                          "Polyspace: defect          : information : impact: high   | ID '17540'",
+                          "Polyspace: defect          : information : impact: high   | ID '17541'",
+                          "Polyspace: defect          : information : impact: high   | ID '17542'",
+                          "Polyspace: defect          : information : impact: high   | ID '17543'",
+                          "Polyspace: defect          : information : impact: high   | ID '17544'",
+                          "Polyspace: defect          : information : impact: medium | ID '17559'",
+                          "Polyspace: defect          : information : impact: medium | ID '17560'",
+                          "Polyspace: defect          : information : impact: medium | ID '17561'",
+                          "Polyspace: defect          : information : impact: medium | ID '17562'",
+                          "Polyspace: defect          : information : impact: medium | ID '17563'",
+                          "Polyspace: defect          : information : impact: medium | ID '17568'",
+                          "Polyspace: defect          : information : impact: medium | ID '17569'",
+                          "Polyspace: defect          : information : impact: medium | ID '17570'",
+                          "Polyspace: defect          : information : impact: medium | ID '17571'",
+                          "Polyspace: defect          : information : impact: low    | ID '17557'",
+                          "Polyspace: defect          : information : impact: low    | ID '17564'",
+                          "Polyspace: defect          : information : impact: low    | ID '17565'",
+                          "Polyspace: defect          : information : impact: low    | ID '17566'",
+                          "Polyspace: run-time check  : color       : red            | number of warnings (0) is "
+                          "exactly as expected. Well done.",
+                          "Polyspace: run-time check  : color       : orange         | number of warnings (19) is "
+                          "higher than the maximum limit (10).",
+                          "Polyspace: global variable : color       : red            | number of warnings (0) is "
+                          "exactly as expected. Well done.",
+                          "Polyspace: global variable : color       : orange         | number of warnings (0) is "
+                          "between limits 0 and 10. Well done.",
+                          "Polyspace: defect          : information : impact: high   | number of warnings (42) is "
+                          "higher than the maximum limit (0).",
+                          "Polyspace: defect          : information : impact: medium | number of warnings (9) is "
+                          "between limits 0 and 10. Well done.",
+                          "Polyspace: defect          : information : impact: low    | number of warnings (4) is "
+                          "between limits 0 and 30. Well done.",
+                          "Polyspace: Returning error code 61."],
+                         self.stderr_lines)
+
+    def test_polyspace_output(self):
+        filename = "polyspace_output.txt"
+        out_file = str(TEST_OUT_DIR / filename)
+        ref_file = str(TEST_IN_DIR / filename)
+        retval = warnings_wrapper([
+            "--output", out_file,
+            "--config", str(TEST_IN_DIR / "config_example_polyspace.yml"),
+            str(TEST_IN_DIR / "polyspace.tsv"),
+        ])
+        self.assertEqual(61, retval)
+        self.assertEqual(["Polyspace: run-time check  : color       : red            | number of warnings (0) is "
+                          "exactly as expected. Well done.",
+                          "Polyspace: run-time check  : color       : orange         | number of warnings (19) is "
+                          "higher than the maximum limit (10).",
+                          "Polyspace: global variable : color       : red            | number of warnings (0) is "
+                          "exactly as expected. Well done.",
+                          "Polyspace: global variable : color       : orange         | number of warnings (0) is "
+                          "between limits 0 and 10. Well done.",
+                          "Polyspace: defect          : information : impact: high   | number of warnings (42) is "
+                          "higher than the maximum limit (0).",
+                          "Polyspace: defect          : information : impact: medium | number of warnings (9) is "
+                          "between limits 0 and 10. Well done.",
+                          "Polyspace: defect          : information : impact: low    | number of warnings (4) is "
+                          "between limits 0 and 30. Well done.",
+                          "Polyspace: Returning error code 61."],
+                         self.stderr_lines)
+        self.assertTrue(filecmp.cmp(out_file, ref_file))
