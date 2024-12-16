@@ -1,88 +1,90 @@
-from io import StringIO
 import unittest
 
-from unittest.mock import patch
+import pytest
 
-from mlx.warnings import RobotSuiteChecker, WarningsPlugin
+from mlx.warnings import RobotSuiteChecker, WarningsPlugin, warnings_wrapper
 
 
 class TestRobotWarnings(unittest.TestCase):
+    @pytest.fixture(autouse=True)
+    def caplog(self, caplog):
+        self.caplog = caplog
+
     def setUp(self):
-        self.warnings = WarningsPlugin(verbose=True)
-        self.dut = self.warnings.activate_checker_name('robot')
-        self.suite1 = 'Suite One'
-        self.suite2 = 'Suite Two'
+        self.warnings = WarningsPlugin()
+        self.dut = self.warnings.activate_checker_name("robot", True, None)
+        self.suite1 = "Suite One"
+        self.suite2 = "Suite Two"
         self.dut.checkers = [
-            RobotSuiteChecker(self.suite1, verbose=True),
-            RobotSuiteChecker(self.suite2, verbose=True),
+            RobotSuiteChecker(self.suite1, *self.dut.logging_args),
+            RobotSuiteChecker(self.suite2, *self.dut.logging_args),
         ]
 
     def test_no_warning(self):
-        with open('tests/test_in/junit_no_fail.xml', 'r') as xmlfile:
+        with open("tests/test_in/junit_no_fail.xml") as xmlfile:
             self.warnings.check(xmlfile.read())
         self.assertEqual(self.warnings.return_count(), 0)
 
     def test_single_warning(self):
-        with open('tests/test_in/robot_single_fail.xml', 'r') as xmlfile:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
-                self.warnings.check(xmlfile.read())
-                count = self.warnings.return_count()
-        stdout_log = fake_out.getvalue()
-
+        with open("tests/test_in/robot_single_fail.xml") as xmlfile:
+            self.warnings.check(xmlfile.read())
+            count = self.warnings.return_count()
         self.assertEqual(count, 1)
-        self.assertIn("Suite {!r}: 1 warnings found".format(self.suite1), stdout_log)
-        self.assertIn("Suite {!r}: 0 warnings found".format(self.suite2), stdout_log)
+        self.assertEqual(
+            [
+                "Suite One &amp; Suite Two.Suite One.First Test"
+            ],
+            self.caplog.messages)
 
     def test_double_warning_and_verbosity(self):
-        with open('tests/test_in/robot_double_fail.xml', 'r') as xmlfile:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
-                self.warnings.check(xmlfile.read())
-                count = self.warnings.return_count()
-        stdout_log = fake_out.getvalue()
-
-        self.assertEqual(count, 2)
+        retval = warnings_wrapper([
+            "--verbose",
+            "--robot",
+            "tests/test_in/robot_double_fail.xml",
+        ])
         self.assertEqual(
-            '\n'.join([
+            [
                 "Suite One &amp; Suite Two.Suite One.First Test",
                 "Suite One &amp; Suite Two.Suite Two.Another test",
-                "Suite {!r}: 1 warnings found".format(self.suite1),
-                "Suite {!r}: 1 warnings found".format(self.suite2),
-            ]) + '\n',
-            stdout_log
+                "number of warnings (2) is higher than the maximum limit (0).",
+                "Returning error code 2."
+            ],
+            self.caplog.messages
         )
+        self.assertEqual(retval, 2)
 
     def test_invalid_xml(self):
-        self.warnings.check('this is not xml')
+        self.warnings.check("this is not xml")
         self.assertEqual(self.warnings.return_count(), 0)
 
     def test_testsuites_root(self):
         self.dut.checkers = [
-            RobotSuiteChecker('test_warn_plugin_double_fail'),
-            RobotSuiteChecker('test_warn_plugin_no_double_fail'),
+            RobotSuiteChecker("test_warn_plugin_double_fail", *self.dut.logging_args),
+            RobotSuiteChecker("test_warn_plugin_no_double_fail", *self.dut.logging_args),
         ]
-        with open('tests/test_in/junit_double_fail.xml', 'r') as xmlfile:
+        with open("tests/test_in/junit_double_fail.xml") as xmlfile:
             self.warnings.check(xmlfile.read())
             count = self.warnings.return_count()
         self.assertEqual(count, 2)
 
     def test_check_suite_name(self):
         self.dut.checkers = [
-            RobotSuiteChecker('nonexistent_suite_name', check_suite_name=True),
+            RobotSuiteChecker("nonexistent_suite_name", *self.dut.logging_args, check_suite_name=True),
         ]
-        with open('tests/test_in/robot_double_fail.xml', 'r') as xmlfile:
+        with open("tests/test_in/robot_double_fail.xml") as xmlfile:
             with self.assertRaises(SystemExit) as c_m:
                 self.warnings.check(xmlfile.read())
         self.assertEqual(c_m.exception.code, -1)
 
     def test_robot_version_5(self):
         self.dut.checkers = [
-            RobotSuiteChecker('Empty Flash Product Id', check_suite_name=True),
+            RobotSuiteChecker("Empty Flash Product Id", *self.dut.logging_args, check_suite_name=True),
         ]
-        with open('tests/test_in/robot_version_5.xml', 'r') as xmlfile:
+        with open("tests/test_in/robot_version_5.xml") as xmlfile:
             self.warnings.check(xmlfile.read())
             count = self.warnings.return_count()
         self.assertEqual(count, 6)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

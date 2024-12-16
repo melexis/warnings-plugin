@@ -1,0 +1,11 @@
+ID	Family	Group	Color	New	Check	Information	Function	File	Status	Severity	Comment	Key	Line	Col
+19339	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Not a defect	Unset		66CC91F4CA91263464	10	8
+19338	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66CC91F4CA91263468	9	9
+19336	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66CC91F4CA91263970	9	10
+19335	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		CC9923E995234C62C0C9	10	11
+17533	Defect	Concurrency	Red	no	Data race	Impact: High	File Scope	dummy_file_name.c	Unreviewed	Unset		630711A054827D921468519C	20	15
+17544	Defect	Concurrency	Red	no	Data race	Impact: High	File Scope	dummy_file_name.c	Unreviewed	Unset		070C2241A805FA2528D0A2316A	23	15
+17559	Defect	Numerical	Red	no	Sign change integer conversion overflow	Impact: Medium	dummy_function()	dummy_file_name.c	Unreviewed	Unset		3366C89A94E893AF4390057274A84E1C	22	7
+17560	Defect	Numerical	Red	no	Sign change integer conversion overflow	Impact: Medium	dummy_function()	dummy_file_name.c	Unreviewed	Unset		3364E09A94E893AF4390057274A80D1C	22	8
+17557	Defect	Data flow	Red	no	Dead code	Impact: Low	dummy_function()	dummy_file_name.c	Unreviewed	Unset		0E1B3288150A44EBD0A7448AC489	24	16
+17564	Defect	Data flow	Red	no	Dead code	Impact: Low	dummy_function()	dummy_file_name.c	Unreviewed	Unset		070C1B448A0522F568D3224568	25	7
