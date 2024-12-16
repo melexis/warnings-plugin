@@ -34,7 +34,7 @@ class JUnitChecker(WarningsChecker):
 
     @property
     def name_repr(self):
-        return "JUnit" if self.name == "junit" else self.name.capitalize()
+        return "JUnit" if self.name == "junit" else super().name_repr
 
     @staticmethod
     def prepare_tree(root_input):

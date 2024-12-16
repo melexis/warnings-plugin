@@ -111,10 +111,6 @@ class RobotSuiteChecker(JUnitChecker):
     def suite_name_repr(self):
         return f"suite {self.suite_name!r}" if self.suite_name else "all test suites"
 
-    @property
-    def name_repr(self):
-        return self.name.replace("_sub", "").capitalize()
-
     def _check_testcase(self, testcase):
         """Handles the check of a test case element by checking if the result is a failure/error.
 
