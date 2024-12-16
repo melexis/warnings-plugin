@@ -1,21 +1,21 @@
 """ Melexis fork of warnings plugin """
 
 __all__ = [
-    'CoverityChecker',
-    'DoxyChecker',
-    'Finding',
-    'JUnitChecker',
-    'PolyspaceChecker',
-    'PolyspaceFamilyChecker',
-    'RobotChecker',
-    'RobotSuiteChecker',
-    'SphinxChecker',
-    'WarningsChecker',
-    'WarningsPlugin',
-    'XMLRunnerChecker',
-    '__version__',
-    'warnings_wrapper',
-    'WarningsConfigError',
+    "CoverityChecker",
+    "DoxyChecker",
+    "Finding",
+    "JUnitChecker",
+    "PolyspaceChecker",
+    "PolyspaceFamilyChecker",
+    "RobotChecker",
+    "RobotSuiteChecker",
+    "SphinxChecker",
+    "WarningsChecker",
+    "WarningsPlugin",
+    "XMLRunnerChecker",
+    "__version__",
+    "warnings_wrapper",
+    "WarningsConfigError",
 ]
 
 

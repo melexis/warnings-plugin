@@ -7,7 +7,7 @@ class TestLimits(TestCase):
 
     def setUp(self):
         self.warnings = WarningsPlugin()
-        self.warnings.activate_checker_name('doxygen', True, None)
+        self.warnings.activate_checker_name("doxygen", True, None)
 
     def test_set_maximum(self):
         for x in range(0, 10):
@@ -31,7 +31,8 @@ class TestLimits(TestCase):
             self.assertRaises(ValueError, self.warnings.configure_minimum, x)
 
     def test_return_values_maximum_decrease(self):
-        self.warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
+        self.warnings.check("testfile.c:6: warning: group test: ignoring title \"Some test functions\" "
+                            "that does not match old title \"Some freaky test functions\"")
         self.assertEqual(self.warnings.return_count(), 1)
         self.warnings.configure_maximum(1)
         self.assertEqual(self.warnings.return_check_limits(), 0)
@@ -39,9 +40,11 @@ class TestLimits(TestCase):
         self.assertEqual(self.warnings.return_check_limits(), 1)
 
     def test_return_values_maximum_increase(self):
-        self.warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
+        self.warnings.check("testfile.c:6: warning: group test: ignoring title \"Some test functions\" "
+                            "that does not match old title \"Some freaky test functions\"")
         self.assertEqual(self.warnings.return_count(), 1)
-        self.warnings.check('testfile.c:12: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
+        self.warnings.check("testfile.c:12: warning: group test: ignoring title \"Some test functions\" "
+                            "that does not match old title \"Some freaky test functions\"")
         self.assertEqual(self.warnings.return_count(), 2)
         self.warnings.configure_maximum(1)
         self.assertEqual(self.warnings.return_check_limits(), 2)
@@ -49,9 +52,11 @@ class TestLimits(TestCase):
         self.assertEqual(self.warnings.return_check_limits(), 0)
 
     def test_return_values_minimum_increase(self):
-        self.warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
+        self.warnings.check("testfile.c:6: warning: group test: ignoring title \"Some test functions\" "
+                            "that does not match old title \"Some freaky test functions\"")
         self.assertEqual(self.warnings.return_count(), 1)
-        self.warnings.check('testfile.c:6: warning: group test: ignoring title "Some test functions" that does not match old title "Some freaky test functions"')
+        self.warnings.check("testfile.c:6: warning: group test: ignoring title \"Some test functions\" "
+                            "that does not match old title \"Some freaky test functions\"")
         self.assertEqual(self.warnings.return_count(), 2)
         # default behavior
         self.assertEqual(self.warnings.return_check_limits(), 2)
@@ -70,7 +75,7 @@ class TestLimits(TestCase):
         with self.assertRaises(ValueError) as c_m:
             self.warnings.configure_minimum(11)
         self.assertEqual(str(c_m.exception),
-                         'Invalid argument: minimum limit must be lower than maximum limit (10); cannot set 11.')
+                         "Invalid argument: minimum limit must be lower than maximum limit (10); cannot set 11.")
 
     def test_invalid_maximum(self):
         self.warnings.configure_maximum(10)
@@ -78,4 +83,4 @@ class TestLimits(TestCase):
         with self.assertRaises(ValueError) as c_m:
             self.warnings.configure_maximum(9)
         self.assertEqual(str(c_m.exception),
-                         'Invalid argument: maximum limit must be higher than minimum limit (10); cannot set 9.')
+                         "Invalid argument: maximum limit must be higher than minimum limit (10); cannot set 9.")

@@ -18,7 +18,6 @@ Class Diagram
     class "CoverityChecker" as mlx.warnings.regex_checker.CoverityChecker {
         checkers : dict
         count : int
-        counted_warnings
         cq_default_path
         cq_description_template
         cq_findings
@@ -34,9 +33,13 @@ Class Diagram
         classification
         count
         cq_description_template
+        logging_fmt : str
         name : str
         add_code_quality_finding(match)
         check(content)
+    }
+    class "DebugOnlyFilter" as mlx.warnings.warnings_checker.DebugOnlyFilter {
+        filter(record: logging.LogRecord) -> bool
     }
     class "DoxyChecker" as mlx.warnings.regex_checker.DoxyChecker {
         name : str
@@ -55,13 +58,13 @@ Class Diagram
     class "JUnitChecker" as mlx.warnings.junit_checker.JUnitChecker {
         count
         name : str
+        name_repr
         check(content)
         prepare_tree(root_input)
     }
     class "PolyspaceChecker" as mlx.warnings.polyspace_checker.PolyspaceChecker {
         checkers : list
         count : int
-        counted_warnings
         cq_default_path
         cq_description_template
         cq_findings
@@ -80,6 +83,7 @@ Class Diagram
         count
         cq_description_template
         family_value
+        logging_fmt : str
         name : str
         add_code_quality_finding(row)
         check(content)
@@ -95,7 +99,7 @@ Class Diagram
     class "RobotChecker" as mlx.warnings.robot_checker.RobotChecker {
         checkers : list
         count : int
-        counted_warnings
+        logging_fmt : str
         maximum
         minimum
         name : str
@@ -107,8 +111,10 @@ Class Diagram
     class "RobotSuiteChecker" as mlx.warnings.robot_checker.RobotSuiteChecker {
         check_suite_name : bool
         is_valid_suite_name : bool
+        logging_fmt : str
         name : str
         suite_name
+        suite_name_repr
         check(content)
     }
     class "SphinxChecker" as mlx.warnings.regex_checker.SphinxChecker {
@@ -120,21 +126,24 @@ Class Diagram
     }
     class "WarningsChecker" as mlx.warnings.warnings_checker.WarningsChecker {
         count : int
-        counted_warnings
         cq_default_path : str
         cq_description_template
         cq_enabled : bool
         cq_findings
         exclude_patterns : list
         include_patterns : list
+        is_sub_checker
+        logger : LoggerAdapter, NoneType, RootLogger
+        logging_args : tuple
+        logging_fmt : str
         maximum
         minimum
         name : str
-        verbose : bool
+        name_repr
         add_patterns(regexes, pattern_container)
         {abstract}check(content)
         parse_config(config)
-        return_check_limits(extra)
+        return_check_limits()
         return_count()
     }
     class "<color:red>WarningsConfigError</color>" as mlx.warnings.exceptions.WarningsConfigError {
@@ -144,9 +153,8 @@ Class Diagram
         count : int
         cq_enabled : bool
         printout : bool
-        public_checkers : list
-        verbose : bool
-        activate_checker(checker)
+        public_checkers : tuple
+        activate_checker(checker_type)
         activate_checker_name(name)
         check(content)
         check_logfile(file)
@@ -158,7 +166,6 @@ Class Diagram
         return_count(name)
         toggle_printout(printout)
         write_code_quality_report(out_file)
-        write_counted_warnings(out_file)
     }
     class "XMLRunnerChecker" as mlx.warnings.regex_checker.XMLRunnerChecker {
         name : str
