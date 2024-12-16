@@ -92,8 +92,8 @@ class WarningsChecker:
         return self.name.replace("_sub", "").capitalize()
 
     @property
-    def is_main_checker(self):
-        return not self.name.endswith("_sub")
+    def is_sub_checker(self):
+        return self.name.endswith("_sub")
 
     @property
     def cq_findings(self):
@@ -212,7 +212,7 @@ class WarningsChecker:
         if error_code == 0:
             error_code = 1
         string_to_print = f"number of warnings ({self.count}) is {error_reason}."
-        if not self.is_main_checker:
+        if not self.is_sub_checker:
             string_to_print += f" Returning error code {error_code}."
         self.logger.warning(string_to_print)
         return error_code
