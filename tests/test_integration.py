@@ -296,6 +296,40 @@ class TestIntegration(TestCase):
         retval = warnings_wrapper(["--robot", "--name", "Suite Two", "tests/test_in/robot_double_fail.xml"])
         self.assertEqual(1, retval)
 
+    def test_robot_output(self):
+        out_file = str(TEST_OUT_DIR / "robot_out.txt")
+        retval = warnings_wrapper(["--robot",
+                                   "--name", "Suite Two",
+                                   "--output", out_file,
+                                   "tests/test_in/robot_double_fail.xml"])
+        self.assertEqual(1, retval)
+        self.assertEqual(["Robot: suite 'Suite Two'    number of warnings (1) is higher than the maximum limit (0).",
+                          "Robot: Returning error code 1."],
+                         self.stderr_lines)
+        with open(out_file, "r") as file:
+            content = file.read()
+            self.assertEqual("Robot: suite 'Suite Two'    Suite One &amp; Suite Two.Suite Two.Another test | "
+                             "Expected str; got int.\n",
+                             content)
+
+    def test_robot_verbose_with_output(self):
+        out_file = str(TEST_OUT_DIR / "robot_out.txt")
+        retval = warnings_wrapper(["--robot",
+                                   "--verbose",
+                                   "--name", "Suite Two",
+                                   "--output", out_file,
+                                   "tests/test_in/robot_double_fail.xml"])
+        self.assertEqual(1, retval)
+        self.assertEqual(["Robot: suite 'Suite Two'    Suite One &amp; Suite Two.Suite Two.Another test",
+                          "Robot: suite 'Suite Two'    number of warnings (1) is higher than the maximum limit (0).",
+                          "Robot: Returning error code 1."],
+                         self.stderr_lines)
+        with open(out_file, "r") as file:
+            content = file.read()
+            self.assertEqual("Robot: suite 'Suite Two'    Suite One &amp; Suite Two.Suite Two.Another test | "
+                             "Expected str; got int.\n",
+                             content)
+
     def test_robot_default_name_arg(self):
         """If no suite name is configured, all suites must be taken into account"""
         retval = warnings_wrapper(["--robot", "tests/test_in/robot_double_fail.xml"])
