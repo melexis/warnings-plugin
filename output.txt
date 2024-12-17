@@ -1,4 +1,4 @@
-readme.rst:9: [redirected with Found] https://badge.fury.io/py/mlx.warnings.svg to https://d25lcipzij17d.cloudfront.net/badge.svg?c=eyJhbGciOiJub25lIn0.eyJiIjp7IngiOmZhbHNlLCJ0IjoidjZlIiwibCI6InB5cGkgcGFja2FnZSIsInIiOiI1LjYuMCJ9fQ&ts=1730019116
+readme.rst:9: [redirected with Found] https://badge.fury.io/py/mlx.warnings.svg to https://d25lcipzij17d.cloudfront.net/badge.svg?c=eyJhbGciOiJub25lIn0.eyJiIjp7IngiOmZhbHNlLCJ0IjoidjZlIiwibCI6InB5cGkgcGFja2FnZSIsInIiOiI1LjYuMCJ9fQ
 readme.rst:25: [redirected with Found] https://codeclimate.com/github/melexis/warnings-plugin/badges/gpa.svg to https://api.codeclimate.com/v1/badges/c287cf98885a503c8a09/maintainability.svg
 contributing.rst:3: [redirected with Found] https://guides.github.com/introduction/flow/ to https://docs.github.com/en/get-started/using-github/github-flow
 readme.rst:-1: [redirected with Found] https://www.bestpractices.dev/projects/4368 to https://www.bestpractices.dev/en/projects/4368
