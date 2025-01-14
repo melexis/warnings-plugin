@@ -77,7 +77,7 @@ class Finding:
         except (TypeError, ValueError):
             line_number = 1
         if line_number == 0:
-            line_number += 1
+            line_number = 1
         elif line_number < 0:
             raise ValueError(f"Expected line number greater than 0; Got {line_number}")
         self._line = line_number
@@ -95,7 +95,7 @@ class Finding:
             column_number = 1
 
         if column_number == 0:
-            column_number += 1
+            column_number = 1
         elif column_number < 0:
             raise ValueError(f"Expected column number greater than 0; Got {column_number}")
         self._column = column_number
