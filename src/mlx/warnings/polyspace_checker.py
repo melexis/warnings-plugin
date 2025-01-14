@@ -230,7 +230,8 @@ class PolyspaceFamilyChecker(WarningsChecker):
                 self.logger.info(f"Excluded defect with ID {content.get('id', None)!r} because the status is "
                                  "'Not a defect' or 'Justified'")
             else:
-                tab_sep_string = "\t".join(content.values())
+                valid_content_values = [item or "" for item in content.values()]
+                tab_sep_string = "\t".join(valid_content_values)
                 if not self._is_excluded(tab_sep_string):
                     self.count = self.count + 1
                     verbose_log_msg = f"ID {content.get('id', None)!r}"

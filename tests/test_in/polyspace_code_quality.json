@@ -160,8 +160,8 @@
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": 8,
-                    "column": 3
+                    "line": 1,
+                    "column": 1
                 }
             }
         },
@@ -287,7 +287,7 @@
             "positions": {
                 "begin": {
                     "line": 15,
-                    "column": 6
+                    "column": 1
                 }
             }
         },
@@ -315,7 +315,7 @@
             "positions": {
                 "begin": {
                     "line": 16,
-                    "column": 8
+                    "column": 1
                 }
             }
         },
@@ -356,7 +356,7 @@
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": 16,
+                    "line": 1,
                     "column": 11
                 }
             }
@@ -413,7 +413,7 @@
             "positions": {
                 "begin": {
                     "line": 18,
-                    "column": 5
+                    "column": 1
                 }
             }
         },

@@ -76,8 +76,9 @@ class Finding:
             line_number = int(value)
         except (TypeError, ValueError):
             line_number = 1
-
-        if line_number <= 0:
+        if line_number == 0:
+            line_number = 1
+        elif line_number < 0:
             raise ValueError(f"Expected line number greater than 0; Got {line_number}")
         self._line = line_number
 
@@ -88,8 +89,14 @@ class Finding:
 
     @column.setter
     def column(self, value):
-        column_number = int(value)
-        if column_number <= 0:
+        try:
+            column_number = int(value)
+        except (TypeError, ValueError):
+            column_number = 1
+
+        if column_number == 0:
+            column_number = 1
+        elif column_number < 0:
             raise ValueError(f"Expected column number greater than 0; Got {column_number}")
         self._column = column_number
 
