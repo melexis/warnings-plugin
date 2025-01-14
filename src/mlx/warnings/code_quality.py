@@ -88,6 +88,11 @@ class Finding:
 
     @column.setter
     def column(self, value):
+        try:
+            column_number = int(value)
+        except (TypeError, ValueError):
+            column_number = 1
+
         if column_number < 0:
             raise ValueError(f"Expected column number greater or equal than 0; Got {column_number}")
         self._column = column_number
