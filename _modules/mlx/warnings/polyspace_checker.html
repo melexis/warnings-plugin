@@ -4,11 +4,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx.warnings.polyspace_checker &#8212; warning-plugin 6.0.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d10597a4" />
+    <title>mlx.warnings.polyspace_checker &#8212; warning-plugin 6.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=34bb78ad" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pydoctheme.css?v=8635fa60" />
     
-    <script src="../../../_static/documentation_options.js?v=b6ed0530"></script>
+    <script src="../../../_static/documentation_options.js?v=81158f5a"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -27,7 +27,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="../../../index.html">warning-plugin-6.0.1</a> &#187;</li>
+        <li><a href="../../../index.html">warning-plugin-6.0.2</a> &#187;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -47,45 +47,45 @@
   <h1>Source code for mlx.warnings.polyspace_checker</h1><div class="highlight"><pre>
 <span></span><span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
 
-<span class="kn">import</span> <span class="nn">csv</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">TextIOWrapper</span>
-<span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="n">Template</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">io</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextIOWrapper</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">string</span><span class="w"> </span><span class="kn">import</span> <span class="n">Template</span>
 
-<span class="kn">from</span> <span class="nn">.code_quality</span> <span class="kn">import</span> <span class="n">Finding</span>
-<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="kn">import</span> <span class="n">WarningsConfigError</span>
-<span class="kn">from</span> <span class="nn">.warnings_checker</span> <span class="kn">import</span> <span class="n">WarningsChecker</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.code_quality</span><span class="w"> </span><span class="kn">import</span> <span class="n">Finding</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">WarningsConfigError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.warnings_checker</span><span class="w"> </span><span class="kn">import</span> <span class="n">WarningsChecker</span>
 
 
 <div class="viewcode-block" id="PolyspaceChecker">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceChecker">[docs]</a>
-<span class="k">class</span> <span class="nc">PolyspaceChecker</span><span class="p">(</span><span class="n">WarningsChecker</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PolyspaceChecker</span><span class="p">(</span><span class="n">WarningsChecker</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;polyspace&quot;</span>
     <span class="n">checkers</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;Constructor to set the default code quality description template to &quot;Polyspace: $check&quot;&#39;&#39;&#39;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">logging_args</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="s2">&quot;Polyspace: $check&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">cq_findings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cq_findings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;List[dict]: list of code quality findings&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cq_findings</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">checker</span><span class="o">.</span><span class="n">cq_findings</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cq_findings</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Template: string.Template instance based on the configured template string&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span>
 
     <span class="nd">@cq_description_template</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_obj</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_obj</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span> <span class="o">=</span> <span class="n">template_obj</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">minimum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">minimum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the lowest minimum amount of warnings</span>
 
 <span class="sd">        Returns:</span>
@@ -96,12 +96,12 @@
         <span class="k">return</span> <span class="mi">0</span>
 
     <span class="nd">@minimum</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">minimum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">minimum</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">minimum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">minimum</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="p">:</span>
             <span class="n">checker</span><span class="o">.</span><span class="n">minimum</span> <span class="o">=</span> <span class="n">minimum</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">maximum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">maximum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the highest minimum amount of warnings</span>
 
 <span class="sd">        Returns:</span>
@@ -112,13 +112,13 @@
         <span class="k">return</span> <span class="mi">0</span>
 
     <span class="nd">@maximum</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">maximum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maximum</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">maximum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maximum</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="p">:</span>
             <span class="n">checker</span><span class="o">.</span><span class="n">maximum</span> <span class="o">=</span> <span class="n">maximum</span>
 
 <div class="viewcode-block" id="PolyspaceChecker.check">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceChecker.check">[docs]</a>
-    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function for counting the number of failures in a TSV file exported by Polyspace</span>
 
@@ -141,7 +141,7 @@
 
 <div class="viewcode-block" id="PolyspaceChecker.return_count">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceChecker.return_count">[docs]</a>
-    <span class="k">def</span> <span class="nf">return_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">return_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Getter function for the amount of warnings found</span>
 
 <span class="sd">        Returns:</span>
@@ -155,7 +155,7 @@
 
 <div class="viewcode-block" id="PolyspaceChecker.return_check_limits">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceChecker.return_check_limits">[docs]</a>
-    <span class="k">def</span> <span class="nf">return_check_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">return_check_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Function for checking whether the warning count is within the configured limits</span>
 
 <span class="sd">        Returns:</span>
@@ -172,7 +172,7 @@
 
 <div class="viewcode-block" id="PolyspaceChecker.parse_config">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceChecker.parse_config">[docs]</a>
-    <span class="k">def</span> <span class="nf">parse_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parsing configuration dict extracted by previously opened JSON or yaml/yml file</span>
 
 <span class="sd">        Args:</span>
@@ -225,7 +225,7 @@
 
 <div class="viewcode-block" id="PolyspaceFamilyChecker">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceFamilyChecker">[docs]</a>
-<span class="k">class</span> <span class="nc">PolyspaceFamilyChecker</span><span class="p">(</span><span class="n">WarningsChecker</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PolyspaceFamilyChecker</span><span class="p">(</span><span class="n">WarningsChecker</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;polyspace_sub&quot;</span>
     <span class="n">code_quality_severity</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;impact: high&quot;</span><span class="p">:</span> <span class="s2">&quot;critical&quot;</span><span class="p">,</span>
@@ -236,7 +236,7 @@
     <span class="p">}</span>
     <span class="n">logging_fmt</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{checker.name_repr}</span><span class="s2">: </span><span class="si">{checker.family_value:15s}</span><span class="s2"> : </span><span class="si">{checker.column_name:11s}</span><span class="s2"> : </span><span class="si">{checker.check_value:14s}</span><span class="s2"> | </span><span class="si">{message}</span><span class="s2">&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">family_value</span><span class="p">,</span> <span class="n">column_name</span><span class="p">,</span> <span class="n">check_value</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">family_value</span><span class="p">,</span> <span class="n">column_name</span><span class="p">,</span> <span class="n">check_value</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the PolyspaceFamilyChecker</span>
 
 <span class="sd">        Args:</span>
@@ -250,17 +250,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">check_value</span> <span class="o">=</span> <span class="n">check_value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Template: string.Template instance based on the configured template string&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span>
 
     <span class="nd">@cq_description_template</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_obj</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_obj</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span> <span class="o">=</span> <span class="n">template_obj</span>
 
 <div class="viewcode-block" id="PolyspaceFamilyChecker.add_code_quality_finding">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceFamilyChecker.add_code_quality_finding">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_code_quality_finding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_code_quality_finding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add code quality finding</span>
 
 <span class="sd">        Args:</span>
@@ -270,7 +270,7 @@
             <span class="n">description</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_description_template</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="o">**</span><span class="n">row</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">WarningsConfigError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to find environment variable from configuration value &quot;</span>
-                                      <span class="sa">f</span><span class="s2">&quot;&#39;cq_description_template&#39;: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
+                                      <span class="sa">f</span><span class="s2">&quot;&#39;cq_description_template&#39;: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
 
         <span class="n">finding</span> <span class="o">=</span> <span class="n">Finding</span><span class="p">(</span><span class="n">description</span><span class="p">)</span>
         <span class="c1"># Attention to bug finder: items have color red for impact: high, medium and low.</span>
@@ -287,7 +287,7 @@
 
 <div class="viewcode-block" id="PolyspaceFamilyChecker.check">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.PolyspaceFamilyChecker.check">[docs]</a>
-    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function for counting the number of failures in a TSV/CSV file exported by Polyspace</span>
 
@@ -299,7 +299,8 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Excluded defect with ID </span><span class="si">{</span><span class="n">content</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span><span class="w"> </span><span class="kc">None</span><span class="p">)</span><span class="si">!r}</span><span class="s2"> because the status is &quot;</span>
                                  <span class="s2">&quot;&#39;Not a defect&#39; or &#39;Justified&#39;&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">tab_sep_string</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+                <span class="n">valid_content_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+                <span class="n">tab_sep_string</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">valid_content_values</span><span class="p">)</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_excluded</span><span class="p">(</span><span class="n">tab_sep_string</span><span class="p">):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
                     <span class="n">verbose_log_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;ID </span><span class="si">{</span><span class="n">content</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span><span class="w"> </span><span class="kc">None</span><span class="p">)</span><span class="si">!r}</span><span class="s2">&quot;</span>
@@ -368,7 +369,7 @@
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Dec 17, 2024.
+      Last updated on Jan 14, 2025.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>

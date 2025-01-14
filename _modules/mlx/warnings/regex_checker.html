@@ -4,11 +4,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx.warnings.regex_checker &#8212; warning-plugin 6.0.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d10597a4" />
+    <title>mlx.warnings.regex_checker &#8212; warning-plugin 6.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=34bb78ad" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pydoctheme.css?v=8635fa60" />
     
-    <script src="../../../_static/documentation_options.js?v=b6ed0530"></script>
+    <script src="../../../_static/documentation_options.js?v=81158f5a"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -27,7 +27,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="../../../index.html">warning-plugin-6.0.1</a> &#187;</li>
+        <li><a href="../../../index.html">warning-plugin-6.0.2</a> &#187;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -45,13 +45,13 @@
           <div class="body" role="main">
             
   <h1>Source code for mlx.warnings.regex_checker</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="n">Template</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">string</span><span class="w"> </span><span class="kn">import</span> <span class="n">Template</span>
 
-<span class="kn">from</span> <span class="nn">.code_quality</span> <span class="kn">import</span> <span class="n">Finding</span>
-<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="kn">import</span> <span class="n">WarningsConfigError</span>
-<span class="kn">from</span> <span class="nn">.warnings_checker</span> <span class="kn">import</span> <span class="n">WarningsChecker</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.code_quality</span><span class="w"> </span><span class="kn">import</span> <span class="n">Finding</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">WarningsConfigError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.warnings_checker</span><span class="w"> </span><span class="kn">import</span> <span class="n">WarningsChecker</span>
 
 <span class="n">DOXYGEN_WARNING_REGEX</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?:(?P&lt;path1&gt;(?:[/.]|[A-Za-z]).+?):(?P&lt;line1&gt;-?\d+):\s*(?P&lt;severity1&gt;[Ww]arning|[Ee]rror)|&lt;.+&gt;:(?P&lt;line2&gt;-?\d+)(?::\s*(?P&lt;severity2&gt;[Ww]arning|[Ee]rror))?): (?P&lt;description1&gt;.+(?:(?!\s*([Nn]otice|[Ww]arning|[Ee]rror): )[^/&lt;\n][^:\n][^/\n].+)*)|\s*\b(?P&lt;severity3&gt;[Nn]otice|[Ww]arning|[Ee]rror): (?!notes)(?P&lt;description2&gt;.+)\n?&quot;</span>
 <span class="n">doxy_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">DOXYGEN_WARNING_REGEX</span><span class="p">)</span>
@@ -66,7 +66,7 @@
 <span class="n">coverity_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">COVERITY_WARNING_REGEX</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">RegexChecker</span><span class="p">(</span><span class="n">WarningsChecker</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RegexChecker</span><span class="p">(</span><span class="n">WarningsChecker</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;regex&quot;</span>
     <span class="n">pattern</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">SEVERITY_MAP</span> <span class="o">=</span> <span class="p">{</span>
@@ -80,7 +80,7 @@
         <span class="s2">&quot;failed&quot;</span><span class="p">:</span> <span class="s2">&quot;critical&quot;</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Function for counting the number of warnings in a specific text</span>
 
 <span class="sd">        Args:</span>
@@ -97,7 +97,7 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_enabled</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">add_code_quality_finding</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">add_code_quality_finding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">match</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_code_quality_finding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">match</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add code quality finding</span>
 
 <span class="sd">        Args:</span>
@@ -120,11 +120,11 @@
 
 <div class="viewcode-block" id="CoverityChecker">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.CoverityChecker">[docs]</a>
-<span class="k">class</span> <span class="nc">CoverityChecker</span><span class="p">(</span><span class="n">RegexChecker</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CoverityChecker</span><span class="p">(</span><span class="n">RegexChecker</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;coverity&quot;</span>
     <span class="n">pattern</span> <span class="o">=</span> <span class="n">coverity_pattern</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">logging_args</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">logging_args</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="s2">&quot;Coverity: CID $cid: $checker&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span> <span class="o">=</span> <span class="p">{</span>
@@ -136,24 +136,24 @@
         <span class="p">}</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">cq_findings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cq_findings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;List[dict]: list of code quality findings&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">checker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cq_findings</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">checker</span><span class="o">.</span><span class="n">cq_findings</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cq_findings</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Template: string.Template instance based on the configured template string&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span>
 
     <span class="nd">@cq_description_template</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_obj</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_obj</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span> <span class="o">=</span> <span class="n">template_obj</span>
 
 <div class="viewcode-block" id="CoverityChecker.return_count">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.CoverityChecker.return_count">[docs]</a>
-    <span class="k">def</span> <span class="nf">return_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">return_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Getter function for the amount of warnings found</span>
 
 <span class="sd">        Returns:</span>
@@ -167,7 +167,7 @@
 
 <div class="viewcode-block" id="CoverityChecker.return_check_limits">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.CoverityChecker.return_check_limits">[docs]</a>
-    <span class="k">def</span> <span class="nf">return_check_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">return_check_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Function for checking whether the warning count is within the configured limits</span>
 
 <span class="sd">        Returns:</span>
@@ -184,7 +184,7 @@
 
 <div class="viewcode-block" id="CoverityChecker.check">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.CoverityChecker.check">[docs]</a>
-    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function for counting the number of warnings, but adopted for Coverity</span>
 <span class="sd">        output</span>
@@ -207,7 +207,7 @@
 
 <div class="viewcode-block" id="CoverityChecker.parse_config">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.CoverityChecker.parse_config">[docs]</a>
-    <span class="k">def</span> <span class="nf">parse_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Process configuration</span>
 
 <span class="sd">        Args:</span>
@@ -230,7 +230,7 @@
 
 
 
-<span class="k">class</span> <span class="nc">CoverityClassificationChecker</span><span class="p">(</span><span class="n">WarningsChecker</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CoverityClassificationChecker</span><span class="p">(</span><span class="n">WarningsChecker</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;coverity_sub&quot;</span>
     <span class="n">logging_fmt</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{checker.name_repr}</span><span class="s2">: </span><span class="si">{checker.classification:&lt;14}</span><span class="s2"> | </span><span class="si">{message}</span><span class="s2">&quot;</span>
     <span class="n">SEVERITY_MAP</span> <span class="o">=</span> <span class="p">{</span>
@@ -241,7 +241,7 @@
         <span class="s2">&quot;pending&quot;</span><span class="p">:</span> <span class="s2">&quot;critical&quot;</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classification</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classification</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the CoverityClassificationChecker:</span>
 
 <span class="sd">        Args:</span>
@@ -251,15 +251,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">classification</span> <span class="o">=</span> <span class="n">classification</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Template: string.Template instance based on the configured template string&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span>
 
     <span class="nd">@cq_description_template</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_obj</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cq_description_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_obj</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cq_description_template</span> <span class="o">=</span> <span class="n">template_obj</span>
 
-    <span class="k">def</span> <span class="nf">add_code_quality_finding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">match</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_code_quality_finding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">match</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add code quality finding</span>
 
 <span class="sd">        Args:</span>
@@ -270,7 +270,7 @@
             <span class="n">description</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cq_description_template</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="o">**</span><span class="n">groups</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">WarningsConfigError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to find environment variable from configuration value &quot;</span>
-                                      <span class="sa">f</span><span class="s2">&quot;&#39;cq_description_template&#39;: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
+                                      <span class="sa">f</span><span class="s2">&quot;&#39;cq_description_template&#39;: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
         <span class="n">finding</span> <span class="o">=</span> <span class="n">Finding</span><span class="p">(</span><span class="n">description</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">classification_raw</span> <span class="o">:=</span> <span class="n">groups</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;classification&quot;</span><span class="p">):</span>
@@ -284,7 +284,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cq_findings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">finding</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function for counting the number of warnings, but adopted for Coverity output.</span>
 <span class="sd">        Multiple warnings for the same CID are counted as one.</span>
@@ -303,7 +303,7 @@
 
 <div class="viewcode-block" id="DoxyChecker">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.DoxyChecker">[docs]</a>
-<span class="k">class</span> <span class="nc">DoxyChecker</span><span class="p">(</span><span class="n">RegexChecker</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DoxyChecker</span><span class="p">(</span><span class="n">RegexChecker</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;doxygen&quot;</span>
     <span class="n">pattern</span> <span class="o">=</span> <span class="n">doxy_pattern</span></div>
 
@@ -311,7 +311,7 @@
 
 <div class="viewcode-block" id="SphinxChecker">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.SphinxChecker">[docs]</a>
-<span class="k">class</span> <span class="nc">SphinxChecker</span><span class="p">(</span><span class="n">RegexChecker</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SphinxChecker</span><span class="p">(</span><span class="n">RegexChecker</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;sphinx&quot;</span>
     <span class="n">pattern</span> <span class="o">=</span> <span class="n">sphinx_pattern</span>
     <span class="n">sphinx_deprecation_regex</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?m)^(?:(.+?:(?:\d+|None)?):?\s*)?(DEBUG|INFO|WARNING|ERROR|SEVERE|(?:\w+Sphinx\d+Warning)):\s*(.+)$&quot;</span>
@@ -319,7 +319,7 @@
 
 <div class="viewcode-block" id="SphinxChecker.include_sphinx_deprecation">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.SphinxChecker.include_sphinx_deprecation">[docs]</a>
-    <span class="k">def</span> <span class="nf">include_sphinx_deprecation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">include_sphinx_deprecation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Adds the pattern for sphinx_deprecation_regex to the list patterns to include and alters the main pattern</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -331,7 +331,7 @@
 
 <div class="viewcode-block" id="XMLRunnerChecker">
 <a class="viewcode-back" href="../../../design.html#mlx.warnings.XMLRunnerChecker">[docs]</a>
-<span class="k">class</span> <span class="nc">XMLRunnerChecker</span><span class="p">(</span><span class="n">RegexChecker</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">XMLRunnerChecker</span><span class="p">(</span><span class="n">RegexChecker</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;xmlrunner&quot;</span>
     <span class="n">pattern</span> <span class="o">=</span> <span class="n">xmlrunner_pattern</span></div>
 
@@ -394,7 +394,7 @@
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Dec 17, 2024.
+      Last updated on Jan 14, 2025.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
