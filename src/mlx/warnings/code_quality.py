@@ -76,9 +76,10 @@ class Finding:
             line_number = int(value)
         except (TypeError, ValueError):
             line_number = 1
-
-        if line_number < 0:
-            raise ValueError(f"Expected line number greater or equal than 0; Got {line_number}")
+        if line_number == 0:
+            line_number += 1
+        elif line_number < 0:
+            raise ValueError(f"Expected line number greater than 0; Got {line_number}")
         self._line = line_number
 
     @property
@@ -93,8 +94,10 @@ class Finding:
         except (TypeError, ValueError):
             column_number = 1
 
-        if column_number < 0:
-            raise ValueError(f"Expected column number greater or equal than 0; Got {column_number}")
+        if column_number == 0:
+            column_number += 1
+        elif column_number < 0:
+            raise ValueError(f"Expected column number greater than 0; Got {column_number}")
         self._column = column_number
 
     def to_dict(self):

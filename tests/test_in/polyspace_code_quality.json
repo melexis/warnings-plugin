@@ -356,7 +356,7 @@
             "path": "dummy_file_name.c",
             "positions": {
                 "begin": {
-                    "line": 16,
+                    "line": 1,
                     "column": 11
                 }
             }
@@ -413,7 +413,7 @@
             "positions": {
                 "begin": {
                     "line": 18,
-                    "column": 5
+                    "column": 1
                 }
             }
         },
