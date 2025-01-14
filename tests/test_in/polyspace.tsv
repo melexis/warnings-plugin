@@ -41,7 +41,7 @@ ID	Family	Group	Color	New	Check	Information	Function	File	Status	Severity	Commen
 19351	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Justified	Unset		66C8A9F4CA91263862	8	9
 19355	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66C8A9F4CA91263962	9	10
 19354	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		CC9153E995234C62C091	9	11
-19358	Run-time Check	Numerical	Orange	no	Overflow	Origin: Path related issue	dummy_function()	dummy_file_name.c	Unreviewed	Unset		CC9153E995234C62C0C1	8	3
+19358	Run-time Check	Numerical	Orange	no	Overflow	Origin: Path related issue	dummy_function()	dummy_file_name.c	Unreviewed	Unset		CC9153E995234C62C0C1
 19360	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66C8B1F4CA91263262	8	4
 19349	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66C8C1F4CA91263262	9	5
 19345	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66C8C1F4CA91263470	9	6
@@ -84,9 +84,9 @@ ID	Family	Group	Color	New	Check	Information	Function	File	Status	Severity	Commen
 22051	Run-time Check	Data flow	Gray	no	Unreachable code		dummy_function()	dummy_file_name.c	Unreviewed	Unset		3166CCB155C9941C	16	12
 22052	Run-time Check	Data flow	Gray	no	Unreachable code		dummy_function()	dummy_file_name.c	Unreviewed	Unset		3166CCB955C9941C	16	13
 17503	Defect	Concurrency	Red	no	Data race	Impact: High	File Scope	dummy_file_name.h	Unreviewed	Unset		CD99338805A214EB94A0438AC8A9	15	5
-17504	Defect	Concurrency	Red	no	Data race	Impact: High	File Scope	dummy_file_name.h	Unreviewed	Unset		CD99378805A214EB94A0438AC8A9	15	6
+17504	Defect	Concurrency	Red	no	Data race	Impact: High	File Scope	dummy_file_name.h	Unreviewed	Unset		CD99378805A214EB94A0438AC8A9	15
 17505	Defect	Concurrency	Red	no	Data race	Impact: High	File Scope	dummy_file_name.c	Unreviewed	Unset		4C18398805A214EB94A0438AC4A9	16	7
-17506	Defect	Concurrency	Red	no	Data race	Impact: High	File Scope	dummy_file_name.c	Unreviewed	Unset		668D2241A805FA2528D0A23360	16	8
+17506	Defect	Concurrency	Red	no	Data race	Impact: High	File Scope	dummy_file_name.c	Unreviewed	Unset		668D2241A805FA2528D0A23360	16	-
 17507	Defect	Concurrency	Red	no	Data race	Impact: High	File Scope	dummy_file_name.h	Unreviewed	Unset		4E19328805A214EB94A0438AC8A1	17	9
 17508	Defect	Concurrency	Red	no	Data race	Impact: High	File Scope	dummy_file_name.h	Unreviewed	Unset		0E9B328805A214EB94A0438AC8A1	17	10
 17509	Defect	Concurrency	Red	no	Data race	Impact: High	File Scope	dummy_file_name.c	Unreviewed	Unset		E6CD2241A805FA2528D0A2316A	16	11
