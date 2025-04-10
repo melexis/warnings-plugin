@@ -10,7 +10,7 @@ ID	Family	Group	Color	New	Check	Information	Function	File	Status	Severity	Commen
 21999	Run-time Check	Data flow	Green	no	Non-initialized pointer		dummy_function()	dummy_file_name.c	Unreviewed	Unset		3166DC72940A8C19	3	9
 22187	Run-time Check	Data flow	Green	no	Non-initialized local variable		dummy_function()	dummy_file_name.c	Unreviewed	Unset		62D889E42995263162	3	10
 22185	Run-time Check	Data flow	Green	no	Non-initialized local variable		dummy_function()	dummy_file_name.c	Unreviewed	Unset		316AD87294CA131C	4	1
-22184	Run-time Check	Data flow	Green	no	Return value not initialized		dummy_function()	dummy_file_name.c	Unreviewed	Unset		316AD04A25CA8C1C	4	2
+22184	Run-time Check	Data flow	Green	no	Return value not initialized		dummy_function()	/?someothererror	Unreviewed	Unset		316AD04A25CA8C1C	4	2
 22011	Run-time Check	Numerical	Green	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		3660C87A65C8131C	3	2
 22014	Run-time Check	Data flow	Green	no	Non-initialized local variable		dummy_function()	dummy_file_name.c	Unreviewed	Unset		6CC0B9E42995263162	3	3
 22010	Run-time Check	Data flow	Green	no	Non-initialized local variable		dummy_function()	dummy_file_name.c	Unreviewed	Unset		3660C87294CA131C	4	4
@@ -27,7 +27,7 @@ ID	Family	Group	Color	New	Check	Information	Function	File	Status	Severity	Commen
 22035	Run-time Check	Data flow	Green	no	Non-initialized local variable		dummy_function()	dummy_file_name.c	Unreviewed	Unset		C499232693A45698C491	5	6
 21989	Run-time Check	Numerical	Green	no	Overflow		dummy_function()	dummy_file_name.c	Not a defect	Unset		C4997327D32B4698C881	6	7
 19928	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		62C8B1F4CA9126336A	6	8
-19962	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Not a defect	Unset		62D8A9F4CA91263472	7	9
+19962	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	/?extern	Not a defect	Unset		62D8A9F4CA91263472	7	9
 19526	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66C899F4CA9126316A	7	10
 19424	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.h	Unreviewed	Unset		62E489F4CA91263262	6	11
 19429	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.h	Justified	Unset		62E4A1F4CA91263162	6	2
@@ -49,7 +49,7 @@ ID	Family	Group	Color	New	Check	Information	Function	File	Status	Severity	Commen
 19339	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Not a defect	Unset		66CC91F4CA91263464	10	8
 19338	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66CC91F4CA91263468	9	9
 19336	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		66CC91F4CA91263970	9	10
-19335	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	dummy_file_name.c	Unreviewed	Unset		CC9923E995234C62C0C9	10	11
+19335	Run-time Check	Numerical	Orange	no	Overflow		dummy_function()	/?extern	Unreviewed	Unset		CC9923E995234C62C0C9	10	11
 28766	Run-time Check	Data flow	Gray	no	Unreachable code		dummy_function()	dummy_file_name.c	Unreviewed	Unset		19396855722507	10	12
 28750	Run-time Check	Data flow	Gray	no	Unreachable code		dummy_function()	dummy_file_name.c	Unreviewed	Unset		62C8C193AA93293362	11	3
 28728	Run-time Check	Data flow	Gray	no	Unreachable code		dummy_function()	dummy_file_name.c	Unreviewed	Unset		62C88983AA9329356C	11	4
@@ -85,7 +85,7 @@ ID	Family	Group	Color	New	Check	Information	Function	File	Status	Severity	Commen
 22052	Run-time Check	Data flow	Gray	no	Unreachable code		dummy_function()	dummy_file_name.c	Unreviewed	Unset		3166CCB955C9941C	16	13
 17503	Defect	Concurrency	Red	no	Data race	Impact: High	File Scope	dummy_file_name.h	Unreviewed	Unset		CD99338805A214EB94A0438AC8A9	15	5
 17504	Defect	Concurrency	Red	no	Data race	Impact: High	File Scope	dummy_file_name.h	Unreviewed	Unset		CD99378805A214EB94A0438AC8A9	15
-17505	Defect	Concurrency	Red	no	Data race	Impact: High	File Scope	dummy_file_name.c	Unreviewed	Unset		4C18398805A214EB94A0438AC4A9	16	7
+17505	Defect	Concurrency	Red	no	Data race	Impact: High	File Scope	/?someothererror	Unreviewed	Unset		4C18398805A214EB94A0438AC4A9	16	7
 17506	Defect	Concurrency	Red	no	Data race	Impact: High	File Scope	dummy_file_name.c	Unreviewed	Unset		668D2241A805FA2528D0A23360	16	-
 17507	Defect	Concurrency	Red	no	Data race	Impact: High	File Scope	dummy_file_name.h	Unreviewed	Unset		4E19328805A214EB94A0438AC8A1	17	9
 17508	Defect	Concurrency	Red	no	Data race	Impact: High	File Scope	dummy_file_name.h	Unreviewed	Unset		0E9B328805A214EB94A0438AC8A1	17	10
@@ -129,7 +129,7 @@ ID	Family	Group	Color	New	Check	Information	Function	File	Status	Severity	Commen
 17560	Defect	Numerical	Red	no	Sign change integer conversion overflow	Impact: Medium	dummy_function()	dummy_file_name.c	Unreviewed	Unset		3364E09A94E893AF4390057274A80D1C	22	8
 17561	Defect	Numerical	Red	no	Sign change integer conversion overflow	Impact: Medium	dummy_function()	dummy_file_name.c	Unreviewed	Unset		3364D49A94E893AF4390057274A8CD18	23	9
 17562	Defect	Numerical	Red	no	Sign change integer conversion overflow	Impact: Medium	dummy_function()	dummy_file_name.c	Unreviewed	Unset		3364D49A94E893AF4390057274A84E98	23	10
-17563	Defect	Numerical	Red	no	Sign change integer conversion overflow	Impact: Medium	dummy_function()	dummy_file_name.c	Unreviewed	Unset		3364D89A94E893AF4390057274A88C98	24	11
+17563	Defect	Numerical	Red	no	Sign change integer conversion overflow	Impact: Medium	dummy_function()	/?extern	Unreviewed	Unset		3364D89A94E893AF4390057274A88C98	24	11
 17568	Defect	Numerical	Red	no	Sign change integer conversion overflow	Impact: Medium	dummy_function()	dummy_file_name.c	Unreviewed	Unset		3970D09A94E893AF4390057274A84C9B	24	12
 17569	Defect	Numerical	Red	no	Sign change integer conversion overflow	Impact: Medium	dummy_function()	dummy_file_name.c	Unreviewed	Unset		62C099936A52A34EBE0D4214C9D1A2366E	23	13
 17570	Defect	Numerical	Red	no	Sign change integer conversion overflow	Impact: Medium	dummy_function()	dummy_file_name.c	Unreviewed	Unset		62C0A1436A52A34EBE0D4214C9D1A2366E	23	14
