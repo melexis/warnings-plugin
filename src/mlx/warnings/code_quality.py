@@ -64,7 +64,7 @@ class Finding:
                     path = path.relative_to(Path.cwd())
                 except ValueError as err:
                     raise ValueError("Failed to convert abolute path to relative path for Code Quality report: "
-                                    f"{err}") from err
+                                     f"{err}") from err
             self._path = str(path)
         else:
             self._path = value[2:]
