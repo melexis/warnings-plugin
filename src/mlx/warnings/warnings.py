@@ -9,7 +9,7 @@ import logging
 import os
 import subprocess
 import sys
-from importlib.metadata import distribution
+from importlib.metadata import version
 from pathlib import Path
 
 from ruamel.yaml import YAML
@@ -20,7 +20,7 @@ from .polyspace_checker import PolyspaceChecker
 from .regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker
 from .robot_checker import RobotChecker
 
-__version__ = distribution("mlx.warnings").version
+__version__ = version("mlx.warnings")
 
 LOGGER = logging.getLogger(__name__)
 
