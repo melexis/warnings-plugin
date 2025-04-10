@@ -20,7 +20,7 @@ from .polyspace_checker import PolyspaceChecker
 from .regex_checker import CoverityChecker, DoxyChecker, SphinxChecker, XMLRunnerChecker
 from .robot_checker import RobotChecker
 
-__version__ = version("mlx.warnings")
+__version__ = version("mlx-warnings")
 
 LOGGER = logging.getLogger(__name__)
 
