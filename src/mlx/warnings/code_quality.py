@@ -56,14 +56,18 @@ class Finding:
 
     @path.setter
     def path(self, value):
-        path = Path(value)
-        if path.is_absolute():
-            try:
-                path = path.relative_to(Path.cwd())
-            except ValueError as err:
-                raise ValueError("Failed to convert abolute path to relative path for Code Quality report: "
-                                 f"{err}") from err
-        self._path = str(path)
+        if not value.startswith("/?"):
+            path = Path(value)
+            if path.is_absolute():
+
+                try:
+                    path = path.relative_to(Path.cwd())
+                except ValueError as err:
+                    raise ValueError("Failed to convert abolute path to relative path for Code Quality report: "
+                                     f"{err}") from err
+            self._path = str(path)
+        else:
+            self._path = value[len("/?"):]
 
     @property
     def line(self):

@@ -255,7 +255,7 @@
         "severity": "major",
         "description": "Polyspace: Overflow",
         "location": {
-            "path": "dummy_file_name.c",
+            "path": "extern",
             "positions": {
                 "begin": {
                     "line": 10,
@@ -263,7 +263,7 @@
                 }
             }
         },
-        "fingerprint": "9a3697faef437ec3bcdaf1c34912aad5"
+        "fingerprint": "2fd525625a9a959d2ac926a202065df7"
     },
     {
         "severity": "critical",
@@ -297,7 +297,7 @@
         "severity": "critical",
         "description": "Polyspace: Data race",
         "location": {
-            "path": "dummy_file_name.c",
+            "path": "someothererror",
             "positions": {
                 "begin": {
                     "line": 16,
@@ -305,7 +305,7 @@
                 }
             }
         },
-        "fingerprint": "cffef099a70ee703d85318b58aaee3ae"
+        "fingerprint": "fdf680bf11ff34f10ced614d3e919f80"
     },
     {
         "severity": "critical",
@@ -319,7 +319,7 @@
                 }
             }
         },
-        "fingerprint": "21c436bad7047cfb5605797b4dd2e57f"
+        "fingerprint": "cffef099a70ee703d85318b58aaee3ae"
     },
     {
         "severity": "critical",
@@ -361,7 +361,7 @@
                 }
             }
         },
-        "fingerprint": "12b0f09fa6a3a951688a1da7df58f5f6"
+        "fingerprint": "21c436bad7047cfb5605797b4dd2e57f"
     },
     {
         "severity": "critical",
@@ -375,7 +375,7 @@
                 }
             }
         },
-        "fingerprint": "44840dd6509374e45d3e4e9f6d1a791b"
+        "fingerprint": "12b0f09fa6a3a951688a1da7df58f5f6"
     },
     {
         "severity": "critical",
@@ -389,7 +389,7 @@
                 }
             }
         },
-        "fingerprint": "9b97b406a7decd5738144269e0708692"
+        "fingerprint": "44840dd6509374e45d3e4e9f6d1a791b"
     },
     {
         "severity": "critical",
@@ -403,7 +403,7 @@
                 }
             }
         },
-        "fingerprint": "638b9256aca9f3517e67e90c11063616"
+        "fingerprint": "9b97b406a7decd5738144269e0708692"
     },
     {
         "severity": "critical",
@@ -417,7 +417,7 @@
                 }
             }
         },
-        "fingerprint": "98068371b4c1f2efc59bd12de75a83d9"
+        "fingerprint": "638b9256aca9f3517e67e90c11063616"
     },
     {
         "severity": "critical",
@@ -431,7 +431,7 @@
                 }
             }
         },
-        "fingerprint": "229bd0263d410b0af1cf419502e6a507"
+        "fingerprint": "98068371b4c1f2efc59bd12de75a83d9"
     },
     {
         "severity": "critical",
@@ -459,7 +459,7 @@
                 }
             }
         },
-        "fingerprint": "ca86994653cbd6e2bd0a21a315684e25"
+        "fingerprint": "229bd0263d410b0af1cf419502e6a507"
     },
     {
         "severity": "critical",
@@ -501,7 +501,7 @@
                 }
             }
         },
-        "fingerprint": "506fa8b19ce9918b2dcee7bfcda2ac82"
+        "fingerprint": "ca86994653cbd6e2bd0a21a315684e25"
     },
     {
         "severity": "critical",
@@ -515,7 +515,7 @@
                 }
             }
         },
-        "fingerprint": "7fa6a9325e456eb1058718476beae0b2"
+        "fingerprint": "506fa8b19ce9918b2dcee7bfcda2ac82"
     },
     {
         "severity": "critical",
@@ -529,7 +529,7 @@
                 }
             }
         },
-        "fingerprint": "59cfffe68c18dbcd136a6a16ee2bbbb5"
+        "fingerprint": "7fa6a9325e456eb1058718476beae0b2"
     },
     {
         "severity": "critical",
@@ -543,7 +543,7 @@
                 }
             }
         },
-        "fingerprint": "d0bfe2255eff847bae72a167313fd2a5"
+        "fingerprint": "59cfffe68c18dbcd136a6a16ee2bbbb5"
     },
     {
         "severity": "critical",
@@ -557,7 +557,7 @@
                 }
             }
         },
-        "fingerprint": "8585e6d19f4be1e8d61c97492306077a"
+        "fingerprint": "d0bfe2255eff847bae72a167313fd2a5"
     },
     {
         "severity": "critical",
@@ -571,7 +571,7 @@
                 }
             }
         },
-        "fingerprint": "28be3be6683be483250b4d59ef3cc16d"
+        "fingerprint": "8585e6d19f4be1e8d61c97492306077a"
     },
     {
         "severity": "critical",
@@ -585,7 +585,7 @@
                 }
             }
         },
-        "fingerprint": "8be85b513aba167a92c30b337451742c"
+        "fingerprint": "28be3be6683be483250b4d59ef3cc16d"
     },
     {
         "severity": "critical",
@@ -599,7 +599,7 @@
                 }
             }
         },
-        "fingerprint": "591dad475acb333461a76cc67ae00f51"
+        "fingerprint": "8be85b513aba167a92c30b337451742c"
     },
     {
         "severity": "critical",
@@ -613,7 +613,7 @@
                 }
             }
         },
-        "fingerprint": "bb70a1151afad3baa3f91b11f97d8fa3"
+        "fingerprint": "591dad475acb333461a76cc67ae00f51"
     },
     {
         "severity": "critical",
@@ -627,7 +627,7 @@
                 }
             }
         },
-        "fingerprint": "e6a1a28fcb8acb2f3365f60adac9e3e7"
+        "fingerprint": "bb70a1151afad3baa3f91b11f97d8fa3"
     },
     {
         "severity": "critical",
@@ -669,7 +669,7 @@
                 }
             }
         },
-        "fingerprint": "ecfecca0bea5d7910d370cb8f0189b42"
+        "fingerprint": "e6a1a28fcb8acb2f3365f60adac9e3e7"
     },
     {
         "severity": "critical",
@@ -683,7 +683,7 @@
                 }
             }
         },
-        "fingerprint": "361b72a0f44c09132dfe74b4e1686562"
+        "fingerprint": "ecfecca0bea5d7910d370cb8f0189b42"
     },
     {
         "severity": "critical",
@@ -697,7 +697,7 @@
                 }
             }
         },
-        "fingerprint": "33b0de8008338b1425ffc60287deffcb"
+        "fingerprint": "361b72a0f44c09132dfe74b4e1686562"
     },
     {
         "severity": "critical",
@@ -711,7 +711,7 @@
                 }
             }
         },
-        "fingerprint": "93e43e05f593bea4d4d51a2c40366de4"
+        "fingerprint": "33b0de8008338b1425ffc60287deffcb"
     },
     {
         "severity": "critical",
@@ -753,7 +753,7 @@
                 }
             }
         },
-        "fingerprint": "bd6fd417f4b5fbe497e103eb5e0640ce"
+        "fingerprint": "93e43e05f593bea4d4d51a2c40366de4"
     },
     {
         "severity": "critical",
@@ -781,7 +781,7 @@
                 }
             }
         },
-        "fingerprint": "344fc7a680122a63080f122b9365910c"
+        "fingerprint": "bd6fd417f4b5fbe497e103eb5e0640ce"
     },
     {
         "severity": "critical",
@@ -795,7 +795,7 @@
                 }
             }
         },
-        "fingerprint": "19b12728d5681c134c1e89fd5ccf6d0e"
+        "fingerprint": "344fc7a680122a63080f122b9365910c"
     },
     {
         "severity": "critical",
@@ -809,7 +809,7 @@
                 }
             }
         },
-        "fingerprint": "fdf4cbad36c706a8007795370a78ee6e"
+        "fingerprint": "19b12728d5681c134c1e89fd5ccf6d0e"
     },
     {
         "severity": "critical",
@@ -837,7 +837,7 @@
                 }
             }
         },
-        "fingerprint": "d12420f28bc3b5dff820fc7d28753136"
+        "fingerprint": "fdf4cbad36c706a8007795370a78ee6e"
     },
     {
         "severity": "critical",
@@ -851,7 +851,7 @@
                 }
             }
         },
-        "fingerprint": "48a92e97833e72b5eec5be985a4b6423"
+        "fingerprint": "d12420f28bc3b5dff820fc7d28753136"
     },
     {
         "severity": "major",
@@ -913,7 +913,7 @@
         "severity": "major",
         "description": "Polyspace: Sign change integer conversion overflow",
         "location": {
-            "path": "dummy_file_name.c",
+            "path": "extern",
             "positions": {
                 "begin": {
                     "line": 24,
@@ -921,7 +921,7 @@
                 }
             }
         },
-        "fingerprint": "f766c4f9940d1efef8a238e5c79906dd"
+        "fingerprint": "a08609ab3a55668ec6dfcd962c7bf4c3"
     },
     {
         "severity": "major",
@@ -935,7 +935,7 @@
                 }
             }
         },
-        "fingerprint": "ecfeb007c472ddfd15ed7f3f0148b92c"
+        "fingerprint": "f766c4f9940d1efef8a238e5c79906dd"
     },
     {
         "severity": "major",
@@ -949,7 +949,7 @@
                 }
             }
         },
-        "fingerprint": "0dba0185c7ee7d9e179045298b39cca2"
+        "fingerprint": "ecfeb007c472ddfd15ed7f3f0148b92c"
     },
     {
         "severity": "major",
@@ -963,7 +963,7 @@
                 }
             }
         },
-        "fingerprint": "ea51d0f24965712bef29f7e8ebead82d"
+        "fingerprint": "0dba0185c7ee7d9e179045298b39cca2"
     },
     {
         "severity": "major",
@@ -977,7 +977,7 @@
                 }
             }
         },
-        "fingerprint": "55113c9f4327039bd2d36d66b2526021"
+        "fingerprint": "ea51d0f24965712bef29f7e8ebead82d"
     },
     {
         "severity": "minor",
