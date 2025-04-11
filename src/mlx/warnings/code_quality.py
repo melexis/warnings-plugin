@@ -67,7 +67,7 @@ class Finding:
                                      f"{err}") from err
             self._path = str(path)
         else:
-            self._path = value[2:]
+            self._path = value[len("/?"):]
 
     @property
     def line(self):
