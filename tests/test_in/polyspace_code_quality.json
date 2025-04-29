@@ -2,6 +2,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Overflow",
+        "check_name": "run-time check",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -16,6 +17,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Overflow",
+        "check_name": "run-time check",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -30,6 +32,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Overflow",
+        "check_name": "run-time check",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
@@ -44,6 +47,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Overflow",
+        "check_name": "run-time check",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
@@ -58,6 +62,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Overflow",
+        "check_name": "run-time check",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -72,6 +77,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Overflow",
+        "check_name": "run-time check",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -86,6 +92,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Overflow",
+        "check_name": "run-time check",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -100,6 +107,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Overflow",
+        "check_name": "run-time check",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -114,6 +122,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Overflow",
+        "check_name": "run-time check",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -128,6 +137,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Overflow",
+        "check_name": "run-time check",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -142,6 +152,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Overflow",
+        "check_name": "run-time check",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -156,6 +167,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Overflow",
+        "check_name": "run-time check",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -170,6 +182,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Overflow",
+        "check_name": "run-time check",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -184,6 +197,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Overflow",
+        "check_name": "run-time check",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -198,6 +212,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Overflow",
+        "check_name": "run-time check",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -212,6 +227,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Overflow",
+        "check_name": "run-time check",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -226,6 +242,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Overflow",
+        "check_name": "run-time check",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -240,6 +257,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Overflow",
+        "check_name": "run-time check",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -254,6 +272,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Overflow",
+        "check_name": "run-time check",
         "location": {
             "path": "extern",
             "positions": {
@@ -268,6 +287,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
@@ -282,6 +302,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
@@ -296,6 +317,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "someothererror",
             "positions": {
@@ -310,6 +332,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -324,6 +347,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
@@ -338,6 +362,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
@@ -352,6 +377,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -366,6 +392,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -380,6 +407,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -394,6 +422,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -408,6 +437,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -422,6 +452,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -436,6 +467,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
@@ -450,6 +482,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -464,6 +497,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
@@ -478,6 +512,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
@@ -492,6 +527,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -506,6 +542,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -520,6 +557,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -534,6 +572,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -548,6 +587,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -562,6 +602,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -576,6 +617,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -590,6 +632,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -604,6 +647,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -618,6 +662,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -632,6 +677,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
@@ -646,6 +692,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
@@ -660,6 +707,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -674,6 +722,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -688,6 +737,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -702,6 +752,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -716,6 +767,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
@@ -730,6 +782,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
@@ -744,6 +797,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -758,6 +812,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
@@ -772,6 +827,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -786,6 +842,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -800,6 +857,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -814,6 +872,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.h",
             "positions": {
@@ -828,6 +887,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -842,6 +902,7 @@
     {
         "severity": "critical",
         "description": "Polyspace: Data race",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -856,6 +917,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Sign change integer conversion overflow",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -870,6 +932,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Sign change integer conversion overflow",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -884,6 +947,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Sign change integer conversion overflow",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -898,6 +962,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Sign change integer conversion overflow",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -912,6 +977,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Sign change integer conversion overflow",
+        "check_name": "defect",
         "location": {
             "path": "extern",
             "positions": {
@@ -926,6 +992,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Sign change integer conversion overflow",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -940,6 +1007,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Sign change integer conversion overflow",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -954,6 +1022,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Sign change integer conversion overflow",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -968,6 +1037,7 @@
     {
         "severity": "major",
         "description": "Polyspace: Sign change integer conversion overflow",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -982,6 +1052,7 @@
     {
         "severity": "minor",
         "description": "Polyspace: Dead code",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -996,6 +1067,7 @@
     {
         "severity": "minor",
         "description": "Polyspace: Dead code",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -1010,6 +1082,7 @@
     {
         "severity": "minor",
         "description": "Polyspace: Dead code",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
@@ -1024,6 +1097,7 @@
     {
         "severity": "minor",
         "description": "Polyspace: Dead code",
+        "check_name": "defect",
         "location": {
             "path": "dummy_file_name.c",
             "positions": {
