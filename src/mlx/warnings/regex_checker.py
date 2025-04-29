@@ -63,6 +63,7 @@ class RegexChecker(WarningsChecker):
             return  # No description was found, which is the bare minimum
 
         finding = Finding(self.cq_description_template.substitute(description=description))
+        finding.check_name = self.name_repr
         finding.severity = next((self.SEVERITY_MAP[result.lower()] for name, result in groups.items()
                                  if name.startswith("severity")), "info")
         finding.path = next((result for name, result in groups.items()
@@ -210,6 +211,7 @@ class CoverityClassificationChecker(WarningsChecker):
             raise WarningsConfigError(f"Failed to find environment variable from configuration value "
                                       f"'cq_description_template': {err}") from err
         finding = Finding(description)
+        finding.check_name = "Coverity"  # for all classifications
 
         if classification_raw := groups.get("classification"):
             finding.severity = self.SEVERITY_MAP[classification_raw.lower()]

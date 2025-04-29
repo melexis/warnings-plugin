@@ -12,6 +12,7 @@ class Finding:
     _path = ""
     _line = 1
     _column = 1
+    _check_name = ""
 
     def __init__(self, description):
         if not description:
@@ -48,6 +49,15 @@ class Finding:
         if value not in expected_values:
             raise ValueError(f"Expected severity to be one of {expected_values}; Got {value!r}")
         self._severity = value
+
+    @property
+    def check_name(self):
+        """str: The name of the check that generated the violation."""
+        return self._check_name
+
+    @check_name.setter
+    def check_name(self, value):
+        self._check_name = value
 
     @property
     def path(self):
@@ -113,6 +123,7 @@ class Finding:
         return {
             "severity": self.severity,
             "description": self.description,
+            "check_name": self.check_name,
             "location": {
                 "path": self.path,
                 "positions": {
