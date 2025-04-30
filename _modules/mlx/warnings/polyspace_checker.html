@@ -4,11 +4,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx.warnings.polyspace_checker &#8212; warning-plugin 6.0.3 documentation</title>
+    <title>mlx.warnings.polyspace_checker &#8212; warning-plugin 6.0.4 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=34bb78ad" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pydoctheme.css?v=8635fa60" />
     
-    <script src="../../../_static/documentation_options.js?v=256d0b43"></script>
+    <script src="../../../_static/documentation_options.js?v=eee49b8e"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -27,7 +27,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="../../../index.html">warning-plugin-6.0.3</a> &#187;</li>
+        <li><a href="../../../index.html">warning-plugin-6.0.4</a> &#187;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -273,6 +273,8 @@
                                       <span class="sa">f</span><span class="s2">&quot;&#39;cq_description_template&#39;: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
 
         <span class="n">finding</span> <span class="o">=</span> <span class="n">Finding</span><span class="p">(</span><span class="n">description</span><span class="p">)</span>
+        <span class="n">finding</span><span class="o">.</span><span class="n">check_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">family_value</span>
+
         <span class="c1"># Attention to bug finder: items have color red for impact: high, medium and low.</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">severity</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">code_quality_severity</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;information&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">finding</span><span class="o">.</span><span class="n">severity</span> <span class="o">=</span> <span class="n">severity</span>
@@ -369,7 +371,7 @@
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Apr 15, 2025.
+      Last updated on Apr 30, 2025.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>

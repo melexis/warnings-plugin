@@ -4,11 +4,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx.warnings.regex_checker &#8212; warning-plugin 6.0.3 documentation</title>
+    <title>mlx.warnings.regex_checker &#8212; warning-plugin 6.0.4 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=34bb78ad" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pydoctheme.css?v=8635fa60" />
     
-    <script src="../../../_static/documentation_options.js?v=256d0b43"></script>
+    <script src="../../../_static/documentation_options.js?v=eee49b8e"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -27,7 +27,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="../../../index.html">warning-plugin-6.0.3</a> &#187;</li>
+        <li><a href="../../../index.html">warning-plugin-6.0.4</a> &#187;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -110,6 +110,7 @@
             <span class="k">return</span>  <span class="c1"># No description was found, which is the bare minimum</span>
 
         <span class="n">finding</span> <span class="o">=</span> <span class="n">Finding</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cq_description_template</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">))</span>
+        <span class="n">finding</span><span class="o">.</span><span class="n">check_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_repr</span>
         <span class="n">finding</span><span class="o">.</span><span class="n">severity</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">SEVERITY_MAP</span><span class="p">[</span><span class="n">result</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">groups</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
                                  <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;severity&quot;</span><span class="p">)),</span> <span class="s2">&quot;info&quot;</span><span class="p">)</span>
         <span class="n">finding</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">result</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">groups</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
@@ -272,6 +273,7 @@
             <span class="k">raise</span> <span class="n">WarningsConfigError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to find environment variable from configuration value &quot;</span>
                                       <span class="sa">f</span><span class="s2">&quot;&#39;cq_description_template&#39;: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
         <span class="n">finding</span> <span class="o">=</span> <span class="n">Finding</span><span class="p">(</span><span class="n">description</span><span class="p">)</span>
+        <span class="n">finding</span><span class="o">.</span><span class="n">check_name</span> <span class="o">=</span> <span class="s2">&quot;Coverity&quot;</span>  <span class="c1"># for all classifications</span>
 
         <span class="k">if</span> <span class="n">classification_raw</span> <span class="o">:=</span> <span class="n">groups</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;classification&quot;</span><span class="p">):</span>
             <span class="n">finding</span><span class="o">.</span><span class="n">severity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SEVERITY_MAP</span><span class="p">[</span><span class="n">classification_raw</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
@@ -394,7 +396,7 @@
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Apr 15, 2025.
+      Last updated on Apr 30, 2025.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
