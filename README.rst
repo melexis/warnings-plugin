@@ -575,7 +575,7 @@ Code Quality Report
 
 Use ``-C, --code-quality`` to let the plugin generate `a Code Quality report`_ for GitLab CI. All counted
 Sphinx, Doxygen, XMLRunner, Coverity and Polyspace warnings/errors/failures will be included. Other checker types are not yet supported by this feature. The report is
-a JSON file that implements `a subset of the Code Climate spec`_. Define this file `as a codequality report artifact`_
+a JSON file that follows `the Code Climate spec`_. Define this file `as a codequality report artifact`_
 of the CI job.
 
 If a warning doesn't contain a path, ``"cq_default_path"`` from the `configuration file to pass options`_ will be used.
@@ -621,6 +621,6 @@ development of the plugin. We encourage anyone to contribute to our repository.
 .. |string.Template| replace:: ``string.Template``
 .. _YAML: https://yaml.org/spec/1.2.2/
 .. _a Code Quality report: https://docs.gitlab.com/ee/ci/testing/code_quality.html
-.. _a subset of the Code Climate spec: https://docs.gitlab.com/ee/ci/testing/code_quality.html#code-quality-report-format
+.. _the Code Climate spec: https://docs.gitlab.com/ci/testing/code_quality/#code-quality-report-format
 .. _as a codequality report artifact: https://docs.gitlab.com/ee/ci/yaml/artifacts_reports.html#artifactsreportscodequality
 .. _string.Template: https://docs.python.org/3/library/string.html#string.Template.template

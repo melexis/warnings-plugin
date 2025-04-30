@@ -207,6 +207,8 @@ class PolyspaceFamilyChecker(WarningsChecker):
                                       f"'cq_description_template': {err}") from err
 
         finding = Finding(description)
+        finding.check_name = self.family_value
+
         # Attention to bug finder: items have color red for impact: high, medium and low.
         if (severity := self.code_quality_severity.get(row["information"].lower())) is not None:
             finding.severity = severity
