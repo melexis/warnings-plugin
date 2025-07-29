@@ -36,6 +36,30 @@ class TestRobotWarnings(unittest.TestCase):
             ],
             self.caplog.messages)
 
+    def test_nested_suite(self):
+        with open("tests/test_in/robot_nested_suite.xml") as xmlfile:
+            self.warnings.check(xmlfile.read())
+            count = self.warnings.return_count()
+        self.assertEqual(count, 2)
+        self.assertEqual(
+            [
+                "Root Suite.Nested Suite.Suite One.First Test",
+                "Root Suite.Nested Suite.Suite Two.First Test"
+            ],
+            self.caplog.messages)
+
+    def test_double_nested_suite(self):
+        with open("tests/test_in/robot_double_nested_suite.xml") as xmlfile:
+            self.warnings.check(xmlfile.read())
+            count = self.warnings.return_count()
+        self.assertEqual(count, 2)
+        self.assertEqual(
+            [
+                "Root Suite.Nested Suite.Double Nested Suite.Suite One.First Test",
+                "Root Suite.Nested Suite.Double Nested Suite.Suite Two.First Test"
+            ],
+            self.caplog.messages)
+
     def test_double_warning_and_verbosity(self):
         retval = warnings_wrapper([
             "--verbose",

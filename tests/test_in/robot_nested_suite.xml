@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Root Suite" tests="6" errors="0" failures="2" skipped="0" time="0.049">
+<testsuite name="Nested Suite" tests="6" errors="0" failures="2" skipped="0" time="0.049">
+<testsuite name="Suite One" tests="3" errors="0" failures="1" skipped="0" time="0.049">
+    <testcase classname="Root Suite.Nested Suite.Suite One" name="First Test" time="0.002">
+        <failure message="Directory 'C:\nonexistent' does not exist." type="AssertionError"></failure>
+    </testcase>
+    <testcase classname="Root Suite.Nested Suite.Suite One" name="An Unlinked Test" time="0.002">
+    </testcase>
+    <testcase classname="Root Suite.Nested Suite.Suite One" name="Another test" time="0.002">
+    </testcase>
+</testsuite>
+<testsuite name="Suite Two" tests="3" errors="0" failures="1" skipped="0" time="0.049">
+    <testcase classname="Root Suite.Nested Suite.Suite Two" name="First Test" time="0.002">
+        <failure message="Directory 'C:\nonexistent' does not exist." type="AssertionError"></failure>
+    </testcase>
+    <testcase classname="Root Suite.Nested Suite.Suite Two" name="An Unlinked Test" time="0.002">
+    </testcase>
+    <testcase classname="Root Suite.Nested Suite.Suite Two" name="Another test" time="0.002">
+    </testcase>
+</testsuite>
+</testsuite>
+</testsuite>
