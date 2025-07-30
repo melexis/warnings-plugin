@@ -65,6 +65,12 @@ napoleon_use_rtype = False
 napoleon_use_param = False
 
 linkcheck_ignore = [r'https://www\.mathworks\.com.+']
+linkcheck_allowed_redirects = {
+    # All HTTP redirections from the source URI to
+    # the canonical URI will be treated as "working".
+    r'https://www.bestpractices.dev/projects/\d+': r'https://www.bestpractices.dev/\w+/projects/\d+',
+    'https://badge.fury.io/py/mlx.warnings.svg': r'https://\w+.cloudfront.net/badge.svg.+',
+}
 
 # Point to plantuml jar file
 # confirm we have plantuml in the path

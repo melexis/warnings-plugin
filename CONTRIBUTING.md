@@ -3,7 +3,7 @@ Contribution Guide
 Anyone is more than welcome to contribute to the development of warnings-plugin,
 no matter your programming skill level. It is the reviewer's obligation to help bring your
 contribution to our desired quality level and you should do your best to help the reviewer
-understand your decisions. Standard GitHub flow is used https://guides.github.com/introduction/flow/
+understand your decisions. Standard GitHub flow is used https://docs.github.com/en/get-started/using-github/github-flow
 to start Pull Requests, which are then merged. We also prefer to make a Work In Progress
 Merge request once you starting your work just in case someone else is not working on the
 same issue.
