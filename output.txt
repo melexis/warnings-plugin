@@ -1,6 +1,1 @@
-readme.rst:25: [redirected with Found] https://codeclimate.com/github/melexis/warnings-plugin/badges/gpa.svg to https://api.codeclimate.com/v1/badges/c287cf98885a503c8a09/maintainability.svg
-readme.rst:9: [redirected with Found] https://badge.fury.io/py/mlx.warnings.svg to https://d25lcipzij17d.cloudfront.net/badge.svg?c=eyJhbGciOiJub25lIn0.eyJiIjp7IngiOmZhbHNlLCJ0IjoidjZlIiwibCI6InB5cGkgcGFja2FnZSIsInIiOiI2LjAuMyJ9fQ
-readme.rst:224: [redirected permanently] https://docs.gitlab.com/ee/ci/testing/code_quality.html to https://docs.gitlab.com/ci/testing/code_quality/
-readme.rst:576: [redirected permanently] https://docs.gitlab.com/ee/ci/yaml/artifacts_reports.html#artifactsreportscodequality to https://docs.gitlab.com/ci/yaml/artifacts_reports/
-contributing.rst:3: [redirected with Found] https://guides.github.com/introduction/flow/ to https://docs.github.com/en/get-started/using-github/github-flow
-readme.rst:-1: [redirected with Found] https://www.bestpractices.dev/projects/4368 to https://www.bestpractices.dev/en/projects/4368
+readme.rst:-1: [redirected with Found] https://qlty.sh/gh/melexis/projects/warnings-plugin to https://qlty.sh/login?returnTo=%2Fgh%2Fmelexis%2Fprojects%2Fwarnings-plugin

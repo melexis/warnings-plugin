@@ -4,11 +4,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx.warnings.junit_checker &#8212; warning-plugin 6.0.4 documentation</title>
+    <title>mlx.warnings.junit_checker &#8212; warning-plugin 6.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=34bb78ad" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pydoctheme.css?v=8635fa60" />
     
-    <script src="../../../_static/documentation_options.js?v=eee49b8e"></script>
+    <script src="../../../_static/documentation_options.js?v=6340cb70"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     
@@ -27,7 +27,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="../../../index.html">warning-plugin-6.0.4</a> &#187;</li>
+        <li><a href="../../../index.html">warning-plugin-6.1.0</a> &#187;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -74,11 +74,7 @@
             <span class="n">root_input</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
             <span class="n">testsuites_root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_tree</span><span class="p">(</span><span class="n">root_input</span><span class="p">)</span>
             <span class="n">suites</span> <span class="o">=</span> <span class="n">JUnitXml</span><span class="o">.</span><span class="n">fromelem</span><span class="p">(</span><span class="n">testsuites_root</span><span class="p">)</span>
-            <span class="n">amount_to_exclude</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">for</span> <span class="n">suite</span> <span class="ow">in</span> <span class="n">suites</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">testcase</span> <span class="ow">in</span> <span class="n">suite</span><span class="p">:</span>
-                    <span class="n">amount_to_exclude</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_testcase</span><span class="p">(</span><span class="n">testcase</span><span class="p">)</span>
-            <span class="n">suites</span><span class="o">.</span><span class="n">update_statistics</span><span class="p">()</span>
+            <span class="n">amount_to_exclude</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_traverse_suites</span><span class="p">(</span><span class="n">suites</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="n">suites</span><span class="o">.</span><span class="n">failures</span> <span class="o">+</span> <span class="n">suites</span><span class="o">.</span><span class="n">errors</span> <span class="o">-</span> <span class="n">amount_to_exclude</span>
         <span class="k">except</span> <span class="n">etree</span><span class="o">.</span><span class="n">ParseError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">msg</span><span class="p">)</span></div>
@@ -126,7 +122,28 @@
                 <span class="k">return</span> <span class="mi">1</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">testcase</span><span class="o">.</span><span class="n">classname</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">testcase</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">testcase</span><span class="o">.</span><span class="n">classname</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">testcase</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">testcase</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="mi">0</span></div>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_traverse_suites</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suites</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Traverses through all test suites, including nested suites, to check for test case failures.</span>
+
+<span class="sd">        This method performs a depth-first traversal of the test suites.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            suites (junitparser.JUnitXml): A collection of test suites.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: The total number of failures to exclude based on the configured regex.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">amount_to_exclude</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">suite</span> <span class="ow">in</span> <span class="n">suites</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">testcase</span> <span class="ow">in</span> <span class="n">suite</span><span class="p">:</span>
+                <span class="n">amount_to_exclude</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_testcase</span><span class="p">(</span><span class="n">testcase</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">suite</span><span class="p">,</span> <span class="s2">&quot;testsuites&quot;</span><span class="p">):</span>
+                <span class="n">sub_suites</span> <span class="o">=</span> <span class="n">suite</span><span class="o">.</span><span class="n">testsuites</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">sub_suites</span><span class="p">:</span>
+                    <span class="n">amount_to_exclude</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_traverse_suites</span><span class="p">(</span><span class="n">sub_suites</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">amount_to_exclude</span></div>
 
 </pre></div>
 
@@ -187,7 +204,7 @@
 
     <div class="footer" role="contentinfo">
     &#169; Copyright 2017-2019, Bavo Van Achte.
-      Last updated on Apr 30, 2025.
+      Last updated on Jul 30, 2025.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     </div>
   </body>
