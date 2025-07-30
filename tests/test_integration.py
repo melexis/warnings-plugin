@@ -373,6 +373,28 @@ class TestIntegration(TestCase):
             if var in os.environ:
                 del os.environ[var]
 
+    def test_robot_config_nested_suites(self):
+        os.environ["MIN_ROBOT_WARNINGS"] = "0"
+        os.environ["MAX_ROBOT_WARNINGS"] = "0"
+        retval = warnings_wrapper([
+            "--config",
+            "tests/test_in/config_example_robot.json",
+            "tests/test_in/robot_double_nested_suite.xml",
+        ])
+
+        self.assertEqual(
+            ["Robot: suite 'Suite One'    number of warnings (1) is between limits 0 and 1. Well done.",
+             "Robot: all test suites      number of warnings (2) is higher than the maximum limit (1).",
+             "Robot: suite 'Suite Two'    number of warnings (1) is between limits 1 and 2. Well done.",
+             "Robot: suite 'b4d su1te name' number of warnings (0) is exactly as expected. Well done.",
+             "Robot: Returning error code 2."],
+            self.stderr_lines
+        )
+        self.assertEqual(2, retval)
+        for var in ("MIN_ROBOT_WARNINGS", "MAX_ROBOT_WARNINGS"):
+            if var in os.environ:
+                del os.environ[var]
+
     def test_robot_config_check_names(self):
         self.maxDiff = None
         with self.assertRaises(SystemExit) as cm_err:

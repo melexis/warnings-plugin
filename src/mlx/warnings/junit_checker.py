@@ -23,11 +23,7 @@ class JUnitChecker(WarningsChecker):
             root_input = etree.fromstring(content.encode("utf-8"))
             testsuites_root = self.prepare_tree(root_input)
             suites = JUnitXml.fromelem(testsuites_root)
-            amount_to_exclude = 0
-            for suite in suites:
-                for testcase in suite:
-                    amount_to_exclude += self._check_testcase(testcase)
-            suites.update_statistics()
+            amount_to_exclude = self._traverse_suites(suites)
             self.count += suites.failures + suites.errors - amount_to_exclude
         except etree.ParseError as err:
             self.logger.error(err.msg)
@@ -72,3 +68,24 @@ class JUnitChecker(WarningsChecker):
             self.logger.info(f"{testcase.classname}.{testcase.name}")
             self.logger.debug(f"{testcase.classname}.{testcase.name} | {testcase.result.message}")
         return 0
+
+    def _traverse_suites(self, suites):
+        """Traverses through all test suites, including nested suites, to check for test case failures.
+
+        This method performs a depth-first traversal of the test suites.
+
+        Args:
+            suites (junitparser.JUnitXml): A collection of test suites.
+
+        Returns:
+            int: The total number of failures to exclude based on the configured regex.
+        """
+        amount_to_exclude = 0
+        for suite in suites:
+            for testcase in suite:
+                amount_to_exclude += self._check_testcase(testcase)
+            if hasattr(suite, "testsuites"):
+                sub_suites = suite.testsuites()
+                if sub_suites:
+                    amount_to_exclude += self._traverse_suites(sub_suites)
+        return amount_to_exclude

@@ -22,13 +22,9 @@
     :target: https://app.codecov.io/gh/melexis/warnings-plugin
     :alt: Code Coverage
 
-.. image:: https://codeclimate.com/github/melexis/warnings-plugin/badges/gpa.svg
-    :target: https://codeclimate.com/github/melexis/warnings-plugin
-    :alt: Code Climate Status
-
-.. image:: https://codeclimate.com/github/melexis/warnings-plugin/badges/issue_count.svg
-    :target: https://codeclimate.com/github/melexis/warnings-plugin/issues
-    :alt: Issue Count
+.. image:: https://qlty.sh/badges/5b71accf-201e-4281-b6fe-8a5f4893fdbc/maintainability.svg
+    :target: https://qlty.sh/gh/melexis/projects/warnings-plugin
+    :alt: Maintainability
 
 .. image:: https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat
     :target: https://github.com/melexis/warnings-plugin/issues
@@ -620,7 +616,7 @@ development of the plugin. We encourage anyone to contribute to our repository.
 
 .. |string.Template| replace:: ``string.Template``
 .. _YAML: https://yaml.org/spec/1.2.2/
-.. _a Code Quality report: https://docs.gitlab.com/ee/ci/testing/code_quality.html
+.. _a Code Quality report: https://docs.gitlab.com/ci/testing/code_quality/
 .. _the Code Climate spec: https://docs.gitlab.com/ci/testing/code_quality/#code-quality-report-format
-.. _as a codequality report artifact: https://docs.gitlab.com/ee/ci/yaml/artifacts_reports.html#artifactsreportscodequality
+.. _as a codequality report artifact: https://docs.gitlab.com/ci/yaml/artifacts_reports/
 .. _string.Template: https://docs.python.org/3/library/string.html#string.Template.template
