@@ -1,1 +1,2 @@
+readme.rst:25: [redirected with Found] https://qlty.sh/badges/5b71accf-201e-4281-b6fe-8a5f4893fdbc/maintainability.svg to https://qlty.sh/gh/melexis/projects/warnings-plugin/maintainability.svg
 readme.rst:-1: [redirected with Found] https://qlty.sh/gh/melexis/projects/warnings-plugin to https://qlty.sh/login?returnTo=%2Fgh%2Fmelexis%2Fprojects%2Fwarnings-plugin
