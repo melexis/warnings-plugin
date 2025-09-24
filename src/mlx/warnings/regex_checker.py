@@ -18,6 +18,8 @@ xmlrunner_pattern = re.compile(PYTHON_XMLRUNNER_REGEX)
 COVERITY_WARNING_REGEX = r"(?P<path>[\w\.\\/\- ]+)(:(?P<line>\d+)(:(?P<column>\d+))?)?: ?CID (?P<cid>\d+) \(#(?P<curr>\d+) of (?P<max>\d+)\): (?P<checker>.+): (?P<classification>[\w ]+),.+"
 coverity_pattern = re.compile(COVERITY_WARNING_REGEX)
 
+ANSI_ESCAPE_REGEX = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+
 
 class RegexChecker(WarningsChecker):
     name = "regex"
@@ -39,7 +41,8 @@ class RegexChecker(WarningsChecker):
         Args:
             content (str): The content to parse
         """
-        matches = re.finditer(self.pattern, content)
+        clean_content = ANSI_ESCAPE_REGEX.sub('', content)
+        matches = re.finditer(self.pattern, clean_content)
         for match in matches:
             match_string = match.group(0).strip()
             if self._is_excluded(match_string):
