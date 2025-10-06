@@ -232,20 +232,23 @@ Below is an example configuration for the Coverity checker:
     coverity:
         enabled: true
         unclassified:
+          min: 0
           max: 0
         pending:
+          min: 0
           max: 0
         bug:
           min: 2
           max: 2
         false_positive:
+          min: 0
           max: -1
         intentional:
+          min: 0
           max: -1
 
 As you can see, we have configured limits for 5 out of 5 Coverity Classifications. You can configure a minimum and a
 maximum limit for the number of allowed Coverity defects that belong to the Classification.
-The default value for both limits is 0.
 A value of `-1` for `max` corresponds to effectively no limit (an infinite amount).
 If one or more Classifications are missing from your configuration, the Coverity defects are counted and 0 are
 allowed. To ignore certain classifications, modify the value for
