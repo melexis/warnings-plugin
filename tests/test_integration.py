@@ -492,7 +492,7 @@ class TestIntegration(TestCase):
                 "tests/test_in/mixed_warnings.txt",
             ])
         self.assertTrue(str(c_m.exception).startswith(
-            "Failed to convert abolute path to relative path for Code Quality report: "
+            "Failed to convert absolute path to relative path for Code Quality report: "
             "'/home/user/myproject/helper/SimpleTimer.h'")
         )
 
