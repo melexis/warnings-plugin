@@ -2,6 +2,7 @@ import hashlib
 from pathlib import Path
 import sys
 
+
 class Finding:
     """Code quality violation"""
 
