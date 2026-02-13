@@ -1,6 +1,6 @@
 import hashlib
 from pathlib import Path
-
+import sys
 
 class Finding:
     """Code quality violation"""
@@ -32,9 +32,9 @@ class Finding:
         4. Step 3 is repeated until a unique hash is obtained.
         """
         hashable_string = f"{self.severity}{self.path}{self.description}"
-        new_hash = hashlib.md5(str(hashable_string).encode("utf-8"), usedforsecurity=False).hexdigest()
+        new_hash = self._md5_hash(str(hashable_string).encode("utf-8"))
         while new_hash in self.fingerprints and self.fingerprints[new_hash] != self:
-            new_hash = hashlib.md5(f"{hashable_string}{new_hash}".encode(), usedforsecurity=False).hexdigest()
+            new_hash = self._md5_hash(f"{hashable_string}{new_hash}".encode())
         type(self).fingerprints[new_hash] = self
         return new_hash
 
@@ -113,6 +113,11 @@ class Finding:
         elif column_number < 0:
             raise ValueError(f"Expected column number greater than 0; Got {column_number}")
         self._column = column_number
+
+    def _md5_hash(self, data: bytes) -> str:
+        if sys.version_info >= (3, 9):
+            return hashlib.md5(data, usedforsecurity=False).hexdigest()
+        return hashlib.md5(data).hexdigest()
 
     def to_dict(self):
         """Returns the code quality finding as dictionary with a unique fingerprint.
