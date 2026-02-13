@@ -32,9 +32,9 @@ class Finding:
         4. Step 3 is repeated until a unique hash is obtained.
         """
         hashable_string = f"{self.severity}{self.path}{self.description}"
-        new_hash = hashlib.md5(str(hashable_string).encode("utf-8")).hexdigest()
+        new_hash = hashlib.md5(str(hashable_string).encode("utf-8"), usedforsecurity=False).hexdigest()
         while new_hash in self.fingerprints and self.fingerprints[new_hash] != self:
-            new_hash = hashlib.md5(f"{hashable_string}{new_hash}".encode()).hexdigest()
+            new_hash = hashlib.md5(f"{hashable_string}{new_hash}".encode(), usedforsecurity=False).hexdigest()
         type(self).fingerprints[new_hash] = self
         return new_hash
 
