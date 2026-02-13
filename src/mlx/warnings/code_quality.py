@@ -117,8 +117,8 @@ class Finding:
 
     def _md5_hash(self, data: bytes) -> str:
         if sys.version_info >= (3, 9):
-            return hashlib.md5(data, usedforsecurity=False).hexdigest() # noqa: S324
-        return hashlib.md5(data).hexdigest() # noqa: S324
+            return hashlib.md5(data, usedforsecurity=False).hexdigest()  # noqa: S324
+        return hashlib.md5(data).hexdigest()  # noqa: S324
 
     def to_dict(self):
         """Returns the code quality finding as dictionary with a unique fingerprint.
