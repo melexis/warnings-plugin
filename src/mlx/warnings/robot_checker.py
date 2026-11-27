@@ -113,7 +113,8 @@ class RobotSuiteChecker(JUnitChecker):
 
         Args:
             name (str): Name of the test suite to check the results of
-            check_suite_name (bool): Whether to raise an error when no test in suite with given name is found
+            check_suite_name (bool): Whether to raise an error when no test in suite with given name is found;
+                when False, the limits of a suite without tests in the input are not checked
         """
         super().__init__(*logging_args)
         self.suite_name = suite_name
@@ -143,6 +144,21 @@ class RobotSuiteChecker(JUnitChecker):
             return super()._check_testcase(testcase)
         self.ignored_testsuites.add(testcase)
         return int(isinstance(testcase.result, (Failure, Error)))
+
+    def return_check_limits(self):
+        """Function for checking whether the warning count is within the configured limits
+
+        The limits of a suite that has no test cases in the input are not checked when check_suite_name is False:
+        the suite did not run, e.g. because a job runs only some of the configured suites.
+
+        Returns:
+            int: 0 if the amount of warnings is within limits or the suite is missing, the count of warnings otherwise
+                (or 1 in case of a count of 0 warnings)
+        """
+        if not self.check_suite_name and not self.is_valid_suite_name:
+            self.logger.warning("not in the input file, its limits are not checked")
+            return 0
+        return super().return_check_limits()
 
     def check(self, content):
         """Function for counting the number of JUnit failures in a specific text

@@ -317,7 +317,8 @@ limits can be configured for multiple test suites individually by means of a
 
 - ``"check_suite_names"``, which is ``true`` by default, raises an error when a configured suite name
   does not exist in the input XML file. This helps you verify that all of the test suites in your configuration file
-  were passed to the `robot` CLI.
+  were passed to the `robot` CLI. When ``false``, the limits of a configured suite that does not exist in the input
+  XML file are not checked, so one configuration file can serve jobs that each run only some of the suites.
 - ``"allow_unconfigured"``, which is ``true`` by default, raises an error when a suite name in the input
   XML file is missing from your configuration file. Note: a configuration value ``""`` matches all suite names.
 
