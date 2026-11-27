@@ -100,6 +100,30 @@ class TestRobotWarnings(unittest.TestCase):
                 self.warnings.check(xmlfile.read())
         self.assertEqual(c_m.exception.code, -1)
 
+    def test_missing_suite_limits_not_checked(self):
+        missing_suite = RobotSuiteChecker("Suite Three", *self.dut.logging_args, check_suite_name=False)
+        missing_suite.maximum = 1
+        missing_suite.minimum = 1
+        present_suite = RobotSuiteChecker(self.suite1, *self.dut.logging_args, check_suite_name=False)
+        present_suite.maximum = 1
+        present_suite.minimum = 1
+        self.dut.checkers = [present_suite, missing_suite]
+        with open("tests/test_in/robot_double_fail.xml") as xmlfile:
+            self.warnings.check(xmlfile.read())
+        self.assertEqual(self.warnings.return_count(), 1)
+        self.assertEqual(self.warnings.return_check_limits(), 0)
+        self.assertIn("not in the input file, its limits are not checked", self.caplog.messages)
+
+    def test_present_suite_limits_still_checked(self):
+        present_suite = RobotSuiteChecker(self.suite1, *self.dut.logging_args, check_suite_name=False)
+        present_suite.maximum = 2
+        present_suite.minimum = 2
+        self.dut.checkers = [present_suite]
+        with open("tests/test_in/robot_double_fail.xml") as xmlfile:
+            self.warnings.check(xmlfile.read())
+        self.assertEqual(self.warnings.return_count(), 1)
+        self.assertEqual(self.warnings.return_check_limits(), 1)
+
     def test_robot_version_5(self):
         self.dut.allow_unconfigured = True
         self.dut.checkers = [

@@ -364,7 +364,7 @@ class TestIntegration(TestCase):
             ["Robot: suite 'Suite One'    number of warnings (1) is between limits 0 and 1. Well done.",
              "Robot: all test suites      number of warnings (2) is higher than the maximum limit (1).",
              "Robot: suite 'Suite Two'    number of warnings (1) is between limits 1 and 2. Well done.",
-             "Robot: suite 'b4d su1te name' number of warnings (0) is exactly as expected. Well done.",
+             "Robot: suite 'b4d su1te name' not in the input file, its limits are not checked",
              "Robot: Returning error code 2."],
             self.stderr_lines
         )
@@ -386,7 +386,7 @@ class TestIntegration(TestCase):
             ["Robot: suite 'Suite One'    number of warnings (1) is between limits 0 and 1. Well done.",
              "Robot: all test suites      number of warnings (2) is higher than the maximum limit (1).",
              "Robot: suite 'Suite Two'    number of warnings (1) is between limits 1 and 2. Well done.",
-             "Robot: suite 'b4d su1te name' number of warnings (0) is exactly as expected. Well done.",
+             "Robot: suite 'b4d su1te name' not in the input file, its limits are not checked",
              "Robot: Returning error code 2."],
             self.stderr_lines
         )
